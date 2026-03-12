@@ -148,7 +148,7 @@ export default function RegistrationPage() {
   if (submitted) {
     return (
       <div className="min-h-screen bg-[#0A1628] pt-20 flex items-center justify-center px-4">
-        <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="text-center max-w-2xl w-full">
+        <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="text-center max-w-3xl w-full">
           <div className="w-24 h-24 rounded-full bg-emerald-500/20 border-2 border-emerald-500/50 flex items-center justify-center mx-auto mb-6">
             <CheckCircle className="w-12 h-12 text-emerald-400" />
           </div>
@@ -201,7 +201,7 @@ export default function RegistrationPage() {
         </div>
       </section>
 
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
 
         {/* Fee summary bar */}
         {form.category && (
@@ -211,26 +211,51 @@ export default function RegistrationPage() {
           </motion.div>
         )}
 
-        {/* Step indicators */}
-        <div className="flex items-center gap-1 mb-8 overflow-x-auto pb-2">
-          {STEPS.map((s, i) => {
-            const Icon = s.icon;
-            const done = step > s.id;
-            const active = step === s.id;
-            return (
-              <div key={s.id} className="flex items-center gap-1 flex-shrink-0">
-                <button
-                  type="button"
-                  onClick={() => done && setStep(s.id)}
-                  className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-all ${active ? "bg-[#C9921A] text-[#0A1628]" : done ? "bg-[#C9921A]/20 text-[#F5B730] cursor-pointer" : "glass text-slate-500"}`}
-                >
-                  {done ? <CheckCircle className="w-3.5 h-3.5" /> : <Icon className="w-3.5 h-3.5" />}
-                  <span className="hidden sm:inline">{s.label}</span>
-                </button>
-                {i < STEPS.length - 1 && <div className={`w-3 h-px ${step > s.id ? "bg-[#C9921A]" : "bg-white/10"}`} />}
-              </div>
-            );
-          })}
+        {/* Step indicators — full width, no scroll */}
+        <div className="mb-8">
+          <div className="flex items-center w-full">
+            {STEPS.map((s, i) => {
+              const Icon = s.icon;
+              const done = step > s.id;
+              const active = step === s.id;
+              return (
+                <div key={s.id} className="flex items-center flex-1 min-w-0">
+                  {/* Step button */}
+                  <button
+                    type="button"
+                    onClick={() => done && setStep(s.id)}
+                    className={`flex flex-col sm:flex-row items-center gap-1 sm:gap-1.5 px-2 py-2.5 rounded-xl text-xs font-bold transition-all w-full justify-center
+                      ${active ? "bg-[#C9921A] text-[#0A1628] shadow-lg shadow-[#C9921A]/20"
+                        : done ? "bg-[#C9921A]/15 text-[#F5B730] cursor-pointer hover:bg-[#C9921A]/25"
+                        : "glass text-slate-500"}`}
+                  >
+                    {done
+                      ? <CheckCircle className="w-3.5 h-3.5 flex-shrink-0" />
+                      : <Icon className="w-3.5 h-3.5 flex-shrink-0" />}
+                    <span className="hidden sm:inline truncate">{s.label}</span>
+                    <span className="sm:hidden text-[9px] font-bold">{s.id}</span>
+                  </button>
+                  {/* Connector line */}
+                  {i < STEPS.length - 1 && (
+                    <div className={`h-px flex-shrink-0 w-2 sm:w-3 transition-colors ${step > s.id ? "bg-[#C9921A]" : "bg-white/10"}`} />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+          {/* Progress bar */}
+          <div className="h-1 bg-white/5 rounded-full mt-3 overflow-hidden">
+            <motion.div
+              className="h-full bg-gradient-to-r from-[#C9921A] to-[#F5B730] rounded-full"
+              initial={{ width: 0 }}
+              animate={{ width: `${((step - 1) / (STEPS.length - 1)) * 100}%` }}
+              transition={{ duration: 0.4, ease: "easeInOut" }}
+            />
+          </div>
+          <div className="flex justify-between mt-1.5">
+            <span className="text-slate-600 text-[10px]">Step {step} of {STEPS.length}</span>
+            <span className="text-slate-600 text-[10px]">{Math.round(((step - 1) / (STEPS.length - 1)) * 100)}% complete</span>
+          </div>
         </div>
 
         {/* Form */}
