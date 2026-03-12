@@ -1,0 +1,768 @@
+"use client";
+
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  CheckCircle, ArrowRight, ArrowLeft, User, Mail, Phone,
+  Building, Globe, Users, CreditCard, Calendar, Info,
+  Mic, Heart, Camera, Bell, Rocket, Handshake, Briefcase,
+  FileText, ChevronDown, MapPin,
+} from "lucide-react";
+import { registrationFees } from "@/lib/data";
+
+const STEPS = [
+  { id: 1, label: "Personal", icon: User },
+  { id: 2, label: "Professional", icon: Briefcase },
+  { id: 3, label: "Attendance", icon: Calendar },
+  { id: 4, label: "Preferences", icon: Heart },
+  { id: 5, label: "Extras", icon: Rocket },
+  { id: 6, label: "Payment", icon: CreditCard },
+  { id: 7, label: "Confirm", icon: CheckCircle },
+];
+
+const salutations = ["Mr", "Mrs", "Ms", "Dr", "Prof", "Hon", "H.E.", "Ambassador", "Rev", "Eng"];
+const genders = ["Male", "Female", "Non-binary", "Prefer not to say"];
+const sectors = ["Government / Public Sector", "Private Sector / Corporate", "International Organisation / DFI", "Civil Society / NGO", "Academic / Research", "Media / Press", "Youth-Led Enterprise / MSME", "Other"];
+const dietaryOptions = ["No special requirements", "Vegetarian", "Vegan", "Halal", "Kosher", "Gluten-free", "Dairy-free", "Other (specify in notes)"];
+const roomTypes = ["Single Room", "Double Room (single occupancy)", "Twin Room (sharing)", "Suite"];
+const paymentMethods = ["Bank Transfer (Invoice)", "Credit / Debit Card", "Mobile Money (EcoCash / InnBucks)", "PayPal", "Institutional Purchase Order"];
+const sessionOptions = [
+  "Day 1 — Inclusive Growth, Smart Investment & Policy Coherence (Mon 21 Sep)",
+  "Day 2 — Digitalisation, Platform Economy & Financial Innovation (Tue 22 Sep)",
+  "Day 3 — Official Opening + Climate Change & Green Jobs (Wed 23 Sep)",
+  "Day 4 — Youth, Women, Skills & Future of Work (Thu 24 Sep)",
+  "Excursions Day — Victoria Falls Experience (Fri 25 Sep)",
+];
+const excursions = ["Victoria Falls Rainforest Walk (UNESCO)", "Zambezi River Morning Boat Cruise", "Morning Game Drive — Zambezi National Park", "No excursion"];
+const investmentAreas = ["Agriculture / Agro-processing", "Renewable Energy / Clean Tech", "Mining & Mineral Processing", "Manufacturing & Industrialisation", "FinTech / Digital Finance", "Infrastructure", "Tourism / Eco-tourism", "Healthcare", "Education / TVET", "Other"];
+const countries = ["Zimbabwe", "South Africa", "Kenya", "Nigeria", "Ghana", "Tanzania", "Uganda", "Ethiopia", "Rwanda", "Zambia", "Mozambique", "Botswana", "Namibia", "Malawi", "Egypt", "Morocco", "Tunisia", "Senegal", "Côte d'Ivoire", "Angola", "DRC", "Cameroon", "SADC Region", "United Kingdom", "United States", "Germany", "France", "China", "India", "UAE", "Other"];
+
+const fees: Record<string, { early: number; standard: number }> = {
+  "Government / Public Sector": { early: 400, standard: 550 },
+  "Private Sector / Corporates": { early: 700, standard: 950 },
+  "International Organisations / DFIs": { early: 400, standard: 550 },
+  "Youth Delegates (Under 35)": { early: 150, standard: 200 },
+  "African Civil Society / MSMEs": { early: 200, standard: 300 },
+  "Virtual / Hybrid Attendance": { early: 100, standard: 150 },
+};
+
+type FormData = {
+  salutation: string; firstName: string; lastName: string; gender: string;
+  dateOfBirth: string; nationality: string; passportNumber: string;
+  organisation: string; department: string; jobTitle: string; sector: string; orgWebsite: string;
+  email: string; confirmEmail: string; phone: string; whatsapp: string; country: string; city: string;
+  category: string; attendanceMode: string; daysAttending: string[];
+  requiresAccommodation: string; arrivalDate: string; departureDate: string;
+  roomType: string; airportTransfer: string; specialNeeds: string;
+  dietaryRequirements: string; sessionInterests: string[]; excursionPreference: string;
+  applyInnovation: string; startupName: string; startupStage: string; startupDescription: string;
+  bilateralMeetings: string; investmentInterests: string[];
+  isMedia: string; mediaOrganisation: string; mediaType: string;
+  paymentMethod: string; invoiceRequired: string; billingOrganisation: string;
+  privacyConsent: boolean; photoConsent: boolean; newsletterOptIn: boolean; termsAccepted: boolean;
+};
+
+const initialForm: FormData = {
+  salutation: "", firstName: "", lastName: "", gender: "", dateOfBirth: "", nationality: "", passportNumber: "",
+  organisation: "", department: "", jobTitle: "", sector: "", orgWebsite: "",
+  email: "", confirmEmail: "", phone: "", whatsapp: "", country: "", city: "",
+  category: "", attendanceMode: "in-person", daysAttending: [],
+  requiresAccommodation: "yes", arrivalDate: "2026-09-20", departureDate: "2026-09-26",
+  roomType: "", airportTransfer: "yes", specialNeeds: "",
+  dietaryRequirements: "", sessionInterests: [], excursionPreference: "",
+  applyInnovation: "no", startupName: "", startupStage: "", startupDescription: "",
+  bilateralMeetings: "yes", investmentInterests: [],
+  isMedia: "no", mediaOrganisation: "", mediaType: "",
+  paymentMethod: "", invoiceRequired: "yes", billingOrganisation: "",
+  privacyConsent: false, photoConsent: false, newsletterOptIn: false, termsAccepted: false,
+};
+
+const inputClass = "w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-[#C9921A]/60 transition-colors";
+const selectClass = "w-full bg-[#0D1F3C] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#C9921A]/60 transition-colors appearance-none";
+const labelClass = "block text-slate-400 text-xs font-semibold uppercase tracking-wide mb-1.5";
+
+function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
+  return (
+    <div>
+      <label className={labelClass}>{label}{required && <span className="text-[#C9921A] ml-1">*</span>}</label>
+      {children}
+    </div>
+  );
+}
+
+function ToggleButton({ value, current, onChange, children }: { value: string; current: string; onChange: (v: string) => void; children: React.ReactNode }) {
+  return (
+    <button
+      type="button"
+      onClick={() => onChange(value)}
+      className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all border ${current === value ? "bg-[#C9921A] text-[#0A1628] border-[#C9921A] font-bold" : "glass text-slate-400 border-white/10 hover:text-white hover:border-white/20"}`}
+    >
+      {children}
+    </button>
+  );
+}
+
+function CheckboxGroup({ options, selected, onChange }: { options: string[]; selected: string[]; onChange: (v: string[]) => void }) {
+  const toggle = (opt: string) => onChange(selected.includes(opt) ? selected.filter(x => x !== opt) : [...selected, opt]);
+  return (
+    <div className="space-y-2">
+      {options.map(opt => (
+        <label key={opt} className="flex items-start gap-3 cursor-pointer p-2.5 rounded-xl hover:bg-white/5 transition-colors group">
+          <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all ${selected.includes(opt) ? "bg-[#C9921A] border-[#C9921A]" : "border-white/20 group-hover:border-[#C9921A]/50"}`}>
+            {selected.includes(opt) && <CheckCircle className="w-3 h-3 text-[#0A1628]" />}
+          </div>
+          <span className={`text-sm leading-snug ${selected.includes(opt) ? "text-white" : "text-slate-400"}`}>{opt}</span>
+        </label>
+      ))}
+    </div>
+  );
+}
+
+export default function RegistrationPage() {
+  const [step, setStep] = useState(1);
+  const [form, setForm] = useState<FormData>(initialForm);
+  const [submitted, setSubmitted] = useState(false);
+  const [regId] = useState(`REG-${String(Math.floor(1000 + Math.random() * 9000))}`);
+
+  const set = (field: keyof FormData, value: FormData[keyof FormData]) => setForm(prev => ({ ...prev, [field]: value }));
+
+  const selectedFee = fees[form.category];
+  const isEarlyBird = true; // before 30 June 2026
+  const feeAmount = selectedFee ? (isEarlyBird ? selectedFee.early : selectedFee.standard) : 0;
+
+  const canProceed = () => {
+    if (step === 1) return form.firstName && form.lastName && form.email && form.phone && form.country && form.salutation;
+    if (step === 2) return form.organisation && form.jobTitle && form.sector;
+    if (step === 3) return form.category && form.attendanceMode;
+    if (step === 6) return form.paymentMethod;
+    if (step === 7) return form.privacyConsent && form.termsAccepted;
+    return true;
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (step < STEPS.length) { setStep(step + 1); }
+    else { setSubmitted(true); }
+  };
+
+  if (submitted) {
+    return (
+      <div className="min-h-screen bg-[#0A1628] pt-20 flex items-center justify-center px-4">
+        <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="text-center max-w-2xl w-full">
+          <div className="w-24 h-24 rounded-full bg-emerald-500/20 border-2 border-emerald-500/50 flex items-center justify-center mx-auto mb-6">
+            <CheckCircle className="w-12 h-12 text-emerald-400" />
+          </div>
+          <h2 className="text-4xl font-black text-white mb-3">Registration Submitted!</h2>
+          <p className="text-slate-300 text-lg mb-2">Welcome to the TNF Global Summit 2026, <strong className="text-[#F5B730]">{form.salutation} {form.firstName} {form.lastName}</strong></p>
+          <p className="text-slate-400 mb-8">A confirmation and invoice will be sent to <strong className="text-white">{form.email}</strong> within 24 hours.</p>
+          <div className="glass-gold rounded-2xl p-6 mb-6 text-left space-y-3">
+            <h3 className="text-[#F5B730] font-bold text-lg mb-4">Registration Summary</h3>
+            <div className="grid grid-cols-2 gap-3 text-sm">
+              <div><span className="text-slate-400">Ref. Number:</span><div className="text-white font-bold text-base">{regId}</div></div>
+              <div><span className="text-slate-400">Status:</span><div className="text-amber-400 font-bold">Pending Confirmation</div></div>
+              <div><span className="text-slate-400">Name:</span><div className="text-white">{form.salutation} {form.firstName} {form.lastName}</div></div>
+              <div><span className="text-slate-400">Organisation:</span><div className="text-white">{form.organisation}</div></div>
+              <div><span className="text-slate-400">Category:</span><div className="text-white">{form.category}</div></div>
+              <div><span className="text-slate-400">Attendance:</span><div className="text-white capitalize">{form.attendanceMode}</div></div>
+              <div><span className="text-slate-400">Country:</span><div className="text-white">{form.country}</div></div>
+              <div><span className="text-slate-400">Payment Method:</span><div className="text-white">{form.paymentMethod}</div></div>
+            </div>
+            {feeAmount > 0 && (
+              <div className="border-t border-white/10 pt-3 flex justify-between items-center">
+                <span className="text-slate-400">Early Bird Fee (until 30 June 2026):</span>
+                <span className="text-[#F5B730] text-2xl font-black">USD {feeAmount}</span>
+              </div>
+            )}
+          </div>
+          <div className="glass rounded-xl p-4 text-sm text-slate-400 mb-6">
+            <strong className="text-white">Next steps:</strong> You will receive an invoice by email. Payment is due within 14 days. Your badge will be ready for collection at Delegate Registration on <strong className="text-white">20 September 2026</strong>.
+          </div>
+          <div className="flex flex-wrap justify-center gap-3">
+            <a href="/" className="btn-gold px-8 py-3 rounded-xl text-sm font-bold inline-flex items-center gap-2">Back to Home <ArrowRight className="w-4 h-4" /></a>
+            <a href="/program" className="btn-outline-gold px-8 py-3 rounded-xl text-sm font-semibold">View Programme</a>
+          </div>
+          <p className="text-slate-500 text-xs mt-6">Questions? Contact <a href="mailto:info@tnfzim.com" className="text-[#C9921A]">info@tnfzim.com</a> · +263 242 783 030</p>
+        </motion.div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-[#0A1628] pt-20">
+      {/* Header */}
+      <section className="py-12 hero-bg pattern-overlay relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0A1628]" />
+        <div className="relative z-10 text-center px-4">
+          <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Secure Your Seat</span>
+          <h1 className="text-4xl sm:text-5xl font-black text-white mt-2 mb-2">
+            Delegate <span className="gradient-text">Registration</span>
+          </h1>
+          <p className="text-slate-400">TNF Global Summit 2026 · Victoria Falls, Zimbabwe · Early bird closes <strong className="text-white">30 June 2026</strong></p>
+        </div>
+      </section>
+
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+
+        {/* Fee summary bar */}
+        {form.category && (
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="glass-gold rounded-xl px-5 py-3 mb-6 flex items-center justify-between">
+            <div className="text-sm text-slate-300">{form.category}</div>
+            <div className="text-[#F5B730] font-black text-lg">USD {feeAmount} <span className="text-slate-400 text-xs font-normal">early bird</span></div>
+          </motion.div>
+        )}
+
+        {/* Step indicators */}
+        <div className="flex items-center gap-1 mb-8 overflow-x-auto pb-2">
+          {STEPS.map((s, i) => {
+            const Icon = s.icon;
+            const done = step > s.id;
+            const active = step === s.id;
+            return (
+              <div key={s.id} className="flex items-center gap-1 flex-shrink-0">
+                <button
+                  type="button"
+                  onClick={() => done && setStep(s.id)}
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-all ${active ? "bg-[#C9921A] text-[#0A1628]" : done ? "bg-[#C9921A]/20 text-[#F5B730] cursor-pointer" : "glass text-slate-500"}`}
+                >
+                  {done ? <CheckCircle className="w-3.5 h-3.5" /> : <Icon className="w-3.5 h-3.5" />}
+                  <span className="hidden sm:inline">{s.label}</span>
+                </button>
+                {i < STEPS.length - 1 && <div className={`w-3 h-px ${step > s.id ? "bg-[#C9921A]" : "bg-white/10"}`} />}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit}>
+          <div className="glass rounded-2xl p-6 sm:p-8">
+            <AnimatePresence mode="wait">
+              <motion.div key={step} initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.25 }}>
+
+                {/* ── STEP 1: Personal ── */}
+                {step === 1 && (
+                  <div className="space-y-5">
+                    <div className="mb-2">
+                      <h2 className="text-xl font-black text-white">Personal Information</h2>
+                      <p className="text-slate-400 text-sm mt-1">Enter your personal details as they should appear on your delegate badge and certificate.</p>
+                    </div>
+                    <div className="grid grid-cols-3 gap-4">
+                      <Field label="Salutation" required>
+                        <div className="relative">
+                          <select required value={form.salutation} onChange={e => set("salutation", e.target.value)} className={selectClass}>
+                            <option value="">Select</option>
+                            {salutations.map(s => <option key={s}>{s}</option>)}
+                          </select>
+                          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+                        </div>
+                      </Field>
+                      <Field label="First Name" required>
+                        <input required type="text" placeholder="Given name" value={form.firstName} onChange={e => set("firstName", e.target.value)} className={inputClass} />
+                      </Field>
+                      <Field label="Last Name" required>
+                        <input required type="text" placeholder="Family name" value={form.lastName} onChange={e => set("lastName", e.target.value)} className={inputClass} />
+                      </Field>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <Field label="Gender">
+                        <div className="relative">
+                          <select value={form.gender} onChange={e => set("gender", e.target.value)} className={selectClass}>
+                            <option value="">Select</option>
+                            {genders.map(g => <option key={g}>{g}</option>)}
+                          </select>
+                          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+                        </div>
+                      </Field>
+                      <Field label="Date of Birth">
+                        <input type="date" value={form.dateOfBirth} onChange={e => set("dateOfBirth", e.target.value)} className={inputClass} />
+                      </Field>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <Field label="Nationality" required>
+                        <div className="relative">
+                          <select required value={form.nationality} onChange={e => set("nationality", e.target.value)} className={selectClass}>
+                            <option value="">Select country</option>
+                            {countries.map(c => <option key={c}>{c}</option>)}
+                          </select>
+                          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+                        </div>
+                      </Field>
+                      <Field label="Passport / ID Number">
+                        <input type="text" placeholder="Optional — for accreditation" value={form.passportNumber} onChange={e => set("passportNumber", e.target.value)} className={inputClass} />
+                      </Field>
+                    </div>
+                    <div className="divider-gold" />
+                    <div>
+                      <h3 className="text-white font-bold text-sm mb-4 flex items-center gap-2"><Mail className="w-4 h-4 text-[#C9921A]" /> Contact Details</h3>
+                      <div className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                          <Field label="Email Address" required>
+                            <div className="relative">
+                              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                              <input required type="email" placeholder="your@email.com" value={form.email} onChange={e => set("email", e.target.value)} className={inputClass + " pl-10"} />
+                            </div>
+                          </Field>
+                          <Field label="Confirm Email" required>
+                            <div className="relative">
+                              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                              <input required type="email" placeholder="Confirm email" value={form.confirmEmail} onChange={e => set("confirmEmail", e.target.value)} className={inputClass + " pl-10"} />
+                            </div>
+                          </Field>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <Field label="Phone Number (with country code)" required>
+                            <div className="relative">
+                              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                              <input required type="tel" placeholder="+263 77 000 0000" value={form.phone} onChange={e => set("phone", e.target.value)} className={inputClass + " pl-10"} />
+                            </div>
+                          </Field>
+                          <Field label="WhatsApp Number">
+                            <div className="relative">
+                              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                              <input type="tel" placeholder="If different from above" value={form.whatsapp} onChange={e => set("whatsapp", e.target.value)} className={inputClass + " pl-10"} />
+                            </div>
+                          </Field>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <Field label="Country of Residence" required>
+                            <div className="relative">
+                              <select required value={form.country} onChange={e => set("country", e.target.value)} className={selectClass}>
+                                <option value="">Select country</option>
+                                {countries.map(c => <option key={c}>{c}</option>)}
+                              </select>
+                              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+                            </div>
+                          </Field>
+                          <Field label="City / Town" required>
+                            <div className="relative">
+                              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                              <input required type="text" placeholder="City" value={form.city} onChange={e => set("city", e.target.value)} className={inputClass + " pl-10"} />
+                            </div>
+                          </Field>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* ── STEP 2: Professional ── */}
+                {step === 2 && (
+                  <div className="space-y-5">
+                    <div className="mb-2">
+                      <h2 className="text-xl font-black text-white">Professional Details</h2>
+                      <p className="text-slate-400 text-sm mt-1">Your professional information as it will appear in the Summit directory and on your badge.</p>
+                    </div>
+                    <Field label="Organisation / Institution" required>
+                      <div className="relative">
+                        <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                        <input required type="text" placeholder="Ministry / Company / NGO / University name" value={form.organisation} onChange={e => set("organisation", e.target.value)} className={inputClass + " pl-10"} />
+                      </div>
+                    </Field>
+                    <div className="grid grid-cols-2 gap-4">
+                      <Field label="Department / Unit">
+                        <input type="text" placeholder="e.g. Investment Promotion Division" value={form.department} onChange={e => set("department", e.target.value)} className={inputClass} />
+                      </Field>
+                      <Field label="Job Title / Position" required>
+                        <input required type="text" placeholder="e.g. Minister / Director / CEO" value={form.jobTitle} onChange={e => set("jobTitle", e.target.value)} className={inputClass} />
+                      </Field>
+                    </div>
+                    <Field label="Sector / Type of Organisation" required>
+                      <div className="relative">
+                        <select required value={form.sector} onChange={e => set("sector", e.target.value)} className={selectClass}>
+                          <option value="">Select sector</option>
+                          {sectors.map(s => <option key={s}>{s}</option>)}
+                        </select>
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+                      </div>
+                    </Field>
+                    <Field label="Organisation Website">
+                      <div className="relative">
+                        <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                        <input type="url" placeholder="https://yourorganisation.org" value={form.orgWebsite} onChange={e => set("orgWebsite", e.target.value)} className={inputClass + " pl-10"} />
+                      </div>
+                    </Field>
+                    <div className="glass rounded-xl p-4 flex items-start gap-3">
+                      <Info className="w-5 h-5 text-[#C9921A] flex-shrink-0 mt-0.5" />
+                      <p className="text-slate-400 text-xs leading-relaxed">
+                        Your professional details will be included in the official delegate directory distributed to all Summit participants, unless you opt out. You can request exclusion by emailing <a href="mailto:info@tnfzim.com" className="text-[#C9921A]">info@tnfzim.com</a>.
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* ── STEP 3: Attendance ── */}
+                {step === 3 && (
+                  <div className="space-y-6">
+                    <div className="mb-2">
+                      <h2 className="text-xl font-black text-white">Attendance & Category</h2>
+                      <p className="text-slate-400 text-sm mt-1">Select your delegate category. Your registration fee is determined by category and attendance mode.</p>
+                    </div>
+
+                    <Field label="Delegate Category" required>
+                      <div className="grid grid-cols-1 gap-2">
+                        {registrationFees.map(fee => (
+                          <button key={fee.category} type="button" onClick={() => set("category", fee.category)}
+                            className={`flex items-center justify-between p-4 rounded-xl border text-left transition-all ${form.category === fee.category ? "border-[#C9921A] bg-[#C9921A]/10" : "glass border-white/10 hover:border-white/25"}`}
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 transition-all ${form.category === fee.category ? "border-[#C9921A] bg-[#C9921A]" : "border-slate-500"}`} />
+                              <span className={`text-sm font-medium ${form.category === fee.category ? "text-white" : "text-slate-300"}`}>{fee.category}</span>
+                            </div>
+                            <div className="text-right flex-shrink-0 ml-4">
+                              <div className="text-[#F5B730] font-black">USD {fee.earlyBird}</div>
+                              <div className="text-slate-500 text-xs line-through">USD {fee.standard}</div>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    </Field>
+
+                    <Field label="Attendance Mode" required>
+                      <div className="flex gap-3">
+                        {[["in-person", "🏛 In-Person"], ["virtual", "💻 Virtual / Online"], ["hybrid", "🔀 Hybrid"]].map(([val, label]) => (
+                          <ToggleButton key={val} value={val} current={form.attendanceMode} onChange={v => set("attendanceMode", v)}>{label}</ToggleButton>
+                        ))}
+                      </div>
+                    </Field>
+
+                    <Field label="Days You Will Attend">
+                      <CheckboxGroup options={sessionOptions} selected={form.daysAttending} onChange={v => set("daysAttending", v)} />
+                    </Field>
+
+                    {form.attendanceMode !== "virtual" && (
+                      <>
+                        <div className="divider-gold" />
+                        <h3 className="text-white font-bold text-sm flex items-center gap-2"><Building className="w-4 h-4 text-[#C9921A]" />Accommodation at Elephant Hills Resort</h3>
+                        <Field label="Do you require accommodation assistance?">
+                          <div className="flex gap-3">
+                            <ToggleButton value="yes" current={form.requiresAccommodation} onChange={v => set("requiresAccommodation", v)}>Yes, please</ToggleButton>
+                            <ToggleButton value="no" current={form.requiresAccommodation} onChange={v => set("requiresAccommodation", v)}>No, self-arranged</ToggleButton>
+                          </div>
+                        </Field>
+                        {form.requiresAccommodation === "yes" && (
+                          <div className="space-y-4">
+                            <div className="grid grid-cols-2 gap-4">
+                              <Field label="Arrival Date"><input type="date" value={form.arrivalDate} onChange={e => set("arrivalDate", e.target.value)} className={inputClass} /></Field>
+                              <Field label="Departure Date"><input type="date" value={form.departureDate} onChange={e => set("departureDate", e.target.value)} className={inputClass} /></Field>
+                            </div>
+                            <Field label="Room Type Preference">
+                              <div className="relative">
+                                <select value={form.roomType} onChange={e => set("roomType", e.target.value)} className={selectClass}>
+                                  <option value="">Select room type</option>
+                                  {roomTypes.map(r => <option key={r}>{r}</option>)}
+                                </select>
+                                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+                              </div>
+                            </Field>
+                          </div>
+                        )}
+                        <Field label="Airport Transfer Required?">
+                          <div className="flex gap-3">
+                            <ToggleButton value="yes" current={form.airportTransfer} onChange={v => set("airportTransfer", v)}>Yes</ToggleButton>
+                            <ToggleButton value="no" current={form.airportTransfer} onChange={v => set("airportTransfer", v)}>No</ToggleButton>
+                          </div>
+                        </Field>
+                        <Field label="Special Access / Mobility Requirements">
+                          <textarea rows={2} placeholder="Please describe any mobility, accessibility or medical requirements..." value={form.specialNeeds} onChange={e => set("specialNeeds", e.target.value)} className={inputClass + " resize-none"} />
+                        </Field>
+                      </>
+                    )}
+                  </div>
+                )}
+
+                {/* ── STEP 4: Preferences ── */}
+                {step === 4 && (
+                  <div className="space-y-6">
+                    <div className="mb-2">
+                      <h2 className="text-xl font-black text-white">Session & Dining Preferences</h2>
+                      <p className="text-slate-400 text-sm mt-1">Help us personalise your Summit experience.</p>
+                    </div>
+                    <Field label="Dietary Requirements">
+                      <div className="relative">
+                        <select value={form.dietaryRequirements} onChange={e => set("dietaryRequirements", e.target.value)} className={selectClass}>
+                          <option value="">No special requirements</option>
+                          {dietaryOptions.map(d => <option key={d}>{d}</option>)}
+                        </select>
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+                      </div>
+                    </Field>
+                    <Field label="Sessions of Primary Interest">
+                      <CheckboxGroup options={sessionOptions} selected={form.sessionInterests} onChange={v => set("sessionInterests", v)} />
+                    </Field>
+                    {form.attendanceMode !== "virtual" && (
+                      <Field label="Excursion Preference (Fri 25 September)">
+                        <div className="space-y-2">
+                          {excursions.map(ex => (
+                            <label key={ex} className={`flex items-center gap-3 cursor-pointer p-3 rounded-xl border transition-all ${form.excursionPreference === ex ? "border-[#C9921A] bg-[#C9921A]/10" : "glass border-white/10 hover:border-white/20"}`}>
+                              <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${form.excursionPreference === ex ? "border-[#C9921A] bg-[#C9921A]" : "border-slate-500"}`} />
+                              <input type="radio" name="excursion" value={ex} checked={form.excursionPreference === ex} onChange={e => set("excursionPreference", e.target.value)} className="hidden" />
+                              <span className={`text-sm ${form.excursionPreference === ex ? "text-white font-medium" : "text-slate-400"}`}>{ex}</span>
+                            </label>
+                          ))}
+                        </div>
+                        <p className="text-slate-500 text-xs mt-2">Excursion places are limited. First-come, first-served. Additional activities available at own cost.</p>
+                      </Field>
+                    )}
+                  </div>
+                )}
+
+                {/* ── STEP 5: Extras ── */}
+                {step === 5 && (
+                  <div className="space-y-6">
+                    <div className="mb-2">
+                      <h2 className="text-xl font-black text-white">Additional Registrations</h2>
+                      <p className="text-slate-400 text-sm mt-1">Innovation Challenge, bilateral meetings, and media accreditation.</p>
+                    </div>
+
+                    {/* Bilateral meetings */}
+                    <div className="glass rounded-xl p-5">
+                      <div className="flex items-start gap-3 mb-4">
+                        <Handshake className="w-5 h-5 text-[#C9921A] flex-shrink-0 mt-0.5" />
+                        <div>
+                          <h3 className="text-white font-bold text-sm">Bilateral Meeting Platform</h3>
+                          <p className="text-slate-400 text-xs mt-1">Register to book one-on-one meetings with ministers, investors, and organisations via the Summit App.</p>
+                        </div>
+                      </div>
+                      <Field label="Register for bilateral meetings?">
+                        <div className="flex gap-3">
+                          <ToggleButton value="yes" current={form.bilateralMeetings} onChange={v => set("bilateralMeetings", v)}>Yes, interested</ToggleButton>
+                          <ToggleButton value="no" current={form.bilateralMeetings} onChange={v => set("bilateralMeetings", v)}>Not at this time</ToggleButton>
+                        </div>
+                      </Field>
+                      {form.bilateralMeetings === "yes" && (
+                        <div className="mt-4">
+                          <Field label="Investment / Partnership Areas of Interest">
+                            <CheckboxGroup options={investmentAreas} selected={form.investmentInterests} onChange={v => set("investmentInterests", v)} />
+                          </Field>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Innovation Challenge */}
+                    <div className="glass rounded-xl p-5">
+                      <div className="flex items-start gap-3 mb-4">
+                        <Rocket className="w-5 h-5 text-[#C9921A] flex-shrink-0 mt-0.5" />
+                        <div>
+                          <h3 className="text-white font-bold text-sm">TNF Innovation Challenge 2026</h3>
+                          <p className="text-slate-400 text-xs mt-1">African youth entrepreneurs pitch digital and green solutions to a global investor panel. Open to delegates under 35.</p>
+                        </div>
+                      </div>
+                      <Field label="Apply for the TNF Innovation Challenge?">
+                        <div className="flex gap-3">
+                          <ToggleButton value="yes" current={form.applyInnovation} onChange={v => set("applyInnovation", v)}>Yes — apply</ToggleButton>
+                          <ToggleButton value="no" current={form.applyInnovation} onChange={v => set("applyInnovation", v)}>No</ToggleButton>
+                        </div>
+                      </Field>
+                      {form.applyInnovation === "yes" && (
+                        <div className="space-y-4 mt-4">
+                          <Field label="Start-up / Project Name">
+                            <input type="text" placeholder="Your venture name" value={form.startupName} onChange={e => set("startupName", e.target.value)} className={inputClass} />
+                          </Field>
+                          <Field label="Stage of Development">
+                            <div className="relative">
+                              <select value={form.startupStage} onChange={e => set("startupStage", e.target.value)} className={selectClass}>
+                                <option value="">Select stage</option>
+                                {["Idea Stage", "Prototype / MVP", "Early Traction", "Growth Stage", "Scaling"].map(s => <option key={s}>{s}</option>)}
+                              </select>
+                              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+                            </div>
+                          </Field>
+                          <Field label="Brief Description of Your Solution (max 250 words)">
+                            <textarea rows={4} placeholder="Describe the problem you solve, your solution, and your impact..." value={form.startupDescription} onChange={e => set("startupDescription", e.target.value)} className={inputClass + " resize-none"} maxLength={1500} />
+                          </Field>
+                          <p className="text-[#F5B730] text-xs">★ A full application form will be emailed to you after registration is confirmed.</p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Media */}
+                    <div className="glass rounded-xl p-5">
+                      <div className="flex items-start gap-3 mb-4">
+                        <Mic className="w-5 h-5 text-[#C9921A] flex-shrink-0 mt-0.5" />
+                        <div>
+                          <h3 className="text-white font-bold text-sm">Media / Press Accreditation</h3>
+                          <p className="text-slate-400 text-xs mt-1">Media representatives require separate accreditation. Press access is subject to approval.</p>
+                        </div>
+                      </div>
+                      <Field label="Are you representing a media organisation?">
+                        <div className="flex gap-3">
+                          <ToggleButton value="yes" current={form.isMedia} onChange={v => set("isMedia", v)}>Yes</ToggleButton>
+                          <ToggleButton value="no" current={form.isMedia} onChange={v => set("isMedia", v)}>No</ToggleButton>
+                        </div>
+                      </Field>
+                      {form.isMedia === "yes" && (
+                        <div className="grid grid-cols-2 gap-4 mt-4">
+                          <Field label="Media Organisation">
+                            <input type="text" placeholder="Publication / Station / Channel" value={form.mediaOrganisation} onChange={e => set("mediaOrganisation", e.target.value)} className={inputClass} />
+                          </Field>
+                          <Field label="Media Type">
+                            <div className="relative">
+                              <select value={form.mediaType} onChange={e => set("mediaType", e.target.value)} className={selectClass}>
+                                <option value="">Select type</option>
+                                {["Print", "Online / Digital", "Television", "Radio", "Podcast", "Freelance"].map(t => <option key={t}>{t}</option>)}
+                              </select>
+                              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+                            </div>
+                          </Field>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* ── STEP 6: Payment ── */}
+                {step === 6 && (
+                  <div className="space-y-5">
+                    <div className="mb-2">
+                      <h2 className="text-xl font-black text-white">Payment Details</h2>
+                      <p className="text-slate-400 text-sm mt-1">Select your preferred payment method. An invoice will be issued within 24 hours.</p>
+                    </div>
+
+                    {selectedFee && (
+                      <div className="glass-gold rounded-2xl p-5">
+                        <h3 className="text-[#C9921A] text-xs font-bold uppercase mb-3">Registration Fee Summary</h3>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-slate-300 text-sm">{form.category}</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="text-slate-400 text-xs">Early Bird Rate (valid until 30 June 2026)</div>
+                            <div className="text-[#F5B730] text-3xl font-black mt-1">USD {feeAmount}</div>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-slate-500 text-xs">Standard Rate</div>
+                            <div className="text-slate-500 text-xl font-bold line-through">USD {selectedFee.standard}</div>
+                            <div className="text-emerald-400 text-xs font-bold">Save USD {selectedFee.standard - selectedFee.early}</div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <Field label="Payment Method" required>
+                      <div className="space-y-2">
+                        {paymentMethods.map(pm => (
+                          <label key={pm} className={`flex items-center gap-3 cursor-pointer p-3.5 rounded-xl border transition-all ${form.paymentMethod === pm ? "border-[#C9921A] bg-[#C9921A]/10" : "glass border-white/10 hover:border-white/20"}`}>
+                            <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${form.paymentMethod === pm ? "border-[#C9921A] bg-[#C9921A]" : "border-slate-500"}`} />
+                            <input type="radio" name="payment" value={pm} checked={form.paymentMethod === pm} onChange={e => set("paymentMethod", e.target.value)} className="hidden" />
+                            <span className={`text-sm font-medium ${form.paymentMethod === pm ? "text-white" : "text-slate-400"}`}>{pm}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </Field>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <Field label="Invoice Required?">
+                        <div className="flex gap-2">
+                          <ToggleButton value="yes" current={form.invoiceRequired} onChange={v => set("invoiceRequired", v)}>Yes</ToggleButton>
+                          <ToggleButton value="no" current={form.invoiceRequired} onChange={v => set("invoiceRequired", v)}>No</ToggleButton>
+                        </div>
+                      </Field>
+                      <Field label="Billing Organisation">
+                        <input type="text" placeholder="If different from your org" value={form.billingOrganisation} onChange={e => set("billingOrganisation", e.target.value)} className={inputClass} />
+                      </Field>
+                    </div>
+
+                    <div className="glass rounded-xl p-4 flex items-start gap-3">
+                      <Info className="w-5 h-5 text-[#C9921A] flex-shrink-0 mt-0.5" />
+                      <div className="text-slate-400 text-xs leading-relaxed space-y-1">
+                        <p>Payment is due within <strong className="text-white">14 days</strong> of invoice date. Registration is only confirmed upon receipt of full payment.</p>
+                        <p>Bank transfer details will be included in your invoice. For mobile money, contact <a href="mailto:info@tnfzim.com" className="text-[#C9921A]">info@tnfzim.com</a>.</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* ── STEP 7: Confirm ── */}
+                {step === 7 && (
+                  <div className="space-y-5">
+                    <div className="mb-2">
+                      <h2 className="text-xl font-black text-white">Review & Submit</h2>
+                      <p className="text-slate-400 text-sm mt-1">Please review your registration and confirm your consents before submitting.</p>
+                    </div>
+
+                    {/* Summary */}
+                    <div className="glass rounded-xl p-5 space-y-3">
+                      <h3 className="text-[#C9921A] text-xs font-bold uppercase mb-3">Registration Summary</h3>
+                      <div className="grid grid-cols-2 gap-y-2 gap-x-6 text-sm">
+                        {[
+                          ["Name", `${form.salutation} ${form.firstName} ${form.lastName}`],
+                          ["Email", form.email],
+                          ["Phone", form.phone],
+                          ["Organisation", form.organisation],
+                          ["Job Title", form.jobTitle],
+                          ["Country", form.country],
+                          ["Category", form.category],
+                          ["Attendance", form.attendanceMode],
+                          ["Payment", form.paymentMethod],
+                        ].map(([label, value]) => value ? (
+                          <div key={label}><span className="text-slate-400">{label}: </span><span className="text-white font-medium">{value}</span></div>
+                        ) : null)}
+                      </div>
+                      {feeAmount > 0 && (
+                        <div className="border-t border-white/10 pt-3 flex justify-between">
+                          <span className="text-slate-400 text-sm">Early Bird Fee:</span>
+                          <span className="text-[#F5B730] font-black text-lg">USD {feeAmount}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Consents */}
+                    <div className="space-y-3">
+                      {[
+                        { key: "termsAccepted", required: true, label: <>I have read and agree to the <a href="/terms" target="_blank" className="text-[#C9921A] underline">Terms of Use</a> and understand that payment is due within 14 days of invoice.</> },
+                        { key: "privacyConsent", required: true, label: <>I have read and agree to the <a href="/privacy" target="_blank" className="text-[#C9921A] underline">Privacy Policy</a> and consent to the processing of my personal data for Summit administration purposes.</> },
+                        { key: "photoConsent", required: false, label: "I consent to being photographed and filmed at Summit sessions and events. Images may be used in official Summit publications and social media." },
+                        { key: "newsletterOptIn", required: false, label: "I would like to receive TNF Summit news, programme updates, and post-summit reports by email. I can unsubscribe at any time." },
+                      ].map(({ key, required, label }) => (
+                        <label key={key} className={`flex items-start gap-3 cursor-pointer p-3.5 rounded-xl border transition-all ${(form as Record<string, unknown>)[key] ? "border-[#C9921A]/30 bg-[#C9921A]/5" : "glass border-white/10 hover:border-white/20"}`}>
+                          <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all ${!!(form as Record<string, unknown>)[key] ? "bg-[#C9921A] border-[#C9921A]" : "border-white/20"}`}>
+                            {!!(form as Record<string, unknown>)[key] && <CheckCircle className="w-3 h-3 text-[#0A1628]" />}
+                          </div>
+                          <input type="checkbox" checked={!!(form as Record<string, unknown>)[key]} onChange={e => set(key as keyof FormData, e.target.checked)} className="hidden" required={required} />
+                          <span className="text-slate-300 text-sm leading-relaxed">
+                            {label}
+                            {required && <span className="text-[#C9921A] ml-1">*</span>}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+
+                    <div className="glass rounded-xl p-4 text-center">
+                      <FileText className="w-5 h-5 text-[#C9921A] mx-auto mb-2" />
+                      <p className="text-slate-400 text-xs">
+                        By submitting you confirm all information is accurate. A confirmation email and invoice will be sent to <strong className="text-white">{form.email}</strong> within 24 hours.
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Navigation */}
+            <div className="flex gap-3 mt-8 pt-6 border-t border-white/5">
+              {step > 1 && (
+                <button type="button" onClick={() => setStep(step - 1)} className="flex items-center gap-2 px-6 py-3 rounded-xl glass text-slate-300 hover:text-white text-sm font-semibold transition-colors">
+                  <ArrowLeft className="w-4 h-4" /> Back
+                </button>
+              )}
+              <button
+                type="submit"
+                disabled={!canProceed()}
+                className="flex-1 btn-gold py-3.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {step < STEPS.length ? (<>Continue to {STEPS[step].label} <ArrowRight className="w-4 h-4" /></>) : (<>Submit Registration <CheckCircle className="w-4 h-4" /></>)}
+              </button>
+            </div>
+          </div>
+        </form>
+
+        {/* Help */}
+        <div className="text-center mt-6 space-y-1">
+          <p className="text-slate-500 text-xs">Need help? <a href="mailto:info@tnfzim.com" className="text-[#C9921A] hover:text-[#F5B730]">info@tnfzim.com</a> · <a href="tel:+2632427830" className="text-[#C9921A] hover:text-[#F5B730]">+263 242 783 030</a></p>
+          <p className="text-slate-600 text-xs">Group registrations (5+ delegates): contact the Secretariat for rates.</p>
+        </div>
+      </div>
+    </div>
+  );
+}
