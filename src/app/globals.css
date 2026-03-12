@@ -1,18 +1,55 @@
 @import "tailwindcss";
 
+/* ── Dark mode variant (class strategy via next-themes) ── */
+@variant dark (&:where(.dark, .dark *));
+
+/* ── CSS design tokens ── */
 :root {
+  /* Brand */
   --navy: #0A1628;
   --navy-light: #122040;
   --gold: #C9921A;
   --gold-light: #F5B730;
   --emerald: #065F46;
   --sky: #0EA5E9;
+
+  /* Dark theme surfaces (default) */
+  --bg-primary: #0A1628;
+  --bg-surface: #0D1F3C;
+  --bg-card: rgba(255, 255, 255, 0.05);
+  --bg-card-hover: rgba(255, 255, 255, 0.08);
+  --text-primary: #F8FAFC;
+  --text-secondary: #CBD5E1;
+  --text-muted: #94A3B8;
+  --text-faint: #475569;
+  --border: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.2);
   --foreground: #F8FAFC;
   --muted: #94A3B8;
+  --navbar-bg: rgba(10, 22, 40, 0.95);
+  --scrollbar-track: #0A1628;
+}
+
+/* ── Light theme overrides ── */
+html.light {
+  --bg-primary: #EFF3F8;
+  --bg-surface: #FFFFFF;
+  --bg-card: rgba(15, 23, 42, 0.04);
+  --bg-card-hover: rgba(15, 23, 42, 0.07);
+  --text-primary: #0F172A;
+  --text-secondary: #1E293B;
+  --text-muted: #475569;
+  --text-faint: #94A3B8;
+  --border: rgba(15, 23, 42, 0.1);
+  --border-strong: rgba(15, 23, 42, 0.2);
+  --foreground: #0F172A;
+  --muted: #64748B;
+  --navbar-bg: rgba(255, 255, 255, 0.95);
+  --scrollbar-track: #EFF3F8;
 }
 
 @theme inline {
-  --color-background: var(--navy);
+  --color-background: var(--bg-primary);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
 }
@@ -22,28 +59,44 @@ html {
 }
 
 body {
-  background: var(--navy);
-  color: var(--foreground);
+  background: var(--bg-primary);
+  color: var(--text-primary);
   font-family: Arial, Helvetica, sans-serif;
   overflow-x: hidden;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #0A1628; }
+::-webkit-scrollbar-track { background: var(--scrollbar-track); }
 ::-webkit-scrollbar-thumb { background: #C9921A; border-radius: 3px; }
 
-/* Glass morphism */
+/* Glass morphism — theme-aware */
 .glass {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-card);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border);
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .glass-gold {
   background: rgba(201, 146, 26, 0.1);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(201, 146, 26, 0.3);
+}
+
+/* Light mode section overrides */
+html.light .hero-bg {
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(14, 165, 233, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(201, 146, 26, 0.06) 0%, transparent 50%),
+    linear-gradient(180deg, #EFF3F8 0%, #E2EAF4 100%);
+}
+html.light .section-gradient {
+  background: linear-gradient(180deg, #EFF3F8 0%, #E8EEF8 100%);
+}
+html.light .pattern-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C9921A' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 
 /* Gradient text */
