@@ -1,12 +1,13 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import {
   Image as ImageIcon, Video, FileText, Download,
-  Bell, Play, ExternalLink, ArrowRight
+  Bell, Play, ExternalLink, ArrowRight, X, ChevronLeft, ChevronRight as ChevronRightIcon,
 } from "lucide-react";
+import { fetchPublicGallery, type MediaFile } from "@/lib/storage";
 
 function FadeIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef(null);
@@ -58,8 +59,56 @@ const postSummitContent = [
   },
 ];
 
+function LightBox({ files, index, onClose, onPrev, onNext }: {
+  files: MediaFile[]; index: number;
+  onClose: () => void; onPrev: () => void; onNext: () => void;
+}) {
+  const f = files[index];
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowLeft") onPrev();
+      if (e.key === "ArrowRight") onNext();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose, onPrev, onNext]);
+  return (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
+      onClick={onClose}>
+      <button onClick={onClose} className="absolute top-4 right-4 w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-white z-10">
+        <X className="w-5 h-5" />
+      </button>
+      <button onClick={e => { e.stopPropagation(); onPrev(); }} className="absolute left-4 w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-white z-10">
+        <ChevronLeft className="w-5 h-5" />
+      </button>
+      <button onClick={e => { e.stopPropagation(); onNext(); }} className="absolute right-4 w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-white z-10">
+        <ChevronRightIcon className="w-5 h-5" />
+      </button>
+      <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="max-w-5xl max-h-[85vh] flex flex-col items-center gap-4"
+        onClick={e => e.stopPropagation()}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={f.publicUrl} alt={f.altText} className="max-h-[75vh] max-w-full rounded-xl object-contain" />
+        {f.caption && <p className="text-slate-300 text-sm text-center">{f.caption}</p>}
+        <p className="text-slate-500 text-xs">{index + 1} / {files.length}</p>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 export default function GalleryPage() {
   const [activeTab, setActiveTab] = useState("venue");
+  const [liveFiles, setLiveFiles]   = useState<MediaFile[]>([]);
+  const [galleryLoading, setGalleryLoading] = useState(true);
+  const [lightboxIndex, setLightboxIndex]   = useState<number | null>(null);
+
+  useEffect(() => {
+    fetchPublicGallery().then(f => {
+      setLiveFiles(f.filter(x => x.mediaType === "image" || x.mediaType === "video"));
+      setGalleryLoading(false);
+    }).catch(() => setGalleryLoading(false));
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#0A1628] pt-20">
@@ -78,6 +127,51 @@ export default function GalleryPage() {
           </motion.div>
         </div>
       </section>
+
+      {/* Live Gallery from Supabase Storage */}
+      {!galleryLoading && liveFiles.length > 0 && (
+        <section className="py-16 section-gradient">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <FadeIn>
+              <div className="text-center mb-10">
+                <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Official Gallery</span>
+                <h2 className="text-3xl font-black text-white mt-3">Summit Media</h2>
+                <p className="text-slate-400 mt-3">{liveFiles.length} items published</p>
+              </div>
+            </FadeIn>
+            <div className="columns-2 sm:columns-3 lg:columns-4 gap-3 space-y-3">
+              {liveFiles.map((f, i) => (
+                <FadeIn key={f.id} delay={i * 0.03}>
+                  {f.mediaType === "video" ? (
+                    <div className="rounded-xl overflow-hidden cursor-pointer relative group break-inside-avoid"
+                      onClick={() => setLightboxIndex(i)}>
+                      <video src={f.publicUrl} className="w-full rounded-xl" muted />
+                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-xl">
+                        <Play className="w-10 h-10 text-white" />
+                      </div>
+                    </div>
+                  ) : (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={f.publicUrl} alt={f.altText} onClick={() => setLightboxIndex(i)}
+                      className="w-full rounded-xl cursor-pointer hover:opacity-90 transition-opacity break-inside-avoid object-cover"
+                      loading="lazy" />
+                  )}
+                </FadeIn>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Lightbox */}
+      <AnimatePresence>
+        {lightboxIndex !== null && (
+          <LightBox files={liveFiles} index={lightboxIndex} onClose={() => setLightboxIndex(null)}
+            onPrev={() => setLightboxIndex(i => i !== null ? (i - 1 + liveFiles.length) % liveFiles.length : 0)}
+            onNext={() => setLightboxIndex(i => i !== null ? (i + 1) % liveFiles.length : 0)}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Coming Soon Banner */}
       <div className="bg-[#C9921A]/10 border-y border-[#C9921A]/20 py-4">

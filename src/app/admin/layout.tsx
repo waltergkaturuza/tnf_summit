@@ -8,17 +8,19 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard, Users, Mic, Mail, Bell, Globe,
   LogOut, Menu, X, ChevronRight, Settings, Shield,
-  UserCheck, MessageSquare,
+  UserCheck, MessageSquare, BarChart2, FolderOpen,
 } from "lucide-react";
 import { useAdmin } from "@/context/AdminContext";
 
 const navItems = [
-  { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/admin/dashboard",     label: "Dashboard",     icon: LayoutDashboard },
+  { href: "/admin/analytics",     label: "Analytics",     icon: BarChart2 },
   { href: "/admin/registrations", label: "Registrations", icon: Users },
-  { href: "/admin/speakers", label: "Speakers", icon: Mic },
-  { href: "/admin/messages", label: "Messages", icon: MessageSquare },
-  { href: "/admin/newsletter", label: "Newsletter", icon: Bell },
-  { href: "/admin/sponsors", label: "Sponsors", icon: Globe },
+  { href: "/admin/speakers",      label: "Speakers",      icon: Mic },
+  { href: "/admin/media",         label: "Media Library", icon: FolderOpen },
+  { href: "/admin/messages",      label: "Messages",      icon: MessageSquare },
+  { href: "/admin/newsletter",    label: "Newsletter",    icon: Bell },
+  { href: "/admin/sponsors",      label: "Sponsors",      icon: Globe },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
