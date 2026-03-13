@@ -9,6 +9,7 @@ import {
   FileText, ChevronDown, MapPin,
 } from "lucide-react";
 import { registrationFees } from "@/lib/data";
+import { insertRegistration, subscribeEmail } from "@/lib/db";
 
 const STEPS = [
   { id: 1, label: "Personal", icon: User },
@@ -122,7 +123,9 @@ export default function RegistrationPage() {
   const [step, setStep] = useState(1);
   const [form, setForm] = useState<FormData>(initialForm);
   const [submitted, setSubmitted] = useState(false);
-  const [regId] = useState(`REG-${String(Math.floor(1000 + Math.random() * 9000))}`);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [regId, setRegId] = useState(`REG-${String(Math.floor(1000 + Math.random() * 9000))}`);
 
   const set = (field: keyof FormData, value: FormData[keyof FormData]) => setForm(prev => ({ ...prev, [field]: value }));
 
@@ -139,10 +142,79 @@ export default function RegistrationPage() {
     return true;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (step < STEPS.length) { setStep(step + 1); }
-    else { setSubmitted(true); }
+    if (step < STEPS.length) { setStep(step + 1); return; }
+
+    // Final submission → write to Supabase
+    setSubmitting(true);
+    setSubmitError("");
+    try {
+      const id = await insertRegistration({
+        status: "pending",
+        adminNotes: "",
+        salutation: form.salutation,
+        firstName: form.firstName,
+        lastName: form.lastName,
+        gender: form.gender,
+        dateOfBirth: form.dateOfBirth,
+        nationality: form.nationality,
+        passportNumber: form.passportNumber,
+        organisation: form.organisation,
+        department: form.department,
+        jobTitle: form.jobTitle,
+        sector: form.sector,
+        organisationWebsite: form.orgWebsite,
+        email: form.email,
+        phone: form.phone,
+        whatsapp: form.whatsapp,
+        country: form.country,
+        city: form.city,
+        category: form.category,
+        attendanceMode: form.attendanceMode as "in-person" | "virtual" | "hybrid",
+        daysAttending: form.daysAttending,
+        requiresAccommodation: form.requiresAccommodation === "yes",
+        arrivalDate: form.arrivalDate,
+        departureDate: form.departureDate,
+        roomType: form.roomType,
+        airportTransfer: form.airportTransfer === "yes",
+        specialNeeds: form.specialNeeds,
+        dietaryRequirements: form.dietaryRequirements,
+        sessionInterests: form.sessionInterests,
+        excursionPreference: form.excursionPreference,
+        applyInnovation: form.applyInnovation === "yes",
+        startupName: form.startupName,
+        startupStage: form.startupStage,
+        startupDescription: form.startupDescription,
+        bilateralMeetings: form.bilateralMeetings === "yes",
+        investmentAreas: form.investmentInterests.join(", "),
+        investmentInterests: form.investmentInterests,
+        isMedia: form.isMedia === "yes",
+        mediaOrganisation: form.mediaOrganisation,
+        mediaType: form.mediaType,
+        paymentMethod: form.paymentMethod,
+        invoiceRequired: form.invoiceRequired === "yes",
+        billingOrganisation: form.billingOrganisation,
+        feeAmount,
+        paymentStatus: "unpaid",
+        privacyConsent: form.privacyConsent,
+        photoConsent: form.photoConsent,
+        newsletterOptIn: form.newsletterOptIn,
+        termsAccepted: form.termsAccepted,
+      });
+      setRegId(`REG-${id.slice(0, 8).toUpperCase()}`);
+
+      // Auto-subscribe if opted in
+      if (form.newsletterOptIn) {
+        await subscribeEmail(form.email, "registration").catch(() => {});
+      }
+      setSubmitted(true);
+    } catch (err: unknown) {
+      console.error(err);
+      setSubmitError("Submission failed. Please check your connection and try again, or email info@tnfzim.com.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (submitted) {
@@ -765,7 +837,13 @@ export default function RegistrationPage() {
             </AnimatePresence>
 
             {/* Navigation */}
-            <div className="flex gap-3 mt-8 pt-6 border-t border-white/5">
+            {submitError && (
+              <div className="mt-4 flex items-start gap-2.5 p-3.5 rounded-xl bg-red-500/10 border border-red-500/20">
+                <Info className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
+                <p className="text-red-400 text-xs leading-relaxed">{submitError}</p>
+              </div>
+            )}
+            <div className="flex gap-3 mt-6 pt-6 border-t border-white/5">
               {step > 1 && (
                 <button type="button" onClick={() => setStep(step - 1)} className="flex items-center gap-2 px-6 py-3 rounded-xl glass text-slate-300 hover:text-white text-sm font-semibold transition-colors">
                   <ArrowLeft className="w-4 h-4" /> Back
@@ -773,10 +851,14 @@ export default function RegistrationPage() {
               )}
               <button
                 type="submit"
-                disabled={!canProceed()}
+                disabled={!canProceed() || submitting}
                 className="flex-1 btn-gold py-3.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                {step < STEPS.length ? (<>Continue to {STEPS[step].label} <ArrowRight className="w-4 h-4" /></>) : (<>Submit Registration <CheckCircle className="w-4 h-4" /></>)}
+                {submitting
+                  ? <><div className="w-4 h-4 border-2 border-[#0A1628]/30 border-t-[#0A1628] rounded-full animate-spin" />Submitting…</>
+                  : step < STEPS.length
+                    ? <>Continue to {STEPS[step].label} <ArrowRight className="w-4 h-4" /></>
+                    : <>Submit Registration <CheckCircle className="w-4 h-4" /></>}
               </button>
             </div>
           </div>

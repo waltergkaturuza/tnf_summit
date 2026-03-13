@@ -104,15 +104,31 @@ const faqs = [
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [form, setForm] = useState({
     name: "", email: "", phone: "", organisation: "",
     enquiryType: "", message: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setSubmitting(true);
+    setSubmitError("");
+    try {
+      const { insertMessage } = await import("@/lib/db");
+      await insertMessage({
+        name: form.name, email: form.email, phone: form.phone,
+        organisation: form.organisation, enquiryType: form.enquiryType,
+        message: form.message,
+      });
+      setSubmitted(true);
+    } catch {
+      setSubmitError("Failed to send your message. Please try again or email info@tnfzim.com directly.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -293,9 +309,13 @@ export default function ContactPage() {
                       />
                     </div>
 
-                    <button type="submit" className="w-full btn-gold py-3.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2">
-                      <Send className="w-4 h-4" />
-                      Send Message
+                    {submitError && (
+                      <p className="text-red-400 text-xs bg-red-500/10 border border-red-500/20 rounded-xl p-3">{submitError}</p>
+                    )}
+                    <button type="submit" disabled={submitting} className="w-full btn-gold py-3.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 disabled:opacity-50">
+                      {submitting
+                        ? <><div className="w-4 h-4 border-2 border-[#0A1628]/30 border-t-[#0A1628] rounded-full animate-spin" />Sending…</>
+                        : <><Send className="w-4 h-4" />Send Message</>}
                     </button>
                   </div>
                 </form>

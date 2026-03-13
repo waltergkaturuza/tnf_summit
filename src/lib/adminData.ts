@@ -12,6 +12,7 @@ export type Registration = {
   gender: string;
   dateOfBirth: string;
   nationality: string;
+  passportNumber: string;
   // Professional
   organisation: string;
   department: string;
@@ -47,6 +48,7 @@ export type Registration = {
   // Bilateral
   bilateralMeetings: boolean;
   investmentAreas: string;
+  investmentInterests: string[];
   // Media
   isMedia: boolean;
   mediaOrganisation: string;
@@ -147,6 +149,7 @@ export function generateMockRegistrations(): Registration[] {
       gender: i % 3 === 0 ? "Female" : i % 3 === 1 ? "Male" : "Male",
       dateOfBirth: `${1960 + (i * 3 % 30)}-0${(i % 9) + 1}-15`,
       nationality: countries[i % countries.length],
+      passportNumber: "",
       organisation: ["Ministry of Finance", "World Bank", "African Development Bank", "Microsoft Africa", "ZCTU", "AU Commission", "ECOWAS", "ILO", "SADC", "IMF", "UNDP"][i % 11],
       department: ["Policy", "Investment", "Research", "Operations", "Legal"][i % 5],
       jobTitle: ["Minister", "Director General", "Senior Economist", "Regional Director", "Secretary General", "CEO", "Head of Programme", "Ambassador", "Commissioner", "Deputy Director"][i % 10],
@@ -175,6 +178,7 @@ export function generateMockRegistrations(): Registration[] {
       startupDescription: "",
       bilateralMeetings: i % 2 === 0,
       investmentAreas: i % 2 === 0 ? "Renewable Energy, Agriculture" : "",
+      investmentInterests: i % 2 === 0 ? ["Renewable Energy / Clean Tech", "Agriculture / Agro-processing"] : [],
       isMedia: i % 10 === 0,
       mediaOrganisation: i % 10 === 0 ? "Africa Business News" : "",
       mediaType: i % 10 === 0 ? "Online" : "",

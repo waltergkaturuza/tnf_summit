@@ -4,40 +4,45 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { Lock, Mail, Eye, EyeOff, Shield, LogIn, AlertCircle } from "lucide-react";
+import { Lock, Mail, Eye, EyeOff, Shield, LogIn, AlertCircle, CheckCircle } from "lucide-react";
 import { useAdmin } from "@/context/AdminContext";
 
 export default function AdminLoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail]           = useState("");
+  const [password, setPassword]     = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const { login, isAuthenticated } = useAdmin();
+  const [error, setError]           = useState("");
+  const [loading, setLoading]       = useState(false);
+  const { login, isAuthenticated, authLoading } = useAdmin();
   const router = useRouter();
 
   useEffect(() => {
-    if (isAuthenticated) router.push("/admin/dashboard");
-  }, [isAuthenticated, router]);
+    if (!authLoading && isAuthenticated) router.push("/admin/dashboard");
+  }, [isAuthenticated, authLoading, router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-    await new Promise((r) => setTimeout(r, 800));
-    const ok = login(email, password);
+    const { ok, error: err } = await login(email, password);
     setLoading(false);
     if (ok) {
       router.push("/admin/dashboard");
     } else {
-      setError("Invalid email or password. Please contact the TNF Secretariat if you need access.");
+      setError(err ?? "Invalid credentials. Please check your email and password.");
     }
   };
+
+  if (authLoading) return (
+    <div className="min-h-screen bg-[#061020] flex items-center justify-center">
+      <div className="w-8 h-8 border-2 border-[#C9921A]/30 border-t-[#C9921A] rounded-full animate-spin" />
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-[#061020] hero-bg flex items-center justify-center px-4">
       <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md">
-        {/* Logo */}
+
         <div className="text-center mb-8">
           <div className="flex justify-center mb-5">
             <div className="relative h-14 w-48">
@@ -57,16 +62,22 @@ export default function AdminLoginPage() {
               <label className="text-slate-400 text-xs font-semibold uppercase tracking-wide mb-1.5 block">Email Address</label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-                <input type="email" required placeholder="admin@tnfzim.com" value={email} onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-[#C9921A]/60" />
+                <input
+                  type="email" required placeholder="your@email.com"
+                  value={email} onChange={e => setEmail(e.target.value)}
+                  className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-[#C9921A]/60"
+                />
               </div>
             </div>
             <div>
               <label className="text-slate-400 text-xs font-semibold uppercase tracking-wide mb-1.5 block">Password</label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-                <input type={showPassword ? "text" : "password"} required placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-10 py-3 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-[#C9921A]/60" />
+                <input
+                  type={showPassword ? "text" : "password"} required placeholder="••••••••"
+                  value={password} onChange={e => setPassword(e.target.value)}
+                  className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-10 py-3 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-[#C9921A]/60"
+                />
                 <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300">
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -74,20 +85,30 @@ export default function AdminLoginPage() {
             </div>
 
             {error && (
-              <motion.div initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="flex items-start gap-2.5 p-3.5 rounded-xl bg-red-500/10 border border-red-500/20">
+              <motion.div initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }}
+                className="flex items-start gap-2.5 p-3.5 rounded-xl bg-red-500/10 border border-red-500/20">
                 <AlertCircle className="w-4 h-4 text-red-400 mt-0.5 flex-shrink-0" />
                 <p className="text-red-400 text-xs leading-relaxed">{error}</p>
               </motion.div>
             )}
 
-            <div className="glass rounded-xl p-3 text-xs text-slate-500 flex items-center gap-2">
-              <Shield className="w-3.5 h-3.5 text-[#C9921A] flex-shrink-0" />
-              Demo credentials: admin@tnfzim.com · TNF@Summit2026
+            {/* Setup instructions */}
+            <div className="glass rounded-xl p-4 space-y-2">
+              <p className="text-[#C9921A] text-xs font-bold flex items-center gap-1.5">
+                <Shield className="w-3.5 h-3.5" /> Supabase Auth Setup
+              </p>
+              <ol className="text-slate-400 text-xs space-y-1 list-decimal list-inside leading-relaxed">
+                <li>Go to your Supabase Dashboard → <strong className="text-white">Authentication → Users</strong></li>
+                <li>Click <strong className="text-white">Add User</strong> → enter your admin email &amp; password</li>
+                <li>Come back here and sign in with those credentials</li>
+              </ol>
             </div>
 
             <button type="submit" disabled={loading}
               className="w-full btn-gold py-3.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 disabled:opacity-50">
-              {loading ? (<><div className="w-4 h-4 border-2 border-[#0A1628]/30 border-t-[#0A1628] rounded-full animate-spin" />Authenticating...</>) : (<><LogIn className="w-4 h-4" />Sign In</>)}
+              {loading
+                ? <><div className="w-4 h-4 border-2 border-[#0A1628]/30 border-t-[#0A1628] rounded-full animate-spin" />Authenticating…</>
+                : <><LogIn className="w-4 h-4" />Sign In</>}
             </button>
           </form>
 
@@ -100,7 +121,12 @@ export default function AdminLoginPage() {
 
         <div className="text-center mt-5 space-y-1.5">
           <a href="/" className="text-slate-600 hover:text-slate-400 text-xs transition-colors block">← Return to Summit Website</a>
-          <p className="text-slate-700 text-xs">Developed by <a href="https://www.quantistechnologies.co.zw/" target="_blank" rel="noopener noreferrer" className="hover:text-slate-500 transition-colors">Quantis Technologies</a></p>
+          <p className="text-slate-700 text-xs">
+            Developed by{" "}
+            <a href="https://www.quantistechnologies.co.zw/" target="_blank" rel="noopener noreferrer" className="hover:text-slate-500">
+              Quantis Technologies
+            </a>
+          </p>
         </div>
       </motion.div>
     </div>

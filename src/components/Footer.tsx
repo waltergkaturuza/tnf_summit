@@ -72,10 +72,26 @@ function YouTubeIcon({ className }: { className?: string }) {
 function NewsletterSignup() {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) setSubscribed(true);
+    if (!email) return;
+    setLoading(true);
+    try {
+      const { subscribeEmail } = await import("@/lib/db");
+      const result = await subscribeEmail(email, "footer");
+      if (result === "already_subscribed") {
+        setMessage("You are already subscribed!");
+      } else {
+        setSubscribed(true);
+      }
+    } catch {
+      setMessage("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -91,8 +107,10 @@ function NewsletterSignup() {
           {subscribed ? (
             <div className="flex items-center gap-2 text-emerald-400 text-sm font-semibold">
               <CheckCircle className="w-5 h-5" />
-              Thank you for subscribing!
+              Thank you! You are subscribed.
             </div>
+          ) : message ? (
+            <div className="text-amber-400 text-sm font-semibold">{message}</div>
           ) : (
             <form onSubmit={handleSubscribe} className="flex gap-2 w-full sm:w-auto">
               <input
@@ -101,14 +119,18 @@ function NewsletterSignup() {
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="flex-1 sm:w-72 bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-[#C9921A]/60"
+                disabled={loading}
+                className="flex-1 sm:w-72 bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-[#C9921A]/60 disabled:opacity-50"
               />
               <button
                 type="submit"
-                className="btn-gold px-5 py-2.5 rounded-lg text-sm font-bold flex items-center gap-2 whitespace-nowrap"
+                disabled={loading}
+                className="btn-gold px-5 py-2.5 rounded-lg text-sm font-bold flex items-center gap-2 whitespace-nowrap disabled:opacity-50"
               >
-                <Send className="w-4 h-4" />
-                Subscribe
+                {loading
+                  ? <div className="w-4 h-4 border-2 border-[#0A1628]/30 border-t-[#0A1628] rounded-full animate-spin" />
+                  : <Send className="w-4 h-4" />}
+                {loading ? "…" : "Subscribe"}
               </button>
             </form>
           )}
