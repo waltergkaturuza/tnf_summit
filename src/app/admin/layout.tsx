@@ -9,18 +9,23 @@ import {
   LayoutDashboard, Users, Mic, Mail, Bell, Globe,
   LogOut, Menu, X, ChevronRight, Settings, Shield,
   UserCheck, MessageSquare, BarChart2, FolderOpen,
+  CreditCard, Activity, UserCog,
 } from "lucide-react";
 import { useAdmin } from "@/context/AdminContext";
 
 const navItems = [
-  { href: "/admin/dashboard",     label: "Dashboard",     icon: LayoutDashboard },
-  { href: "/admin/analytics",     label: "Analytics",     icon: BarChart2 },
-  { href: "/admin/registrations", label: "Registrations", icon: Users },
-  { href: "/admin/speakers",      label: "Speakers",      icon: Mic },
-  { href: "/admin/media",         label: "Media Library", icon: FolderOpen },
-  { href: "/admin/messages",      label: "Messages",      icon: MessageSquare },
-  { href: "/admin/newsletter",    label: "Newsletter",    icon: Bell },
-  { href: "/admin/sponsors",      label: "Sponsors",      icon: Globe },
+  { href: "/admin/dashboard",     label: "Dashboard",     icon: LayoutDashboard, group: "" },
+  { href: "/admin/analytics",     label: "Analytics",     icon: BarChart2,        group: "" },
+  { href: "/admin/registrations", label: "Registrations", icon: Users,            group: "management" },
+  { href: "/admin/payments",      label: "Payments",      icon: CreditCard,       group: "management" },
+  { href: "/admin/speakers",      label: "Speakers",      icon: Mic,              group: "content" },
+  { href: "/admin/media",         label: "Media Library", icon: FolderOpen,       group: "content" },
+  { href: "/admin/messages",      label: "Messages",      icon: MessageSquare,    group: "comms" },
+  { href: "/admin/newsletter",    label: "Newsletter",    icon: Bell,             group: "comms" },
+  { href: "/admin/sponsors",      label: "Sponsors",      icon: Globe,            group: "content" },
+  { href: "/admin/users",         label: "Users",         icon: UserCog,          group: "system" },
+  { href: "/admin/audit",         label: "Audit Trail",   icon: Activity,         group: "system" },
+  { href: "/admin/settings",      label: "Settings",      icon: Settings,         group: "system" },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -64,21 +69,40 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto">
-        {navItems.map(({ href, label, icon: Icon }) => {
-          const active = pathname.startsWith(href);
-          const badge = href === "/admin/messages" ? unreadMessages : href === "/admin/registrations" ? pendingRegs : 0;
-          return (
-            <Link key={href} href={href} onClick={() => setSidebarOpen(false)}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group ${active ? "bg-[#C9921A]/15 text-[#F5B730] border border-[#C9921A]/20" : "text-slate-400 hover:text-white hover:bg-white/5"}`}
-            >
-              <Icon className={`w-4 h-4 flex-shrink-0 ${active ? "text-[#C9921A]" : "group-hover:text-slate-200"}`} />
-              <span className="flex-1">{label}</span>
-              {badge > 0 && <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${active ? "bg-[#C9921A] text-[#0A1628]" : "bg-red-500 text-white"}`}>{badge}</span>}
-              {active && <ChevronRight className="w-3 h-3 text-[#C9921A]" />}
-            </Link>
-          );
-        })}
+      <nav className="flex-1 p-3 overflow-y-auto">
+        {(() => {
+          const groups = [
+            { key: "",           label: "" },
+            { key: "management", label: "Management" },
+            { key: "content",    label: "Content" },
+            { key: "comms",      label: "Communications" },
+            { key: "system",     label: "System" },
+          ];
+          return groups.map(g => {
+            const items = navItems.filter(n => n.group === g.key);
+            if (!items.length) return null;
+            return (
+              <div key={g.key} className="mb-2">
+                {g.label && <p className="text-slate-600 text-[10px] font-bold uppercase tracking-widest px-3 py-2">{g.label}</p>}
+                <div className="space-y-0.5">
+                  {items.map(({ href, label, icon: Icon }) => {
+                    const active = pathname.startsWith(href);
+                    const badge = href === "/admin/messages" ? unreadMessages : href === "/admin/registrations" ? pendingRegs : 0;
+                    return (
+                      <Link key={href} href={href} onClick={() => setSidebarOpen(false)}
+                        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group ${active ? "bg-[#C9921A]/15 text-[#F5B730] border border-[#C9921A]/20" : "text-slate-400 hover:text-white hover:bg-white/5"}`}>
+                        <Icon className={`w-4 h-4 flex-shrink-0 ${active ? "text-[#C9921A]" : "group-hover:text-slate-200"}`} />
+                        <span className="flex-1">{label}</span>
+                        {badge > 0 && <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${active ? "bg-[#C9921A] text-[#0A1628]" : "bg-red-500 text-white"}`}>{badge}</span>}
+                        {active && <ChevronRight className="w-3 h-3 text-[#C9921A]" />}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          });
+        })()}
       </nav>
 
       {/* User */}
