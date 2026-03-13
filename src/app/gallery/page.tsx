@@ -133,29 +133,52 @@ export default function GalleryPage() {
         <section className="py-16 section-gradient">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <FadeIn>
-              <div className="text-center mb-10">
+              <div className="text-center mb-12">
                 <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Official Gallery</span>
-                <h2 className="text-3xl font-black text-white mt-3">Summit Media</h2>
-                <p className="text-slate-400 mt-3">{liveFiles.length} items published</p>
+                <h2 className="text-3xl font-black text-white mt-3">Victoria Falls & Elephant Hills Resort</h2>
+                <p className="text-slate-400 mt-2">A world-class summit destination — one of the Seven Natural Wonders of the World</p>
               </div>
             </FadeIn>
-            <div className="columns-2 sm:columns-3 lg:columns-4 gap-3 space-y-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-6">
               {liveFiles.map((f, i) => (
-                <FadeIn key={f.id} delay={i * 0.03}>
-                  {f.mediaType === "video" ? (
-                    <div className="rounded-xl overflow-hidden cursor-pointer relative group break-inside-avoid"
-                      onClick={() => setLightboxIndex(i)}>
-                      <video src={f.publicUrl} className="w-full rounded-xl" muted />
-                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-xl">
-                        <Play className="w-10 h-10 text-white" />
-                      </div>
+                <FadeIn key={f.id} delay={i * 0.05}>
+                  <div className="group" onClick={() => setLightboxIndex(i)}>
+                    <div className="rounded-xl overflow-hidden cursor-pointer relative aspect-[4/3] bg-white/5">
+                      {f.mediaType === "video" ? (
+                        <>
+                          <video src={f.publicUrl} className="w-full h-full object-cover rounded-xl" muted />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-end p-4">
+                            <p className="text-white text-sm font-medium leading-snug">{f.caption || f.altText}</p>
+                          </div>
+                          <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/60 to-transparent rounded-b-xl">
+                            <p className="text-white text-sm font-semibold">{f.altText}</p>
+                          </div>
+                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+                              <Play className="w-6 h-6 text-white ml-0.5" />
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={f.publicUrl}
+                            alt={f.altText}
+                            className="w-full h-full object-cover rounded-xl group-hover:scale-[1.02] transition-transform duration-300"
+                            loading="lazy"
+                          />
+                          <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent rounded-b-xl">
+                            <p className="text-white text-sm font-semibold">{f.altText}</p>
+                            {f.caption && (
+                              <p className="text-white/90 text-xs mt-1 line-clamp-2">{f.caption}</p>
+                            )}
+                          </div>
+                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors rounded-xl" />
+                        </>
+                      )}
                     </div>
-                  ) : (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={f.publicUrl} alt={f.altText} onClick={() => setLightboxIndex(i)}
-                      className="w-full rounded-xl cursor-pointer hover:opacity-90 transition-opacity break-inside-avoid object-cover"
-                      loading="lazy" />
-                  )}
+                  </div>
                 </FadeIn>
               ))}
             </div>
@@ -173,48 +196,51 @@ export default function GalleryPage() {
         )}
       </AnimatePresence>
 
-      {/* Coming Soon Banner */}
-      <div className="bg-[#C9921A]/10 border-y border-[#C9921A]/20 py-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center gap-3 flex-wrap">
-          <Bell className="w-5 h-5 text-[#F5B730]" />
-          <p className="text-[#F5B730] text-sm font-semibold">
-            Summit media will be published here after September 2026. Register to receive media notifications.
-          </p>
-          <Link href="/registration" className="text-[#0A1628] bg-[#C9921A] px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-[#F5B730] transition-colors">
-            Register
-          </Link>
-        </div>
-      </div>
-
-      {/* Venue Preview */}
-      <section className="py-20 section-gradient">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn>
-            <div className="text-center mb-10">
-              <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">The Venue</span>
-              <h2 className="text-3xl font-black text-white mt-3">Victoria Falls & Elephant Hills Resort</h2>
-              <p className="text-slate-400 mt-3">A world-class summit destination — one of the Seven Natural Wonders of the World</p>
-            </div>
-          </FadeIn>
-
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-            {previewImages.map((img, i) => (
-              <FadeIn key={i} delay={i * 0.08}>
-                <div className={`glass rounded-2xl overflow-hidden card-hover ${img.aspectRatio} flex items-center justify-center border border-white/5 hover:border-white/20 transition-all`}
-                  style={{ minHeight: "160px" }}>
-                  <div className="text-center p-6">
-                    <div className="text-5xl sm:text-6xl mb-3">{img.emoji}</div>
-                    <div className="text-white text-xs sm:text-sm font-medium">{img.label}</div>
-                    <div className="mt-3 text-[10px] px-2 py-0.5 rounded-full inline-block" style={{ background: `${img.color}20`, color: img.color }}>
-                      Coming Sept 2026
-                    </div>
-                  </div>
-                </div>
-              </FadeIn>
-            ))}
+      {/* Coming Soon Banner — only when no gallery content yet */}
+      {!galleryLoading && liveFiles.length === 0 && (
+        <div className="bg-[#C9921A]/10 border-y border-[#C9921A]/20 py-4">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center gap-3 flex-wrap">
+            <Bell className="w-5 h-5 text-[#F5B730]" />
+            <p className="text-[#F5B730] text-sm font-semibold">
+              Summit media will be published here after September 2026. Register to receive media notifications.
+            </p>
+            <Link href="/registration" className="text-[#0A1628] bg-[#C9921A] px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-[#F5B730] transition-colors">
+              Register
+            </Link>
           </div>
         </div>
-      </section>
+      )}
+
+      {/* Venue Preview — only when no live gallery content */}
+      {!galleryLoading && liveFiles.length === 0 && (
+        <section className="py-20 section-gradient">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <FadeIn>
+              <div className="text-center mb-10">
+                <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">The Venue</span>
+                <h2 className="text-3xl font-black text-white mt-3">Victoria Falls & Elephant Hills Resort</h2>
+                <p className="text-slate-400 mt-3">A world-class summit destination — one of the Seven Natural Wonders of the World</p>
+              </div>
+            </FadeIn>
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+              {previewImages.map((img, i) => (
+                <FadeIn key={i} delay={i * 0.08}>
+                  <div className={`glass rounded-2xl overflow-hidden card-hover ${img.aspectRatio} flex items-center justify-center border border-white/5 hover:border-white/20 transition-all`}
+                    style={{ minHeight: "160px" }}>
+                    <div className="text-center p-6">
+                      <div className="text-5xl sm:text-6xl mb-3">{img.emoji}</div>
+                      <div className="text-white text-xs sm:text-sm font-medium">{img.label}</div>
+                      <div className="mt-3 text-[10px] px-2 py-0.5 rounded-full inline-block" style={{ background: `${img.color}20`, color: img.color }}>
+                        Coming Sept 2026
+                      </div>
+                    </div>
+                  </div>
+                </FadeIn>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Post-Summit Media */}
       <section id="downloads" className="py-20 bg-[#061020]">

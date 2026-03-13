@@ -138,6 +138,19 @@ export async function fetchPublicGallery(): Promise<MediaFile[]> {
   return (data ?? []).map(row => rowToMedia(row as Record<string, unknown>));
 }
 
+// ── Fetch public sponsor logos (published only) ───────────────────────────────
+export async function fetchPublicSponsorLogos(): Promise<MediaFile[]> {
+  const { data, error } = await supabase
+    .schema("tnf_summit")
+    .from("media_files")
+    .select("*")
+    .eq("category", "sponsors")
+    .eq("is_published", true)
+    .order("sort_order", { ascending: true });
+  if (error) throw error;
+  return (data ?? []).map(row => rowToMedia(row as Record<string, unknown>));
+}
+
 // ── Update media file metadata ────────────────────────────────────────────────
 export async function updateMediaFile(id: string, updates: Partial<{
   altText: string; caption: string; isPublished: boolean; sortOrder: number; category: MediaCategory;

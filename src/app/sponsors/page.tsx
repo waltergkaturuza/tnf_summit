@@ -1,10 +1,11 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Star, Globe, CheckCircle, Mail, TrendingUp } from "lucide-react";
 import { sponsors } from "@/lib/data";
+import { fetchPublicSponsorLogos, type MediaFile } from "@/lib/storage";
 
 function FadeIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef(null);
@@ -98,6 +99,12 @@ const whySponsor = [
 ];
 
 export default function SponsorsPage() {
+  const [logos, setLogos] = useState<MediaFile[]>([]);
+
+  useEffect(() => {
+    fetchPublicSponsorLogos().then(setLogos).catch(() => {});
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#0A1628] pt-20">
       {/* Header */}
@@ -115,6 +122,39 @@ export default function SponsorsPage() {
           </motion.div>
         </div>
       </section>
+
+      {/* Partner Logos — from Supabase Storage */}
+      {logos.length > 0 && (
+        <section className="py-16 section-gradient">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <FadeIn>
+              <div className="text-center mb-10">
+                <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Our Partners</span>
+                <h2 className="text-2xl font-black text-white mt-3">Official Partners & Sponsors</h2>
+              </div>
+            </FadeIn>
+            <div className="flex flex-wrap justify-center items-center gap-8 sm:gap-12">
+              {logos.map((logo, i) => (
+                <FadeIn key={logo.id} delay={i * 0.05}>
+                  <div className="flex flex-col items-center gap-3 group">
+                    <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl glass flex items-center justify-center p-3 border border-white/5 hover:border-[#C9921A]/30 transition-colors">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={logo.publicUrl}
+                        alt={logo.altText}
+                        className="max-w-full max-h-full object-contain"
+                      />
+                    </div>
+                    {logo.caption && (
+                      <p className="text-slate-400 text-xs text-center max-w-[120px]">{logo.caption}</p>
+                    )}
+                  </div>
+                </FadeIn>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Why Sponsor */}
       <section className="py-16 section-gradient">
