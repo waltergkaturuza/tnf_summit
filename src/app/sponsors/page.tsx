@@ -116,7 +116,7 @@ export default function SponsorsPage() {
             <h1 className="text-4xl sm:text-5xl font-black text-white mt-3 mb-4">
               Sponsors & <span className="gradient-text">Official Partners</span>
             </h1>
-            <p className="text-slate-400 max-w-2xl mx-auto">
+            <p className="max-w-2xl mx-auto text-theme-primary">
               Join Africa&apos;s most influential tripartite platform as a sponsor or partner. Position your organisation at the intersection of policy, investment and decent work.
             </p>
           </motion.div>
@@ -146,7 +146,7 @@ export default function SponsorsPage() {
                       />
                     </div>
                     {logo.caption && (
-                      <p className="text-slate-400 text-xs text-center max-w-[120px]">{logo.caption}</p>
+                      <p className="text-xs text-center max-w-[120px] text-theme-primary">{logo.caption}</p>
                     )}
                   </div>
                 </FadeIn>
@@ -162,7 +162,7 @@ export default function SponsorsPage() {
           <FadeIn>
             <div className="text-center mb-10">
               <h2 className="text-3xl font-black text-white">Why Sponsor the TNF Global Summit?</h2>
-              <p className="text-slate-400 mt-3 max-w-2xl mx-auto">
+              <p className="mt-3 max-w-2xl mx-auto text-theme-primary">
                 Unparalleled access to Africa&apos;s most senior decision-makers, investors and policy shapers.
               </p>
             </div>
@@ -174,7 +174,7 @@ export default function SponsorsPage() {
                   <div className="text-3xl mb-2">{item.icon}</div>
                   <div className="text-2xl font-black gradient-text">{item.value}</div>
                   <div className="text-white font-bold text-sm mt-1">{item.label}</div>
-                  <div className="text-slate-500 text-xs mt-1">{item.desc}</div>
+                  <div className="text-xs mt-1 text-theme-primary">{item.desc}</div>
                 </div>
               </FadeIn>
             ))}
@@ -194,7 +194,7 @@ export default function SponsorsPage() {
               ].map((benefit) => (
                 <div key={benefit} className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-[#10B981] mt-0.5 flex-shrink-0" />
-                  <span className="text-slate-300 text-sm">{benefit}</span>
+                  <span className="text-sm text-theme-primary">{benefit}</span>
                 </div>
               ))}
             </div>
@@ -225,18 +225,18 @@ export default function SponsorsPage() {
                       <div className="flex items-center gap-3 mb-3">
                         <span className="text-3xl">{tier.emoji}</span>
                         <div>
-                          <div className="text-sm text-slate-400 font-medium">Sponsorship Level</div>
+                          <div className="text-sm font-medium text-theme-primary">Sponsorship Level</div>
                           <h3 className="text-2xl font-black" style={{ color: tier.color }}>
                             {tier.label}
                           </h3>
                         </div>
                       </div>
-                      <p className="text-slate-400 text-sm mb-4">{tier.description}</p>
+                      <p className="text-sm mb-4 text-theme-primary">{tier.description}</p>
 
                       {/* Existing sponsors */}
                       {tier.sponsors.length > 0 && (
                         <div>
-                          <div className="text-slate-500 text-xs font-bold uppercase mb-2">Current {tier.label} Partners</div>
+                          <div className="text-xs font-bold uppercase mb-2 text-theme-primary">Current {tier.label} Partners</div>
                           <div className="space-y-2">
                             {tier.sponsors.map((s) => (
                               <a
@@ -254,9 +254,9 @@ export default function SponsorsPage() {
                                 </div>
                                 <div>
                                   <div className="text-white text-xs font-bold">{s.name}</div>
-                                  <div className="text-slate-500 text-[10px]">{s.description}</div>
+                                  <div className="text-[10px] text-theme-primary">{s.description}</div>
                                 </div>
-                                <Globe className="w-3 h-3 text-slate-500 ml-auto" />
+                                <Globe className="w-3 h-3 text-theme-primary ml-auto" />
                               </a>
                             ))}
                           </div>
@@ -266,12 +266,12 @@ export default function SponsorsPage() {
 
                     {/* Benefits */}
                     <div className="lg:col-span-2">
-                      <div className="text-slate-400 text-xs font-bold uppercase mb-3">Package Benefits</div>
+                          <div className="text-xs font-bold uppercase mb-3 text-theme-primary">Package Benefits</div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         {tier.benefits.map((b) => (
                           <div key={b} className="flex items-start gap-2.5">
                             <Star className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" style={{ color: tier.color }} />
-                            <span className="text-slate-300 text-sm">{b}</span>
+                            <span className="text-sm text-theme-primary">{b}</span>
                           </div>
                         ))}
                       </div>
@@ -305,7 +305,7 @@ export default function SponsorsPage() {
             <div className="glass-gold rounded-3xl p-10 sm:p-12">
               <div className="text-4xl mb-4">🤝</div>
               <h2 className="text-3xl font-black text-white mb-4">Become a Summit Partner</h2>
-              <p className="text-slate-300 mb-8 leading-relaxed">
+              <p className="mb-8 leading-relaxed text-theme-primary">
                 For custom sponsorship packages, sector table sponsorship, and partnership opportunities, contact the TNF Secretariat&apos;s partnerships team directly.
               </p>
               <div className="flex flex-wrap justify-center gap-4">

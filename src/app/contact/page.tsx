@@ -142,7 +142,7 @@ export default function ContactPage() {
             <h1 className="text-4xl sm:text-5xl font-black text-white mt-3 mb-4">
               Contact <span className="gradient-text">Us</span>
             </h1>
-            <p className="text-slate-400 max-w-2xl mx-auto">
+            <p className="max-w-2xl mx-auto text-theme-primary">
               The TNF Secretariat team is ready to assist with registration, sponsorship, speaker and media enquiries.
             </p>
           </motion.div>
@@ -167,7 +167,7 @@ export default function ContactPage() {
                         <Icon className="w-5 h-5" style={{ color: item.color }} />
                       </div>
                       <div>
-                        <div className="text-slate-400 text-xs font-medium mb-0.5">{item.label}</div>
+                        <div className="text-xs font-medium mb-0.5 text-theme-primary">{item.label}</div>
                         {item.href ? (
                           <a
                             href={item.href}
@@ -192,7 +192,7 @@ export default function ContactPage() {
                 <div className="text-2xl mb-2">📅</div>
                 <h3 className="text-white font-bold mb-1">Summit Dates</h3>
                 <div className="text-[#F5B730] font-bold">20–26 September 2026</div>
-                <div className="text-slate-400 text-xs mt-1">Elephant Hills Resort, Victoria Falls, Zimbabwe</div>
+                <div className="text-xs mt-1 text-theme-primary">Elephant Hills Resort, Victoria Falls, Zimbabwe</div>
                 <div className="divider-gold my-3" />
                 <div className="text-[#F5B730] font-bold text-sm">Early Bird Closes 30 June 2026</div>
               </div>
@@ -212,7 +212,7 @@ export default function ContactPage() {
                     <CheckCircle className="w-8 h-8 text-emerald-400" />
                   </div>
                   <h3 className="text-2xl font-black text-white mb-3">Message Sent!</h3>
-                  <p className="text-slate-400">
+                  <p className="text-theme-primary">
                     Thank you for contacting the TNF Secretariat. We will respond within 2 business days at <strong className="text-white">{form.email}</strong>.
                   </p>
                 </motion.div>
@@ -226,30 +226,30 @@ export default function ContactPage() {
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="text-slate-400 text-xs font-medium mb-1.5 block">Full Name *</label>
+                        <label className="text-xs font-medium mb-1.5 block text-theme-primary">Full Name *</label>
                         <div className="relative">
-                          <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                          <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-primary" />
                           <input
                             required
                             type="text"
                             placeholder="Your name"
                             value={form.name}
                             onChange={(e) => setForm({ ...form, name: e.target.value })}
-                            className="w-full bg-white/5 border border-white/10 rounded-lg pl-9 pr-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-[#C9921A]/60"
+                            className="w-full bg-white/5 border border-white/10 rounded-lg pl-9 pr-4 py-2.5 text-sm text-white placeholder:text-theme-primary/70 focus:outline-none focus:border-[#C9921A]/60"
                           />
                         </div>
                       </div>
                       <div>
-                        <label className="text-slate-400 text-xs font-medium mb-1.5 block">Email Address *</label>
+                        <label className="text-xs font-medium mb-1.5 block text-theme-primary">Email Address *</label>
                         <div className="relative">
-                          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-primary" />
                           <input
                             required
                             type="email"
                             placeholder="your@email.com"
                             value={form.email}
                             onChange={(e) => setForm({ ...form, email: e.target.value })}
-                            className="w-full bg-white/5 border border-white/10 rounded-lg pl-9 pr-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-[#C9921A]/60"
+                            className="w-full bg-white/5 border border-white/10 rounded-lg pl-9 pr-4 py-2.5 text-sm text-white placeholder:text-theme-primary/70 focus:outline-none focus:border-[#C9921A]/60"
                           />
                         </div>
                       </div>
@@ -257,35 +257,35 @@ export default function ContactPage() {
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="text-slate-400 text-xs font-medium mb-1.5 block">Phone</label>
+                        <label className="text-xs font-medium mb-1.5 block text-theme-primary">Phone</label>
                         <div className="relative">
-                          <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                          <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-primary" />
                           <input
                             type="tel"
                             placeholder="+263 77 000 0000"
                             value={form.phone}
                             onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                            className="w-full bg-white/5 border border-white/10 rounded-lg pl-9 pr-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-[#C9921A]/60"
+                            className="w-full bg-white/5 border border-white/10 rounded-lg pl-9 pr-4 py-2.5 text-sm text-white placeholder:text-theme-primary/70 focus:outline-none focus:border-[#C9921A]/60"
                           />
                         </div>
                       </div>
                       <div>
-                        <label className="text-slate-400 text-xs font-medium mb-1.5 block">Organisation</label>
+                        <label className="text-xs font-medium mb-1.5 block text-theme-primary">Organisation</label>
                         <div className="relative">
-                          <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                          <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-primary" />
                           <input
                             type="text"
                             placeholder="Your organisation"
                             value={form.organisation}
                             onChange={(e) => setForm({ ...form, organisation: e.target.value })}
-                            className="w-full bg-white/5 border border-white/10 rounded-lg pl-9 pr-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-[#C9921A]/60"
+                            className="w-full bg-white/5 border border-white/10 rounded-lg pl-9 pr-4 py-2.5 text-sm text-white placeholder:text-theme-primary/70 focus:outline-none focus:border-[#C9921A]/60"
                           />
                         </div>
                       </div>
                     </div>
 
                     <div>
-                      <label className="text-slate-400 text-xs font-medium mb-1.5 block">Enquiry Type *</label>
+                      <label className="text-xs font-medium mb-1.5 block text-theme-primary">Enquiry Type *</label>
                       <select
                         required
                         value={form.enquiryType}
@@ -298,14 +298,14 @@ export default function ContactPage() {
                     </div>
 
                     <div>
-                      <label className="text-slate-400 text-xs font-medium mb-1.5 block">Message *</label>
+                      <label className="text-xs font-medium mb-1.5 block text-theme-primary">Message *</label>
                       <textarea
                         required
                         rows={5}
                         placeholder="Please provide details about your enquiry..."
                         value={form.message}
                         onChange={(e) => setForm({ ...form, message: e.target.value })}
-                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-[#C9921A]/60 resize-none"
+                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white placeholder:text-theme-primary/70 focus:outline-none focus:border-[#C9921A]/60 resize-none"
                       />
                     </div>
 
@@ -343,7 +343,7 @@ export default function ContactPage() {
                   >
                     <span className="text-white text-sm font-semibold">{faq.q}</span>
                     <ChevronDown
-                      className={`w-4 h-4 text-slate-400 flex-shrink-0 transition-transform ${openFaq === i ? "rotate-180" : ""}`}
+                      className={`w-4 h-4 text-theme-primary flex-shrink-0 transition-transform ${openFaq === i ? "rotate-180" : ""}`}
                     />
                   </button>
                   {openFaq === i && (
@@ -352,7 +352,7 @@ export default function ContactPage() {
                       animate={{ height: "auto", opacity: 1 }}
                       className="px-5 pb-4 border-t border-white/5"
                     >
-                      <p className="text-slate-400 text-sm leading-relaxed pt-3">{faq.a}</p>
+                      <p className="text-sm leading-relaxed pt-3 text-theme-primary">{faq.a}</p>
                     </motion.div>
                   )}
                 </div>

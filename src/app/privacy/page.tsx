@@ -11,7 +11,7 @@ export default function PrivacyPage() {
     <div className="min-h-screen bg-[var(--bg-primary)] pt-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Back */}
-        <Link href="/" className="inline-flex items-center gap-2 text-slate-400 hover:text-white text-sm mb-8 transition-colors">
+        <Link href="/" className="inline-flex items-center gap-2 text-theme-primary hover:text-white text-sm mb-8 transition-colors">
           <ArrowLeft className="w-4 h-4" />
           Back to Home
         </Link>
@@ -23,13 +23,13 @@ export default function PrivacyPage() {
           </div>
           <div>
             <h1 className="text-3xl sm:text-4xl font-black text-white">Privacy Policy</h1>
-            <p className="text-slate-400 mt-1 text-sm">
+            <p className="mt-1 text-sm text-theme-primary">
               TNF Global Summit 2026 · Last updated: March 2026
             </p>
           </div>
         </div>
 
-        <div className="glass rounded-2xl p-6 sm:p-10 space-y-8 text-slate-300 text-sm leading-relaxed">
+        <div className="glass rounded-2xl p-6 sm:p-10 space-y-8 text-sm leading-relaxed text-theme-primary">
 
           <section>
             <h2 className="text-white font-bold text-lg mb-3">1. Introduction</h2>
@@ -57,7 +57,7 @@ export default function PrivacyPage() {
               ].map((item) => (
                 <div key={item.title} className="glass rounded-xl p-4">
                   <div className="text-white font-semibold text-sm mb-1">{item.title}</div>
-                  <div className="text-slate-400 text-sm">{item.desc}</div>
+                  <div className="text-sm text-theme-primary">{item.desc}</div>
                 </div>
               ))}
             </div>
@@ -188,9 +188,9 @@ export default function PrivacyPage() {
                 <Mail className="w-4 h-4 text-[#C9921A]" />
                 <a href="mailto:info@tnfzim.com" className="text-[#F5B730] hover:underline">info@tnfzim.com</a>
               </div>
-              <div className="text-slate-400 text-sm">Tripartite Negotiating Forum (TNF) Secretariat</div>
-              <div className="text-slate-400 text-sm">East Wing Block 3 Celestial Park, Borrowdale, Harare, Zimbabwe</div>
-              <div className="text-slate-400 text-sm">+263 242 783030 / 783090</div>
+              <div className="text-sm text-theme-primary">Tripartite Negotiating Forum (TNF) Secretariat</div>
+              <div className="text-sm text-theme-primary">East Wing Block 3 Celestial Park, Borrowdale, Harare, Zimbabwe</div>
+              <div className="text-sm text-theme-primary">+263 242 783030 / 783090</div>
             </div>
           </section>
 
@@ -205,9 +205,9 @@ export default function PrivacyPage() {
 
         </div>
 
-        <div className="mt-8 text-center text-slate-600 text-xs">
+        <div className="mt-8 text-center text-xs text-theme-primary">
           Platform developed by{" "}
-          <a href="https://www.quantistechnologies.co.zw/" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-[#C9921A] transition-colors font-semibold">
+          <a href="https://www.quantistechnologies.co.zw/" target="_blank" rel="noopener noreferrer" className="text-theme-primary hover:text-[#C9921A] transition-colors font-semibold">
             Quantis Technologies
           </a>
         </div>

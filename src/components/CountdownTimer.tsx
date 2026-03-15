@@ -31,7 +31,7 @@ function TimeBlock({ value, label }: TimeUnit) {
           </div>
         </div>
       </motion.div>
-      <span className="text-xs sm:text-sm text-slate-400 uppercase tracking-widest font-medium">
+      <span className="text-xs sm:text-sm uppercase tracking-widest font-medium text-theme-primary">
         {label}
       </span>
     </div>
@@ -65,7 +65,7 @@ export default function CountdownTimer() {
   if (!mounted) {
     return (
       <div className="text-center">
-        <p className="text-slate-400 text-sm uppercase tracking-widest mb-6 font-medium">
+        <p className="text-sm uppercase tracking-widest mb-6 font-medium text-theme-primary">
           Countdown to Summit Opening
         </p>
         <div className="flex items-center justify-center gap-4 sm:gap-6">
@@ -77,7 +77,7 @@ export default function CountdownTimer() {
                     --
                   </span>
                 </div>
-                <span className="text-xs sm:text-sm text-slate-400 uppercase tracking-widest font-medium">
+                <span className="text-xs sm:text-sm uppercase tracking-widest font-medium text-theme-primary">
                   {label}
                 </span>
               </div>
@@ -87,7 +87,7 @@ export default function CountdownTimer() {
             </div>
           ))}
         </div>
-        <p className="text-slate-500 text-xs mt-6">
+        <p className="text-xs mt-6 text-theme-primary">
           {summitInfo.dates} · {summitInfo.venue} · {summitInfo.location}
         </p>
       </div>
@@ -96,7 +96,7 @@ export default function CountdownTimer() {
 
   return (
     <div className="text-center">
-      <p className="text-slate-400 text-sm uppercase tracking-widest mb-6 font-medium">
+      <p className="text-sm uppercase tracking-widest mb-6 font-medium text-theme-primary">
         Countdown to Summit Opening
       </p>
       <div className="flex items-center justify-center gap-4 sm:gap-6">
@@ -109,7 +109,7 @@ export default function CountdownTimer() {
           </div>
         ))}
       </div>
-      <p className="text-slate-500 text-xs mt-6">
+      <p className="text-xs mt-6 text-theme-primary">
         {summitInfo.dates} · {summitInfo.venue} · {summitInfo.location}
       </p>
     </div>

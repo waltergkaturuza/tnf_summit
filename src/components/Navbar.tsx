@@ -99,15 +99,17 @@ export default function Navbar() {
               </div>
             </Link>
 
-            {/* Desktop Nav */}
+            {/* Desktop Nav — bold tabs; active: green (light) / orange (dark) */}
             <nav className="hidden xl:flex items-center gap-0.5">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${
+                  className={`px-3 py-2 rounded-lg text-xs font-bold transition-all duration-200 ${
                     pathname === link.href
-                      ? "text-[#F5B730] bg-[#C9921A]/10"
+                      ? isDark
+                        ? "text-[#F5B730] bg-[#C9921A]/15"
+                        : "text-[#33A852] bg-[#33A852]/10"
                       : isDark
                         ? "text-slate-300 hover:text-white hover:bg-white/5"
                         : "text-slate-600 hover:text-[#0A1628] hover:bg-black/5"
@@ -312,9 +314,11 @@ export default function Navbar() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setMobileOpen(false)}
-                    className={`flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                    className={`flex items-center px-4 py-3 rounded-xl text-sm font-bold transition-all ${
                       pathname === link.href
-                        ? "text-[#F5B730] bg-[#C9921A]/10 border border-[#C9921A]/20"
+                        ? isDark
+                          ? "text-[#F5B730] bg-[#C9921A]/15 border border-[#C9921A]/25"
+                          : "text-[#33A852] bg-[#33A852]/10 border border-[#33A852]/25"
                         : ""
                     }`}
                     style={{ color: pathname === link.href ? undefined : "var(--text-secondary)" }}

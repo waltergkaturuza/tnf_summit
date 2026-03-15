@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "TNF Global Summit 2026 | Inclusive Growth, Decent Work & Investment Promotion",
   description:
-    "Africa's premier tripartite-led global convening platform. 20–26 September 2026 at Elephant Hills Resort, Victoria Falls, Zimbabwe. 1,500–2,000 delegates. Organised by the Tripartite Negotiating Forum (TNF) Secretariat.",
+    "Africa's premier tripartite-led global convening platform. 20–26 September 2026 at Elephant Hills Resort, Victoria Falls, Zimbabwe. 1,500–2,000 delegates. Organised by the Tripartite Negotiating Forum (TNF).",
   keywords: [
     "TNF Global Summit",
     "Tripartite Negotiating Forum",

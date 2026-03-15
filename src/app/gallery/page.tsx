@@ -90,8 +90,8 @@ function LightBox({ files, index, onClose, onPrev, onNext }: {
         onClick={e => e.stopPropagation()}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={f.publicUrl} alt={f.altText} className="max-h-[75vh] max-w-full rounded-xl object-contain" />
-        {f.caption && <p className="text-slate-300 text-sm text-center">{f.caption}</p>}
-        <p className="text-slate-500 text-xs">{index + 1} / {files.length}</p>
+        {f.caption && <p className="text-sm text-center text-theme-primary">{f.caption}</p>}
+        <p className="text-xs text-theme-primary">{index + 1} / {files.length}</p>
       </motion.div>
     </motion.div>
   );
@@ -121,7 +121,7 @@ export default function GalleryPage() {
             <h1 className="text-4xl sm:text-5xl font-black text-white mt-3 mb-4">
               Gallery & <span className="gradient-text">Media Centre</span>
             </h1>
-            <p className="text-slate-400 max-w-2xl mx-auto">
+            <p className="max-w-2xl mx-auto text-theme-primary">
               Official Summit photography, video recordings, presentations and documents. Full media gallery available after the Summit (September 2026).
             </p>
           </motion.div>
@@ -136,7 +136,7 @@ export default function GalleryPage() {
               <div className="text-center mb-12">
                 <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Official Gallery</span>
                 <h2 className="text-3xl font-black text-white mt-3">Victoria Falls & Elephant Hills Resort</h2>
-                <p className="text-slate-400 mt-2">A world-class summit destination — one of the Seven Natural Wonders of the World</p>
+                <p className="mt-2 text-theme-primary">A world-class summit destination — one of the Seven Natural Wonders of the World</p>
               </div>
             </FadeIn>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-6">
@@ -219,7 +219,7 @@ export default function GalleryPage() {
               <div className="text-center mb-10">
                 <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">The Venue</span>
                 <h2 className="text-3xl font-black text-white mt-3">Victoria Falls & Elephant Hills Resort</h2>
-                <p className="text-slate-400 mt-3">A world-class summit destination — one of the Seven Natural Wonders of the World</p>
+                <p className="mt-3 text-theme-primary">A world-class summit destination — one of the Seven Natural Wonders of the World</p>
               </div>
             </FadeIn>
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
@@ -249,7 +249,7 @@ export default function GalleryPage() {
             <div className="text-center mb-14">
               <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Post-Summit</span>
               <h2 className="text-4xl font-black text-white mt-3">What Will Be Available</h2>
-              <p className="text-slate-400 mt-4 max-w-2xl mx-auto">
+              <p className="mt-4 max-w-2xl mx-auto text-theme-primary">
                 The full media centre will be activated following the Summit. Here&apos;s what delegates and media can expect to access.
               </p>
             </div>
@@ -270,15 +270,15 @@ export default function GalleryPage() {
                       </div>
                       <div>
                         <h3 className="text-white font-bold">{section.category}</h3>
-                        <p className="text-slate-400 text-xs mt-1 leading-relaxed">{section.desc}</p>
+                        <p className="text-xs mt-1 leading-relaxed text-theme-primary">{section.desc}</p>
                       </div>
                     </div>
                     <div className="space-y-2">
                       {section.items.map((item) => (
-                        <div key={item} className="flex items-center gap-2 text-slate-400 text-sm">
+                        <div key={item} className="flex items-center gap-2 text-sm text-theme-primary">
                           <div className="w-1.5 h-1.5 rounded-full" style={{ background: section.color }} />
                           {item}
-                          <span className="ml-auto text-[10px] px-1.5 py-0.5 rounded bg-slate-700 text-slate-500">Soon</span>
+                          <span className="ml-auto text-[10px] px-1.5 py-0.5 rounded bg-slate-700 text-theme-primary">Soon</span>
                         </div>
                       ))}
                     </div>
@@ -297,7 +297,7 @@ export default function GalleryPage() {
             <div className="glass-gold rounded-3xl p-10 sm:p-12">
               <div className="text-5xl mb-6">📺</div>
               <h2 className="text-3xl font-black text-white mb-4">Live & Hybrid Coverage</h2>
-              <p className="text-slate-300 mb-8 leading-relaxed">
+              <p className="mb-8 leading-relaxed text-theme-primary">
                 The TNF Global Summit will offer hybrid attendance with live streaming of plenary sessions. Virtual delegates can participate in real-time from anywhere in the world.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
@@ -309,7 +309,7 @@ export default function GalleryPage() {
                   <div key={item.title} className="glass rounded-xl p-4 text-center">
                     <div className="text-2xl mb-2">{item.icon}</div>
                     <div className="text-white font-bold text-sm">{item.title}</div>
-                    <div className="text-slate-400 text-xs mt-1">{item.desc}</div>
+                    <div className="text-xs mt-1 text-theme-primary">{item.desc}</div>
                   </div>
                 ))}
               </div>
@@ -333,7 +333,7 @@ export default function GalleryPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <FadeIn>
             <h2 className="text-2xl font-black text-white mb-4">Follow the Summit</h2>
-            <p className="text-slate-400 mb-6">
+            <p className="mb-6 text-theme-primary">
               Use <span className="text-[#F5B730] font-bold">#TNFGlobalSummit</span> on social media to join the global conversation.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
@@ -341,7 +341,7 @@ export default function GalleryPage() {
                 <a
                   key={platform}
                   href="#"
-                  className="glass px-6 py-3 rounded-xl text-slate-300 text-sm font-medium hover:text-white hover:border-white/20 transition-all border border-white/5"
+                  className="glass px-6 py-3 rounded-xl text-sm font-medium hover:text-white hover:border-white/20 transition-all border border-white/5 text-theme-primary"
                 >
                   {platform}
                 </a>

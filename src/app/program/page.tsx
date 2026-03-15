@@ -70,7 +70,7 @@ function SessionCard({ session }: { session: Session }) {
             {/* Room & Themes */}
             <div className="flex items-center gap-3 mt-2 flex-wrap">
               {session.room !== "BOTH" && session.room !== "ALL" && (
-                <div className="flex items-center gap-1 text-slate-500 text-xs">
+                <div className="flex items-center gap-1 text-xs text-theme-primary">
                   <MapPin className="w-3 h-3" />
                   <span>{session.room === "A" ? "Room A" : "Room B"}</span>
                 </div>
@@ -93,7 +93,7 @@ function SessionCard({ session }: { session: Session }) {
           {session.description && (
             <div className="flex-shrink-0 ml-auto">
               <ChevronDown
-                className={`w-4 h-4 text-slate-500 transition-transform ${expanded ? "rotate-180" : ""}`}
+                className={`w-4 h-4 text-theme-primary transition-transform ${expanded ? "rotate-180" : ""}`}
               />
             </div>
           )}
@@ -110,11 +110,11 @@ function SessionCard({ session }: { session: Session }) {
             className="overflow-hidden"
           >
             <div className="px-4 sm:px-5 pb-5 pt-1 border-t border-white/5">
-              <p className="text-slate-300 text-sm leading-relaxed mb-3">
+              <p className="text-sm leading-relaxed mb-3 text-theme-primary">
                 {session.description}
               </p>
               {session.room !== "BOTH" && session.room !== "ALL" && (
-                <div className="flex items-center gap-2 text-slate-400 text-xs">
+                <div className="flex items-center gap-2 text-xs text-theme-primary">
                   <MapPin className="w-3 h-3 text-[#C9921A]" />
                   <span>{getRoomLabel(session.room)}</span>
                 </div>
@@ -199,7 +199,7 @@ export default function ProgramPage() {
             <h1 className="text-4xl sm:text-5xl font-black text-white mt-3 mb-4">
               Conference <span className="gradient-text">Programme</span>
             </h1>
-            <p className="text-slate-400 max-w-2xl mx-auto">
+            <p className="max-w-2xl mx-auto text-theme-primary">
               20–26 September 2026 · Elephant Hills Resort, Victoria Falls, Zimbabwe<br />
               4 plenary days · 20+ sessions · 2 concurrent rooms · 14 spotlight themes
             </p>
@@ -219,7 +219,7 @@ export default function ProgramPage() {
                 className={`flex-shrink-0 px-4 py-2.5 rounded-xl text-sm font-bold transition-all border ${
                   activeDay === i
                     ? "text-white border-transparent"
-                    : "glass text-slate-400 border-white/10 hover:text-white"
+                    : "glass border-white/10 hover:text-white text-theme-primary"
                 }`}
                 style={activeDay === i ? { background: `${color}25`, borderColor: `${color}50`, color: color } : {}}
               >
@@ -250,14 +250,14 @@ export default function ProgramPage() {
                   </div>
                 </div>
                 <h2 className="text-white font-bold text-xl mt-2">{currentDay.theme}</h2>
-                <div className="flex items-center gap-2 text-slate-400 text-sm mt-1">
+                <div className="flex items-center gap-2 text-sm mt-1 text-theme-primary">
                   <Calendar className="w-4 h-4 text-[#C9921A]" />
                   <span>{currentDay.date}</span>
                 </div>
               </div>
               <div className="text-right">
                 <div className="text-[#C9921A] text-2xl font-black">{currentDay.sessions.length}</div>
-                <div className="text-slate-400 text-xs">sessions</div>
+                <div className="text-xs text-theme-primary">sessions</div>
               </div>
             </div>
           </motion.div>
@@ -272,13 +272,13 @@ export default function ProgramPage() {
 
           {/* Search */}
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-primary" />
             <input
               type="text"
               placeholder="Search sessions..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-white/5 border border-white/10 rounded-lg pl-9 pr-4 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-[#C9921A]/50"
+              className="w-full bg-white/5 border border-white/10 rounded-lg pl-9 pr-4 py-2 text-sm text-white placeholder:text-theme-primary/70 focus:outline-none focus:border-[#C9921A]/50"
             />
           </div>
 
@@ -291,7 +291,7 @@ export default function ProgramPage() {
                 className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                   activeType === t.id
                     ? "bg-[#C9921A] text-[#0A1628] font-bold"
-                    : "glass text-slate-400 hover:text-white"
+                    : "glass text-theme-primary hover:text-white"
                 }`}
               >
                 {t.label}
@@ -312,7 +312,7 @@ export default function ProgramPage() {
                 className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                   activeRoom === r.id
                     ? "bg-sky-500/20 text-sky-300 border border-sky-500/40"
-                    : "glass text-slate-400 hover:text-white"
+                    : "glass text-theme-primary hover:text-white"
                 }`}
               >
                 {r.label}
@@ -333,7 +333,7 @@ export default function ProgramPage() {
             {filteredSessions.length === 0 ? (
               <div className="glass rounded-2xl p-12 text-center">
                 <div className="text-4xl mb-4">🔍</div>
-                <p className="text-slate-400">No sessions match your filters.</p>
+                <p className="text-theme-primary">No sessions match your filters.</p>
                 <button
                   onClick={() => { setActiveType("all"); setActiveRoom("all"); setSearch(""); }}
                   className="mt-4 text-[#C9921A] text-sm hover:text-[#F5B730] transition-colors"
@@ -368,7 +368,7 @@ export default function ProgramPage() {
 
         {/* Download note */}
         <div className="mt-6 text-center">
-          <p className="text-slate-500 text-xs">
+          <p className="text-xs text-theme-primary">
             Full programme document available for download ·{" "}
             <span className="text-[#C9921A]">info@tnfzim.com</span>
           </p>

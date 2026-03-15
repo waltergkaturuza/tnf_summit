@@ -114,7 +114,7 @@ export default function SpeakersPage() {
             <h1 className="text-4xl sm:text-5xl font-black text-white mt-3 mb-4">
               Keynote Speakers <span className="gradient-text">&amp; Panelists</span>
             </h1>
-            <p className="text-slate-400 max-w-2xl mx-auto">
+            <p className="max-w-2xl mx-auto text-theme-primary">
               World-class speakers including heads of state, ministers, global economists, investment leaders, technology innovators and social dialogue experts.
             </p>
           </motion.div>
@@ -141,7 +141,7 @@ export default function SpeakersPage() {
             <div className="text-center mb-14">
               <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Speaker Profiles</span>
               <h2 className="text-4xl font-black text-white mt-3">Expected Speaker Categories</h2>
-              <p className="text-slate-400 mt-4 max-w-2xl mx-auto">
+              <p className="mt-4 max-w-2xl mx-auto text-theme-primary">
                 The Summit programme features speakers across these high-level categories. Individual speaker confirmations to be announced.
               </p>
             </div>
@@ -161,7 +161,7 @@ export default function SpeakersPage() {
                       </div>
                     </div>
                   </div>
-                  <p className="text-slate-400 text-xs leading-relaxed">{profile.desc}</p>
+                  <p className="text-xs leading-relaxed text-theme-primary">{profile.desc}</p>
                 </div>
               </FadeIn>
             ))}
@@ -179,7 +179,7 @@ export default function SpeakersPage() {
                 <h2 className="text-3xl font-black text-white mt-3 mb-6">
                   Speaking at the <span className="gradient-text">TNF Global Summit</span>
                 </h2>
-                <p className="text-slate-300 leading-relaxed mb-6">
+                <p className="leading-relaxed mb-6 text-theme-primary">
                   The TNF Global Summit offers unparalleled visibility before Africa&apos;s most influential audience of ministers, investors, social partners and development institutions.
                 </p>
                 <div className="space-y-3 mb-8">
@@ -193,7 +193,7 @@ export default function SpeakersPage() {
                   ].map((item) => (
                     <div key={item} className="flex items-start gap-3">
                       <Mic className="w-4 h-4 text-[#C9921A] mt-0.5 flex-shrink-0" />
-                      <span className="text-slate-300 text-sm">{item}</span>
+                      <span className="text-sm text-theme-primary">{item}</span>
                     </div>
                   ))}
                 </div>
@@ -208,7 +208,7 @@ export default function SpeakersPage() {
               <div className="glass-gold rounded-3xl p-8 text-center">
                 <div className="text-5xl mb-4">🎤</div>
                 <h3 className="text-2xl font-black text-white mb-4">Reach 1,500+ Leaders</h3>
-                <p className="text-slate-400 mb-6 text-sm leading-relaxed">
+                <p className="mb-6 text-sm leading-relaxed text-theme-primary">
                   Speak before ministers, policymakers, institutional investors, DFI leaders, business executives and civil society leaders from across Africa and the world.
                 </p>
                 <div className="grid grid-cols-2 gap-4 mb-6">
@@ -220,7 +220,7 @@ export default function SpeakersPage() {
                   ].map((stat) => (
                     <div key={stat.label} className="glass rounded-xl p-3 text-center">
                       <div className="text-xl font-black gradient-text">{stat.value}</div>
-                      <div className="text-slate-400 text-xs mt-1">{stat.label}</div>
+                      <div className="text-xs mt-1 text-theme-primary">{stat.label}</div>
                     </div>
                   ))}
                 </div>
@@ -241,7 +241,7 @@ export default function SpeakersPage() {
             <div className="text-5xl mb-6">🚀</div>
             <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Youth Innovation</span>
             <h2 className="text-3xl font-black text-white mt-3 mb-6">TNF Innovation Challenge</h2>
-            <p className="text-slate-300 leading-relaxed mb-8">
+            <p className="leading-relaxed mb-8 text-theme-primary">
               Are you an African youth entrepreneur with a solution for digital or green economy challenges? Apply to pitch at the TNF Innovation Challenge before a live global investor jury.
             </p>
             <div className="glass rounded-2xl p-6 mb-8 text-left">
@@ -259,7 +259,7 @@ export default function SpeakersPage() {
                     <Star className="w-4 h-4 text-[#C9921A] mt-0.5 flex-shrink-0" />
                     <div>
                       <span className="text-white font-semibold">{item.label}: </span>
-                      <span className="text-slate-400">{item.value}</span>
+                      <span className="text-theme-primary">{item.value}</span>
                     </div>
                   </div>
                 ))}

@@ -78,9 +78,9 @@ const initialForm: FormData = {
   privacyConsent: false, photoConsent: false, newsletterOptIn: false, termsAccepted: false,
 };
 
-const inputClass = "w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-[#C9921A]/60 transition-colors";
+const inputClass = "w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-theme-primary/70 focus:outline-none focus:border-[#C9921A]/60 transition-colors";
 const selectClass = "w-full bg-[var(--bg-surface)] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#C9921A]/60 transition-colors appearance-none";
-const labelClass = "block text-slate-400 text-xs font-semibold uppercase tracking-wide mb-1.5";
+const labelClass = "block text-xs font-semibold uppercase tracking-wide mb-1.5 text-theme-primary";
 
 function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
   return (
@@ -96,7 +96,7 @@ function ToggleButton({ value, current, onChange, children }: { value: string; c
     <button
       type="button"
       onClick={() => onChange(value)}
-      className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all border ${current === value ? "bg-[#C9921A] text-[#0A1628] border-[#C9921A] font-bold" : "glass text-slate-400 border-white/10 hover:text-white hover:border-white/20"}`}
+      className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all border ${current === value ? "bg-[#C9921A] text-[#0A1628] border-[#C9921A] font-bold" : "glass border-white/10 hover:text-white hover:border-white/20 text-theme-primary"}`}
     >
       {children}
     </button>
@@ -112,7 +112,7 @@ function CheckboxGroup({ options, selected, onChange }: { options: string[]; sel
           <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all ${selected.includes(opt) ? "bg-[#C9921A] border-[#C9921A]" : "border-white/20 group-hover:border-[#C9921A]/50"}`}>
             {selected.includes(opt) && <CheckCircle className="w-3 h-3 text-[#0A1628]" />}
           </div>
-          <span className={`text-sm leading-snug ${selected.includes(opt) ? "text-white" : "text-slate-400"}`}>{opt}</span>
+          <span className={`text-sm leading-snug ${selected.includes(opt) ? "text-white" : "text-theme-primary"}`}>{opt}</span>
         </label>
       ))}
     </div>
@@ -225,35 +225,35 @@ export default function RegistrationPage() {
             <CheckCircle className="w-12 h-12 text-emerald-400" />
           </div>
           <h2 className="text-4xl font-black text-white mb-3">Registration Submitted!</h2>
-          <p className="text-slate-300 text-lg mb-2">Welcome to the TNF Global Summit 2026, <strong className="text-[#F5B730]">{form.salutation} {form.firstName} {form.lastName}</strong></p>
-          <p className="text-slate-400 mb-8">A confirmation and invoice will be sent to <strong className="text-white">{form.email}</strong> within 24 hours.</p>
+          <p className="text-lg mb-2 text-theme-primary">Welcome to the TNF Global Summit 2026, <strong className="text-[#F5B730]">{form.salutation} {form.firstName} {form.lastName}</strong></p>
+          <p className="mb-8 text-theme-primary">A confirmation and invoice will be sent to <strong className="text-white">{form.email}</strong> within 24 hours.</p>
           <div className="glass-gold rounded-2xl p-6 mb-6 text-left space-y-3">
             <h3 className="text-[#F5B730] font-bold text-lg mb-4">Registration Summary</h3>
             <div className="grid grid-cols-2 gap-3 text-sm">
-              <div><span className="text-slate-400">Ref. Number:</span><div className="text-white font-bold text-base">{regId}</div></div>
-              <div><span className="text-slate-400">Status:</span><div className="text-amber-400 font-bold">Pending Confirmation</div></div>
-              <div><span className="text-slate-400">Name:</span><div className="text-white">{form.salutation} {form.firstName} {form.lastName}</div></div>
-              <div><span className="text-slate-400">Organisation:</span><div className="text-white">{form.organisation}</div></div>
-              <div><span className="text-slate-400">Category:</span><div className="text-white">{form.category}</div></div>
-              <div><span className="text-slate-400">Attendance:</span><div className="text-white capitalize">{form.attendanceMode}</div></div>
-              <div><span className="text-slate-400">Country:</span><div className="text-white">{form.country}</div></div>
-              <div><span className="text-slate-400">Payment Method:</span><div className="text-white">{form.paymentMethod}</div></div>
+              <div><span className="text-theme-primary">Ref. Number:</span><div className="text-white font-bold text-base">{regId}</div></div>
+              <div><span className="text-theme-primary">Status:</span><div className="text-amber-400 font-bold">Pending Confirmation</div></div>
+              <div><span className="text-theme-primary">Name:</span><div className="text-white">{form.salutation} {form.firstName} {form.lastName}</div></div>
+              <div><span className="text-theme-primary">Organisation:</span><div className="text-white">{form.organisation}</div></div>
+              <div><span className="text-theme-primary">Category:</span><div className="text-white">{form.category}</div></div>
+              <div><span className="text-theme-primary">Attendance:</span><div className="text-white capitalize">{form.attendanceMode}</div></div>
+              <div><span className="text-theme-primary">Country:</span><div className="text-white">{form.country}</div></div>
+              <div><span className="text-theme-primary">Payment Method:</span><div className="text-white">{form.paymentMethod}</div></div>
             </div>
             {feeAmount > 0 && (
               <div className="border-t border-white/10 pt-3 flex justify-between items-center">
-                <span className="text-slate-400">Early Bird Fee (until 30 June 2026):</span>
+                <span className="text-theme-primary">Early Bird Fee (until 30 June 2026):</span>
                 <span className="text-[#F5B730] text-2xl font-black">USD {feeAmount}</span>
               </div>
             )}
           </div>
-          <div className="glass rounded-xl p-4 text-sm text-slate-400 mb-6">
+          <div className="glass rounded-xl p-4 text-sm text-theme-primary mb-6">
             <strong className="text-white">Next steps:</strong> You will receive an invoice by email. Payment is due within 14 days. Your badge will be ready for collection at Delegate Registration on <strong className="text-white">20 September 2026</strong>.
           </div>
           <div className="flex flex-wrap justify-center gap-3">
             <a href="/" className="btn-gold px-8 py-3 rounded-xl text-sm font-bold inline-flex items-center gap-2">Back to Home <ArrowRight className="w-4 h-4" /></a>
             <a href="/program" className="btn-outline-gold px-8 py-3 rounded-xl text-sm font-semibold">View Programme</a>
           </div>
-          <p className="text-slate-500 text-xs mt-6">Questions? Contact <a href="mailto:info@tnfzim.com" className="text-[#C9921A]">info@tnfzim.com</a> · +263 242 783 030</p>
+          <p className="text-xs mt-6 text-theme-primary">Questions? Contact <a href="mailto:info@tnfzim.com" className="text-[#C9921A]">info@tnfzim.com</a> · +263 242 783 030</p>
         </motion.div>
       </div>
     );
@@ -269,7 +269,7 @@ export default function RegistrationPage() {
           <h1 className="text-4xl sm:text-5xl font-black text-white mt-2 mb-2">
             Delegate <span className="gradient-text">Registration</span>
           </h1>
-          <p className="text-slate-400">TNF Global Summit 2026 · Victoria Falls, Zimbabwe · Early bird closes <strong className="text-white">30 June 2026</strong></p>
+          <p className="text-theme-primary">TNF Global Summit 2026 · Victoria Falls, Zimbabwe · Early bird closes <strong className="text-white">30 June 2026</strong></p>
         </div>
       </section>
 
@@ -278,8 +278,8 @@ export default function RegistrationPage() {
         {/* Fee summary bar */}
         {form.category && (
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="glass-gold rounded-xl px-5 py-3 mb-6 flex items-center justify-between">
-            <div className="text-sm text-slate-300">{form.category}</div>
-            <div className="text-[#F5B730] font-black text-lg">USD {feeAmount} <span className="text-slate-400 text-xs font-normal">early bird</span></div>
+            <div className="text-sm text-theme-primary">{form.category}</div>
+            <div className="text-[#F5B730] font-black text-lg">USD {feeAmount} <span className="text-xs font-normal text-theme-primary">early bird</span></div>
           </motion.div>
         )}
 
@@ -299,7 +299,7 @@ export default function RegistrationPage() {
                     className={`flex flex-col sm:flex-row items-center gap-1 sm:gap-1.5 px-2 py-2.5 rounded-xl text-xs font-bold transition-all w-full justify-center
                       ${active ? "bg-[#C9921A] text-[#0A1628] shadow-lg shadow-[#C9921A]/20"
                         : done ? "bg-[#C9921A]/15 text-[#F5B730] cursor-pointer hover:bg-[#C9921A]/25"
-                        : "glass text-slate-500"}`}
+                        : "glass text-theme-primary"}`}
                   >
                     {done
                       ? <CheckCircle className="w-3.5 h-3.5 flex-shrink-0" />
@@ -325,8 +325,8 @@ export default function RegistrationPage() {
             />
           </div>
           <div className="flex justify-between mt-1.5">
-            <span className="text-slate-600 text-[10px]">Step {step} of {STEPS.length}</span>
-            <span className="text-slate-600 text-[10px]">{Math.round(((step - 1) / (STEPS.length - 1)) * 100)}% complete</span>
+            <span className="text-[10px] text-theme-primary">Step {step} of {STEPS.length}</span>
+            <span className="text-[10px] text-theme-primary">{Math.round(((step - 1) / (STEPS.length - 1)) * 100)}% complete</span>
           </div>
         </div>
 
@@ -341,7 +341,7 @@ export default function RegistrationPage() {
                   <div className="space-y-5">
                     <div className="mb-2">
                       <h2 className="text-xl font-black text-white">Personal Information</h2>
-                      <p className="text-slate-400 text-sm mt-1">Enter your personal details as they should appear on your delegate badge and certificate.</p>
+                      <p className="text-sm mt-1 text-theme-primary">Enter your personal details as they should appear on your delegate badge and certificate.</p>
                     </div>
                     <div className="grid grid-cols-3 gap-4">
                       <Field label="Salutation" required>
@@ -350,7 +350,7 @@ export default function RegistrationPage() {
                             <option value="">Select</option>
                             {salutations.map(s => <option key={s}>{s}</option>)}
                           </select>
-                          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+                          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-primary pointer-events-none" />
                         </div>
                       </Field>
                       <Field label="First Name" required>
@@ -367,7 +367,7 @@ export default function RegistrationPage() {
                             <option value="">Select</option>
                             {genders.map(g => <option key={g}>{g}</option>)}
                           </select>
-                          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+                          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-primary pointer-events-none" />
                         </div>
                       </Field>
                       <Field label="Date of Birth">
@@ -381,7 +381,7 @@ export default function RegistrationPage() {
                             <option value="">Select country</option>
                             {countries.map(c => <option key={c}>{c}</option>)}
                           </select>
-                          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+                          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-primary pointer-events-none" />
                         </div>
                       </Field>
                       <Field label="Passport / ID Number">
@@ -395,13 +395,13 @@ export default function RegistrationPage() {
                         <div className="grid grid-cols-2 gap-4">
                           <Field label="Email Address" required>
                             <div className="relative">
-                              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-primary" />
                               <input required type="email" placeholder="your@email.com" value={form.email} onChange={e => set("email", e.target.value)} className={inputClass + " pl-10"} />
                             </div>
                           </Field>
                           <Field label="Confirm Email" required>
                             <div className="relative">
-                              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-primary" />
                               <input required type="email" placeholder="Confirm email" value={form.confirmEmail} onChange={e => set("confirmEmail", e.target.value)} className={inputClass + " pl-10"} />
                             </div>
                           </Field>
@@ -409,13 +409,13 @@ export default function RegistrationPage() {
                         <div className="grid grid-cols-2 gap-4">
                           <Field label="Phone Number (with country code)" required>
                             <div className="relative">
-                              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-primary" />
                               <input required type="tel" placeholder="+263 77 000 0000" value={form.phone} onChange={e => set("phone", e.target.value)} className={inputClass + " pl-10"} />
                             </div>
                           </Field>
                           <Field label="WhatsApp Number">
                             <div className="relative">
-                              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-primary" />
                               <input type="tel" placeholder="If different from above" value={form.whatsapp} onChange={e => set("whatsapp", e.target.value)} className={inputClass + " pl-10"} />
                             </div>
                           </Field>
@@ -427,12 +427,12 @@ export default function RegistrationPage() {
                                 <option value="">Select country</option>
                                 {countries.map(c => <option key={c}>{c}</option>)}
                               </select>
-                              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+                              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-primary pointer-events-none" />
                             </div>
                           </Field>
                           <Field label="City / Town" required>
                             <div className="relative">
-                              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-primary" />
                               <input required type="text" placeholder="City" value={form.city} onChange={e => set("city", e.target.value)} className={inputClass + " pl-10"} />
                             </div>
                           </Field>
@@ -447,11 +447,11 @@ export default function RegistrationPage() {
                   <div className="space-y-5">
                     <div className="mb-2">
                       <h2 className="text-xl font-black text-white">Professional Details</h2>
-                      <p className="text-slate-400 text-sm mt-1">Your professional information as it will appear in the Summit directory and on your badge.</p>
+                      <p className="text-sm mt-1 text-theme-primary">Your professional information as it will appear in the Summit directory and on your badge.</p>
                     </div>
                     <Field label="Organisation / Institution" required>
                       <div className="relative">
-                        <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                        <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-primary" />
                         <input required type="text" placeholder="Ministry / Company / NGO / University name" value={form.organisation} onChange={e => set("organisation", e.target.value)} className={inputClass + " pl-10"} />
                       </div>
                     </Field>
@@ -469,18 +469,18 @@ export default function RegistrationPage() {
                           <option value="">Select sector</option>
                           {sectors.map(s => <option key={s}>{s}</option>)}
                         </select>
-                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-primary pointer-events-none" />
                       </div>
                     </Field>
                     <Field label="Organisation Website">
                       <div className="relative">
-                        <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                        <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-primary" />
                         <input type="url" placeholder="https://yourorganisation.org" value={form.orgWebsite} onChange={e => set("orgWebsite", e.target.value)} className={inputClass + " pl-10"} />
                       </div>
                     </Field>
                     <div className="glass rounded-xl p-4 flex items-start gap-3">
                       <Info className="w-5 h-5 text-[#C9921A] flex-shrink-0 mt-0.5" />
-                      <p className="text-slate-400 text-xs leading-relaxed">
+                      <p className="text-xs leading-relaxed text-theme-primary">
                         Your professional details will be included in the official delegate directory distributed to all Summit participants, unless you opt out. You can request exclusion by emailing <a href="mailto:info@tnfzim.com" className="text-[#C9921A]">info@tnfzim.com</a>.
                       </p>
                     </div>
@@ -492,7 +492,7 @@ export default function RegistrationPage() {
                   <div className="space-y-6">
                     <div className="mb-2">
                       <h2 className="text-xl font-black text-white">Attendance & Category</h2>
-                      <p className="text-slate-400 text-sm mt-1">Select your delegate category. Your registration fee is determined by category and attendance mode.</p>
+                      <p className="text-sm mt-1 text-theme-primary">Select your delegate category. Your registration fee is determined by category and attendance mode.</p>
                     </div>
 
                     <Field label="Delegate Category" required>
@@ -503,11 +503,11 @@ export default function RegistrationPage() {
                           >
                             <div className="flex items-center gap-3">
                               <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 transition-all ${form.category === fee.category ? "border-[#C9921A] bg-[#C9921A]" : "border-slate-500"}`} />
-                              <span className={`text-sm font-medium ${form.category === fee.category ? "text-white" : "text-slate-300"}`}>{fee.category}</span>
+                              <span className={`text-sm font-medium ${form.category === fee.category ? "text-white" : "text-theme-primary"}`}>{fee.category}</span>
                             </div>
                             <div className="text-right flex-shrink-0 ml-4">
                               <div className="text-[#F5B730] font-black">USD {fee.earlyBird}</div>
-                              <div className="text-slate-500 text-xs line-through">USD {fee.standard}</div>
+                              <div className="text-xs line-through text-theme-primary">USD {fee.standard}</div>
                             </div>
                           </button>
                         ))}
@@ -548,7 +548,7 @@ export default function RegistrationPage() {
                                   <option value="">Select room type</option>
                                   {roomTypes.map(r => <option key={r}>{r}</option>)}
                                 </select>
-                                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+                                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-primary pointer-events-none" />
                               </div>
                             </Field>
                           </div>
@@ -572,7 +572,7 @@ export default function RegistrationPage() {
                   <div className="space-y-6">
                     <div className="mb-2">
                       <h2 className="text-xl font-black text-white">Session & Dining Preferences</h2>
-                      <p className="text-slate-400 text-sm mt-1">Help us personalise your Summit experience.</p>
+                      <p className="text-sm mt-1 text-theme-primary">Help us personalise your Summit experience.</p>
                     </div>
                     <Field label="Dietary Requirements">
                       <div className="relative">
@@ -580,7 +580,7 @@ export default function RegistrationPage() {
                           <option value="">No special requirements</option>
                           {dietaryOptions.map(d => <option key={d}>{d}</option>)}
                         </select>
-                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-primary pointer-events-none" />
                       </div>
                     </Field>
                     <Field label="Sessions of Primary Interest">
@@ -593,11 +593,11 @@ export default function RegistrationPage() {
                             <label key={ex} className={`flex items-center gap-3 cursor-pointer p-3 rounded-xl border transition-all ${form.excursionPreference === ex ? "border-[#C9921A] bg-[#C9921A]/10" : "glass border-white/10 hover:border-white/20"}`}>
                               <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${form.excursionPreference === ex ? "border-[#C9921A] bg-[#C9921A]" : "border-slate-500"}`} />
                               <input type="radio" name="excursion" value={ex} checked={form.excursionPreference === ex} onChange={e => set("excursionPreference", e.target.value)} className="hidden" />
-                              <span className={`text-sm ${form.excursionPreference === ex ? "text-white font-medium" : "text-slate-400"}`}>{ex}</span>
+                              <span className={`text-sm ${form.excursionPreference === ex ? "text-white font-medium" : "text-theme-primary"}`}>{ex}</span>
                             </label>
                           ))}
                         </div>
-                        <p className="text-slate-500 text-xs mt-2">Excursion places are limited. First-come, first-served. Additional activities available at own cost.</p>
+                        <p className="text-xs mt-2 text-theme-primary">Excursion places are limited. First-come, first-served. Additional activities available at own cost.</p>
                       </Field>
                     )}
                   </div>
@@ -608,7 +608,7 @@ export default function RegistrationPage() {
                   <div className="space-y-6">
                     <div className="mb-2">
                       <h2 className="text-xl font-black text-white">Additional Registrations</h2>
-                      <p className="text-slate-400 text-sm mt-1">Innovation Challenge, bilateral meetings, and media accreditation.</p>
+                      <p className="text-sm mt-1 text-theme-primary">Innovation Challenge, bilateral meetings, and media accreditation.</p>
                     </div>
 
                     {/* Bilateral meetings */}
@@ -617,7 +617,7 @@ export default function RegistrationPage() {
                         <Handshake className="w-5 h-5 text-[#C9921A] flex-shrink-0 mt-0.5" />
                         <div>
                           <h3 className="text-white font-bold text-sm">Bilateral Meeting Platform</h3>
-                          <p className="text-slate-400 text-xs mt-1">Register to book one-on-one meetings with ministers, investors, and organisations via the Summit App.</p>
+                          <p className="text-xs mt-1 text-theme-primary">Register to book one-on-one meetings with ministers, investors, and organisations via the Summit App.</p>
                         </div>
                       </div>
                       <Field label="Register for bilateral meetings?">
@@ -641,7 +641,7 @@ export default function RegistrationPage() {
                         <Rocket className="w-5 h-5 text-[#C9921A] flex-shrink-0 mt-0.5" />
                         <div>
                           <h3 className="text-white font-bold text-sm">TNF Innovation Challenge 2026</h3>
-                          <p className="text-slate-400 text-xs mt-1">African youth entrepreneurs pitch digital and green solutions to a global investor panel. Open to delegates under 35.</p>
+                          <p className="text-xs mt-1 text-theme-primary">African youth entrepreneurs pitch digital and green solutions to a global investor panel. Open to delegates under 35.</p>
                         </div>
                       </div>
                       <Field label="Apply for the TNF Innovation Challenge?">
@@ -661,7 +661,7 @@ export default function RegistrationPage() {
                                 <option value="">Select stage</option>
                                 {["Idea Stage", "Prototype / MVP", "Early Traction", "Growth Stage", "Scaling"].map(s => <option key={s}>{s}</option>)}
                               </select>
-                              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+                              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-primary pointer-events-none" />
                             </div>
                           </Field>
                           <Field label="Brief Description of Your Solution (max 250 words)">
@@ -678,7 +678,7 @@ export default function RegistrationPage() {
                         <Mic className="w-5 h-5 text-[#C9921A] flex-shrink-0 mt-0.5" />
                         <div>
                           <h3 className="text-white font-bold text-sm">Media / Press Accreditation</h3>
-                          <p className="text-slate-400 text-xs mt-1">Media representatives require separate accreditation. Press access is subject to approval.</p>
+                          <p className="text-xs mt-1 text-theme-primary">Media representatives require separate accreditation. Press access is subject to approval.</p>
                         </div>
                       </div>
                       <Field label="Are you representing a media organisation?">
@@ -698,7 +698,7 @@ export default function RegistrationPage() {
                                 <option value="">Select type</option>
                                 {["Print", "Online / Digital", "Television", "Radio", "Podcast", "Freelance"].map(t => <option key={t}>{t}</option>)}
                               </select>
-                              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+                              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-primary pointer-events-none" />
                             </div>
                           </Field>
                         </div>
@@ -712,23 +712,23 @@ export default function RegistrationPage() {
                   <div className="space-y-5">
                     <div className="mb-2">
                       <h2 className="text-xl font-black text-white">Payment Details</h2>
-                      <p className="text-slate-400 text-sm mt-1">Select your preferred payment method. An invoice will be issued within 24 hours.</p>
+                      <p className="text-sm mt-1 text-theme-primary">Select your preferred payment method. An invoice will be issued within 24 hours.</p>
                     </div>
 
                     {selectedFee && (
                       <div className="glass-gold rounded-2xl p-5">
                         <h3 className="text-[#C9921A] text-xs font-bold uppercase mb-3">Registration Fee Summary</h3>
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-slate-300 text-sm">{form.category}</span>
+                          <span className="text-sm text-theme-primary">{form.category}</span>
                         </div>
                         <div className="flex items-center justify-between">
                           <div>
-                            <div className="text-slate-400 text-xs">Early Bird Rate (valid until 30 June 2026)</div>
+                            <div className="text-xs text-theme-primary">Early Bird Rate (valid until 30 June 2026)</div>
                             <div className="text-[#F5B730] text-3xl font-black mt-1">USD {feeAmount}</div>
                           </div>
                           <div className="text-right">
-                            <div className="text-slate-500 text-xs">Standard Rate</div>
-                            <div className="text-slate-500 text-xl font-bold line-through">USD {selectedFee.standard}</div>
+                            <div className="text-xs text-theme-primary">Standard Rate</div>
+                            <div className="text-theme-primary text-xl font-bold line-through">USD {selectedFee.standard}</div>
                             <div className="text-emerald-400 text-xs font-bold">Save USD {selectedFee.standard - selectedFee.early}</div>
                           </div>
                         </div>
@@ -741,7 +741,7 @@ export default function RegistrationPage() {
                           <label key={pm} className={`flex items-center gap-3 cursor-pointer p-3.5 rounded-xl border transition-all ${form.paymentMethod === pm ? "border-[#C9921A] bg-[#C9921A]/10" : "glass border-white/10 hover:border-white/20"}`}>
                             <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${form.paymentMethod === pm ? "border-[#C9921A] bg-[#C9921A]" : "border-slate-500"}`} />
                             <input type="radio" name="payment" value={pm} checked={form.paymentMethod === pm} onChange={e => set("paymentMethod", e.target.value)} className="hidden" />
-                            <span className={`text-sm font-medium ${form.paymentMethod === pm ? "text-white" : "text-slate-400"}`}>{pm}</span>
+                            <span className={`text-sm font-medium ${form.paymentMethod === pm ? "text-white" : "text-theme-primary"}`}>{pm}</span>
                           </label>
                         ))}
                       </div>
@@ -761,7 +761,7 @@ export default function RegistrationPage() {
 
                     <div className="glass rounded-xl p-4 flex items-start gap-3">
                       <Info className="w-5 h-5 text-[#C9921A] flex-shrink-0 mt-0.5" />
-                      <div className="text-slate-400 text-xs leading-relaxed space-y-1">
+                      <div className="text-xs leading-relaxed space-y-1 text-theme-primary">
                         <p>Payment is due within <strong className="text-white">14 days</strong> of invoice date. Registration is only confirmed upon receipt of full payment.</p>
                         <p>Bank transfer details will be included in your invoice. For mobile money, contact <a href="mailto:info@tnfzim.com" className="text-[#C9921A]">info@tnfzim.com</a>.</p>
                       </div>
@@ -774,7 +774,7 @@ export default function RegistrationPage() {
                   <div className="space-y-5">
                     <div className="mb-2">
                       <h2 className="text-xl font-black text-white">Review & Submit</h2>
-                      <p className="text-slate-400 text-sm mt-1">Please review your registration and confirm your consents before submitting.</p>
+                      <p className="text-sm mt-1 text-theme-primary">Please review your registration and confirm your consents before submitting.</p>
                     </div>
 
                     {/* Summary */}
@@ -792,12 +792,12 @@ export default function RegistrationPage() {
                           ["Attendance", form.attendanceMode],
                           ["Payment", form.paymentMethod],
                         ].map(([label, value]) => value ? (
-                          <div key={label}><span className="text-slate-400">{label}: </span><span className="text-white font-medium">{value}</span></div>
+                          <div key={label}><span className="text-theme-primary">{label}: </span><span className="text-white font-medium">{value}</span></div>
                         ) : null)}
                       </div>
                       {feeAmount > 0 && (
                         <div className="border-t border-white/10 pt-3 flex justify-between">
-                          <span className="text-slate-400 text-sm">Early Bird Fee:</span>
+                          <span className="text-sm text-theme-primary">Early Bird Fee:</span>
                           <span className="text-[#F5B730] font-black text-lg">USD {feeAmount}</span>
                         </div>
                       )}
@@ -816,7 +816,7 @@ export default function RegistrationPage() {
                             {!!(form as Record<string, unknown>)[key] && <CheckCircle className="w-3 h-3 text-[#0A1628]" />}
                           </div>
                           <input type="checkbox" checked={!!(form as Record<string, unknown>)[key]} onChange={e => set(key as keyof FormData, e.target.checked)} className="hidden" required={required} />
-                          <span className="text-slate-300 text-sm leading-relaxed">
+                          <span className="text-sm leading-relaxed text-theme-primary">
                             {label}
                             {required && <span className="text-[#C9921A] ml-1">*</span>}
                           </span>
@@ -826,7 +826,7 @@ export default function RegistrationPage() {
 
                     <div className="glass rounded-xl p-4 text-center">
                       <FileText className="w-5 h-5 text-[#C9921A] mx-auto mb-2" />
-                      <p className="text-slate-400 text-xs">
+                      <p className="text-xs text-theme-primary">
                         By submitting you confirm all information is accurate. A confirmation email and invoice will be sent to <strong className="text-white">{form.email}</strong> within 24 hours.
                       </p>
                     </div>
@@ -845,7 +845,7 @@ export default function RegistrationPage() {
             )}
             <div className="flex gap-3 mt-6 pt-6 border-t border-white/5">
               {step > 1 && (
-                <button type="button" onClick={() => setStep(step - 1)} className="flex items-center gap-2 px-6 py-3 rounded-xl glass text-slate-300 hover:text-white text-sm font-semibold transition-colors">
+                <button type="button" onClick={() => setStep(step - 1)} className="flex items-center gap-2 px-6 py-3 rounded-xl glass text-theme-primary hover:text-white text-sm font-semibold transition-colors">
                   <ArrowLeft className="w-4 h-4" /> Back
                 </button>
               )}
@@ -866,8 +866,8 @@ export default function RegistrationPage() {
 
         {/* Help */}
         <div className="text-center mt-6 space-y-1">
-          <p className="text-slate-500 text-xs">Need help? <a href="mailto:info@tnfzim.com" className="text-[#C9921A] hover:text-[#F5B730]">info@tnfzim.com</a> · <a href="tel:+2632427830" className="text-[#C9921A] hover:text-[#F5B730]">+263 242 783 030</a></p>
-          <p className="text-slate-600 text-xs">Group registrations (5+ delegates): contact the Secretariat for rates.</p>
+          <p className="text-xs text-theme-primary">Need help? <a href="mailto:info@tnfzim.com" className="text-[#C9921A] hover:text-[#F5B730]">info@tnfzim.com</a> · <a href="tel:+2632427830" className="text-[#C9921A] hover:text-[#F5B730]">+263 242 783 030</a></p>
+          <p className="text-xs text-theme-primary">Group registrations (5+ delegates): contact the Secretariat for rates.</p>
         </div>
       </div>
     </div>

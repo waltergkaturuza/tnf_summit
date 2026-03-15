@@ -3,20 +3,25 @@
 /* ── Dark mode variant (class strategy via next-themes) ── */
 @variant dark (&:where(.dark, .dark *));
 
-/* ── CSS design tokens ── */
+/* ── CSS design tokens (TNF logo-inspired palette) ── */
 :root {
-  /* Brand */
-  --navy: #0F2847;
-  --navy-light: #122040;
+  /* Brand — TNF logo colors */
+  --tnf-red: #EA4335;
+  --tnf-green: #33A852;
+  --tnf-yellow: #FBBC05;
+  --tnf-navy: #152D4B;
+  --tnf-navy-deep: #243C5C;
+  --navy: #152D4B;
+  --navy-light: #1a3558;
   --gold: #C9921A;
   --gold-light: #F5B730;
   --emerald: #065F46;
   --sky: #0EA5E9;
 
-  /* Dark theme surfaces (default) — softer, less heavy */
-  --bg-primary: #0F2847;
-  --bg-surface: #132f4c;
-  --bg-alt: #162d4a;
+  /* Dark theme surfaces — TNF logo background + blended accents */
+  --bg-primary: #152D4B;
+  --bg-surface: #1a3558;
+  --bg-alt: #1e3a5f;
   --bg-card: rgba(255, 255, 255, 0.06);
   --bg-card-hover: rgba(255, 255, 255, 0.1);
   --text-primary: #F8FAFC;
@@ -27,8 +32,8 @@
   --border-strong: rgba(255, 255, 255, 0.22);
   --foreground: #F8FAFC;
   --muted: #94A3B8;
-  --navbar-bg: rgba(15, 40, 71, 0.95);
-  --scrollbar-track: #0F2847;
+  --navbar-bg: rgba(21, 45, 75, 0.95);
+  --scrollbar-track: #152D4B;
 }
 
 /* ── Light theme overrides ── */
@@ -70,7 +75,7 @@ body {
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--scrollbar-track); }
-::-webkit-scrollbar-thumb { background: #C9921A; border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #33A852, #C9921A); border-radius: 3px; }
 
 /* Glass morphism — theme-aware */
 .glass {
@@ -81,28 +86,71 @@ body {
 }
 
 .glass-gold {
-  background: rgba(201, 146, 26, 0.1);
+  background: linear-gradient(135deg, rgba(51, 168, 82, 0.1), rgba(201, 146, 26, 0.15));
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(201, 146, 26, 0.3);
+  border: 1px solid rgba(51, 168, 82, 0.35);
+  box-shadow: 0 0 0 1px rgba(251, 188, 5, 0.08);
 }
 
 /* Light mode section overrides */
 html.light .hero-bg {
   background:
-    radial-gradient(ellipse at 20% 50%, rgba(14, 165, 233, 0.08) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 20%, rgba(201, 146, 26, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 50%, rgba(51, 168, 82, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(251, 188, 5, 0.1) 0%, transparent 50%),
     linear-gradient(180deg, #EFF3F8 0%, #E2EAF4 100%);
 }
 html.light .section-gradient {
   background: linear-gradient(180deg, #EFF3F8 0%, #E8EEF8 100%);
 }
 html.light .pattern-overlay {
-  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C9921A' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2333A852' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
+
+/* Light mode: dark text on light backgrounds — maximum contrast */
+html.light .text-white,
+html.light .text-slate-100,
+html.light .text-slate-200,
+html.light .text-slate-300,
+html.light .text-slate-400,
+html.light .text-slate-500,
+html.light .text-slate-600,
+html.light .text-slate-700 { color: #0F172A !important; }
+/* Keep gold/amber accents visible in light mode */
+html.light .text-amber-400,
+html.light .text-amber-500 { color: #B45309 !important; }
+/* Hover states — dark text in light mode */
+html.light .hover\:text-white:hover { color: #0F172A !important; }
+html.light .hover\:text-slate-400:hover { color: #0F172A !important; }
+/* Border visibility on light backgrounds */
+html.light .border-white\/5 { border-color: rgba(15, 23, 42, 0.12) !important; }
+html.light .border-white\/10 { border-color: rgba(15, 23, 42, 0.18) !important; }
+html.light .border-white\/15 { border-color: rgba(15, 23, 42, 0.22) !important; }
+html.light .border-white\/20 { border-color: rgba(15, 23, 42, 0.25) !important; }
+/* Placeholder text — dark in light mode */
+html.light input::placeholder,
+html.light textarea::placeholder { color: #475569 !important; }
+
+/* Light mode: secondary text — dark for visibility */
+html.light .text-forest-light { color: #0F172A !important; }
+
+/* Theme-aware text: always matches background (dark on light, light on dark) — use on countdown, explore, etc. */
+.text-theme-primary { color: var(--text-primary) !important; }
+
+/* Dark mode: brighter text on dark backgrounds site-wide */
+:not(html.light) .text-slate-400 { color: #CBD5E1 !important; }
+:not(html.light) .text-slate-500 { color: #94A3B8 !important; }
+:not(html.light) .text-slate-600 { color: #94A3B8 !important; }
+:not(html.light) footer input::placeholder { color: #94A3B8 !important; }
 
 /* Gradient text */
 .gradient-text {
   background: linear-gradient(135deg, #F5B730 0%, #C9921A 50%, #F5B730 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+html.light .gradient-text {
+  background: linear-gradient(135deg, #B45309 0%, #92400E 50%, #B45309 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -140,18 +188,19 @@ html.light .pattern-overlay {
   animation: pulse-gold 2s ease-in-out infinite;
 }
 
-/* Hero gradient background — softer, warmer */
+/* Hero gradient background — TNF logo colors (red, green, yellow) — more visible */
 .hero-bg {
   background: 
-    radial-gradient(ellipse at 20% 50%, rgba(14, 165, 233, 0.2) 0%, transparent 55%),
-    radial-gradient(ellipse at 80% 20%, rgba(201, 146, 26, 0.15) 0%, transparent 45%),
-    radial-gradient(ellipse at 50% 80%, rgba(6, 95, 70, 0.08) 0%, transparent 50%),
-    linear-gradient(180deg, #0F2847 0%, #132f4c 50%, #162d4a 100%);
+    radial-gradient(ellipse at 15% 40%, rgba(51, 168, 82, 0.22) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 25%, rgba(251, 188, 5, 0.18) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 85%, rgba(234, 67, 53, 0.1) 0%, transparent 55%),
+    radial-gradient(ellipse at 70% 60%, rgba(51, 168, 82, 0.12) 0%, transparent 50%),
+    linear-gradient(180deg, #152D4B 0%, #1a3558 50%, #1e3a5f 100%);
 }
 
-/* Section gradients — lighter, more inviting */
+/* Section gradients — TNF navy with visible green tint */
 .section-gradient {
-  background: linear-gradient(180deg, #0F2847 0%, #132f4c 100%);
+  background: linear-gradient(180deg, #152D4B 0%, #1a3558 40%, rgba(51, 168, 82, 0.08) 100%);
 }
 
 /* Card hover effects */
@@ -187,6 +236,14 @@ html.light .pattern-overlay {
   box-shadow: 0 8px 25px rgba(201, 146, 26, 0.3);
   transform: translateY(-2px);
 }
+html.light .btn-outline-gold {
+  color: #92400E;
+  border-color: #C9921A;
+}
+html.light .btn-outline-gold:hover {
+  color: #0F172A;
+  background: rgba(201, 146, 26, 0.12);
+}
 
 /* Divider gold */
 .divider-gold {
@@ -194,12 +251,12 @@ html.light .pattern-overlay {
   background: linear-gradient(90deg, transparent, #C9921A, transparent);
 }
 
-/* Pattern overlay */
+/* Pattern overlay — TNF green + gold accents — more visible */
 .pattern-overlay {
-  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C9921A' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2333A852' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3Cg fill='%23FBBC05' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3Ccircle cx='10' cy='10' r='1'/%3E%3Ccircle cx='50' cy='50' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 
-/* Animated border */
+/* Animated border — TNF red, green, yellow */
 @keyframes border-flow {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -207,12 +264,12 @@ html.light .pattern-overlay {
 }
 
 .animated-border {
-  background: linear-gradient(270deg, #C9921A, #0EA5E9, #065F46, #C9921A);
+  background: linear-gradient(270deg, #EA4335, #33A852, #FBBC05, #C9921A, #EA4335);
   background-size: 300% 300%;
-  animation: border-flow 4s ease infinite;
+  animation: border-flow 5s ease infinite;
 }
 
-/* Timeline connector */
+/* Timeline connector — TNF green to gold */
 .timeline-line::before {
   content: '';
   position: absolute;
@@ -220,7 +277,7 @@ html.light .pattern-overlay {
   top: 0;
   bottom: 0;
   width: 2px;
-  background: linear-gradient(180deg, #C9921A, transparent);
+  background: linear-gradient(180deg, #33A852, #FBBC05, transparent);
   transform: translateX(-50%);
 }
 

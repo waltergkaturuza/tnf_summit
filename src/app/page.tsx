@@ -38,10 +38,10 @@ export default function HomePage() {
     <div className="min-h-screen">
       {/* ─── HERO ─── */}
       <section className="relative min-h-screen hero-bg pattern-overlay flex flex-col items-center justify-center overflow-hidden">
-        {/* Animated orbs */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-500/5 rounded-full blur-3xl" />
+        {/* Animated orbs — TNF logo colors (green, yellow, red) */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl animate-pulse" style={{ background: "rgba(51, 168, 82, 0.2)" }} />
+        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full blur-3xl animate-pulse" style={{ background: "rgba(251, 188, 5, 0.16)", animationDelay: "1s" }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-3xl" style={{ background: "rgba(234, 67, 53, 0.06)" }} />
 
         <div className="relative z-10 text-center max-w-5xl mx-auto px-4 pt-24 pb-16">
           {/* Badge */}
@@ -70,7 +70,7 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-lg sm:text-2xl text-slate-300 font-light mb-2"
+            className="text-lg sm:text-2xl font-light mb-2 text-theme-primary"
           >
             on Inclusive Growth, Decent Work
           </motion.p>
@@ -126,9 +126,9 @@ export default function HomePage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8 }}
-            className="text-slate-500 text-xs mt-8"
+            className="text-xs mt-8 text-theme-primary"
           >
-            Organised by the <span className="text-slate-400">Tripartite Negotiating Forum (TNF) Secretariat</span>
+            Organised by the <span>Tripartite Negotiating Forum (TNF)</span>
           </motion.p>
         </div>
 
@@ -154,7 +154,7 @@ export default function HomePage() {
           <motion.div
             animate={{ y: [0, 8, 0] }}
             transition={{ repeat: Infinity, duration: 1.5 }}
-            className="flex flex-col items-center gap-1 text-slate-500 cursor-pointer"
+            className="flex flex-col items-center gap-1 cursor-pointer text-theme-primary"
           >
             <span className="text-xs uppercase tracking-widest">Explore</span>
             <ChevronDown className="w-5 h-5" />
@@ -173,7 +173,7 @@ export default function HomePage() {
                   <div className="text-center p-3">
                     <Icon className="w-5 h-5 text-[#C9921A] mx-auto mb-2" />
                     <div className="text-xl sm:text-2xl font-black gradient-text">{fact.value}</div>
-                    <div className="text-slate-500 text-xs mt-1 leading-tight">{fact.label}</div>
+                    <div className="text-xs mt-1 leading-tight text-theme-primary">{fact.label}</div>
                   </div>
                 </FadeIn>
               );
@@ -193,15 +193,15 @@ export default function HomePage() {
                   Africa&apos;s Premier<br />
                   <span className="gradient-text">Tripartite Platform</span>
                 </h2>
-                <p className="text-slate-300 leading-relaxed mb-6">
+                <p className="leading-relaxed mb-6 text-theme-primary">
                   The TNF Global Summit on Inclusive Growth, Decent Work and Investment Promotion is Africa&apos;s premier tripartite-led global convening platform. Anchored in UN SDG 8, the African Union&apos;s Agenda 2063, the AfCFTA, and Zimbabwe&apos;s NDS2 and Vision 2030.
                 </p>
-                <p className="text-slate-400 leading-relaxed mb-8">
+                <p className="leading-relaxed mb-8 text-theme-primary">
                   The Summit convenes 1,500–2,000 ministers, policymakers, investors, social partners, development institutions, and youth innovators to bridge economic growth, responsible investment, and decent work through structured social dialogue. Hosted at Elephant Hills Resort — Victoria Falls, Zimbabwe.
                 </p>
                 <div className="flex flex-wrap gap-3">
                   {["UN SDG 8", "AU Agenda 2063", "AfCFTA", "Zimbabwe Vision 2030", "NDS2"].map((tag) => (
-                    <span key={tag} className="glass px-3 py-1.5 rounded-full text-xs text-slate-300 border border-white/10">
+                    <span key={tag} className="glass px-3 py-1.5 rounded-full text-xs border border-white/10 text-theme-primary">
                       {tag}
                     </span>
                   ))}
@@ -220,7 +220,7 @@ export default function HomePage() {
                   <div key={i} className="glass rounded-2xl p-5 card-hover">
                     <div className="text-3xl mb-3">{item.icon}</div>
                     <div className="text-white font-bold text-sm">{item.title}</div>
-                    <div className="text-slate-400 text-xs mt-1">{item.sub}</div>
+                    <div className="text-xs mt-1 text-theme-primary">{item.sub}</div>
                   </div>
                 ))}
               </div>
@@ -236,7 +236,7 @@ export default function HomePage() {
             <div className="text-center mb-14">
               <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Why Attend</span>
               <h2 className="text-4xl font-black text-white mt-3">Who Should Attend?</h2>
-              <p className="text-slate-400 mt-4 max-w-2xl mx-auto">
+              <p className="mt-4 max-w-2xl mx-auto text-theme-primary">
                 The Summit is designed for leaders and changemakers across sectors who want to shape Africa&apos;s economic future.
               </p>
             </div>
@@ -255,7 +255,7 @@ export default function HomePage() {
                       <Icon className="w-6 h-6" style={{ color: item.color }} />
                     </div>
                     <h3 className="text-white font-bold text-sm mb-3">{item.audience}</h3>
-                    <p className="text-slate-400 text-sm leading-relaxed">{item.description}</p>
+                    <p className="text-sm leading-relaxed text-theme-primary">{item.description}</p>
                   </div>
                 </FadeIn>
               );
@@ -271,7 +271,7 @@ export default function HomePage() {
             <div className="text-center mb-14">
               <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Programme</span>
               <h2 className="text-4xl font-black text-white mt-3">14 Spotlight Themes</h2>
-              <p className="text-slate-400 mt-4 max-w-2xl mx-auto">
+              <p className="mt-4 max-w-2xl mx-auto text-theme-primary">
                 World-class sessions covering the most critical dimensions of Africa&apos;s economic transformation.
               </p>
             </div>
@@ -331,7 +331,7 @@ export default function HomePage() {
             <div className="text-center mb-14">
               <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Schedule</span>
               <h2 className="text-4xl font-black text-white mt-3">Summit Week at a Glance</h2>
-              <p className="text-slate-400 mt-4">20–26 September 2026 · Elephant Hills Resort, Victoria Falls</p>
+              <p className="mt-4 text-theme-primary">20–26 September 2026 · Elephant Hills Resort, Victoria Falls</p>
             </div>
           </FadeIn>
 
@@ -348,14 +348,14 @@ export default function HomePage() {
               <FadeIn key={i} delay={i * 0.07}>
                 <div className="glass rounded-xl p-4 card-hover text-center border border-white/5 h-full">
                   <div className="text-2xl mb-2">{day.emoji}</div>
-                  <div className="text-xs text-slate-400 mb-1">{day.date}</div>
+                  <div className="text-xs mb-1 text-theme-primary">{day.date}</div>
                   <div
                     className="text-sm font-bold mb-2"
                     style={{ color: day.color }}
                   >
                     {day.label}
                   </div>
-                  <p className="text-slate-400 text-xs leading-relaxed">{day.desc}</p>
+                  <p className="text-xs leading-relaxed text-theme-primary">{day.desc}</p>
                 </div>
               </FadeIn>
             ))}
@@ -377,7 +377,7 @@ export default function HomePage() {
                 <h2 className="text-4xl sm:text-5xl font-black text-white mb-4">
                   Secure Your Seat Today
                 </h2>
-                <p className="text-slate-300 text-lg mb-8 max-w-2xl mx-auto">
+                <p className="text-lg mb-8 max-w-2xl mx-auto text-theme-primary">
                   Join 1,500+ ministers, policymakers, investors and innovators at Africa&apos;s premier tripartite summit. Early bird rates from USD 100.
                 </p>
 
@@ -386,8 +386,8 @@ export default function HomePage() {
                   {registrationFees.slice(0, 3).map((fee) => (
                     <div key={fee.category} className="glass rounded-xl p-3 text-center">
                       <div className="text-[#F5B730] text-xl font-black">${fee.earlyBird}</div>
-                      <div className="text-slate-400 text-xs mt-1 leading-tight">{fee.category}</div>
-                      <div className="text-slate-500 text-xs line-through">${fee.standard}</div>
+                      <div className="text-xs mt-1 leading-tight text-theme-primary">{fee.category}</div>
+                      <div className="text-xs line-through text-theme-primary">${fee.standard}</div>
                     </div>
                   ))}
                 </div>
@@ -420,7 +420,7 @@ export default function HomePage() {
           <FadeIn delay={0.1}>
             <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10">
               {["TNF Secretariat", "ILO", "ZIDA", "AU Commission", "AfCFTA Secretariat", "ZCTU", "CZI", "AICESIS"].map((partner) => (
-                <div key={partner} className="glass px-6 py-3 rounded-xl text-slate-400 text-sm font-medium hover:text-white hover:border-white/20 transition-all border border-transparent card-hover">
+                <div key={partner} className="glass px-6 py-3 rounded-xl text-sm font-medium hover:text-white hover:border-white/20 transition-all border border-transparent card-hover text-theme-primary">
                   {partner}
                 </div>
               ))}
@@ -448,7 +448,7 @@ export default function HomePage() {
                 <h2 className="text-4xl font-black text-white mt-3 mb-6">
                   TNF Innovation<br /><span className="gradient-text">Challenge 2026</span>
                 </h2>
-                <p className="text-slate-300 leading-relaxed mb-6">
+                <p className="leading-relaxed mb-6 text-theme-primary">
                   12 African youth finalists pitch digital and green economy solutions to a live global investor panel. The top 5 finalists advance to the grand finale at the Ministerial Gala Dinner.
                 </p>
                 <ul className="space-y-3 mb-8">
@@ -461,7 +461,7 @@ export default function HomePage() {
                   ].map((item) => (
                     <li key={item} className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-[#10B981] mt-0.5 flex-shrink-0" />
-                      <span className="text-slate-300 text-sm">{item}</span>
+                      <span className="text-sm text-theme-primary">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -489,8 +489,8 @@ export default function HomePage() {
                     <div key={i} className="flex items-center gap-4">
                       <div className={`w-3 h-3 rounded-full flex-shrink-0 ${item.status === "open" ? "bg-[#10B981] pulse-gold" : "bg-slate-600"}`} />
                       <div className="flex-1 flex items-center justify-between">
-                        <span className={`text-sm font-medium ${item.status === "open" ? "text-white" : "text-slate-400"}`}>{item.step}</span>
-                        <span className="text-xs text-slate-500">{item.date}</span>
+                        <span className={`text-sm font-medium ${item.status === "open" ? "text-white" : "text-theme-primary"}`}>{item.step}</span>
+                        <span className="text-xs text-theme-primary">{item.date}</span>
                       </div>
                     </div>
                   ))}
@@ -510,7 +510,7 @@ export default function HomePage() {
               <h2 className="text-4xl font-black text-white mt-3">
                 Elephant Hills Resort<br /><span className="gradient-text">Victoria Falls, Zimbabwe</span>
               </h2>
-              <p className="text-slate-400 mt-4 max-w-2xl mx-auto">
+              <p className="mt-4 max-w-2xl mx-auto text-theme-primary">
                 One of Africa&apos;s most iconic resort destinations — overlooking the Zambezi River, minutes from one of the Seven Natural Wonders of the World.
               </p>
             </div>
@@ -529,7 +529,7 @@ export default function HomePage() {
                 <div className="glass rounded-2xl p-6 card-hover border border-white/5">
                   <div className="text-3xl mb-4">{item.emoji}</div>
                   <h3 className="text-white font-bold mb-2">{item.title}</h3>
-                  <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
+                  <p className="text-sm leading-relaxed text-theme-primary">{item.desc}</p>
                 </div>
               </FadeIn>
             ))}
@@ -539,13 +539,13 @@ export default function HomePage() {
 
       {/* ─── FINAL CTA ─── */}
       <section className="py-24 hero-bg pattern-overlay relative overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-500/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-3xl" style={{ background: "rgba(51, 168, 82, 0.12)" }} />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <FadeIn>
             <h2 className="text-5xl sm:text-6xl font-black text-white mb-6">
               Be Part of<br /><span className="shimmer">History</span>
             </h2>
-            <p className="text-slate-300 text-xl mb-10 max-w-2xl mx-auto">
+            <p className="text-xl mb-10 max-w-2xl mx-auto text-theme-primary">
               Join Africa&apos;s most influential tripartite platform at Victoria Falls. Shape the continent&apos;s economic future.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4">
@@ -557,7 +557,7 @@ export default function HomePage() {
                 Contact Us
               </Link>
             </div>
-            <p className="text-slate-500 text-sm mt-6">
+            <p className="text-sm mt-6 text-theme-primary">
               #TNFGlobalSummit · {summitInfo.website}
             </p>
           </FadeIn>

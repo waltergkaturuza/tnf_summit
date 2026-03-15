@@ -36,7 +36,7 @@ export default function AboutPage() {
             <h1 className="text-4xl sm:text-5xl font-black text-white mt-3 mb-4">
               Africa&apos;s Premier <span className="gradient-text">Tripartite Platform</span>
             </h1>
-            <p className="text-slate-400 max-w-2xl mx-auto text-lg">
+            <p className="max-w-2xl mx-auto text-lg text-theme-primary">
               The inaugural TNF Global Summit on Inclusive Growth, Decent Work & Investment Promotion — setting the standard for tripartite-led global convening.
             </p>
           </motion.div>
@@ -51,18 +51,18 @@ export default function AboutPage() {
               <div>
                 <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">The Summit</span>
                 <h2 className="text-3xl font-black text-white mt-3 mb-6">What is the TNF Global Summit?</h2>
-                <p className="text-slate-300 leading-relaxed mb-4">
+                <p className="leading-relaxed mb-4 text-theme-primary">
                   The TNF Global Summit on Inclusive Growth, Decent Work and Investment Promotion is Africa&apos;s premier tripartite-led global convening platform. It is the inaugural flagship event of the Tripartite Negotiating Forum (TNF) Secretariat of Zimbabwe.
                 </p>
-                <p className="text-slate-400 leading-relaxed mb-4">
+                <p className="leading-relaxed mb-4 text-theme-primary">
                   Anchored in the United Nations Sustainable Development Goal 8 (SDG 8), the African Union&apos;s Agenda 2063, the African Continental Free Trade Area (AfCFTA), and Zimbabwe&apos;s National Development Strategy 2 (NDS2) and Vision 2030, the Summit brings together the world&apos;s most influential voices on economic growth, decent work, and investment.
                 </p>
-                <p className="text-slate-400 leading-relaxed mb-8">
+                <p className="leading-relaxed mb-8 text-theme-primary">
                   Hosted at the iconic Elephant Hills Resort in Victoria Falls, Zimbabwe, the Summit produces binding policy commitments, investment pipelines, and measurable social outcomes, positioning Zimbabwe and the TNF as Africa&apos;s recognised global convening hub.
                 </p>
                 <div className="flex flex-wrap gap-3">
                   {["UN SDG 8", "AU Agenda 2063", "AfCFTA", "Zimbabwe NDS2", "Vision 2030", "Tripartism", "Social Dialogue"].map((tag) => (
-                    <span key={tag} className="glass px-3 py-1.5 rounded-full text-xs text-slate-300">
+                    <span key={tag} className="glass px-3 py-1.5 rounded-full text-xs text-theme-primary">
                       {tag}
                     </span>
                   ))}
@@ -82,7 +82,7 @@ export default function AboutPage() {
                     <div className="text-2xl">{item.icon}</div>
                     <div>
                       <div className="text-white font-bold text-sm">{item.title}</div>
-                      <div className="text-slate-400 text-xs mt-1 leading-relaxed">{item.desc}</div>
+                      <div className="text-xs mt-1 leading-relaxed text-theme-primary">{item.desc}</div>
                     </div>
                   </div>
                 ))}
@@ -115,7 +115,7 @@ export default function AboutPage() {
                       <Icon className="w-6 h-6" style={{ color: item.color }} />
                     </div>
                     <h3 className="text-white font-bold mb-3">{item.audience}</h3>
-                    <p className="text-slate-400 text-sm leading-relaxed">{item.description}</p>
+                    <p className="text-sm leading-relaxed text-theme-primary">{item.description}</p>
                   </div>
                 </FadeIn>
               );
@@ -131,7 +131,7 @@ export default function AboutPage() {
             <div className="text-center mb-14">
               <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Spotlight Themes</span>
               <h2 className="text-4xl font-black text-white mt-3">14 Critical Themes</h2>
-              <p className="text-slate-400 mt-4 max-w-2xl mx-auto">
+              <p className="mt-4 max-w-2xl mx-auto text-theme-primary">
                 The Summit addresses 14 spotlight themes covering Africa&apos;s most pressing economic transformation agenda.
               </p>
             </div>
@@ -173,7 +173,7 @@ export default function AboutPage() {
             <div className="text-center mb-14">
               <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Our Foundation</span>
               <h2 className="text-4xl font-black text-white mt-3">The Tripartite Model</h2>
-              <p className="text-slate-400 mt-4 max-w-2xl mx-auto">
+              <p className="mt-4 max-w-2xl mx-auto text-theme-primary">
                 The TNF Global Summit is grounded in genuine tripartism — bringing together the three key social partners.
               </p>
             </div>
@@ -189,7 +189,7 @@ export default function AboutPage() {
                 <div className="glass rounded-2xl p-8 text-center card-hover border border-white/5">
                   <div className="text-5xl mb-4">{pillar.emoji}</div>
                   <h3 className="text-xl font-black mb-3" style={{ color: pillar.color }}>{pillar.title}</h3>
-                  <p className="text-slate-400 text-sm leading-relaxed">{pillar.desc}</p>
+                  <p className="text-sm leading-relaxed text-theme-primary">{pillar.desc}</p>
                 </div>
               </FadeIn>
             ))}
@@ -208,7 +208,7 @@ export default function AboutPage() {
                   Elephant Hills Resort<br />
                   <span className="gradient-text">Victoria Falls, Zimbabwe</span>
                 </h2>
-                <p className="text-slate-300 leading-relaxed mb-6">
+                <p className="leading-relaxed mb-6 text-theme-primary">
                   One of Africa&apos;s most iconic resort venues, Elephant Hills Resort sits on the banks of the Zambezi River, just minutes from the majestic Victoria Falls — Mosi-oa-Tunya — one of the Seven Natural Wonders of the World.
                 </p>
                 <div className="space-y-3 mb-8">
@@ -223,13 +223,13 @@ export default function AboutPage() {
                   ].map((item) => (
                     <div key={item} className="flex items-start gap-3">
                       <CheckCircle className="w-4 h-4 text-[#10B981] mt-0.5 flex-shrink-0" />
-                      <span className="text-slate-300 text-sm">{item}</span>
+                      <span className="text-sm text-theme-primary">{item}</span>
                     </div>
                   ))}
                 </div>
                 <div className="flex items-center gap-2 glass rounded-xl p-3">
                   <MapPin className="w-5 h-5 text-[#C9921A]" />
-                  <span className="text-slate-300 text-sm">Elephant Hills Resort, 1 Squire Mugadza Drive, Victoria Falls, Zimbabwe</span>
+                  <span className="text-sm text-theme-primary">Elephant Hills Resort, 1 Squire Mugadza Drive, Victoria Falls, Zimbabwe</span>
                 </div>
               </div>
             </FadeIn>
@@ -249,7 +249,7 @@ export default function AboutPage() {
                   <div key={i} className="glass rounded-xl p-3 flex items-center gap-4">
                     <div className="text-2xl w-10 text-center">{item.icon}</div>
                     <div className="flex-1">
-                      <div className="text-slate-400 text-xs">{item.title}</div>
+                      <div className="text-xs text-theme-primary">{item.title}</div>
                       <div className="text-white text-sm font-semibold">{item.value}</div>
                     </div>
                   </div>
@@ -266,10 +266,10 @@ export default function AboutPage() {
           <FadeIn>
             <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Organiser</span>
             <h2 className="text-3xl font-black text-white mt-3 mb-6">Tripartite Negotiating Forum (TNF) Secretariat</h2>
-            <p className="text-slate-400 leading-relaxed mb-4">
+            <p className="leading-relaxed mb-4 text-theme-primary">
               The Tripartite Negotiating Forum (TNF) is Zimbabwe&apos;s official tripartite institution, comprising Government, Employers&apos; organisations, and Workers&apos; organisations. It serves as the national platform for structured social dialogue on economic, labour, and social policy matters.
             </p>
-            <p className="text-slate-400 leading-relaxed mb-8">
+            <p className="leading-relaxed mb-8 text-theme-primary">
               The TNF Secretariat, based in Harare, Zimbabwe, coordinates the Forum&apos;s activities and manages the TNF Global Summit as part of its mandate to position Zimbabwe as a regional hub for tripartite dialogue and inclusive economic governance.
             </p>
             <div className="flex flex-wrap justify-center gap-4">

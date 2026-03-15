@@ -100,7 +100,7 @@ function NewsletterSignup() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div>
             <h3 className="text-white font-bold text-lg mb-1">Stay Updated</h3>
-            <p className="text-slate-400 text-sm">
+            <p className="text-sm text-theme-primary">
               Subscribe for Summit updates, speaker announcements, and more.
             </p>
           </div>
@@ -120,7 +120,7 @@ function NewsletterSignup() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={loading}
-                className="flex-1 sm:w-72 bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-[#C9921A]/60 disabled:opacity-50"
+                className="flex-1 sm:w-72 bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white placeholder:text-theme-primary/70 focus:outline-none focus:border-[#C9921A]/60 disabled:opacity-50"
               />
               <button
                 type="submit"
@@ -162,25 +162,25 @@ export default function Footer() {
               </div>
             </Link>
             <p className="text-[#C9921A] text-xs font-semibold mb-4">Global Summit 2026 — Inaugural Edition</p>
-            <p className="text-slate-400 text-sm leading-relaxed mb-6">
+            <p className="text-sm leading-relaxed mb-6 text-theme-primary">
               Africa&apos;s premier tripartite-led global convening platform on Inclusive Growth, Decent Work and Investment Promotion. Anchored in UN SDG 8, AU Agenda 2063, AfCFTA, and Zimbabwe&apos;s NDS2.
             </p>
 
             {/* Contact details */}
             <div className="space-y-3">
-              <a href={`mailto:${summitInfo.email}`} className="flex items-center gap-2.5 text-slate-400 hover:text-[#F5B730] text-sm transition-colors">
+              <a href={`mailto:${summitInfo.email}`} className="flex items-center gap-2.5 text-theme-primary hover:text-[#F5B730] text-sm transition-colors">
                 <Mail className="w-4 h-4 text-[#C9921A] flex-shrink-0" />
                 {summitInfo.email}
               </a>
-              <a href={`mailto:${summitInfo.emailAlt}`} className="flex items-center gap-2.5 text-slate-400 hover:text-[#F5B730] text-sm transition-colors">
+              <a href={`mailto:${summitInfo.emailAlt}`} className="flex items-center gap-2.5 text-theme-primary hover:text-[#F5B730] text-sm transition-colors">
                 <Mail className="w-4 h-4 text-[#C9921A] flex-shrink-0" />
                 {summitInfo.emailAlt}
               </a>
-              <a href="tel:+2632427830" className="flex items-center gap-2.5 text-slate-400 hover:text-[#F5B730] text-sm transition-colors">
+              <a href="tel:+2632427830" className="flex items-center gap-2.5 text-theme-primary hover:text-[#F5B730] text-sm transition-colors">
                 <Phone className="w-4 h-4 text-[#C9921A] flex-shrink-0" />
                 {summitInfo.phone}
               </a>
-              <div className="flex items-start gap-2.5 text-slate-400 text-sm">
+              <div className="flex items-start gap-2.5 text-sm text-theme-primary">
                 <MapPin className="w-4 h-4 text-[#C9921A] mt-0.5 flex-shrink-0" />
                 {summitInfo.address}
               </div>
@@ -188,7 +188,7 @@ export default function Footer() {
                 href={summitInfo.mainWebsite}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2.5 text-slate-400 hover:text-[#F5B730] text-sm transition-colors"
+                className="flex items-center gap-2.5 text-theme-primary hover:text-[#F5B730] text-sm transition-colors"
               >
                 <Globe className="w-4 h-4 text-[#C9921A] flex-shrink-0" />
                 tnfzim.com
@@ -202,7 +202,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Follow TNF on X / Twitter"
-                className="w-9 h-9 rounded-lg glass flex items-center justify-center text-slate-400 hover:text-white hover:border-[#C9921A]/40 transition-all"
+                className="w-9 h-9 rounded-lg glass flex items-center justify-center text-theme-primary hover:text-white hover:border-[#C9921A]/40 transition-all"
               >
                 <XIcon className="w-3.5 h-3.5" />
               </a>
@@ -211,7 +211,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Follow TNF on Facebook"
-                className="w-9 h-9 rounded-lg glass flex items-center justify-center text-slate-400 hover:text-white hover:border-[#C9921A]/40 transition-all"
+                className="w-9 h-9 rounded-lg glass flex items-center justify-center text-theme-primary hover:text-white hover:border-[#C9921A]/40 transition-all"
               >
                 <FacebookIcon className="w-4 h-4" />
               </a>
@@ -220,7 +220,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="TNF on LinkedIn"
-                className="w-9 h-9 rounded-lg glass flex items-center justify-center text-slate-400 hover:text-white hover:border-[#C9921A]/40 transition-all"
+                className="w-9 h-9 rounded-lg glass flex items-center justify-center text-theme-primary hover:text-white hover:border-[#C9921A]/40 transition-all"
               >
                 <LinkedInIcon className="w-3.5 h-3.5" />
               </a>
@@ -229,7 +229,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="TNF on YouTube"
-                className="w-9 h-9 rounded-lg glass flex items-center justify-center text-slate-400 hover:text-white hover:border-[#C9921A]/40 transition-all"
+                className="w-9 h-9 rounded-lg glass flex items-center justify-center text-theme-primary hover:text-white hover:border-[#C9921A]/40 transition-all"
               >
                 <YouTubeIcon className="w-3.5 h-3.5" />
               </a>
@@ -240,7 +240,7 @@ export default function Footer() {
               href={summitInfo.mainWebsite}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 mt-5 text-slate-500 hover:text-[#C9921A] text-xs transition-colors"
+              className="inline-flex items-center gap-1.5 mt-5 text-theme-primary hover:text-[#C9921A] text-xs transition-colors"
             >
               <ExternalLink className="w-3 h-3" />
               Visit TNF Secretariat website
@@ -254,7 +254,7 @@ export default function Footer() {
               <ul className="space-y-2.5">
                 {footerLinks.summit.map((link) => (
                   <li key={link.href}>
-                    <Link href={link.href} className="text-slate-400 hover:text-[#F5B730] text-sm transition-colors">
+                    <Link href={link.href} className="text-theme-primary hover:text-[#F5B730] text-sm transition-colors">
                       {link.label}
                     </Link>
                   </li>
@@ -266,7 +266,7 @@ export default function Footer() {
               <ul className="space-y-2.5">
                 {footerLinks.programme.map((link) => (
                   <li key={link.href}>
-                    <Link href={link.href} className="text-slate-400 hover:text-[#F5B730] text-sm transition-colors">
+                    <Link href={link.href} className="text-theme-primary hover:text-[#F5B730] text-sm transition-colors">
                       {link.label}
                     </Link>
                   </li>
@@ -278,7 +278,7 @@ export default function Footer() {
               <ul className="space-y-2.5">
                 {footerLinks.participate.map((link) => (
                   <li key={link.href}>
-                    <Link href={link.href} className="text-slate-400 hover:text-[#F5B730] text-sm transition-colors">
+                    <Link href={link.href} className="text-theme-primary hover:text-[#F5B730] text-sm transition-colors">
                       {link.label}
                     </Link>
                   </li>
@@ -295,13 +295,13 @@ export default function Footer() {
                         href={link.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-slate-400 hover:text-[#F5B730] text-sm transition-colors flex items-center gap-1"
+                        className="text-theme-primary hover:text-[#F5B730] text-sm transition-colors flex items-center gap-1"
                       >
                         {link.label}
                         <ExternalLink className="w-3 h-3 opacity-50" />
                       </a>
                     ) : (
-                      <Link href={link.href} className="text-slate-400 hover:text-[#F5B730] text-sm transition-colors">
+                      <Link href={link.href} className="text-theme-primary hover:text-[#F5B730] text-sm transition-colors">
                         {link.label}
                       </Link>
                     )}
@@ -318,14 +318,14 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
           {/* Top row: copyright left, legal links right */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mb-3">
-            <p className="text-slate-500 text-xs text-center sm:text-left">
+            <p className="text-xs text-center sm:text-left text-theme-primary">
               © 2026 Tripartite Negotiating Forum (TNF) Secretariat. All rights reserved.
             </p>
             <div className="flex items-center gap-5 text-xs">
-              <Link href="/privacy" className="text-slate-500 hover:text-slate-300 transition-colors">
+              <Link href="/privacy" className="text-theme-primary hover:opacity-80 transition-colors">
                 Privacy Policy
               </Link>
-              <Link href="/terms" className="text-slate-500 hover:text-slate-300 transition-colors">
+              <Link href="/terms" className="text-theme-primary hover:opacity-80 transition-colors">
                 Terms of Use
               </Link>
               {/* Hidden admin link — very subtle, only for staff */}
@@ -341,20 +341,20 @@ export default function Footer() {
 
           {/* Bottom row: hashtag + developer credit */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
-            <div className="flex items-center gap-3 text-xs text-slate-600">
+            <div className="flex items-center gap-3 text-xs text-theme-primary">
               <span className="text-[#C9921A] font-bold">{summitInfo.hashtag}</span>
               <span>·</span>
               <span>{summitInfo.location}</span>
               <span>·</span>
               <span>{summitInfo.dates}</span>
             </div>
-            <p className="text-slate-600 text-xs">
+            <p className="text-xs text-theme-primary">
               Developed by{" "}
               <a
                 href="https://www.quantistechnologies.co.zw/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-slate-400 hover:text-[#C9921A] font-semibold transition-colors"
+                className="text-theme-primary hover:text-[#C9921A] font-semibold transition-colors"
               >
                 Quantis Technologies
               </a>
