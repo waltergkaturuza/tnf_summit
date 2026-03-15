@@ -1,6 +1,6 @@
-import type { FullTranslations } from "./types";
+import type { LocaleOverride } from "./types";
 
-export const zh: Partial<FullTranslations> = {
+export const zh: LocaleOverride = {
   nav: { home: "首页", about: "关于", program: "日程", speakers: "演讲嘉宾", registration: "报名", sponsors: "赞助商", gallery: "图库", updates: "动态与新闻", contact: "联系我们", participate: "参与", submitAbstract: "提交摘要", volunteer: "志愿者", trackStatus: "查询状态", programmeSchedule: "日程安排", sessions: "会议" },
   cta: { register: "立即报名", learnMore: "了解更多", viewProgram: "查看日程" },
   search: { placeholder: "搜索页面、会议、主题…", noResults: "未找到结果。", searchLabel: "搜索" },

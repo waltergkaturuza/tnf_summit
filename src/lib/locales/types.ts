@@ -124,7 +124,16 @@ export type AboutTranslations = {
   venueBadge: string;
   venueTitle: string;
   venueAddress: string;
+  venueIntro: string;
   venueBullets: string[];
+  themesIntro: string;
+  tripartiteSectionBadge: string;
+  organiserBadge: string;
+  organiserTitle: string;
+  organiserDesc1: string;
+  organiserDesc2: string;
+  contactSecretariat: string;
+  visitTnfWebsite: string;
 };
 
 /** Programme page */
@@ -132,9 +141,16 @@ export type ProgramTranslations = {
   heroBadge: string;
   heroTitle: string;
   heroSub: string;
+  heroSubLine2: string;
   filters: string;
+  searchPlaceholder: string;
   noSessions: string;
+  clearFilters: string;
   sessions: string;
+  sessionTypeLegend: string;
+  downloadNote: string;
+  sessionTypes: { id: string; label: string }[];
+  rooms: { id: string; label: string }[];
 };
 
 /** Speakers page */
@@ -142,12 +158,29 @@ export type SpeakersTranslations = {
   heroBadge: string;
   heroTitle: string;
   heroSub: string;
+  comingSoonBanner: string;
+  registerCta: string;
+  profilesBadge: string;
+  profilesTitle: string;
+  profilesSub: string;
   categoriesTitle: string;
   categoriesSub: string;
+  forSpeakersBadge: string;
+  forSpeakersTitle: string;
+  forSpeakersIntro: string;
+  forSpeakersBullets: string[];
+  speakerEnquiries: string;
   reachTitle: string;
   reachIntro: string;
+  reachStats: { value: string; label: string }[];
+  contactProgrammeTeam: string;
+  innovationBadge: string;
   innovationTitle: string;
   innovationIntro: string;
+  innovationFormatTitle: string;
+  innovationFormatItems: { label: string; value: string }[];
+  applyInnovation: string;
+  expectedProfiles: { role: string; desc: string; day: string }[];
 };
 
 /** Sponsors page */
@@ -174,14 +207,31 @@ export type GalleryTranslations = {
 
 /** Contact page */
 export type ContactTranslations = {
+  heroBadge: string;
   heroTitle: string;
   heroSub: string;
   secretariatTitle: string;
   summitDates: string;
+  summitDatesVenue: string;
+  earlyBirdCloses: string;
   sendMessage: string;
   messageSentTitle: string;
   messageSentSub: string;
+  formFullName: string;
+  formEmail: string;
+  formPhone: string;
+  formOrganisation: string;
+  formEnquiryType: string;
+  formMessage: string;
+  placeholders: { name: string; email: string; phone: string; organisation: string; enquiryType: string; message: string };
+  submitSending: string;
+  submitSend: string;
+  submitError: string;
+  faqBadge: string;
   faqTitle: string;
+  enquiryTypes: string[];
+  contactItems: { label: string; value: string }[];
+  faqs: { q: string; a: string }[];
 };
 
 /** Registration page (labels and options) */
@@ -202,6 +252,110 @@ export type RegistrationTranslations = {
   groupReg: string;
 };
 
+/** Updates & News page */
+export type UpdatesTranslations = {
+  heroTitle: string;
+  heroSub: string;
+  filterAll: string;
+  filterNews: string;
+  filterEvents: string;
+  noUpdates: string;
+  noUpdatesHint: string;
+  typeNews: string;
+  typeEvent: string;
+  searchPlaceholder: string;
+  commentPlaceholder: string;
+  commentNamePlaceholder: string;
+  postCommentAnonymous: string;
+  postComment: string;
+  commentsCount: string;
+  abstractLabel: string;
+  registrationLabel: string;
+  statusLabel: string;
+};
+
+/** Track Status page */
+export type TrackStatusTranslations = {
+  heroTitle: string;
+  heroSub: string;
+  placeholder: string;
+  buttonLookup: string;
+  buttonChecking: string;
+  errorNotFound: string;
+  errorGeneric: string;
+  abstractLabel: string;
+  registrationLabel: string;
+  statusLabel: string;
+  lostIdContact: string;
+  registerLink: string;
+  statusLabels: Record<string, string>;
+};
+
+/** Volunteer page */
+export type VolunteerTranslations = {
+  heroTitle: string;
+  heroSub: string;
+  whyTitle: string;
+  whyDesc: string;
+  getInTouchTitle: string;
+  getInTouchDesc: string;
+  emailUs: string;
+  registerAsDelegateBefore: string;
+  registerAsDelegateLink: string;
+  registerAsDelegateAfter: string;
+  contactPage: string;
+};
+
+/** Abstract submit page */
+export type AbstractsTranslations = {
+  successTitle: string;
+  successThankYou: string;
+  yourAbstractId: string;
+  useThisIdToTrack: string;
+  planningToAttend: string;
+  registerToSecure: string;
+  registerNow: string;
+  trackSubmissionStatus: string;
+  badge: string;
+  formTitle: string;
+  formSub: string;
+  themeLabel: string;
+  selectTheme: string;
+  titleLabel: string;
+  titlePlaceholder: string;
+  abstractLabel: string;
+  abstractPlaceholder: string;
+  wordCount: string;
+  keywordsLabel: string;
+  keywordsPlaceholder: string;
+  participationLabel: string;
+  participationOptions: { value: string; label: string }[];
+  documentLinkLabel: string;
+  documentNamePlaceholder: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  institution: string;
+  country: string;
+  countryPlaceholder: string;
+  gender: string;
+  dateOfBirth: string;
+  tShirtSize: string;
+  genderPreferNot: string;
+  genderFemale: string;
+  genderMale: string;
+  genderOther: string;
+  tShirtSelect: string;
+  coAuthorsLabel: string;
+  addCoAuthor: string;
+  coAuthorName: string;
+  coAuthorEmail: string;
+  coAuthorInstitution: string;
+  submitButton: string;
+  alsoRegisterLink: string;
+};
+
 export type FullTranslations = CoreTranslations & {
   home: HomeTranslations;
   about: AboutTranslations;
@@ -212,4 +366,12 @@ export type FullTranslations = CoreTranslations & {
   gallery: GalleryTranslations;
   contact: ContactTranslations;
   registration: RegistrationTranslations;
+  updates: UpdatesTranslations;
+  trackStatus: TrackStatusTranslations;
+  volunteer: VolunteerTranslations;
+  abstracts: AbstractsTranslations;
 };
+
+/** For locale override files: every key at every level is optional. */
+export type DeepPartial<T> = { [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K] };
+export type LocaleOverride = DeepPartial<FullTranslations>;

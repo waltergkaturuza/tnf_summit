@@ -1,6 +1,6 @@
-import type { FullTranslations } from "./types";
+import type { LocaleOverride } from "./types";
 
-export const el: Partial<FullTranslations> = {
+export const el: LocaleOverride = {
   nav: { home: "Αρχική", about: "Σχετικά", program: "Πρόγραμμα", speakers: "Ομιλητές", registration: "Εγγραφή", sponsors: "Χορηγοί", gallery: "Συλλογή", updates: "Ενημερώσεις και νέα", contact: "Επικοινωνία", participate: "Συμμετοχή", submitAbstract: "Υποβολή περίληψης", volunteer: "Εθελοντισμός", trackStatus: "Κατάσταση", programmeSchedule: "Πρόγραμμα", sessions: "Συνεδρίες" },
   cta: { register: "Εγγραφή τώρα", learnMore: "Μάθετε περισσότερα", viewProgram: "Δείτε το πρόγραμμα" },
   search: { placeholder: "Αναζήτηση σελίδων, συνεδρίων, θεμάτων…", noResults: "Δεν βρέθηκαν αποτελέσματα.", searchLabel: "Αναζήτηση" },

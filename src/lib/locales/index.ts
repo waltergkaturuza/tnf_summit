@@ -1,4 +1,4 @@
-import type { FullTranslations, Language } from "./types";
+import type { FullTranslations, Language, LocaleOverride } from "./types";
 import en from "./en";
 
 // Re-export type for consumers
@@ -13,8 +13,21 @@ import { ja } from "@/lib/locales/ja";
 import { ru } from "@/lib/locales/ru";
 import { el } from "@/lib/locales/el";
 
-function merge<T extends object>(base: T, overrides: Partial<T>): T {
-  return { ...base, ...overrides } as T;
+function merge(base: FullTranslations, overrides: LocaleOverride): FullTranslations {
+  const result = { ...base } as FullTranslations;
+  const sectionKeys: (keyof FullTranslations)[] = [
+    "nav", "cta", "search", "misc", "home", "about", "footer",
+    "program", "speakers", "sponsors", "gallery", "contact", "registration",
+    "updates", "trackStatus", "volunteer", "abstracts",
+  ];
+  for (const key of sectionKeys) {
+    const ov = (overrides as Record<string, unknown>)[key];
+    const baseSection = (base as Record<string, unknown>)[key];
+    if (ov && typeof ov === "object" && !Array.isArray(ov) && ov !== null && baseSection && typeof baseSection === "object") {
+      (result as Record<string, unknown>)[key] = { ...baseSection, ...ov };
+    }
+  }
+  return result;
 }
 
 export const fullTranslations: Record<Language, FullTranslations> = {

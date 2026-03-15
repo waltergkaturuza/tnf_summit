@@ -7,6 +7,7 @@ import {
   Image as ImageIcon, Video, FileText, Download,
   Bell, Play, ExternalLink, ArrowRight, X, ChevronLeft, ChevronRight as ChevronRightIcon,
 } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 import { fetchPublicGallery, type MediaFile } from "@/lib/storage";
 
 function FadeIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
@@ -98,6 +99,7 @@ function LightBox({ files, index, onClose, onPrev, onNext }: {
 }
 
 export default function GalleryPage() {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState("venue");
   const [liveFiles, setLiveFiles]   = useState<MediaFile[]>([]);
   const [galleryLoading, setGalleryLoading] = useState(true);
@@ -117,12 +119,12 @@ export default function GalleryPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[var(--bg-primary)]" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
-            <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Media Centre</span>
+            <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">{t.gallery.heroBadge}</span>
             <h1 className="text-4xl sm:text-5xl font-black text-white mt-3 mb-4">
-              Gallery & <span className="gradient-text">Media Centre</span>
+              {t.gallery.heroTitle}
             </h1>
             <p className="max-w-2xl mx-auto text-theme-primary">
-              Official Summit photography, video recordings, presentations and documents. Full media gallery available after the Summit (September 2026).
+              {t.gallery.heroSub}
             </p>
           </motion.div>
         </div>
@@ -134,9 +136,9 @@ export default function GalleryPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <FadeIn>
               <div className="text-center mb-12">
-                <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Official Gallery</span>
-                <h2 className="text-3xl font-black text-white mt-3">Victoria Falls & Elephant Hills Resort</h2>
-                <p className="mt-2 text-theme-primary">A world-class summit destination — one of the Seven Natural Wonders of the World</p>
+                <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">{t.gallery.heroBadge}</span>
+                <h2 className="text-3xl font-black text-white mt-3">{t.gallery.venueTitle}</h2>
+                <p className="mt-2 text-theme-primary">{t.gallery.venueSub}</p>
               </div>
             </FadeIn>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-6">

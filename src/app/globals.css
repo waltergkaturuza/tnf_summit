@@ -5,6 +5,10 @@
 
 /* ── CSS design tokens (TNF logo-inspired palette) ── */
 :root {
+  /* Fonts (system fallback when Google Fonts unavailable at build) */
+  --font-geist-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-geist-mono: ui-monospace, monospace;
+
   /* Brand — TNF logo colors */
   --tnf-red: #EA4335;
   --tnf-green: #33A852;

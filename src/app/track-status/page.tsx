@@ -4,20 +4,11 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Search, FileText, User, ArrowRight, AlertCircle } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 import { getTrackStatus } from "@/lib/db";
 
-const STATUS_LABELS: Record<string, string> = {
-  pending: "Pending",
-  confirmed: "Confirmed",
-  cancelled: "Cancelled",
-  waitlisted: "Waitlisted",
-  submitted: "Submitted",
-  under_review: "Under review",
-  accepted: "Accepted",
-  rejected: "Rejected",
-};
-
 export default function TrackStatusPage() {
+  const { t } = useLanguage();
   const [trackId, setTrackId] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<{ trackType: string; status: string; titleOrName: string } | null>(null);
@@ -33,9 +24,9 @@ export default function TrackStatusPage() {
     try {
       const res = await getTrackStatus(id);
       if (res) setResult({ trackType: res.trackType, status: res.status, titleOrName: res.titleOrName });
-      else setError("No submission found with this ID. Please check and try again.");
+      else setError(t.trackStatus.errorNotFound);
     } catch {
-      setError("Unable to look up status. Please try again.");
+      setError(t.trackStatus.errorGeneric);
     } finally {
       setLoading(false);
     }
@@ -45,8 +36,8 @@ export default function TrackStatusPage() {
     <div className="min-h-screen bg-[var(--bg-primary)] pt-28 pb-16 px-4">
       <div className="max-w-xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10">
-          <h1 className="text-4xl font-black text-white mb-2">Track Status</h1>
-          <p className="text-slate-400">Enter your Registration ID or Abstract ID to see the current status.</p>
+          <h1 className="text-4xl font-black text-white mb-2">{t.trackStatus.heroTitle}</h1>
+          <p className="text-slate-400">{t.trackStatus.heroSub}</p>
         </motion.div>
 
         <motion.form initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }} onSubmit={handleSubmit} className="space-y-4">
@@ -57,12 +48,12 @@ export default function TrackStatusPage() {
                 type="text"
                 value={trackId}
                 onChange={(e) => setTrackId(e.target.value)}
-                placeholder="e.g. TNF-REG-200926-A1B2C3 or TNF-ABS-200926-XY7Z9"
+                placeholder={t.trackStatus.placeholder}
                 className="w-full bg-white/5 border border-white/10 rounded-xl pl-12 pr-4 py-3.5 text-white placeholder:text-slate-500 focus:outline-none focus:border-[#C9921A]/60 font-mono text-sm"
               />
             </div>
             <button type="submit" disabled={loading || !trackId.trim()} className="btn-gold px-6 py-3.5 rounded-xl text-sm font-bold disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
-              {loading ? "Checking…" : "Look up"}
+              {loading ? t.trackStatus.buttonChecking : t.trackStatus.buttonLookup}
             </button>
           </div>
         </motion.form>
@@ -88,14 +79,14 @@ export default function TrackStatusPage() {
                   </div>
                 )}
                 <div>
-                  <p className="text-slate-500 text-xs uppercase font-semibold">{result.trackType === "abstract" ? "Abstract" : "Registration"}</p>
+                  <p className="text-slate-500 text-xs uppercase font-semibold">{result.trackType === "abstract" ? t.trackStatus.abstractLabel : t.trackStatus.registrationLabel}</p>
                   <p className="text-white font-bold">{result.titleOrName || "—"}</p>
                 </div>
               </div>
               <div className="flex items-center justify-between py-3 border-t border-white/5">
-                <span className="text-slate-400">Status</span>
+                <span className="text-slate-400">{t.trackStatus.statusLabel}</span>
                 <span className={`font-bold ${result.status === "confirmed" || result.status === "accepted" ? "text-emerald-400" : result.status === "rejected" || result.status === "cancelled" ? "text-red-400" : "text-amber-400"}`}>
-                  {STATUS_LABELS[result.status] ?? result.status}
+                  {t.trackStatus.statusLabels[result.status] ?? result.status}
                 </span>
               </div>
             </div>
@@ -103,11 +94,11 @@ export default function TrackStatusPage() {
         )}
 
         <p className="text-center text-slate-500 text-sm mt-8">
-          Lost your ID? Contact <a href="mailto:info@tnfzim.com" className="text-[#C9921A] hover:underline">info@tnfzim.com</a> with your name and email.
+          {t.trackStatus.lostIdContact} <a href="mailto:info@tnfzim.com" className="text-[#C9921A] hover:underline">info@tnfzim.com</a> with your name and email.
         </p>
         <div className="text-center mt-6">
           <Link href="/registration" className="inline-flex items-center gap-2 text-[#C9921A] font-semibold hover:underline">
-            Register for the Summit <ArrowRight className="w-4 h-4" />
+            {t.trackStatus.registerLink} <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </div>

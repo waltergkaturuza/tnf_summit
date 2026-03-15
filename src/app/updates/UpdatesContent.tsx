@@ -40,10 +40,10 @@ export default function UpdatesContent({ initialUpdates }: { initialUpdates: Upd
             <span className="text-[#F5B730] text-sm font-semibold">{t.nav.updates}</span>
           </motion.div>
           <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.05 }} className="text-4xl sm:text-5xl font-black text-white mb-2">
-            Updates & News
+            {t.updates.heroTitle}
           </motion.h1>
           <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }} className="text-slate-400 text-lg max-w-2xl">
-            Latest summit news, announcements and upcoming events.
+            {t.updates.heroSub}
           </motion.p>
         </div>
       </section>
@@ -62,7 +62,7 @@ export default function UpdatesContent({ initialUpdates }: { initialUpdates: Upd
                     filter === f ? "bg-[#C9921A] text-[#0A1628] border-[#C9921A]" : "bg-white/5 text-slate-400 border-white/10 hover:border-[#C9921A]/40 hover:text-[#F5B730]"
                   }`}
                 >
-                  {f === "all" ? "All" : f === "news" ? "News" : "Upcoming Events"}
+                  {f === "all" ? t.updates.filterAll : f === "news" ? t.updates.filterNews : t.updates.filterEvents}
                 </button>
               ))}
             </div>
@@ -70,8 +70,8 @@ export default function UpdatesContent({ initialUpdates }: { initialUpdates: Upd
             {updates.length === 0 ? (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20 rounded-2xl glass border border-white/5">
                 <Newspaper className="w-16 h-16 mx-auto text-slate-600 mb-4" />
-                <h2 className="text-xl font-bold text-white mb-2">No updates found</h2>
-                <p className="text-slate-400 max-w-md mx-auto">Try a different category or search, or check back soon.</p>
+                <h2 className="text-xl font-bold text-white mb-2">{t.updates.noUpdates}</h2>
+                <p className="text-slate-400 max-w-md mx-auto">{t.updates.noUpdatesHint}</p>
               </motion.div>
             ) : (
               <>
@@ -85,7 +85,7 @@ export default function UpdatesContent({ initialUpdates }: { initialUpdates: Upd
                           <div className="absolute top-4 left-4 flex gap-2">
                             <span className="text-[10px] px-2.5 py-1 rounded-full font-bold backdrop-blur-md bg-[#C9921A]/90 text-[#0A1628]">{featured.category}</span>
                             <span className={`text-[10px] px-2.5 py-1 rounded-full font-bold backdrop-blur-md ${featured.type === "event" ? "bg-amber-500/90 text-[#0A1628]" : "bg-sky-500/90 text-white"}`}>
-                              {featured.type === "event" ? "Event" : "News"}
+                              {featured.type === "event" ? t.updates.typeEvent : t.updates.typeNews}
                             </span>
                           </div>
                         </div>
@@ -156,7 +156,7 @@ export default function UpdatesContent({ initialUpdates }: { initialUpdates: Upd
                 <div className="p-4">
                   <input
                     type="text"
-                    placeholder="Search posts..."
+                    placeholder={t.updates.searchPlaceholder}
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-[#C9921A]/60"

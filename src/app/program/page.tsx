@@ -7,6 +7,7 @@ import {
   Star, Building, Mic, Users, Coffee, Utensils, Music,
   Plane, Sun, Globe
 } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 import { program, themes } from "@/lib/data";
 import { getSessionTypeColor, getSessionTypeBadge, getRoomLabel } from "@/lib/utils";
 import type { Session } from "@/lib/data";
@@ -142,17 +143,6 @@ function SessionCard({ session }: { session: Session }) {
   );
 }
 
-const sessionTypes = [
-  { id: "all", label: "All Sessions" },
-  { id: "plenary", label: "Plenary" },
-  { id: "concurrent", label: "Concurrent" },
-  { id: "workshop", label: "Workshops" },
-  { id: "special", label: "Special Sessions" },
-  { id: "ceremony", label: "Ceremonies" },
-  { id: "social", label: "Social Events" },
-  { id: "networking", label: "Networking" },
-  { id: "excursion", label: "Excursions" },
-];
 
 const dayColors: Record<string, string> = {
   "ARRIVAL DAY": "#64748B",
@@ -165,12 +155,14 @@ const dayColors: Record<string, string> = {
 };
 
 export default function ProgramPage() {
+  const { t } = useLanguage();
   const [activeDay, setActiveDay] = useState(0);
   const [activeType, setActiveType] = useState("all");
   const [activeRoom, setActiveRoom] = useState("all");
   const [search, setSearch] = useState("");
 
   const currentDay = program[activeDay];
+  const sessionTypes = t.program.sessionTypes;
 
   const filteredSessions = currentDay.sessions.filter((s) => {
     const typeMatch = activeType === "all" || s.type === activeType;
@@ -195,13 +187,12 @@ export default function ProgramPage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">TNF Global Summit 2026</span>
+            <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">{t.program.heroBadge}</span>
             <h1 className="text-4xl sm:text-5xl font-black text-white mt-3 mb-4">
-              Conference <span className="gradient-text">Programme</span>
+              {t.program.heroTitle.split(" ")[0]} <span className="gradient-text">{t.program.heroTitle.split(" ").slice(1).join(" ")}</span>
             </h1>
             <p className="max-w-2xl mx-auto text-theme-primary">
-              20–26 September 2026 · Elephant Hills Resort, Victoria Falls, Zimbabwe<br />
-              4 plenary days · 20+ sessions · 2 concurrent rooms · 14 spotlight themes
+              {t.program.heroSubLine2}
             </p>
           </motion.div>
         </div>
@@ -257,7 +248,7 @@ export default function ProgramPage() {
               </div>
               <div className="text-right">
                 <div className="text-[#C9921A] text-2xl font-black">{currentDay.sessions.length}</div>
-                <div className="text-xs text-theme-primary">sessions</div>
+                <div className="text-xs text-theme-primary">{t.program.sessions}</div>
               </div>
             </div>
           </motion.div>
@@ -267,7 +258,7 @@ export default function ProgramPage() {
         <div className="glass rounded-2xl p-4 mb-6 space-y-3">
           <div className="flex items-center gap-2">
             <Filter className="w-4 h-4 text-[#C9921A]" />
-            <span className="text-white text-sm font-semibold">Filters</span>
+            <span className="text-white text-sm font-semibold">{t.program.filters}</span>
           </div>
 
           {/* Search */}
@@ -275,7 +266,7 @@ export default function ProgramPage() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-primary" />
             <input
               type="text"
-              placeholder="Search sessions..."
+              placeholder={t.program.searchPlaceholder}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full bg-white/5 border border-white/10 rounded-lg pl-9 pr-4 py-2 text-sm text-white placeholder:text-theme-primary/70 focus:outline-none focus:border-[#C9921A]/50"
@@ -301,11 +292,7 @@ export default function ProgramPage() {
 
           {/* Room filter */}
           <div className="flex gap-2">
-            {[
-              { id: "all", label: "All Rooms" },
-              { id: "A", label: "🏛 Room A — Plenary" },
-              { id: "B", label: "🔵 Room B — Syndicate" },
-            ].map((r) => (
+            {t.program.rooms.map((r) => (
               <button
                 key={r.id}
                 onClick={() => setActiveRoom(r.id)}
@@ -333,12 +320,12 @@ export default function ProgramPage() {
             {filteredSessions.length === 0 ? (
               <div className="glass rounded-2xl p-12 text-center">
                 <div className="text-4xl mb-4">🔍</div>
-                <p className="text-theme-primary">No sessions match your filters.</p>
+                <p className="text-theme-primary">{t.program.noSessions}</p>
                 <button
                   onClick={() => { setActiveType("all"); setActiveRoom("all"); setSearch(""); }}
                   className="mt-4 text-[#C9921A] text-sm hover:text-[#F5B730] transition-colors"
                 >
-                  Clear all filters
+                  {t.program.clearFilters}
                 </button>
               </div>
             ) : (
@@ -353,7 +340,7 @@ export default function ProgramPage() {
         <div className="mt-10 glass rounded-2xl p-5">
           <h3 className="text-white font-bold text-sm mb-4 flex items-center gap-2">
             <Filter className="w-4 h-4 text-[#C9921A]" />
-            Session Type Legend
+            {t.program.sessionTypeLegend}
           </h3>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {sessionTypes.slice(1).map((type) => (
@@ -369,8 +356,7 @@ export default function ProgramPage() {
         {/* Download note */}
         <div className="mt-6 text-center">
           <p className="text-xs text-theme-primary">
-            Full programme document available for download ·{" "}
-            <span className="text-[#C9921A]">info@tnfzim.com</span>
+            {t.program.downloadNote} · <span className="text-[#C9921A]">info@tnfzim.com</span>
           </p>
         </div>
       </div>

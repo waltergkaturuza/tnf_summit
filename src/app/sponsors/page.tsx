@@ -4,6 +4,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Star, Globe, CheckCircle, Mail, TrendingUp } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 import { sponsors } from "@/lib/data";
 import { fetchPublicSponsorLogos, type MediaFile } from "@/lib/storage";
 
@@ -99,6 +100,7 @@ const whySponsor = [
 ];
 
 export default function SponsorsPage() {
+  const { t } = useLanguage();
   const [logos, setLogos] = useState<MediaFile[]>([]);
 
   useEffect(() => {
@@ -112,12 +114,12 @@ export default function SponsorsPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[var(--bg-primary)]" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
-            <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Partners & Sponsors</span>
+            <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">{t.sponsors.heroBadge}</span>
             <h1 className="text-4xl sm:text-5xl font-black text-white mt-3 mb-4">
-              Sponsors & <span className="gradient-text">Official Partners</span>
+              {t.sponsors.heroTitle}
             </h1>
             <p className="max-w-2xl mx-auto text-theme-primary">
-              Join Africa&apos;s most influential tripartite platform as a sponsor or partner. Position your organisation at the intersection of policy, investment and decent work.
+              {t.sponsors.heroSub}
             </p>
           </motion.div>
         </div>
@@ -129,8 +131,8 @@ export default function SponsorsPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <FadeIn>
               <div className="text-center mb-10">
-                <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Our Partners</span>
-                <h2 className="text-2xl font-black text-white mt-3">Official Partners & Sponsors</h2>
+                <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">{t.sponsors.heroBadge}</span>
+                <h2 className="text-2xl font-black text-white mt-3">{t.sponsors.partnersTitle}</h2>
               </div>
             </FadeIn>
             <div className="flex flex-wrap justify-center items-center gap-8 sm:gap-12">
@@ -208,7 +210,7 @@ export default function SponsorsPage() {
           <FadeIn>
             <div className="text-center mb-14">
               <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Sponsorship</span>
-              <h2 className="text-4xl font-black text-white mt-3">Sponsorship Packages</h2>
+              <h2 className="text-4xl font-black text-white mt-3">{t.sponsors.packagesTitle}</h2>
             </div>
           </FadeIn>
 
@@ -304,7 +306,7 @@ export default function SponsorsPage() {
           <FadeIn>
             <div className="glass-gold rounded-3xl p-10 sm:p-12">
               <div className="text-4xl mb-4">🤝</div>
-              <h2 className="text-3xl font-black text-white mb-4">Become a Summit Partner</h2>
+              <h2 className="text-3xl font-black text-white mb-4">{t.sponsors.becomePartnerTitle}</h2>
               <p className="mb-8 leading-relaxed text-theme-primary">
                 For custom sponsorship packages, sector table sponsorship, and partnership opportunities, contact the TNF Secretariat&apos;s partnerships team directly.
               </p>

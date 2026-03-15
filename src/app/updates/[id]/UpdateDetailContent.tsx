@@ -7,6 +7,7 @@ import {
   ArrowLeft, Calendar, FolderOpen, ExternalLink, ThumbsUp, ThumbsDown,
   MessageCircle, Send, User, UserX,
 } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 import type { Update, UpdateComment } from "@/lib/adminData";
 import {
   fetchUpdateComments,
@@ -28,6 +29,7 @@ function getOrCreateVoterKey(): string {
 }
 
 export default function UpdateDetailContent({ update }: { update: Update }) {
+  const { t } = useLanguage();
   const [comments, setComments] = useState<UpdateComment[]>([]);
   const [reaction, setReaction] = useState<{ likes: number; dislikes: number; userReaction: "like" | "dislike" | null }>({ likes: 0, dislikes: 0, userReaction: null });
   const [loadingReaction, setLoadingReaction] = useState(false);
@@ -163,14 +165,14 @@ export default function UpdateDetailContent({ update }: { update: Update }) {
         {/* Comments */}
         <section>
           <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-            <MessageCircle className="w-5 h-5 text-[#C9921A]" /> Comments {comments.length > 0 && `(${comments.length})`}
+            <MessageCircle className="w-5 h-5 text-[#C9921A]" /> {t.updates.commentsCount} {comments.length > 0 && `(${comments.length})`}
           </h2>
 
           <form onSubmit={handleSubmitComment} className="glass rounded-2xl border border-white/10 p-4 mb-6">
             <textarea
               value={commentBody}
               onChange={(e) => setCommentBody(e.target.value)}
-              placeholder="Write a comment..."
+              placeholder={t.updates.commentPlaceholder}
               rows={3}
               required
               className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:border-[#C9921A]/60 resize-none mb-4"
@@ -178,20 +180,20 @@ export default function UpdateDetailContent({ update }: { update: Update }) {
             <div className="flex flex-wrap gap-4 items-center mb-4">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input type="checkbox" checked={commentAnonymous} onChange={(e) => setCommentAnonymous(e.target.checked)} className="w-4 h-4 rounded border-white/20 bg-white/5 text-[#C9921A] focus:ring-[#C9921A]" />
-                <span className="text-slate-400 text-sm">Post as anonymous</span>
+                <span className="text-slate-400 text-sm">{t.updates.postCommentAnonymous}</span>
               </label>
               {!commentAnonymous && (
                 <input
                   type="text"
                   value={commentName}
                   onChange={(e) => setCommentName(e.target.value)}
-                  placeholder="Your name"
+                  placeholder={t.updates.commentNamePlaceholder}
                   className="flex-1 min-w-[160px] bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-[#C9921A]/60"
                 />
               )}
             </div>
             <button type="submit" disabled={submittingComment} className="flex items-center gap-2 btn-gold px-5 py-2.5 rounded-xl text-sm font-bold disabled:opacity-50">
-              <Send className="w-4 h-4" /> {submittingComment ? "Posting…" : "Post comment"}
+              <Send className="w-4 h-4" /> {submittingComment ? "…" : t.updates.postComment}
             </button>
           </form>
 

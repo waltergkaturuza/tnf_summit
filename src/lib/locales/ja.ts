@@ -1,6 +1,6 @@
-import type { FullTranslations } from "./types";
+import type { LocaleOverride } from "./types";
 
-export const ja: Partial<FullTranslations> = {
+export const ja: LocaleOverride = {
   nav: { home: "ホーム", about: "概要", program: "プログラム", speakers: "スピーカー", registration: "参加登録", sponsors: "スポンサー", gallery: "ギャラリー", updates: "お知らせ・ニュース", contact: "お問い合わせ", participate: "参加", submitAbstract: "要旨を提出", volunteer: "ボランティア", trackStatus: "状況照会", programmeSchedule: "プログラム", sessions: "セッション" },
   cta: { register: "今すぐ登録", learnMore: "詳細を見る", viewProgram: "プログラムを見る" },
   search: { placeholder: "ページ、セッション、テーマを検索…", noResults: "結果が見つかりません。", searchLabel: "検索" },
