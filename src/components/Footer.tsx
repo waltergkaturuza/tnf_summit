@@ -5,33 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Mail, Phone, MapPin, Globe, Send, CheckCircle, ExternalLink } from "lucide-react";
 import { summitInfo } from "@/lib/data";
-
-const footerLinks = {
-  summit: [
-    { label: "About the Summit", href: "/about" },
-    { label: "Why Attend", href: "/about#why-attend" },
-    { label: "Spotlight Themes", href: "/about#themes" },
-    { label: "Venue", href: "/about#venue" },
-  ],
-  programme: [
-    { label: "Full Programme", href: "/program" },
-    { label: "Keynote Speakers", href: "/speakers" },
-    { label: "Concurrent Sessions", href: "/program#concurrent" },
-    { label: "Excursions Day", href: "/program#excursions" },
-  ],
-  participate: [
-    { label: "Register", href: "/registration" },
-    { label: "Fees & Categories", href: "/registration#fees" },
-    { label: "Sponsors & Partners", href: "/sponsors" },
-    { label: "Contact Us", href: "/contact" },
-  ],
-  media: [
-    { label: "Photo Gallery", href: "/gallery" },
-    { label: "Press & Media", href: "/contact#media" },
-    { label: "Downloads", href: "/gallery#downloads" },
-    { label: "TNF Secretariat", href: "https://tnfzim.com", external: true },
-  ],
-};
+import { useLanguage } from "@/context/LanguageContext";
 
 /* Twitter / X SVG icon */
 function XIcon({ className }: { className?: string }) {
@@ -70,6 +44,7 @@ function YouTubeIcon({ className }: { className?: string }) {
 }
 
 function NewsletterSignup() {
+  const { t } = useLanguage();
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -83,7 +58,7 @@ function NewsletterSignup() {
       const { subscribeEmail } = await import("@/lib/db");
       const result = await subscribeEmail(email, "footer");
       if (result === "already_subscribed") {
-        setMessage("You are already subscribed!");
+        setMessage(t.footer.thankYou);
       } else {
         setSubscribed(true);
       }
@@ -99,15 +74,15 @@ function NewsletterSignup() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div>
-            <h3 className="text-white font-bold text-lg mb-1">Stay Updated</h3>
+            <h3 className="text-white font-bold text-lg mb-1">{t.footer.stayUpdated}</h3>
             <p className="text-sm text-theme-primary">
-              Subscribe for Summit updates, speaker announcements, and more.
+              {t.footer.subscribeDesc}
             </p>
           </div>
           {subscribed ? (
             <div className="flex items-center gap-2 text-emerald-400 text-sm font-semibold">
               <CheckCircle className="w-5 h-5" />
-              Thank you! You are subscribed.
+              {t.footer.thankYou}
             </div>
           ) : message ? (
             <div className="text-amber-400 text-sm font-semibold">{message}</div>
@@ -116,7 +91,7 @@ function NewsletterSignup() {
               <input
                 type="email"
                 required
-                placeholder="Enter your email"
+                placeholder={t.footer.enterEmail}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={loading}
@@ -141,6 +116,7 @@ function NewsletterSignup() {
 }
 
 export default function Footer() {
+  const { t } = useLanguage();
   return (
     <footer className="bg-[var(--bg-alt)] border-t border-white/5">
       {/* Newsletter */}
@@ -243,16 +219,16 @@ export default function Footer() {
               className="inline-flex items-center gap-1.5 mt-5 text-theme-primary hover:text-[#C9921A] text-xs transition-colors"
             >
               <ExternalLink className="w-3 h-3" />
-              Visit TNF Secretariat website
+              {t.footer.visitSecretariat}
             </a>
           </div>
 
           {/* Links */}
           <div className="lg:col-span-3 grid grid-cols-2 sm:grid-cols-4 gap-8">
             <div>
-              <h4 className="text-white font-semibold text-sm mb-4">The Summit</h4>
+              <h4 className="text-white font-semibold text-sm mb-4">{t.footer.summitCol}</h4>
               <ul className="space-y-2.5">
-                {footerLinks.summit.map((link) => (
+                {t.footer.summitLinks.map((link) => (
                   <li key={link.href}>
                     <Link href={link.href} className="text-theme-primary hover:text-[#F5B730] text-sm transition-colors">
                       {link.label}
@@ -262,9 +238,9 @@ export default function Footer() {
               </ul>
             </div>
             <div>
-              <h4 className="text-white font-semibold text-sm mb-4">Programme</h4>
+              <h4 className="text-white font-semibold text-sm mb-4">{t.footer.programmeCol}</h4>
               <ul className="space-y-2.5">
-                {footerLinks.programme.map((link) => (
+                {t.footer.programmeLinks.map((link) => (
                   <li key={link.href}>
                     <Link href={link.href} className="text-theme-primary hover:text-[#F5B730] text-sm transition-colors">
                       {link.label}
@@ -274,9 +250,9 @@ export default function Footer() {
               </ul>
             </div>
             <div>
-              <h4 className="text-white font-semibold text-sm mb-4">Participate</h4>
+              <h4 className="text-white font-semibold text-sm mb-4">{t.footer.participateCol}</h4>
               <ul className="space-y-2.5">
-                {footerLinks.participate.map((link) => (
+                {t.footer.participateLinks.map((link) => (
                   <li key={link.href}>
                     <Link href={link.href} className="text-theme-primary hover:text-[#F5B730] text-sm transition-colors">
                       {link.label}
@@ -286,11 +262,11 @@ export default function Footer() {
               </ul>
             </div>
             <div>
-              <h4 className="text-white font-semibold text-sm mb-4">Media</h4>
+              <h4 className="text-white font-semibold text-sm mb-4">{t.footer.mediaCol}</h4>
               <ul className="space-y-2.5">
-                {footerLinks.media.map((link) => (
+                {t.footer.mediaLinks.map((link) => (
                   <li key={link.href}>
-                    {"external" in link && link.external ? (
+                    {link.href.startsWith("http") ? (
                       <a
                         href={link.href}
                         target="_blank"
@@ -319,14 +295,14 @@ export default function Footer() {
           {/* Top row: copyright left, legal links right */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mb-3">
             <p className="text-xs text-center sm:text-left text-theme-primary">
-              © 2026 Tripartite Negotiating Forum (TNF) Secretariat. All rights reserved.
+              {t.footer.copyright}
             </p>
             <div className="flex items-center gap-5 text-xs">
               <Link href="/privacy" className="text-theme-primary hover:opacity-80 transition-colors">
-                Privacy Policy
+                {t.footer.privacy}
               </Link>
               <Link href="/terms" className="text-theme-primary hover:opacity-80 transition-colors">
-                Terms of Use
+                {t.footer.terms}
               </Link>
               {/* Hidden admin link — very subtle, only for staff */}
               <Link
@@ -340,16 +316,16 @@ export default function Footer() {
           </div>
 
           {/* Bottom row: hashtag + developer credit */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
-            <div className="flex items-center gap-3 text-xs text-theme-primary">
-              <span className="text-[#C9921A] font-bold">{summitInfo.hashtag}</span>
-              <span>·</span>
-              <span>{summitInfo.location}</span>
-              <span>·</span>
-              <span>{summitInfo.dates}</span>
-            </div>
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
+              <div className="flex items-center gap-3 text-xs text-theme-primary">
+                <span className="text-[#C9921A] font-bold">{t.footer.hashtag}</span>
+                <span>·</span>
+                <span>{summitInfo.location}</span>
+                <span>·</span>
+                <span>{summitInfo.dates}</span>
+              </div>
             <p className="text-xs text-theme-primary">
-              Developed by{" "}
+              {t.footer.developedBy}{" "}
               <a
                 href="https://www.quantistechnologies.co.zw/"
                 target="_blank"

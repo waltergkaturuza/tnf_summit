@@ -8,9 +8,11 @@ import {
   ArrowRight, ChevronDown, Star, TrendingUp, Cpu,
   Leaf, CreditCard, GraduationCap, Factory, MessageSquare,
   Rocket, Heart, Building, Zap, CheckCircle, ExternalLink,
+  Landmark, Handshake,
 } from "lucide-react";
 import CountdownTimer from "@/components/CountdownTimer";
-import { summitInfo, themes, keyFacts, whyAttend, registrationFees } from "@/lib/data";
+import { useLanguage } from "@/context/LanguageContext";
+import { summitInfo, themes, keyFacts, registrationFees } from "@/lib/data";
 
 const iconMap: Record<string, React.ElementType> = {
   TrendingUp, Cpu, Leaf, CreditCard, GraduationCap, Factory, MessageSquare,
@@ -34,6 +36,7 @@ function FadeIn({ children, delay = 0, className = "" }: { children: React.React
 }
 
 export default function HomePage() {
+  const { t } = useLanguage();
   return (
     <div className="min-h-screen">
       {/* ─── HERO ─── */}
@@ -52,7 +55,7 @@ export default function HomePage() {
             className="inline-flex items-center gap-2 glass-gold rounded-full px-4 py-2 mb-6"
           >
             <Star className="w-4 h-4 text-[#F5B730]" />
-            <span className="text-[#F5B730] text-sm font-semibold">{summitInfo.edition}</span>
+            <span className="text-[#F5B730] text-sm font-semibold">{t.home.edition}</span>
           </motion.div>
 
           {/* Title */}
@@ -62,7 +65,7 @@ export default function HomePage() {
             transition={{ duration: 0.8, delay: 0.1 }}
             className="text-5xl sm:text-6xl lg:text-7xl font-black leading-tight mb-4"
           >
-            <span className="text-white">TNF </span>
+            <span className="text-white">{t.home.title} </span>
             <span className="shimmer">Global Summit</span>
           </motion.h1>
 
@@ -72,7 +75,7 @@ export default function HomePage() {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="text-lg sm:text-2xl font-light mb-2 text-theme-primary"
           >
-            on Inclusive Growth, Decent Work
+            {t.home.subtitle1}
           </motion.p>
           <motion.p
             initial={{ opacity: 0, y: 30 }}
@@ -80,7 +83,7 @@ export default function HomePage() {
             transition={{ duration: 0.7, delay: 0.3 }}
             className="text-lg sm:text-2xl text-[#C9921A] font-semibold mb-8"
           >
-            & Investment Promotion
+            {t.home.subtitle2}
           </motion.p>
 
           {/* Date & Location */}
@@ -92,15 +95,15 @@ export default function HomePage() {
           >
             <div className="flex items-center gap-2 glass rounded-full px-4 py-2">
               <Calendar className="w-4 h-4 text-[#C9921A]" />
-              <span className="text-white text-sm font-medium">20–26 September 2026</span>
+              <span className="text-white text-sm font-medium">{t.home.date}</span>
             </div>
             <div className="flex items-center gap-2 glass rounded-full px-4 py-2">
               <MapPin className="w-4 h-4 text-[#C9921A]" />
-              <span className="text-white text-sm font-medium">Victoria Falls, Zimbabwe</span>
+              <span className="text-white text-sm font-medium">{t.home.venue}</span>
             </div>
             <div className="flex items-center gap-2 glass rounded-full px-4 py-2">
               <Users className="w-4 h-4 text-[#C9921A]" />
-              <span className="text-white text-sm font-medium">1,500–2,000 Delegates</span>
+              <span className="text-white text-sm font-medium">{t.home.delegates}</span>
             </div>
           </motion.div>
 
@@ -112,11 +115,11 @@ export default function HomePage() {
             className="flex flex-wrap items-center justify-center gap-4"
           >
             <Link href="/registration" className="btn-gold px-8 py-4 rounded-xl text-base font-bold flex items-center gap-2">
-              Register Now
+              {t.home.registerNow}
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link href="/program" className="btn-outline-gold px-8 py-4 rounded-xl text-base font-semibold flex items-center gap-2">
-              View Programme
+              {t.home.viewProgramme}
               <ArrowRight className="w-5 h-5" />
             </Link>
           </motion.div>
@@ -128,7 +131,7 @@ export default function HomePage() {
             transition={{ delay: 0.8 }}
             className="text-xs mt-8 text-theme-primary"
           >
-            Organised by the <span>Tripartite Negotiating Forum (TNF)</span>
+            {t.home.organisedBy}
           </motion.p>
         </div>
 
@@ -156,7 +159,7 @@ export default function HomePage() {
             transition={{ repeat: Infinity, duration: 1.5 }}
             className="flex flex-col items-center gap-1 cursor-pointer text-theme-primary"
           >
-            <span className="text-xs uppercase tracking-widest">Explore</span>
+            <span className="text-xs uppercase tracking-widest">{t.home.explore}</span>
             <ChevronDown className="w-5 h-5" />
           </motion.div>
         </motion.div>
@@ -173,7 +176,7 @@ export default function HomePage() {
                   <div className="text-center p-3">
                     <Icon className="w-5 h-5 text-[#C9921A] mx-auto mb-2" />
                     <div className="text-xl sm:text-2xl font-black gradient-text">{fact.value}</div>
-                    <div className="text-xs mt-1 leading-tight text-theme-primary">{fact.label}</div>
+                    <div className="text-xs mt-1 leading-tight text-theme-primary">{t.home.keyFactLabels[i] ?? fact.label}</div>
                   </div>
                 </FadeIn>
               );
@@ -188,19 +191,18 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <FadeIn>
               <div>
-                <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">About the Summit</span>
+                <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">{t.home.aboutHeading}</span>
                 <h2 className="text-4xl sm:text-5xl font-black text-white mt-3 mb-6 leading-tight">
-                  Africa&apos;s Premier<br />
-                  <span className="gradient-text">Tripartite Platform</span>
+                  <span className="gradient-text">{t.home.aboutTitle}</span>
                 </h2>
                 <p className="leading-relaxed mb-6 text-theme-primary">
-                  The TNF Global Summit on Inclusive Growth, Decent Work and Investment Promotion is Africa&apos;s premier tripartite-led global convening platform. Anchored in UN SDG 8, the African Union&apos;s Agenda 2063, the AfCFTA, and Zimbabwe&apos;s NDS2 and Vision 2030.
+                  {t.home.aboutDesc1}
                 </p>
                 <p className="leading-relaxed mb-8 text-theme-primary">
-                  The Summit convenes 1,500–2,000 ministers, policymakers, investors, social partners, development institutions, and youth innovators to bridge economic growth, responsible investment, and decent work through structured social dialogue. Hosted at Elephant Hills Resort — Victoria Falls, Zimbabwe.
+                  {t.home.aboutDesc2}
                 </p>
                 <div className="flex flex-wrap gap-3">
-                  {["UN SDG 8", "AU Agenda 2063", "AfCFTA", "Zimbabwe Vision 2030", "NDS2"].map((tag) => (
+                  {t.home.aboutTags.map((tag) => (
                     <span key={tag} className="glass px-3 py-1.5 rounded-full text-xs border border-white/10 text-theme-primary">
                       {tag}
                     </span>
@@ -212,10 +214,10 @@ export default function HomePage() {
             <FadeIn delay={0.2}>
               <div className="grid grid-cols-2 gap-4">
                 {[
-                  { icon: "📍", title: "Victoria Falls", sub: "Elephant Hills Resort, Zimbabwe" },
-                  { icon: "📅", title: "7 Days", sub: "20–26 September 2026" },
-                  { icon: "🌍", title: "Global Reach", sub: "Ministers, Investors & Social Partners" },
-                  { icon: "🏆", title: "Binding Outcomes", sub: "Policy Commitments & Investment Pledges" },
+                  { icon: "📍", title: t.home.aboutCard1Title, sub: t.home.aboutCard1Sub },
+                  { icon: "📅", title: t.home.aboutCard2Title, sub: t.home.aboutCard2Sub },
+                  { icon: "🌍", title: t.home.aboutCard3Title, sub: t.home.aboutCard3Sub },
+                  { icon: "🏆", title: t.home.aboutCard4Title, sub: t.home.aboutCard4Sub },
                 ].map((item, i) => (
                   <div key={i} className="glass rounded-2xl p-5 card-hover">
                     <div className="text-3xl mb-3">{item.icon}</div>
@@ -234,25 +236,26 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn>
             <div className="text-center mb-14">
-              <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Why Attend</span>
-              <h2 className="text-4xl font-black text-white mt-3">Who Should Attend?</h2>
+              <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">{t.home.whyAttendHeading}</span>
+              <h2 className="text-4xl font-black text-white mt-3">{t.home.whoShouldAttend}</h2>
               <p className="mt-4 max-w-2xl mx-auto text-theme-primary">
-                The Summit is designed for leaders and changemakers across sectors who want to shape Africa&apos;s economic future.
+                {t.home.whyAttendIntro}
               </p>
             </div>
           </FadeIn>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {whyAttend.map((item, i) => {
-              const Icon = iconMap[item.icon] || Star;
+            {t.home.whyAttendItems.map((item, i) => {
+              const colors = ["#3B82F6", "#C9921A", "#10B981", "#8B5CF6"];
+              const Icon = [Landmark, TrendingUp, Handshake, Rocket][i] || Star;
               return (
                 <FadeIn key={i} delay={i * 0.1}>
                   <div className="glass rounded-2xl p-6 card-hover h-full">
                     <div
                       className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
-                      style={{ background: `${item.color}20`, border: `1px solid ${item.color}40` }}
+                      style={{ background: `${colors[i]}20`, border: `1px solid ${colors[i]}40` }}
                     >
-                      <Icon className="w-6 h-6" style={{ color: item.color }} />
+                      <Icon className="w-6 h-6" style={{ color: colors[i] }} />
                     </div>
                     <h3 className="text-white font-bold text-sm mb-3">{item.audience}</h3>
                     <p className="text-sm leading-relaxed text-theme-primary">{item.description}</p>
@@ -269,10 +272,10 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn>
             <div className="text-center mb-14">
-              <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Programme</span>
-              <h2 className="text-4xl font-black text-white mt-3">14 Spotlight Themes</h2>
+              <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">{t.home.programmeHeading}</span>
+              <h2 className="text-4xl font-black text-white mt-3">{t.home.themesHeading}</h2>
               <p className="mt-4 max-w-2xl mx-auto text-theme-primary">
-                World-class sessions covering the most critical dimensions of Africa&apos;s economic transformation.
+                {t.home.programmeIntro}
               </p>
             </div>
           </FadeIn>
@@ -316,7 +319,7 @@ export default function HomePage() {
           <FadeIn delay={0.2}>
             <div className="text-center mt-10">
               <Link href="/program" className="btn-outline-gold px-8 py-3 rounded-xl text-sm font-semibold inline-flex items-center gap-2">
-                View Full Programme
+                {t.home.viewFullProgramme}
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -329,36 +332,27 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn>
             <div className="text-center mb-14">
-              <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Schedule</span>
-              <h2 className="text-4xl font-black text-white mt-3">Summit Week at a Glance</h2>
-              <p className="mt-4 text-theme-primary">20–26 September 2026 · Elephant Hills Resort, Victoria Falls</p>
+              <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">{t.home.scheduleHeading}</span>
+              <h2 className="text-4xl font-black text-white mt-3">{t.home.summitWeek}</h2>
+              <p className="mt-4 text-theme-primary">{t.home.scheduleDate}</p>
             </div>
           </FadeIn>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-3">
-            {[
-              { date: "Sun 20", label: "Arrival Day", desc: "Registration, check-in & bilateral pre-bookings", emoji: "✈️", color: "#64748B" },
-              { date: "Mon 21", label: "Day 1", desc: "Inclusive Growth, Smart Investment & Policy Coherence", emoji: "💼", color: "#3B82F6" },
-              { date: "Tue 22", label: "Day 2", desc: "Digitalisation, Platform Economy & Financial Innovation", emoji: "💡", color: "#8B5CF6" },
-              { date: "Wed 23", label: "Day 3 ★", desc: "Official Opening + Climate Change & Green Jobs", emoji: "🌱", color: "#10B981" },
-              { date: "Thu 24", label: "Day 4", desc: "Youth, Women, Skills & Future of Work + Closing", emoji: "🎓", color: "#EC4899" },
-              { date: "Fri 25", label: "Excursions", desc: "Victoria Falls, Zambezi Cruise & Game Drive", emoji: "🦁", color: "#F59E0B" },
-              { date: "Sat 26", label: "Departure", desc: "Check-out & airport transfers", emoji: "🏡", color: "#94A3B8" },
-            ].map((day, i) => (
-              <FadeIn key={i} delay={i * 0.07}>
-                <div className="glass rounded-xl p-4 card-hover text-center border border-white/5 h-full">
-                  <div className="text-2xl mb-2">{day.emoji}</div>
-                  <div className="text-xs mb-1 text-theme-primary">{day.date}</div>
-                  <div
-                    className="text-sm font-bold mb-2"
-                    style={{ color: day.color }}
-                  >
-                    {day.label}
+            {["✈️", "💼", "💡", "🌱", "🎓", "🦁", "🏡"].map((emoji, i) => {
+              const day = t.home.weekDays[i];
+              const colors = ["#64748B", "#3B82F6", "#8B5CF6", "#10B981", "#EC4899", "#F59E0B", "#94A3B8"];
+              return (
+                <FadeIn key={i} delay={i * 0.07}>
+                  <div className="glass rounded-xl p-4 card-hover text-center border border-white/5 h-full">
+                    <div className="text-2xl mb-2">{emoji}</div>
+                    <div className="text-xs mb-1 text-theme-primary">{day.date}</div>
+                    <div className="text-sm font-bold mb-2" style={{ color: colors[i] }}>{day.label}</div>
+                    <p className="text-xs leading-relaxed text-theme-primary">{day.desc}</p>
                   </div>
-                  <p className="text-xs leading-relaxed text-theme-primary">{day.desc}</p>
-                </div>
-              </FadeIn>
-            ))}
+                </FadeIn>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -372,13 +366,13 @@ export default function HomePage() {
               <div className="relative z-10">
                 <div className="inline-flex items-center gap-2 glass rounded-full px-4 py-2 mb-6">
                   <CheckCircle className="w-4 h-4 text-[#F5B730]" />
-                  <span className="text-[#F5B730] text-sm font-semibold">Early Bird Closes 30 June 2026</span>
+                  <span className="text-[#F5B730] text-sm font-semibold">{t.home.registerCtaBadge}</span>
                 </div>
                 <h2 className="text-4xl sm:text-5xl font-black text-white mb-4">
-                  Secure Your Seat Today
+                  {t.home.registerCtaHeading}
                 </h2>
                 <p className="text-lg mb-8 max-w-2xl mx-auto text-theme-primary">
-                  Join 1,500+ ministers, policymakers, investors and innovators at Africa&apos;s premier tripartite summit. Early bird rates from USD 100.
+                  {t.home.registerCtaSub}
                 </p>
 
                 {/* Fee preview */}
@@ -398,7 +392,7 @@ export default function HomePage() {
                     <ArrowRight className="w-5 h-5" />
                   </Link>
                   <Link href="/registration#fees" className="btn-outline-gold px-8 py-4 rounded-xl text-base font-semibold">
-                    View All Fees
+                    {t.home.viewAllFees}
                   </Link>
                 </div>
               </div>
@@ -412,8 +406,8 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn>
             <div className="text-center mb-10">
-              <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Partners & Organisers</span>
-              <h2 className="text-3xl font-black text-white mt-3">Official Partners</h2>
+              <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">{t.home.partnersHeading}</span>
+              <h2 className="text-3xl font-black text-white mt-3">{t.home.partnersSub}</h2>
             </div>
           </FadeIn>
 
@@ -430,7 +424,7 @@ export default function HomePage() {
           <FadeIn delay={0.2}>
             <div className="text-center mt-10">
               <Link href="/sponsors" className="text-[#C9921A] text-sm hover:text-[#F5B730] transition-colors flex items-center gap-1.5 justify-center">
-                View all sponsors and partners
+                {t.home.viewAllSponsors}
                 <ExternalLink className="w-4 h-4" />
               </Link>
             </div>
@@ -444,21 +438,15 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <FadeIn>
               <div>
-                <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Youth Innovation</span>
+                <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">{t.home.innovationHeading}</span>
                 <h2 className="text-4xl font-black text-white mt-3 mb-6">
-                  TNF Innovation<br /><span className="gradient-text">Challenge 2026</span>
+                  {t.home.innovationTitle}
                 </h2>
                 <p className="leading-relaxed mb-6 text-theme-primary">
-                  12 African youth finalists pitch digital and green economy solutions to a live global investor panel. The top 5 finalists advance to the grand finale at the Ministerial Gala Dinner.
+                  {t.home.innovationDesc}
                 </p>
                 <ul className="space-y-3 mb-8">
-                  {[
-                    "Live pitches before global investor jury",
-                    "Real-time audience voting",
-                    "Start-ups, tech hubs & youth-led enterprises",
-                    "Finals at the Ministerial Gala Dinner",
-                    "Connect with investors and mentors",
-                  ].map((item) => (
+                  {t.home.innovationBullets.map((item) => (
                     <li key={item} className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-[#10B981] mt-0.5 flex-shrink-0" />
                       <span className="text-sm text-theme-primary">{item}</span>
@@ -466,7 +454,7 @@ export default function HomePage() {
                   ))}
                 </ul>
                 <Link href="/registration" className="btn-gold px-8 py-3 rounded-xl text-sm font-bold inline-flex items-center gap-2">
-                  Apply for Innovation Challenge
+                  {t.home.applyInnovation}
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -476,20 +464,14 @@ export default function HomePage() {
               <div className="glass rounded-3xl p-8">
                 <div className="text-center mb-8">
                   <div className="text-6xl mb-4">🚀</div>
-                  <h3 className="text-2xl font-black text-white">Innovation Timeline</h3>
+                  <h3 className="text-2xl font-black text-white">{t.home.innovationTimelineTitle}</h3>
                 </div>
                 <div className="space-y-4">
-                  {[
-                    { step: "Applications Open", date: "Now — May 2026", status: "open" },
-                    { step: "Shortlist Announced", date: "July 2026", status: "upcoming" },
-                    { step: "Round 1 Pitches", date: "22 Sep 2026", status: "upcoming" },
-                    { step: "Top 5 Finals", date: "23 Sep 2026 — Gala Dinner", status: "upcoming" },
-                    { step: "Winner Announced", date: "23 Sep 2026", status: "upcoming" },
-                  ].map((item, i) => (
+                  {t.home.innovationSteps.map((item, i) => (
                     <div key={i} className="flex items-center gap-4">
-                      <div className={`w-3 h-3 rounded-full flex-shrink-0 ${item.status === "open" ? "bg-[#10B981] pulse-gold" : "bg-slate-600"}`} />
+                      <div className={`w-3 h-3 rounded-full flex-shrink-0 ${i === 0 ? "bg-[#10B981] pulse-gold" : "bg-slate-600"}`} />
                       <div className="flex-1 flex items-center justify-between">
-                        <span className={`text-sm font-medium ${item.status === "open" ? "text-white" : "text-theme-primary"}`}>{item.step}</span>
+                        <span className={`text-sm font-medium ${i === 0 ? "text-white" : "text-theme-primary"}`}>{item.step}</span>
                         <span className="text-xs text-theme-primary">{item.date}</span>
                       </div>
                     </div>
@@ -506,33 +488,29 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn>
             <div className="text-center mb-14">
-              <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Venue</span>
+              <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">{t.home.venueHeading}</span>
               <h2 className="text-4xl font-black text-white mt-3">
-                Elephant Hills Resort<br /><span className="gradient-text">Victoria Falls, Zimbabwe</span>
+                {t.home.venueTitle}
               </h2>
               <p className="mt-4 max-w-2xl mx-auto text-theme-primary">
-                One of Africa&apos;s most iconic resort destinations — overlooking the Zambezi River, minutes from one of the Seven Natural Wonders of the World.
+                {t.home.venueIntro}
               </p>
             </div>
           </FadeIn>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { emoji: "🌊", title: "Zambezi Riverfront", desc: "Overlooking the mighty Zambezi River with breathtaking views from the resort terrace and pool deck." },
-              { emoji: "🌍", title: "UNESCO World Heritage", desc: "Minutes from Victoria Falls — Mosi-oa-Tunya, one of the Seven Natural Wonders of the World." },
-              { emoji: "🏨", title: "5-Star Conference Facilities", desc: "Main Plenary Hall, Syndicate Hall, breakout rooms, exhibition space and luxury accommodation." },
-              { emoji: "✈️", title: "International Connectivity", desc: "Direct flights from Johannesburg, Harare, Nairobi, Dubai, Cape Town and major African capitals." },
-              { emoji: "🦁", title: "Wildlife Experiences", desc: "Adjacent to Zambezi National Park — Big Five game drives, river cruises and helicopter flips over the Falls." },
-              { emoji: "🤝", title: "World-Class Networking", desc: "Gala dinners, cocktail receptions, and investor deal rooms designed for meaningful connections." },
-            ].map((item, i) => (
-              <FadeIn key={i} delay={i * 0.08}>
-                <div className="glass rounded-2xl p-6 card-hover border border-white/5">
-                  <div className="text-3xl mb-4">{item.emoji}</div>
-                  <h3 className="text-white font-bold mb-2">{item.title}</h3>
-                  <p className="text-sm leading-relaxed text-theme-primary">{item.desc}</p>
-                </div>
-              </FadeIn>
-            ))}
+            {["🌊", "🌍", "🏨", "✈️", "🦁", "🤝"].map((emoji, i) => {
+              const card = t.home.venueCards[i];
+              return (
+                <FadeIn key={i} delay={i * 0.08}>
+                  <div className="glass rounded-2xl p-6 card-hover border border-white/5">
+                    <div className="text-3xl mb-4">{emoji}</div>
+                    <h3 className="text-white font-bold mb-2">{card.title}</h3>
+                    <p className="text-sm leading-relaxed text-theme-primary">{card.desc}</p>
+                  </div>
+                </FadeIn>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -543,22 +521,22 @@ export default function HomePage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <FadeIn>
             <h2 className="text-5xl sm:text-6xl font-black text-white mb-6">
-              Be Part of<br /><span className="shimmer">History</span>
+              <span className="shimmer">{t.home.finalCtaTitle}</span>
             </h2>
             <p className="text-xl mb-10 max-w-2xl mx-auto text-theme-primary">
-              Join Africa&apos;s most influential tripartite platform at Victoria Falls. Shape the continent&apos;s economic future.
+              {t.home.finalCtaSub}
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4">
               <Link href="/registration" className="btn-gold px-12 py-5 rounded-xl text-lg font-black flex items-center gap-2">
-                Register for the Summit
+                {t.home.registerForSummit}
                 <ArrowRight className="w-6 h-6" />
               </Link>
               <Link href="/contact" className="btn-outline-gold px-10 py-5 rounded-xl text-lg font-semibold">
-                Contact Us
+                {t.home.contactUs}
               </Link>
             </div>
             <p className="text-sm mt-6 text-theme-primary">
-              #TNFGlobalSummit · {summitInfo.website}
+              {t.home.finalHashtag}
             </p>
           </FadeIn>
         </div>

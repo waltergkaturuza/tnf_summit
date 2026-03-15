@@ -8,8 +8,10 @@ import {
   Mic, Heart, Camera, Bell, Rocket, Handshake, Briefcase,
   FileText, ChevronDown, MapPin,
 } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 import { registrationFees } from "@/lib/data";
 import { insertRegistration, subscribeEmail } from "@/lib/db";
+import { getCountryNames } from "@/lib/countries";
 
 const STEPS = [
   { id: 1, label: "Personal", icon: User },
@@ -36,7 +38,7 @@ const sessionOptions = [
 ];
 const excursions = ["Victoria Falls Rainforest Walk (UNESCO)", "Zambezi River Morning Boat Cruise", "Morning Game Drive — Zambezi National Park", "No excursion"];
 const investmentAreas = ["Agriculture / Agro-processing", "Renewable Energy / Clean Tech", "Mining & Mineral Processing", "Manufacturing & Industrialisation", "FinTech / Digital Finance", "Infrastructure", "Tourism / Eco-tourism", "Healthcare", "Education / TVET", "Other"];
-const countries = ["Zimbabwe", "South Africa", "Kenya", "Nigeria", "Ghana", "Tanzania", "Uganda", "Ethiopia", "Rwanda", "Zambia", "Mozambique", "Botswana", "Namibia", "Malawi", "Egypt", "Morocco", "Tunisia", "Senegal", "Côte d'Ivoire", "Angola", "DRC", "Cameroon", "SADC Region", "United Kingdom", "United States", "Germany", "France", "China", "India", "UAE", "Other"];
+const countries = getCountryNames();
 
 const fees: Record<string, { early: number; standard: number }> = {
   "Government / Public Sector": { early: 400, standard: 550 },
@@ -120,6 +122,7 @@ function CheckboxGroup({ options, selected, onChange }: { options: string[]; sel
 }
 
 export default function RegistrationPage() {
+  const { t } = useLanguage();
   const [step, setStep] = useState(1);
   const [form, setForm] = useState<FormData>(initialForm);
   const [submitted, setSubmitted] = useState(false);
@@ -304,7 +307,7 @@ export default function RegistrationPage() {
                     {done
                       ? <CheckCircle className="w-3.5 h-3.5 flex-shrink-0" />
                       : <Icon className="w-3.5 h-3.5 flex-shrink-0" />}
-                    <span className="hidden sm:inline truncate">{s.label}</span>
+                    <span className="hidden sm:inline truncate">{t.registration.steps[i]?.label ?? s.label}</span>
                     <span className="sm:hidden text-[9px] font-bold">{s.id}</span>
                   </button>
                   {/* Connector line */}
@@ -378,7 +381,7 @@ export default function RegistrationPage() {
                       <Field label="Nationality" required>
                         <div className="relative">
                           <select required value={form.nationality} onChange={e => set("nationality", e.target.value)} className={selectClass}>
-                            <option value="">Select country</option>
+                            <option value="">{t.registration.selectCountry}</option>
                             {countries.map(c => <option key={c}>{c}</option>)}
                           </select>
                           <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-primary pointer-events-none" />
@@ -424,7 +427,7 @@ export default function RegistrationPage() {
                           <Field label="Country of Residence" required>
                             <div className="relative">
                               <select required value={form.country} onChange={e => set("country", e.target.value)} className={selectClass}>
-                                <option value="">Select country</option>
+                                <option value="">{t.registration.selectCountry}</option>
                                 {countries.map(c => <option key={c}>{c}</option>)}
                               </select>
                               <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-primary pointer-events-none" />
