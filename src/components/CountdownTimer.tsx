@@ -21,7 +21,7 @@ function TimeBlock({ value, label }: TimeUnit) {
         className="relative w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 glass-gold rounded-2xl flex items-center justify-center mb-2"
       >
         <div className="absolute inset-0 rounded-2xl animated-border p-[1px]">
-          <div className="w-full h-full rounded-2xl bg-[#0D1F3C] flex items-center justify-center">
+          <div className="w-full h-full rounded-2xl bg-[var(--bg-surface)] flex items-center justify-center">
             <span
               className="text-3xl sm:text-4xl lg:text-5xl font-black gradient-text tabular-nums"
               suppressHydrationWarning

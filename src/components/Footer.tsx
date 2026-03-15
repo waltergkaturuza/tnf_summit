@@ -142,7 +142,7 @@ function NewsletterSignup() {
 
 export default function Footer() {
   return (
-    <footer className="bg-[#061020] border-t border-white/5">
+    <footer className="bg-[var(--bg-alt)] border-t border-white/5">
       {/* Newsletter */}
       <NewsletterSignup />
 

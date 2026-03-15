@@ -6,28 +6,29 @@
 /* ── CSS design tokens ── */
 :root {
   /* Brand */
-  --navy: #0A1628;
+  --navy: #0F2847;
   --navy-light: #122040;
   --gold: #C9921A;
   --gold-light: #F5B730;
   --emerald: #065F46;
   --sky: #0EA5E9;
 
-  /* Dark theme surfaces (default) */
-  --bg-primary: #0A1628;
-  --bg-surface: #0D1F3C;
-  --bg-card: rgba(255, 255, 255, 0.05);
-  --bg-card-hover: rgba(255, 255, 255, 0.08);
+  /* Dark theme surfaces (default) — softer, less heavy */
+  --bg-primary: #0F2847;
+  --bg-surface: #132f4c;
+  --bg-alt: #162d4a;
+  --bg-card: rgba(255, 255, 255, 0.06);
+  --bg-card-hover: rgba(255, 255, 255, 0.1);
   --text-primary: #F8FAFC;
   --text-secondary: #CBD5E1;
   --text-muted: #94A3B8;
-  --text-faint: #475569;
-  --border: rgba(255, 255, 255, 0.1);
-  --border-strong: rgba(255, 255, 255, 0.2);
+  --text-faint: #64748B;
+  --border: rgba(255, 255, 255, 0.12);
+  --border-strong: rgba(255, 255, 255, 0.22);
   --foreground: #F8FAFC;
   --muted: #94A3B8;
-  --navbar-bg: rgba(10, 22, 40, 0.95);
-  --scrollbar-track: #0A1628;
+  --navbar-bg: rgba(15, 40, 71, 0.95);
+  --scrollbar-track: #0F2847;
 }
 
 /* ── Light theme overrides ── */
@@ -139,18 +140,18 @@ html.light .pattern-overlay {
   animation: pulse-gold 2s ease-in-out infinite;
 }
 
-/* Hero gradient background */
+/* Hero gradient background — softer, warmer */
 .hero-bg {
   background: 
-    radial-gradient(ellipse at 20% 50%, rgba(14, 165, 233, 0.15) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 20%, rgba(201, 146, 26, 0.1) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 80%, rgba(6, 95, 70, 0.1) 0%, transparent 50%),
-    linear-gradient(180deg, #0A1628 0%, #061020 100%);
+    radial-gradient(ellipse at 20% 50%, rgba(14, 165, 233, 0.2) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 20%, rgba(201, 146, 26, 0.15) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 80%, rgba(6, 95, 70, 0.08) 0%, transparent 50%),
+    linear-gradient(180deg, #0F2847 0%, #132f4c 50%, #162d4a 100%);
 }
 
-/* Section gradients */
+/* Section gradients — lighter, more inviting */
 .section-gradient {
-  background: linear-gradient(180deg, #0A1628 0%, #0D1F3C 100%);
+  background: linear-gradient(180deg, #0F2847 0%, #132f4c 100%);
 }
 
 /* Card hover effects */

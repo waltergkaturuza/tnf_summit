@@ -27,12 +27,12 @@ function SpeakerModal({ speaker, onClose, onSave, isNew }: {
   const [form, setForm] = useState(speaker);
   const set = (k: keyof typeof form, v: string) => setForm(prev => ({ ...prev, [k]: v }));
   const inputClass = "w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-[#C9921A]/60";
-  const selectClass = "w-full bg-[#0D1F3C] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#C9921A]/60";
+  const selectClass = "w-full bg-[var(--bg-surface)] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#C9921A]/60";
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-10 overflow-y-auto">
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
-      <motion.div initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} className="relative w-full max-w-2xl bg-[#0D1F3C] rounded-2xl border border-white/10 overflow-hidden mb-4">
+      <motion.div initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} className="relative w-full max-w-2xl bg-[var(--bg-surface)] rounded-2xl border border-white/10 overflow-hidden mb-4">
         <div className="flex items-center justify-between p-5 border-b border-white/5">
           <h2 className="text-white font-black text-lg flex items-center gap-2"><Mic className="w-5 h-5 text-[#C9921A]" />{isNew ? "Add Speaker" : "Edit Speaker"}</h2>
           <button onClick={onClose} className="p-2 rounded-lg glass text-slate-400 hover:text-white"><X className="w-4 h-4" /></button>

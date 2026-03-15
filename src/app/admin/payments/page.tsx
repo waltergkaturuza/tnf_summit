@@ -253,7 +253,7 @@ export default function PaymentsPage() {
                 <ChevronDown className="w-4 h-4 text-slate-400" />
               </button>
               {showFilterMenu && (
-                <div className="absolute left-0 top-full mt-2 w-40 bg-[#0D1F3C] border border-white/10 rounded-xl shadow-xl z-20 overflow-hidden">
+                <div className="absolute left-0 top-full mt-2 w-40 bg-[var(--bg-surface)] border border-white/10 rounded-xl shadow-xl z-20 overflow-hidden">
                   {["all", "unpaid", "paid", "partial", "refunded"].map(s => (
                     <button key={s} onClick={() => { setFilterStatus(s); setShowFilterMenu(false); }}
                       className={`w-full text-left px-4 py-2.5 text-sm transition-colors capitalize ${filterStatus === s ? "text-[#F5B730] bg-[#C9921A]/10" : "text-slate-300 hover:bg-white/5"}`}>

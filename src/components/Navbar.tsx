@@ -73,7 +73,7 @@ export default function Navbar() {
 
   const navbarBg = scrolled
     ? isDark
-      ? "bg-[#0A1628]/95 backdrop-blur-xl shadow-2xl border-b border-white/5"
+      ? "bg-[var(--bg-primary)]/95 backdrop-blur-xl shadow-2xl border-b border-white/5"
       : "bg-white/95 backdrop-blur-xl shadow-lg border-b border-black/5"
     : "bg-transparent";
 

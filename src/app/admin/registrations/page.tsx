@@ -44,7 +44,7 @@ function RegistrationModal({ reg, onClose, onUpdate }: {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-10 overflow-y-auto">
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
-      <motion.div initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95 }} className="relative w-full max-w-3xl bg-[#0D1F3C] rounded-2xl border border-white/10 overflow-hidden mb-4">
+      <motion.div initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95 }} className="relative w-full max-w-3xl bg-[var(--bg-surface)] rounded-2xl border border-white/10 overflow-hidden mb-4">
         {/* Header */}
         <div className="flex items-start justify-between p-6 border-b border-white/5">
           <div>
@@ -106,7 +106,7 @@ function RegistrationModal({ reg, onClose, onUpdate }: {
                   <div className="text-slate-400 text-xs">{reg.paymentMethod}</div>
                 </div>
                 <select value={payStatus} onChange={e => setPayStatus(e.target.value as typeof payStatus)}
-                  className="bg-[#0A1628] border border-white/10 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none">
+                  className="bg-[var(--bg-primary)] border border-white/10 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none">
                   <option value="unpaid">Unpaid</option>
                   <option value="paid">Paid</option>
                   <option value="partial">Partial</option>
@@ -256,17 +256,17 @@ export default function RegistrationsPage() {
           <input type="text" placeholder="Search by name, org, email, ID..." value={search} onChange={e => setSearch(e.target.value)}
             className="w-full bg-white/5 border border-white/10 rounded-lg pl-9 pr-4 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-[#C9921A]/60" />
         </div>
-        <select value={categoryFilter} onChange={e => setCategoryFilter(e.target.value)} className="bg-[#0D1F3C] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none">
+        <select value={categoryFilter} onChange={e => setCategoryFilter(e.target.value)} className="bg-[var(--bg-surface)] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none">
           <option value="all">All Categories</option>
           {categories.map(c => <option key={c}>{c}</option>)}
         </select>
-        <select value={modeFilter} onChange={e => setModeFilter(e.target.value)} className="bg-[#0D1F3C] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none">
+        <select value={modeFilter} onChange={e => setModeFilter(e.target.value)} className="bg-[var(--bg-surface)] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none">
           <option value="all">All Modes</option>
           <option value="in-person">In-Person</option>
           <option value="virtual">Virtual</option>
           <option value="hybrid">Hybrid</option>
         </select>
-        <select value={sortBy} onChange={e => setSortBy(e.target.value as typeof sortBy)} className="bg-[#0D1F3C] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none">
+        <select value={sortBy} onChange={e => setSortBy(e.target.value as typeof sortBy)} className="bg-[var(--bg-surface)] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none">
           <option value="date">Sort: Date</option>
           <option value="name">Sort: Name</option>
           <option value="status">Sort: Status</option>

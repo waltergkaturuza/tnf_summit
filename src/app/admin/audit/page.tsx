@@ -128,7 +128,7 @@ export default function AuditTrailPage() {
             <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${showFilter ? "rotate-180" : ""}`} />
           </button>
           {showFilter && (
-            <div className="absolute left-0 top-full mt-2 w-52 bg-[#0D1F3C] border border-white/10 rounded-xl shadow-xl z-20 overflow-hidden">
+            <div className="absolute left-0 top-full mt-2 w-52 bg-[var(--bg-surface)] border border-white/10 rounded-xl shadow-xl z-20 overflow-hidden">
               <button onClick={() => { setFilterAction("all"); setShowFilter(false); }}
                 className={`w-full text-left px-4 py-2.5 text-sm ${filterAction === "all" ? "text-[#F5B730] bg-[#C9921A]/10" : "text-slate-300 hover:bg-white/5"}`}>
                 All Actions

@@ -79,7 +79,7 @@ const initialForm: FormData = {
 };
 
 const inputClass = "w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-[#C9921A]/60 transition-colors";
-const selectClass = "w-full bg-[#0D1F3C] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#C9921A]/60 transition-colors appearance-none";
+const selectClass = "w-full bg-[var(--bg-surface)] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#C9921A]/60 transition-colors appearance-none";
 const labelClass = "block text-slate-400 text-xs font-semibold uppercase tracking-wide mb-1.5";
 
 function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
@@ -219,7 +219,7 @@ export default function RegistrationPage() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-[#0A1628] pt-20 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-[var(--bg-primary)] pt-20 flex items-center justify-center px-4">
         <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="text-center max-w-3xl w-full">
           <div className="w-24 h-24 rounded-full bg-emerald-500/20 border-2 border-emerald-500/50 flex items-center justify-center mx-auto mb-6">
             <CheckCircle className="w-12 h-12 text-emerald-400" />
@@ -260,10 +260,10 @@ export default function RegistrationPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0A1628] pt-20">
+    <div className="min-h-screen bg-[var(--bg-primary)] pt-20">
       {/* Header */}
       <section className="py-12 hero-bg pattern-overlay relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0A1628]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[var(--bg-primary)]" />
         <div className="relative z-10 text-center px-4">
           <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Secure Your Seat</span>
           <h1 className="text-4xl sm:text-5xl font-black text-white mt-2 mb-2">

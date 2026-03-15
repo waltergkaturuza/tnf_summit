@@ -163,7 +163,7 @@ export default function HomePage() {
       </section>
 
       {/* ─── KEY STATS ─── */}
-      <section className="py-12 bg-[#0D1F3C] border-y border-white/5">
+      <section className="py-12 bg-[var(--bg-surface)] border-y border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
             {keyFacts.map((fact, i) => {
@@ -230,7 +230,7 @@ export default function HomePage() {
       </section>
 
       {/* ─── WHY ATTEND ─── */}
-      <section className="py-20 bg-[#061020]">
+      <section className="py-20 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn>
             <div className="text-center mb-14">
@@ -325,7 +325,7 @@ export default function HomePage() {
       </section>
 
       {/* ─── SUMMIT WEEK AT A GLANCE ─── */}
-      <section className="py-20 bg-[#061020]">
+      <section className="py-20 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn>
             <div className="text-center mb-14">
@@ -408,7 +408,7 @@ export default function HomePage() {
       </section>
 
       {/* ─── PARTNERS ─── */}
-      <section className="py-16 bg-[#061020]">
+      <section className="py-16 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn>
             <div className="text-center mb-10">
@@ -502,7 +502,7 @@ export default function HomePage() {
       </section>
 
       {/* ─── VENUE ─── */}
-      <section className="py-20 bg-[#061020]">
+      <section className="py-20 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn>
             <div className="text-center mb-14">

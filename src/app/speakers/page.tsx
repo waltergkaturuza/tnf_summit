@@ -104,10 +104,10 @@ const expectedProfiles = [
 
 export default function SpeakersPage() {
   return (
-    <div className="min-h-screen bg-[#0A1628] pt-20">
+    <div className="min-h-screen bg-[var(--bg-primary)] pt-20">
       {/* Header */}
       <section className="py-20 hero-bg pattern-overlay relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0A1628]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[var(--bg-primary)]" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
             <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">TNF Global Summit 2026</span>
@@ -170,7 +170,7 @@ export default function SpeakersPage() {
       </section>
 
       {/* Speaking at the Summit */}
-      <section className="py-20 bg-[#061020]">
+      <section className="py-20 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <FadeIn>

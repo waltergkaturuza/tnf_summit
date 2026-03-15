@@ -34,13 +34,13 @@ export default function AdminLoginPage() {
   };
 
   if (authLoading) return (
-    <div className="min-h-screen bg-[#061020] flex items-center justify-center">
+    <div className="min-h-screen bg-[var(--bg-primary)] flex items-center justify-center">
       <div className="w-8 h-8 border-2 border-[#C9921A]/30 border-t-[#C9921A] rounded-full animate-spin" />
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-[#061020] hero-bg flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[var(--bg-primary)] hero-bg flex items-center justify-center px-4">
       <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md">
 
         <div className="text-center mb-8">

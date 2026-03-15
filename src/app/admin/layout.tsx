@@ -45,7 +45,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   if (pathname === "/admin") return <>{children}</>;
   if (!mounted || !isAuthenticated) return (
-    <div className="min-h-screen bg-[#061020] flex items-center justify-center">
+    <div className="min-h-screen bg-[var(--bg-primary)] flex items-center justify-center">
       <div className="w-8 h-8 border-2 border-[#C9921A]/30 border-t-[#C9921A] rounded-full animate-spin" />
     </div>
   );
@@ -56,7 +56,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const handleLogout = () => { logout(); router.push("/admin"); };
 
   const Sidebar = ({ mobile = false }: { mobile?: boolean }) => (
-    <div className={`${mobile ? "w-72" : "w-64"} h-full flex flex-col bg-[#06101F] border-r border-white/5`}>
+    <div className={`${mobile ? "w-72" : "w-64"} h-full flex flex-col bg-[var(--bg-alt)] border-r border-white/5`}>
       {/* Logo */}
       <div className="p-5 border-b border-white/5">
         <Link href="/" className="flex items-center gap-3 mb-1">
@@ -127,7 +127,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   );
 
   return (
-    <div className="flex h-screen bg-[#0A1628] overflow-hidden">
+    <div className="flex h-screen bg-[var(--bg-primary)] overflow-hidden">
       {/* Desktop sidebar */}
       <div className="hidden lg:flex flex-shrink-0"><Sidebar /></div>
 
@@ -146,7 +146,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Main */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top bar */}
-        <header className="h-14 bg-[#06101F] border-b border-white/5 flex items-center justify-between px-4 sm:px-6 flex-shrink-0">
+        <header className="h-14 bg-[var(--bg-alt)] border-b border-white/5 flex items-center justify-between px-4 sm:px-6 flex-shrink-0">
           <div className="flex items-center gap-3">
             <button onClick={() => setSidebarOpen(true)} className="lg:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5">
               <Menu className="w-5 h-5" />

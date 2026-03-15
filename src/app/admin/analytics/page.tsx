@@ -39,7 +39,7 @@ const CustomTooltip = ({ active, payload, label }: {
 }) => {
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-[#0D1F3C] border border-white/10 rounded-xl p-3 text-xs shadow-xl">
+    <div className="bg-[var(--bg-surface)] border border-white/10 rounded-xl p-3 text-xs shadow-xl">
       <p className="text-slate-400 mb-2">{label}</p>
       {payload.map((p, i) => (
         <p key={i} style={{ color: p.color }} className="font-semibold">{p.name}: {p.value.toLocaleString()}</p>
@@ -201,7 +201,7 @@ export default function AnalyticsPage() {
               <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${showWindowMenu ? "rotate-180" : ""}`} />
             </button>
             {showWindowMenu && (
-              <div className="absolute right-0 top-full mt-2 w-40 bg-[#0D1F3C] border border-white/10 rounded-xl shadow-xl z-20 overflow-hidden">
+              <div className="absolute right-0 top-full mt-2 w-40 bg-[var(--bg-surface)] border border-white/10 rounded-xl shadow-xl z-20 overflow-hidden">
                 {TIME_WINDOWS.map(w => (
                   <button key={w.days} onClick={() => { setWindow(w.days); setShowWindowMenu(false); }}
                     className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${

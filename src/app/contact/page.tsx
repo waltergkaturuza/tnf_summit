@@ -132,10 +132,10 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A1628] pt-20">
+    <div className="min-h-screen bg-[var(--bg-primary)] pt-20">
       {/* Header */}
       <section className="py-20 hero-bg pattern-overlay relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0A1628]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[var(--bg-primary)]" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
             <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Get in Touch</span>
@@ -290,7 +290,7 @@ export default function ContactPage() {
                         required
                         value={form.enquiryType}
                         onChange={(e) => setForm({ ...form, enquiryType: e.target.value })}
-                        className="w-full bg-[#0D1F3C] border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#C9921A]/60"
+                        className="w-full bg-[var(--bg-surface)] border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#C9921A]/60"
                       >
                         <option value="">Select enquiry type</option>
                         {enquiryTypes.map((t) => <option key={t} value={t}>{t}</option>)}
