@@ -1,7 +1,12 @@
 import type { FullTranslations } from "./types";
 
 const en: FullTranslations = {
-  nav: { home: "Home", about: "About", program: "Program", speakers: "Speakers", registration: "Registration", sponsors: "Sponsors", gallery: "Gallery", contact: "Contact" },
+  nav: {
+    home: "Home", about: "About", program: "Program", speakers: "Speakers",
+    registration: "Registration", sponsors: "Sponsors", gallery: "Gallery", updates: "Updates & News", contact: "Contact",
+    participate: "Participate", submitAbstract: "Submit Abstract", volunteer: "Volunteer", trackStatus: "Track Status",
+    programmeSchedule: "Programme Schedule", sessions: "Sessions",
+  },
   cta: { register: "Register Now", learnMore: "Learn More", viewProgram: "View Programme" },
   search: { placeholder: "Search pages, sessions, themes…", noResults: "No results found.", searchLabel: "Search" },
   misc: { earlyBird: "Early bird closes 30 June 2026", visitSite: "Visit TNF Secretariat website" },

@@ -1,7 +1,7 @@
 import type { FullTranslations } from "./types";
 
 export const fr: Partial<FullTranslations> = {
-  nav: { home: "Accueil", about: "À propos", program: "Programme", speakers: "Intervenants", registration: "Inscription", sponsors: "Partenaires", gallery: "Galerie", contact: "Contact" },
+  nav: { home: "Accueil", about: "À propos", program: "Programme", speakers: "Intervenants", registration: "Inscription", sponsors: "Partenaires", gallery: "Galerie", updates: "Actualités et événements", contact: "Contact", participate: "Participer", submitAbstract: "Soumettre un résumé", volunteer: "Bénévolat", trackStatus: "Suivi", programmeSchedule: "Programme", sessions: "Sessions" },
   cta: { register: "S'inscrire", learnMore: "En savoir plus", viewProgram: "Voir le programme" },
   search: { placeholder: "Rechercher des pages, séances, thèmes…", noResults: "Aucun résultat trouvé.", searchLabel: "Recherche" },
   misc: { earlyBird: "Tarif précoce jusqu'au 30 juin 2026", visitSite: "Visiter le site du Secrétariat TNF" },

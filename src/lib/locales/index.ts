@@ -5,13 +5,13 @@ import en from "./en";
 export type { FullTranslations } from "./types";
 
 // Build other languages by merging en with overrides. Each locale file exports partial overrides.
-import { fr } from "./fr";
-import { pt } from "./pt";
-import { sn } from "./sn";
-import { zh } from "./zh";
-import { ja } from "./ja";
-import { ru } from "./ru";
-import { el } from "./el";
+import { fr } from "@/lib/locales/fr";
+import { pt } from "@/lib/locales/pt";
+import { sn } from "@/lib/locales/sn";
+import { zh } from "@/lib/locales/zh";
+import { ja } from "@/lib/locales/ja";
+import { ru } from "@/lib/locales/ru";
+import { el } from "@/lib/locales/el";
 
 function merge<T extends object>(base: T, overrides: Partial<T>): T {
   return { ...base, ...overrides } as T;

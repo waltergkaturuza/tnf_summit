@@ -1,7 +1,7 @@
 import type { FullTranslations } from "./types";
 
 export const el: Partial<FullTranslations> = {
-  nav: { home: "Αρχική", about: "Σχετικά", program: "Πρόγραμμα", speakers: "Ομιλητές", registration: "Εγγραφή", sponsors: "Χορηγοί", gallery: "Συλλογή", contact: "Επικοινωνία" },
+  nav: { home: "Αρχική", about: "Σχετικά", program: "Πρόγραμμα", speakers: "Ομιλητές", registration: "Εγγραφή", sponsors: "Χορηγοί", gallery: "Συλλογή", updates: "Ενημερώσεις και νέα", contact: "Επικοινωνία", participate: "Συμμετοχή", submitAbstract: "Υποβολή περίληψης", volunteer: "Εθελοντισμός", trackStatus: "Κατάσταση", programmeSchedule: "Πρόγραμμα", sessions: "Συνεδρίες" },
   cta: { register: "Εγγραφή τώρα", learnMore: "Μάθετε περισσότερα", viewProgram: "Δείτε το πρόγραμμα" },
   search: { placeholder: "Αναζήτηση σελίδων, συνεδρίων, θεμάτων…", noResults: "Δεν βρέθηκαν αποτελέσματα.", searchLabel: "Αναζήτηση" },
   misc: { earlyBird: "Προεγγραφή έως 30 Ιουνίου 2026", visitSite: "Επίσκεψη στον ιστότοπο του Γραφείου TNF" },

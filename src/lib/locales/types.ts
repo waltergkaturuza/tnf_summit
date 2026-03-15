@@ -4,7 +4,9 @@ export type Language = "en" | "fr" | "pt" | "sn" | "zh" | "ja" | "ru" | "el";
 export type CoreTranslations = {
   nav: {
     home: string; about: string; program: string; speakers: string;
-    registration: string; sponsors: string; gallery: string; contact: string;
+    registration: string; sponsors: string; gallery: string; updates: string; contact: string;
+    participate: string; submitAbstract: string; volunteer: string; trackStatus: string;
+    programmeSchedule: string; sessions: string;
   };
   cta: { register: string; learnMore: string; viewProgram: string };
   search: { placeholder: string; noResults: string; searchLabel: string };

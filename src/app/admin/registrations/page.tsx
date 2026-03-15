@@ -59,6 +59,7 @@ function RegistrationModal({ reg, onClose, onUpdate }: {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            {reg.trackId && <span className="text-[#C9921A] text-sm font-mono font-bold">{reg.trackId}</span>}
             <span className="text-slate-500 text-xs font-mono">{reg.id}</span>
             <button onClick={onClose} className="p-2 rounded-lg glass text-slate-400 hover:text-white"><X className="w-4 h-4" /></button>
           </div>
@@ -198,7 +199,7 @@ export default function RegistrationsPage() {
     return registrations
       .filter(r => {
         const q = search.toLowerCase();
-        const matchSearch = !q || `${r.firstName} ${r.lastName} ${r.organisation} ${r.email} ${r.country} ${r.id}`.toLowerCase().includes(q);
+        const matchSearch = !q || `${r.firstName} ${r.lastName} ${r.organisation} ${r.email} ${r.country} ${r.id} ${r.trackId ?? ""}`.toLowerCase().includes(q);
         const matchStatus = statusFilter === "all" || r.status === statusFilter;
         const matchCat = categoryFilter === "all" || r.category === categoryFilter;
         const matchMode = modeFilter === "all" || r.attendanceMode === modeFilter;
@@ -212,8 +213,8 @@ export default function RegistrationsPage() {
   }, [registrations, search, statusFilter, categoryFilter, modeFilter, sortBy]);
 
   const exportCSV = () => {
-    const headers = ["ID", "Status", "Salutation", "First Name", "Last Name", "Email", "Phone", "Organisation", "Job Title", "Country", "Category", "Attendance", "Fee (USD)", "Payment Status", "Registered"];
-    const rows = filtered.map(r => [r.id, r.status, r.salutation, r.firstName, r.lastName, r.email, r.phone, r.organisation, r.jobTitle, r.country, r.category, r.attendanceMode, r.feeAmount, r.paymentStatus, new Date(r.createdAt).toLocaleDateString()]);
+    const headers = ["Track ID", "ID", "Status", "Salutation", "First Name", "Last Name", "Email", "Phone", "Organisation", "Job Title", "Country", "Category", "Attendance", "Fee (USD)", "Payment Status", "Registered"];
+    const rows = filtered.map(r => [r.trackId ?? "", r.id, r.status, r.salutation, r.firstName, r.lastName, r.email, r.phone, r.organisation, r.jobTitle, r.country, r.category, r.attendanceMode, r.feeAmount, r.paymentStatus, new Date(r.createdAt).toLocaleDateString()]);
     const csv = [headers, ...rows].map(r => r.map(c => `"${c}"`).join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
@@ -279,6 +280,7 @@ export default function RegistrationsPage() {
           <table className="w-full">
             <thead>
               <tr className="border-b border-white/5">
+                <th className="text-left text-slate-500 text-xs font-bold uppercase px-4 py-3">Track ID</th>
                 <th className="text-left text-slate-500 text-xs font-bold uppercase px-4 py-3">Delegate</th>
                 <th className="text-left text-slate-500 text-xs font-bold uppercase px-4 py-3 hidden sm:table-cell">Organisation</th>
                 <th className="text-left text-slate-500 text-xs font-bold uppercase px-4 py-3 hidden md:table-cell">Category</th>
@@ -292,6 +294,9 @@ export default function RegistrationsPage() {
             <tbody>
               {filtered.map(reg => (
                 <tr key={reg.id} className="border-b border-white/5 last:border-0 hover:bg-white/2 transition-colors">
+                  <td className="px-4 py-3">
+                    <span className="text-[#C9921A] text-xs font-mono font-bold">{reg.trackId ?? "—"}</span>
+                  </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-lg bg-[#C9921A]/15 flex items-center justify-center flex-shrink-0">

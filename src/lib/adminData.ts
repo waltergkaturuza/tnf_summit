@@ -4,6 +4,7 @@ export type AttendanceMode = "in-person" | "virtual" | "hybrid";
 export type Registration = {
   id: string;
   createdAt: string;
+  trackId: string | null;
   status: RegistrationStatus;
   // Personal
   salutation: string;
@@ -88,6 +89,67 @@ export type NewsletterSubscriber = {
   status: "active" | "unsubscribed";
 };
 
+export type UpdateType = "news" | "event";
+
+export type Update = {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  type: UpdateType;
+  category: string;
+  title: string;
+  description: string;
+  link: string;
+  imageUrl: string;
+  published: boolean;
+  publishedAt: string | null;
+  eventDate: string | null;
+  displayOrder: number;
+};
+
+export type UpdateComment = {
+  id: string;
+  updateId: string;
+  authorName: string | null;
+  isAnonymous: boolean;
+  content: string;
+  createdAt: string;
+};
+
+export type UpdateReactionCounts = { likes: number; dislikes: number; userReaction: "like" | "dislike" | null };
+
+export type AbstractParticipation = "oral" | "poster" | "panel" | "workshop" | "other";
+export type AbstractStatus = "submitted" | "under_review" | "accepted" | "rejected";
+
+export type CoAuthor = { name: string; email?: string; institution?: string };
+
+export type Abstract = {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  trackId: string;
+  themeId: string;
+  title: string;
+  abstractText: string;
+  keywords: string[];
+  wordCount: number;
+  participation: AbstractParticipation;
+  documentUrl: string;
+  fileName: string;
+  gender: string;
+  dateOfBirth: string | null;
+  country: string;
+  institution: string;
+  tShirtSize: string;
+  coAuthors: CoAuthor[];
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  status: AbstractStatus;
+  adminNotes: string;
+};
+
 export type Speaker = {
   id: string;
   name: string;
@@ -142,6 +204,7 @@ export function generateMockRegistrations(): Registration[] {
     return {
       id: `REG-${String(1001 + i).padStart(4, "0")}`,
       createdAt: date.toISOString(),
+      trackId: null,
       status: statuses[i % statuses.length],
       salutation,
       firstName,

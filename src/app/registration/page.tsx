@@ -153,7 +153,7 @@ export default function RegistrationPage() {
     setSubmitting(true);
     setSubmitError("");
     try {
-      const id = await insertRegistration({
+      const { id, trackId } = await insertRegistration({
         status: "pending",
         adminNotes: "",
         salutation: form.salutation,
@@ -205,7 +205,7 @@ export default function RegistrationPage() {
         newsletterOptIn: form.newsletterOptIn,
         termsAccepted: form.termsAccepted,
       });
-      setRegId(`REG-${id.slice(0, 8).toUpperCase()}`);
+      setRegId(trackId);
 
       // Auto-subscribe if opted in
       if (form.newsletterOptIn) {
@@ -233,7 +233,7 @@ export default function RegistrationPage() {
           <div className="glass-gold rounded-2xl p-6 mb-6 text-left space-y-3">
             <h3 className="text-[#F5B730] font-bold text-lg mb-4">Registration Summary</h3>
             <div className="grid grid-cols-2 gap-3 text-sm">
-              <div><span className="text-theme-primary">Ref. Number:</span><div className="text-white font-bold text-base">{regId}</div></div>
+              <div><span className="text-theme-primary">Registration ID:</span><div className="text-white font-bold text-lg tracking-wide">{regId}</div></div>
               <div><span className="text-theme-primary">Status:</span><div className="text-amber-400 font-bold">Pending Confirmation</div></div>
               <div><span className="text-theme-primary">Name:</span><div className="text-white">{form.salutation} {form.firstName} {form.lastName}</div></div>
               <div><span className="text-theme-primary">Organisation:</span><div className="text-white">{form.organisation}</div></div>

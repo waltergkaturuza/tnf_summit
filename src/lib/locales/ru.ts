@@ -1,7 +1,7 @@
 import type { FullTranslations } from "./types";
 
 export const ru: Partial<FullTranslations> = {
-  nav: { home: "Главная", about: "О саммите", program: "Программа", speakers: "Спикеры", registration: "Регистрация", sponsors: "Спонсоры", gallery: "Галерея", contact: "Контакты" },
+  nav: { home: "Главная", about: "О саммите", program: "Программа", speakers: "Спикеры", registration: "Регистрация", sponsors: "Спонсоры", gallery: "Галерея", updates: "Новости и события", contact: "Контакты", participate: "Участие", submitAbstract: "Подать тезисы", volunteer: "Волонтёры", trackStatus: "Статус", programmeSchedule: "Программа", sessions: "Сессии" },
   cta: { register: "Зарегистрироваться", learnMore: "Подробнее", viewProgram: "Смотреть программу" },
   search: { placeholder: "Поиск страниц, сессий, тем…", noResults: "Ничего не найдено.", searchLabel: "Поиск" },
   misc: { earlyBird: "Ранняя регистрация до 30 июня 2026", visitSite: "Сайт Секретариата TNF" },

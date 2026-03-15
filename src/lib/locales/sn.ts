@@ -1,7 +1,7 @@
 import type { FullTranslations } from "./types";
 
 export const sn: Partial<FullTranslations> = {
-  nav: { home: "Kumba", about: "Nezve", program: "Chirongwa", speakers: "Vatauriri", registration: "Kunyoresa", sponsors: "Vatsigiri", gallery: "Mifananidzo", contact: "Taura" },
+  nav: { home: "Kumba", about: "Nezve", program: "Chirongwa", speakers: "Vatauriri", registration: "Kunyoresa", sponsors: "Vatsigiri", gallery: "Mifananidzo", updates: "Mashoko neZviitiko", contact: "Taura", participate: "Tora Chikamu", submitAbstract: "Tumira Abstract", volunteer: "Kuzvipira", trackStatus: "Mamiriro", programmeSchedule: "Chirongwa", sessions: "Zvirongwa" },
   cta: { register: "Nyoresa Iye Zvino", learnMore: "Dzidza Zvakawanda", viewProgram: "Ona Chirongwa" },
   search: { placeholder: "Tsvaga mapeji, misangano, mazwi…", noResults: "Hapana zvakawanikwa.", searchLabel: "Tsvaga" },
   misc: { earlyBird: "Mutengo wekutanga unopera 30 Chikumi 2026", visitSite: "Shanyira webhusaiti yeTNF Secretariat" },

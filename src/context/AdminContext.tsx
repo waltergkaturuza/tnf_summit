@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
 import { supabase } from "@/lib/supabase";
 import * as db from "@/lib/db";
-import type { Registration, ContactMessage, NewsletterSubscriber, Speaker } from "@/lib/adminData";
+import type { Registration, ContactMessage, NewsletterSubscriber, Speaker, Update, Abstract } from "@/lib/adminData";
 
 type AdminContextType = {
   isAuthenticated: boolean;
@@ -32,6 +32,19 @@ type AdminContextType = {
   updateSpeaker: (id: string, updates: Partial<Speaker>) => Promise<void>;
   addSpeaker: (speaker: Omit<Speaker, "id" | "addedAt">) => Promise<void>;
   deleteSpeaker: (id: string) => Promise<void>;
+
+  updates: Update[];
+  updatesLoading: boolean;
+  addUpdate: (u: Omit<Update, "id" | "createdAt" | "updatedAt">) => Promise<Update>;
+  updateUpdate: (id: string, updates: Partial<Update>) => Promise<void>;
+  deleteUpdate: (id: string) => Promise<void>;
+  refreshUpdates: () => Promise<void>;
+
+  abstracts: Abstract[];
+  abstractsLoading: boolean;
+  updateAbstract: (id: string, updates: Partial<Abstract>) => Promise<void>;
+  deleteAbstract: (id: string) => Promise<void>;
+  refreshAbstracts: () => Promise<void>;
 };
 
 const AdminContext = createContext<AdminContextType | null>(null);
@@ -51,6 +64,12 @@ export function AdminProvider({ children }: { children: ReactNode }) {
 
   const [speakers, setSpeakers] = useState<Speaker[]>([]);
   const [spksLoading, setSpksLoading] = useState(false);
+
+  const [updates, setUpdates] = useState<Update[]>([]);
+  const [updatesLoading, setUpdatesLoading] = useState(false);
+
+  const [abstracts, setAbstracts] = useState<Abstract[]>([]);
+  const [abstractsLoading, setAbstractsLoading] = useState(false);
 
   // ── Auth state from Supabase ──────────────────────────────────────────────
   useEffect(() => {
@@ -78,18 +97,24 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     setMsgsLoading(true);
     setSubsLoading(true);
     setSpksLoading(true);
+    setUpdatesLoading(true);
+    setAbstractsLoading(true);
 
     try {
-      const [regs, msgs, subs, spks] = await Promise.all([
+      const [regs, msgs, subs, spks, upds, abs] = await Promise.all([
         db.fetchRegistrations(),
         db.fetchMessages(),
         db.fetchSubscribers(),
         db.fetchSpeakers(),
+        db.fetchUpdates(),
+        db.fetchAbstracts(),
       ]);
       setRegistrations(regs);
       setMessages(msgs);
       setSubscribers(subs);
       setSpeakers(spks);
+      setUpdates(upds);
+      setAbstracts(abs);
     } catch (err) {
       console.error("Failed to load admin data:", err);
     } finally {
@@ -97,6 +122,8 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       setMsgsLoading(false);
       setSubsLoading(false);
       setSpksLoading(false);
+      setUpdatesLoading(false);
+      setAbstractsLoading(false);
     }
   };
 
@@ -113,6 +140,8 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     setMessages([]);
     setSubscribers([]);
     setSpeakers([]);
+    setUpdates([]);
+    setAbstracts([]);
   };
 
   // ── Registrations ─────────────────────────────────────────────────────────
@@ -170,6 +199,46 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     setSpeakers(prev => prev.filter(s => s.id !== id));
   };
 
+  // ── Updates & News ────────────────────────────────────────────────────────
+  const refreshUpdates = useCallback(async () => {
+    setUpdatesLoading(true);
+    try { setUpdates(await db.fetchUpdates()); }
+    finally { setUpdatesLoading(false); }
+  }, []);
+
+  const addUpdate = async (u: Omit<Update, "id" | "createdAt" | "updatedAt">) => {
+    const created = await db.insertUpdate(u);
+    setUpdates(prev => [created, ...prev]);
+    return created;
+  };
+
+  const updateUpdate = async (id: string, updates: Partial<Update>) => {
+    await db.updateUpdate(id, updates);
+    setUpdates(prev => prev.map(u => u.id === id ? { ...u, ...updates } : u));
+  };
+
+  const deleteUpdate = async (id: string) => {
+    await db.deleteUpdate(id);
+    setUpdates(prev => prev.filter(u => u.id !== id));
+  };
+
+  // ── Abstracts ─────────────────────────────────────────────────────────────
+  const refreshAbstracts = useCallback(async () => {
+    setAbstractsLoading(true);
+    try { setAbstracts(await db.fetchAbstracts()); }
+    finally { setAbstractsLoading(false); }
+  }, []);
+
+  const updateAbstract = async (id: string, updates: Partial<Abstract>) => {
+    await db.updateAbstract(id, updates);
+    setAbstracts(prev => prev.map(a => a.id === id ? { ...a, ...updates } : a));
+  };
+
+  const deleteAbstract = async (id: string) => {
+    await db.deleteAbstract(id);
+    setAbstracts(prev => prev.filter(a => a.id !== id));
+  };
+
   return (
     <AdminContext.Provider value={{
       isAuthenticated, authLoading, login, logout,
@@ -177,6 +246,8 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       messages, msgsLoading, updateMessage, deleteMessage,
       subscribers, subsLoading, updateSubscriber, deleteSubscriber,
       speakers, spksLoading, updateSpeaker, addSpeaker, deleteSpeaker,
+      updates, updatesLoading, addUpdate, updateUpdate, deleteUpdate, refreshUpdates,
+      abstracts, abstractsLoading, updateAbstract, deleteAbstract, refreshAbstracts,
     }}>
       {children}
     </AdminContext.Provider>
