@@ -8,9 +8,10 @@ import {
 } from "recharts";
 import {
   BarChart2, Eye, Users, TrendingUp, Monitor, Smartphone, Tablet,
-  Globe, RefreshCw, Calendar, MousePointer, ChevronDown,
+  Globe, RefreshCw, Calendar, MousePointer, ChevronDown, Download,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { fetchDownloadStats } from "@/lib/db";
 import { format, parseISO, subDays } from "date-fns";
 import type { ViewsPerDay, TopPage, DeviceStat } from "@/lib/analytics";
 
@@ -78,6 +79,7 @@ export default function AnalyticsPage() {
   const [topPages, setTopPages] = useState<TopPage[]>([]);
   const [devices, setDevices]   = useState<DeviceStat[]>([]);
   const [eventsByType, setEventsByType] = useState<{ name: string; Events: number }[]>([]);
+  const [downloadStats, setDownloadStats] = useState<Awaited<ReturnType<typeof fetchDownloadStats>> | null>(null);
 
   const since = (days: number) => subDays(new Date(), days).toISOString();
 
@@ -154,6 +156,10 @@ export default function AnalyticsPage() {
           Events: v,
         }))
       );
+
+      // Resource download stats (last 90 days)
+      const dlStats = await fetchDownloadStats(90);
+      setDownloadStats(dlStats);
     } catch (e) { console.error(e); }
     finally { setLoading(false); setRefreshing(false); }
   }, [window]);
@@ -228,6 +234,7 @@ export default function AnalyticsPage() {
         <StatCard icon={Users}         label="Unique Visitors"     value={unique} sub={`Last ${windowLabel}`} color={GOLD}   />
         <StatCard icon={MousePointer}  label="Views Today"         value={today}  sub="Since midnight"        color={PURPLE} />
         <StatCard icon={TrendingUp}    label="Days in Window"      value={window} sub={windowLabel}           color={EMERALD}/>
+        <StatCard icon={Download}      label="Resource Downloads"  value={downloadStats?.total ?? 0} sub="Last 90 days" color="#8B5CF6" />
       </div>
 
       {/* Events by Type (Area Chart — matching screenshot) */}
@@ -336,6 +343,57 @@ export default function AnalyticsPage() {
             )}
         </motion.div>
       </div>
+
+      {/* Resource Downloads */}
+      {downloadStats && (downloadStats.total > 0 || downloadStats.byAttachment.length > 0) && (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.22 }}
+          className="glass rounded-2xl p-6 border border-white/5">
+          <div className="flex items-center justify-between mb-1">
+            <h2 className="text-white font-bold flex items-center gap-2">
+              <Download className="w-5 h-5 text-[#8B5CF6]" /> Resource Downloads
+            </h2>
+            <span className="text-slate-500 text-xs">LAST 90 DAYS</span>
+          </div>
+          <p className="text-slate-500 text-xs mb-5">Gallery and document downloads from Updates & News</p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div>
+              <p className="text-slate-400 text-sm mb-3">Total downloads: <span className="text-white font-bold">{downloadStats.total}</span></p>
+              {downloadStats.byDay.length > 0 && (
+                <ResponsiveContainer width="100%" height={140}>
+                  <AreaChart data={downloadStats.byDay.map(d => ({ date: format(parseISO(d.date), "d MMM"), count: d.count }))} margin={{ top: 5, right: 5, bottom: 0, left: -15 }}>
+                    <defs>
+                      <linearGradient id="gDl" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#8B5CF6" stopOpacity={0.3} /><stop offset="95%" stopColor="#8B5CF6" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                    <XAxis dataKey="date" tick={{ fill: "#64748b", fontSize: 10 }} axisLine={false} tickLine={false} />
+                    <YAxis tick={{ fill: "#64748b", fontSize: 10 }} axisLine={false} tickLine={false} />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Area type="monotone" dataKey="count" stroke="#8B5CF6" fill="url(#gDl)" strokeWidth={2} dot={false} name="Downloads" />
+                  </AreaChart>
+                </ResponsiveContainer>
+              )}
+            </div>
+            <div>
+              <p className="text-slate-400 text-sm mb-3">Top resources</p>
+              {downloadStats.byAttachment.length === 0 ? (
+                <p className="text-slate-600 text-sm">No attachment downloads yet.</p>
+              ) : (
+                <div className="space-y-1">
+                  {downloadStats.byAttachment.slice(0, 8).map((a, i) => (
+                    <div key={a.attachmentId} className="flex items-center gap-3 py-2 border-b border-white/3 last:border-0">
+                      <span className="text-slate-600 text-xs w-4 text-right flex-shrink-0">{i + 1}</span>
+                      <span className="text-slate-300 text-xs truncate flex-1" title={a.name}>{a.name}</span>
+                      <span className="text-white text-xs font-bold flex-shrink-0">{a.count}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </motion.div>
+      )}
 
       {/* Device Breakdown */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}

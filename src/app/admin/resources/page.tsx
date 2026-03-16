@@ -7,10 +7,12 @@ import {
   Filter, ChevronRight,
 } from "lucide-react";
 import Link from "next/link";
+import { supabase } from "@/lib/supabase";
 import {
   fetchAllAttachmentsForAdmin,
   deleteUpdateAttachment,
   updateUpdateAttachment,
+  insertAuditLog,
 } from "@/lib/db";
 import type { UpdateAttachment, UpdateAttachmentCategory } from "@/lib/adminData";
 
@@ -58,6 +60,8 @@ export default function ResourcesPage() {
   const handleDelete = async (a: AttachmentWithUpdate) => {
     if (!confirm(`Remove "${a.name}" from resources?`)) return;
     await deleteUpdateAttachment(a.id);
+    const { data } = await supabase.auth.getSession();
+    await insertAuditLog("attachment_deleted", { entityType: "attachment", entityId: a.id, entityLabel: a.name, performedBy: data.session?.user?.email ?? "system" });
     load();
   };
 

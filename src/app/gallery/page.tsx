@@ -286,7 +286,7 @@ export default function GalleryPage() {
                       {items.map((att) => (
                         <a
                           key={att.id}
-                          href={att.publicUrl}
+                          href={`/api/track-download?url=${encodeURIComponent(att.publicUrl)}&attachmentId=${att.id}&name=${encodeURIComponent(att.name)}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-white/5 transition-colors group"

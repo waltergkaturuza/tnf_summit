@@ -131,6 +131,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) return { ok: false, error: error.message };
+    await db.insertAuditLog("login", { entityType: "auth", performedBy: email });
     return { ok: true };
   };
 
@@ -186,17 +187,37 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   // ── Speakers ──────────────────────────────────────────────────────────────
   const updateSpeaker = async (id: string, updates: Partial<Speaker>) => {
     await db.updateSpeaker(id, updates);
+    const { data } = await supabase.auth.getSession();
+    await db.insertAuditLog("speaker_updated", {
+      entityType: "speaker", entityId: id, entityLabel: updates.name ?? speakers.find(s => s.id === id)?.name ?? "",
+      performedBy: data.session?.user?.email ?? "system",
+    });
     setSpeakers(prev => prev.map(s => s.id === id ? { ...s, ...updates } : s));
   };
 
   const addSpeaker = async (speaker: Omit<Speaker, "id" | "addedAt">) => {
     await db.insertSpeaker(speaker);
-    setSpeakers(await db.fetchSpeakers());
+    const list = await db.fetchSpeakers();
+    const added = list.find(s => s.name === speaker.name && s.organisation === speaker.organisation);
+    if (added) {
+      const { data } = await supabase.auth.getSession();
+      await db.insertAuditLog("speaker_created", {
+        entityType: "speaker", entityId: added.id, entityLabel: speaker.name,
+        performedBy: data.session?.user?.email ?? "system",
+      });
+    }
+    setSpeakers(list);
   };
 
   const deleteSpeaker = async (id: string) => {
+    const prev = speakers.find(s => s.id === id);
     await db.deleteSpeaker(id);
-    setSpeakers(prev => prev.filter(s => s.id !== id));
+    const { data } = await supabase.auth.getSession();
+    await db.insertAuditLog("speaker_deleted", {
+      entityType: "speaker", entityId: id, entityLabel: prev?.name ?? "",
+      performedBy: data.session?.user?.email ?? "system",
+    });
+    setSpeakers(prevList => prevList.filter(s => s.id !== id));
   };
 
   // ── Updates & News ────────────────────────────────────────────────────────
@@ -208,18 +229,35 @@ export function AdminProvider({ children }: { children: ReactNode }) {
 
   const addUpdate = async (u: Omit<Update, "id" | "createdAt" | "updatedAt">) => {
     const created = await db.insertUpdate(u);
+    const { data } = await supabase.auth.getSession();
+    await db.insertAuditLog("update_created", {
+      entityType: "update", entityId: created.id, entityLabel: created.title,
+      performedBy: data.session?.user?.email ?? "system",
+    });
     setUpdates(prev => [created, ...prev]);
     return created;
   };
 
-  const updateUpdate = async (id: string, updates: Partial<Update>) => {
-    await db.updateUpdate(id, updates);
-    setUpdates(prev => prev.map(u => u.id === id ? { ...u, ...updates } : u));
+  const updateUpdate = async (id: string, upd: Partial<Update>) => {
+    await db.updateUpdate(id, upd);
+    const { data } = await supabase.auth.getSession();
+    const label = upd.title ?? updates.find(u => u.id === id)?.title ?? "";
+    await db.insertAuditLog("update_updated", {
+      entityType: "update", entityId: id, entityLabel: label,
+      performedBy: data.session?.user?.email ?? "system",
+    });
+    setUpdates(prev => prev.map(u => u.id === id ? { ...u, ...upd } : u));
   };
 
   const deleteUpdate = async (id: string) => {
+    const prev = updates.find(u => u.id === id);
     await db.deleteUpdate(id);
-    setUpdates(prev => prev.filter(u => u.id !== id));
+    const { data } = await supabase.auth.getSession();
+    await db.insertAuditLog("update_deleted", {
+      entityType: "update", entityId: id, entityLabel: prev?.title ?? "",
+      performedBy: data.session?.user?.email ?? "system",
+    });
+    setUpdates(prevList => prevList.filter(u => u.id !== id));
   };
 
   // ── Abstracts ─────────────────────────────────────────────────────────────

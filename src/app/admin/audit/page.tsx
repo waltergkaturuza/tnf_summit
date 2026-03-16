@@ -6,6 +6,7 @@ import {
   Activity, RefreshCw, Search, Filter, ChevronDown,
   LogIn, LogOut, UserPlus, Settings, Trash2, Edit3,
   Upload, FileText, CreditCard, Bell, Mic, Globe,
+  Newspaper, Paperclip, Download,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { format, parseISO } from "date-fns";
@@ -46,6 +47,12 @@ const ACTION_CONFIG: Record<string, { icon: React.ElementType; color: string; la
   user_created:            { icon: UserPlus, color: "#0EA5E9", label: "User Added" },
   user_updated:            { icon: Edit3,    color: "#C9921A", label: "User Updated" },
   user_deleted:            { icon: Trash2,   color: "#EF4444", label: "User Removed" },
+  update_created:          { icon: Newspaper, color: "#0EA5E9", label: "Update Created" },
+  update_updated:          { icon: Edit3,    color: "#C9921A", label: "Update Updated" },
+  update_deleted:          { icon: Trash2,    color: "#EF4444", label: "Update Deleted" },
+  attachment_created:     { icon: Paperclip, color: "#0EA5E9", label: "Attachment Added" },
+  attachment_deleted:     { icon: Trash2,    color: "#EF4444", label: "Attachment Removed" },
+  resource_download:      { icon: Download,  color: "#8B5CF6", label: "Resource Downloaded" },
 };
 
 function getActionCfg(action: string) {
@@ -94,6 +101,8 @@ export default function AuditTrailPage() {
     { label: "Auth", values: ["login", "logout"] },
     { label: "Registrations", values: ["registration_created", "registration_updated", "registration_deleted"] },
     { label: "Content", values: ["speaker_created", "speaker_updated", "speaker_deleted", "sponsor_created", "sponsor_updated"] },
+    { label: "Updates & News", values: ["update_created", "update_updated", "update_deleted", "attachment_created", "attachment_deleted"] },
+    { label: "Resources", values: ["resource_download"] },
     { label: "Payments", values: ["invoice_generated", "invoice_marked_paid", "payment_updated"] },
     { label: "Settings & Users", values: ["settings_updated", "user_created", "user_updated", "user_deleted"] },
   ];

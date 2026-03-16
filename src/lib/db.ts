@@ -671,6 +671,111 @@ export async function deleteUpdateAttachment(id: string): Promise<void> {
   if (error) throw error;
 }
 
+// ── AUDIT TRAIL ────────────────────────────────────────────────────────────────
+
+export type AuditAction =
+  | "login" | "logout"
+  | "registration_created" | "registration_updated" | "registration_deleted"
+  | "speaker_created" | "speaker_updated" | "speaker_deleted"
+  | "sponsor_created" | "sponsor_updated" | "sponsor_deleted"
+  | "update_created" | "update_updated" | "update_deleted"
+  | "attachment_created" | "attachment_deleted"
+  | "resource_download"
+  | "message_replied" | "message_deleted" | "subscriber_added" | "subscriber_removed"
+  | "media_uploaded" | "media_deleted"
+  | "invoice_generated" | "invoice_marked_paid" | "payment_updated"
+  | "settings_updated" | "user_created" | "user_updated" | "user_deleted";
+
+export async function insertAuditLog(
+  action: AuditAction,
+  opts?: { entityType?: string; entityId?: string; entityLabel?: string; performedBy?: string; details?: Record<string, unknown> }
+): Promise<void> {
+  try {
+    const { error } = await supabase.schema("tnf_summit").from("audit_trail").insert({
+      action,
+      entity_type: opts?.entityType ?? "",
+      entity_id: opts?.entityId ?? "",
+      entity_label: opts?.entityLabel ?? "",
+      performed_by: opts?.performedBy ?? "system",
+      details: opts?.details ?? {},
+    });
+    if (error) console.warn("Audit log insert failed:", error.message);
+  } catch (e) {
+    console.warn("Audit log error:", e);
+  }
+}
+
+// ── RESOURCE DOWNLOAD TRACKING ──────────────────────────────────────────────────
+
+export async function recordResourceDownload(params: {
+  attachmentId?: string;
+  mediaFileId?: string;
+  resourceName: string;
+  resourceUrl: string;
+  ipHash?: string;
+  userAgent?: string;
+  referrer?: string;
+}): Promise<void> {
+  try {
+    const { error } = await supabase.schema("tnf_summit").from("resource_downloads").insert({
+      attachment_id: params.attachmentId || null,
+      media_file_id: params.mediaFileId || null,
+      resource_name: params.resourceName,
+      resource_url: params.resourceUrl,
+      ip_hash: params.ipHash || null,
+      user_agent: params.userAgent || null,
+      referrer: params.referrer || null,
+    });
+    if (error) console.warn("Download tracking failed:", error.message);
+  } catch (e) {
+    console.warn("Download tracking error:", e);
+  }
+}
+
+export type DownloadStats = {
+  total: number;
+  byAttachment: { attachmentId: string; name: string; count: number }[];
+  byDay: { date: string; count: number }[];
+};
+
+export async function fetchDownloadStats(days = 90): Promise<DownloadStats> {
+  const since = new Date();
+  since.setDate(since.getDate() - days);
+  const cutoff = since.toISOString();
+
+  const { data: rows, error } = await supabase
+    .schema("tnf_summit")
+    .from("resource_downloads")
+    .select("id, attachment_id, resource_name, created_at")
+    .gte("created_at", cutoff);
+
+  if (error) return { total: 0, byAttachment: [], byDay: [] };
+
+  const total = rows?.length ?? 0;
+  const byAttachmentMap: Record<string, { name: string; count: number }> = {};
+  const byDayMap: Record<string, number> = {};
+
+  (rows ?? []).forEach((r: { attachment_id?: string; resource_name: string; created_at: string }) => {
+    const aid = r.attachment_id ?? "unknown";
+    if (!byAttachmentMap[aid]) byAttachmentMap[aid] = { name: r.resource_name, count: 0 };
+    byAttachmentMap[aid].count++;
+    const d = r.created_at.split("T")[0];
+    byDayMap[d] = (byDayMap[d] ?? 0) + 1;
+  });
+
+  const byAttachment = Object.entries(byAttachmentMap)
+    .filter(([k]) => k !== "unknown")
+    .map(([attachmentId, v]) => ({ attachmentId, name: v.name, count: v.count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 20);
+
+  const byDay = Object.entries(byDayMap)
+    .sort()
+    .map(([date, count]) => ({ date, count }));
+
+  return { total, byAttachment, byDay };
+}
+
 export async function getActiveSubscriberEmails(): Promise<string[]> {
   const { data, error } = await supabase
     .schema("tnf_summit")

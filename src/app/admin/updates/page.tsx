@@ -10,6 +10,7 @@ import {
   fetchUpdateAttachments,
   insertUpdateAttachment,
   deleteUpdateAttachment,
+  insertAuditLog,
 } from "@/lib/db";
 import { uploadFile, fetchMediaFiles, type MediaFile } from "@/lib/storage";
 import type { Update, UpdateType, UpdateAttachment, UpdateAttachmentType, UpdateAttachmentCategory } from "@/lib/adminData";
@@ -322,7 +323,7 @@ function UpdateModal({
                           <div className="flex items-center gap-1 shrink-0">
                             {a.showOnEvent && <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400">Event</span>}
                             {a.showInResources && <span className="text-[10px] px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-400">Resources</span>}
-                            <button type="button" onClick={async () => { if (confirm("Remove this attachment?")) { await deleteUpdateAttachment(a.id); loadAttachments(); } }} className="p-1 rounded text-slate-500 hover:text-red-400">
+                            <button type="button" onClick={async () => { if (confirm("Remove this attachment?")) { await deleteUpdateAttachment(a.id); const { data } = await supabase.auth.getSession(); await insertAuditLog("attachment_deleted", { entityType: "attachment", entityId: a.id, entityLabel: a.name, performedBy: data.session?.user?.email ?? "system" }); loadAttachments(); } }} className="p-1 rounded text-slate-500 hover:text-red-400">
                               <Trash2 className="w-3.5 h-3.5" />
                             </button>
                           </div>
@@ -460,7 +461,7 @@ function UpdateModal({
                       onClick={async () => {
                         if (!newAtt.name.trim() || !newAtt.publicUrl.trim()) return;
                         if (updateId) {
-                          await insertUpdateAttachment({
+                          const created = await insertUpdateAttachment({
                             updateId,
                             name: newAtt.name.trim(),
                             type: newAtt.type,
@@ -472,6 +473,8 @@ function UpdateModal({
                             showInResources: newAtt.showInResources,
                             displayOrder: 0,
                           });
+                          const { data } = await supabase.auth.getSession();
+                          await insertAuditLog("attachment_created", { entityType: "attachment", entityId: created.id, entityLabel: created.name, performedBy: data.session?.user?.email ?? "system" });
                           loadAttachments();
                         } else {
                           setPendingAttachments((p) => [...p, { ...newAtt, name: newAtt.name.trim(), publicUrl: newAtt.publicUrl.trim() }]);
@@ -647,9 +650,11 @@ export default function UpdatesPage() {
       } else {
         const created = await addUpdate(data);
         if (pendingAttachments?.length) {
-          const { insertUpdateAttachment } = await import("@/lib/db");
+          const { insertUpdateAttachment, insertAuditLog } = await import("@/lib/db");
+          const { data: sess } = await supabase.auth.getSession();
+          const performedBy = sess.session?.user?.email ?? "system";
           for (const att of pendingAttachments) {
-            await insertUpdateAttachment({
+            const inserted = await insertUpdateAttachment({
               updateId: created.id,
               name: att.name,
               type: att.type,
@@ -661,6 +666,7 @@ export default function UpdatesPage() {
               showInResources: att.showInResources,
               displayOrder: 0,
             });
+            await insertAuditLog("attachment_created", { entityType: "attachment", entityId: inserted.id, entityLabel: inserted.name, performedBy });
           }
         }
         if (data.published && notify) {

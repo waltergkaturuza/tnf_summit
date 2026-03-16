@@ -1,14 +1,17 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
-  Users, CheckCircle, Clock, XCircle, DollarSign,
+  Users, CheckCircle, Clock, DollarSign,
   MessageSquare, Bell, Mic, TrendingUp, Globe,
-  ArrowRight, AlertCircle, ArrowUpRight,
+  ArrowRight, AlertCircle, ArrowUpRight, Download,
+  Newspaper, FileText, FolderOpen, Activity, Paperclip,
 } from "lucide-react";
 import { useAdmin } from "@/context/AdminContext";
+import { fetchDownloadStats, fetchAllAttachmentsForAdmin } from "@/lib/db";
+import { fetchMediaFiles } from "@/lib/storage";
 
 function StatCard({ label, value, sub, icon: Icon, color, href }: {
   label: string; value: string | number; sub?: string;
@@ -56,7 +59,26 @@ function RecentRow({ reg }: { reg: ReturnType<typeof useAdmin>["registrations"][
 }
 
 export default function DashboardPage() {
-  const { registrations, messages, subscribers, speakers } = useAdmin();
+  const { registrations, messages, subscribers, speakers, updates, abstracts } = useAdmin();
+  const [downloadCount, setDownloadCount] = useState<number | null>(null);
+  const [attachmentsCount, setAttachmentsCount] = useState<number | null>(null);
+  const [mediaCount, setMediaCount] = useState<number | null>(null);
+  const [auditCount, setAuditCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetchDownloadStats(90).then((s) => setDownloadCount(s.total)).catch(() => setDownloadCount(0));
+  }, []);
+  useEffect(() => {
+    fetchAllAttachmentsForAdmin().then((a) => setAttachmentsCount(a.length)).catch(() => setAttachmentsCount(0));
+  }, []);
+  useEffect(() => {
+    fetchMediaFiles().then((f) => setMediaCount(f.length)).catch(() => setMediaCount(0));
+  }, []);
+  useEffect(() => {
+    import("@/lib/supabase").then(({ supabase }) =>
+      supabase.schema("tnf_summit").from("audit_trail").select("*", { count: "exact", head: true }).gte("created_at", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
+    ).then(({ count }) => setAuditCount(count ?? 0)).catch(() => setAuditCount(0));
+  }, []);
 
   const stats = useMemo(() => {
     const total = registrations.length;
@@ -103,13 +125,19 @@ export default function DashboardPage() {
       {/* Stats grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard label="Total Registrations" value={stats.total} sub={`${stats.inPerson} in-person · ${stats.virtual} virtual`} icon={Users} color="#3B82F6" href="/admin/registrations" />
-        <StatCard label="Confirmed" value={stats.confirmed} sub={`${Math.round(stats.confirmed / stats.total * 100)}% of total`} icon={CheckCircle} color="#10B981" href="/admin/registrations" />
+        <StatCard label="Confirmed" value={stats.confirmed} sub={stats.total > 0 ? `${Math.round(stats.confirmed / stats.total * 100)}% of total` : "—"} icon={CheckCircle} color="#10B981" href="/admin/registrations" />
         <StatCard label="Pending" value={stats.pending} sub="Awaiting confirmation" icon={Clock} color="#F59E0B" href="/admin/registrations" />
         <StatCard label="Revenue (USD)" value={`$${stats.revenue.toLocaleString()}`} sub="Confirmed paid registrations" icon={DollarSign} color="#C9921A" />
         <StatCard label="Unread Messages" value={stats.unread} sub={`${messages.length} total enquiries`} icon={MessageSquare} color="#8B5CF6" href="/admin/messages" />
         <StatCard label="Newsletter" value={stats.activeSubs} sub="Active subscribers" icon={Bell} color="#EC4899" href="/admin/newsletter" />
         <StatCard label="Speakers" value={stats.confSpeakers} sub={`${speakers.length} total · ${speakers.filter(s => s.status === "tentative").length} tentative`} icon={Mic} color="#0EA5E9" href="/admin/speakers" />
         <StatCard label="Countries" value={Object.keys(registrations.reduce((acc, r) => ({ ...acc, [r.country]: 1 }), {})).length} sub="Nationalities represented" icon={Globe} color="#14B8A6" />
+        <StatCard label="Resource Downloads" value={downloadCount ?? "—"} sub="Last 90 days" icon={Download} color="#8B5CF6" href="/admin/analytics" />
+        <StatCard label="Updates & News" value={updates.filter(u => u.published).length} sub={`${updates.length} total · ${updates.filter(u => !u.published).length} draft`} icon={Newspaper} color="#0EA5E9" href="/admin/updates" />
+        <StatCard label="Resources" value={attachmentsCount ?? "—"} sub="Attachments & documents" icon={Paperclip} color="#EC4899" href="/admin/resources" />
+        <StatCard label="Abstracts" value={abstracts.length} sub="Submitted abstracts" icon={FileText} color="#10B981" href="/admin/abstracts" />
+        <StatCard label="Media Library" value={mediaCount ?? "—"} sub="Images, docs & videos" icon={FolderOpen} color="#F59E0B" href="/admin/media" />
+        <StatCard label="Audit Trail" value={auditCount ?? "—"} sub="Actions last 7 days" icon={Activity} color="#64748b" href="/admin/audit" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -131,7 +159,7 @@ export default function DashboardPage() {
             <h3 className="text-white font-bold text-sm mb-4 flex items-center gap-2"><TrendingUp className="w-4 h-4 text-[#C9921A]" />By Category</h3>
             <div className="space-y-2.5">
               {Object.entries(stats.byCategory).sort((a, b) => b[1] - a[1]).map(([cat, count]) => {
-                const pct = Math.round(count / stats.total * 100);
+                const pct = stats.total > 0 ? Math.round(count / stats.total * 100) : 0;
                 return (
                   <div key={cat}>
                     <div className="flex justify-between text-xs mb-1">
@@ -176,6 +204,37 @@ export default function DashboardPage() {
             ))}
             {stats.unread === 0 && <p className="text-slate-600 text-xs text-center py-2">All messages read</p>}
           </div>
+
+          {/* Recent Updates & News */}
+          <div className="glass rounded-2xl p-5">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-white font-bold text-sm flex items-center gap-2"><Newspaper className="w-4 h-4 text-[#C9921A]" />Recent Updates</h3>
+              <Link href="/admin/updates" className="text-[#C9921A] text-xs hover:text-[#F5B730]"><ArrowRight className="w-3 h-3" /></Link>
+            </div>
+            {[...updates].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 3).map(u => (
+              <div key={u.id} className="py-2 border-b border-white/5 last:border-0">
+                <div className="text-white text-xs font-semibold truncate">{u.title}</div>
+                <div className="text-slate-500 text-xs">{u.category} · {u.published ? "Published" : "Draft"}</div>
+              </div>
+            ))}
+            {updates.length === 0 && <p className="text-slate-600 text-xs text-center py-2">No updates yet</p>}
+          </div>
+
+          {/* Recent Abstracts */}
+          {abstracts.length > 0 && (
+            <div className="glass rounded-2xl p-5">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-white font-bold text-sm flex items-center gap-2"><FileText className="w-4 h-4 text-[#C9921A]" />Recent Abstracts</h3>
+                <Link href="/admin/abstracts" className="text-[#C9921A] text-xs hover:text-[#F5B730]"><ArrowRight className="w-3 h-3" /></Link>
+              </div>
+              {[...abstracts].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 3).map(a => (
+                <div key={a.id} className="py-2 border-b border-white/5 last:border-0">
+                  <div className="text-white text-xs font-semibold truncate">{a.title}</div>
+                  <div className="text-slate-500 text-xs truncate">{a.trackId}</div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

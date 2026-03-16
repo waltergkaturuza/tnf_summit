@@ -206,7 +206,7 @@ export default function UpdateDetailContent({ update, attachments = [] }: { upda
               {attachments.map((att) => (
                 <a
                   key={att.id}
-                  href={att.publicUrl}
+                  href={`/api/track-download?url=${encodeURIComponent(att.publicUrl)}&attachmentId=${att.id}&name=${encodeURIComponent(att.name)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 glass rounded-xl border border-white/10 px-4 py-3 hover:border-[#C9921A]/40 transition-colors"
