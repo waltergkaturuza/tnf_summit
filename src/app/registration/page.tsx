@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { registrationFees } from "@/lib/data";
-import { subscribeEmail } from "@/lib/db";
+import { insertRegistration, subscribeEmail } from "@/lib/db";
 import { getCountryNames } from "@/lib/countries";
 
 const STEPS = [
@@ -153,14 +153,11 @@ export default function RegistrationPage() {
     e.preventDefault();
     if (step < STEPS.length) { setStep(step + 1); return; }
 
-    // Final submission → via API (uses service role, bypasses RLS)
+    // Final submission → direct Supabase insert (requires anon INSERT policy)
     setSubmitting(true);
     setSubmitError("");
     try {
-      const res = await fetch("/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      const { trackId } = await insertRegistration({
         status: "pending",
         adminNotes: "",
         salutation: form.salutation,
@@ -211,13 +208,7 @@ export default function RegistrationPage() {
         photoConsent: form.photoConsent,
         newsletterOptIn: form.newsletterOptIn,
         termsAccepted: form.termsAccepted,
-        }),
       });
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.error || "Submission failed");
-      }
-      const { trackId } = await res.json();
       setRegId(trackId);
 
       // Auto-subscribe if opted in
