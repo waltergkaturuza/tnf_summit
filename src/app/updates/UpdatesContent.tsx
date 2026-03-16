@@ -34,7 +34,7 @@ export default function UpdatesContent({ initialUpdates }: { initialUpdates: Upd
       {/* Hero */}
       <section className="relative pt-28 pb-10 px-4 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-[#C9921A]/10 to-transparent pointer-events-none" />
-        <div className="max-w-6xl mx-auto relative">
+        <div className="max-w-7xl mx-auto relative">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="inline-flex items-center gap-2 glass-gold rounded-full px-4 py-2 mb-4">
             <Megaphone className="w-4 h-4 text-[#F5B730]" />
             <span className="text-[#F5B730] text-sm font-semibold">{t.nav.updates}</span>
@@ -48,10 +48,10 @@ export default function UpdatesContent({ initialUpdates }: { initialUpdates: Upd
         </div>
       </section>
 
-      <div className="max-w-6xl mx-auto px-4 pb-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
         <div className="flex flex-col lg:flex-row gap-10">
           {/* Main content */}
-          <main className="flex-1 min-w-0">
+          <main className="flex-1 min-w-0 lg:min-w-[600px]">
             {/* Filter tabs */}
             <div className="flex flex-wrap gap-2 mb-6">
               {(["all", "news", "event"] as const).map((f) => (
@@ -147,7 +147,7 @@ export default function UpdatesContent({ initialUpdates }: { initialUpdates: Upd
           </main>
 
           {/* Sidebar */}
-          <aside className="w-full lg:w-80 flex-shrink-0">
+          <aside className="w-full lg:w-72 xl:w-80 flex-shrink-0">
             <div className="lg:sticky lg:top-24 space-y-8">
               {/* Search */}
               <div className="rounded-2xl overflow-hidden border border-white/10 bg-[#C9921A]/10 border-[#C9921A]/20">

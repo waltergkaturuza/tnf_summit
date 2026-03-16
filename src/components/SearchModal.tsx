@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, X, ArrowRight, FileText, Calendar, Mic, Users, Image, Phone, Shield, BookOpen, Star } from "lucide-react";
+import { Search, X, ArrowRight, FileText, Calendar, Mic, Users, Image, Phone, Shield, BookOpen, Star, Newspaper, Download, UserPlus, FileCheck } from "lucide-react";
 import { program, themes } from "@/lib/data";
 import { useLanguage } from "@/context/LanguageContext";
 
@@ -23,7 +23,11 @@ const pageResults: Result[] = [
   { id: "speakers", title: "Speakers & Panelists", subtitle: "Keynote speakers, Innovation Challenge", href: "/speakers", category: "Pages", icon: Mic },
   { id: "registration", title: "Registration", subtitle: "Delegate registration, fees, categories", href: "/registration", category: "Pages", icon: Users },
   { id: "sponsors", title: "Sponsors & Partners", subtitle: "Platinum, Gold, Silver sponsorship tiers", href: "/sponsors", category: "Pages", icon: Star },
-  { id: "gallery", title: "Media Gallery", subtitle: "Photos, videos, presentations, proceedings", href: "/gallery", category: "Pages", icon: Image },
+  { id: "updates", title: "Updates & News", subtitle: "Latest news, announcements, upcoming events", href: "/updates", category: "Pages", icon: Newspaper },
+  { id: "gallery", title: "Media & Gallery", subtitle: "Photos, videos, resources & downloads", href: "/gallery", category: "Pages", icon: Image },
+  { id: "abstracts", title: "Submit Abstract", subtitle: "Abstract submission for sessions", href: "/abstracts/submit", category: "Pages", icon: FileCheck },
+  { id: "volunteer", title: "Volunteer", subtitle: "Apply to volunteer at the Summit", href: "/volunteer", category: "Pages", icon: UserPlus },
+  { id: "track-status", title: "Track Status", subtitle: "Check registration or abstract status", href: "/track-status", category: "Pages", icon: Download },
   { id: "contact", title: "Contact & FAQ", subtitle: "Secretariat contact, enquiry form", href: "/contact", category: "Pages", icon: Phone },
   { id: "privacy", title: "Privacy Policy", subtitle: "Data protection, cookies, user rights", href: "/privacy", category: "Legal", icon: Shield },
   { id: "terms", title: "Terms of Use", subtitle: "Registration policies, code of conduct", href: "/terms", category: "Legal", icon: Shield },
@@ -74,7 +78,7 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
   const { t } = useLanguage();
 
   const filtered = query.trim().length === 0
-    ? pageResults.slice(0, 6)
+    ? pageResults
     : allResults.filter(r =>
         `${r.title} ${r.subtitle} ${r.category}`.toLowerCase().includes(query.toLowerCase())
       ).slice(0, 12);

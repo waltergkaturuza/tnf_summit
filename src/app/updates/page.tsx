@@ -1,6 +1,8 @@
 import { fetchPublishedUpdates } from "@/lib/db";
 import UpdatesContent from "./UpdatesContent";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Updates & News | TNF Global Summit",
   description: "Latest news and upcoming events for the TNF Global Summit.",
