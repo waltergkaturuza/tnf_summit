@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { registrationFees } from "@/lib/data";
-import { insertRegistration, subscribeEmail } from "@/lib/db";
+import { subscribeEmail } from "@/lib/db";
 import { getCountryNames } from "@/lib/countries";
 
 const STEPS = [
@@ -110,7 +110,11 @@ function CheckboxGroup({ options, selected, onChange }: { options: string[]; sel
   return (
     <div className="space-y-2">
       {options.map(opt => (
-        <label key={opt} className="flex items-start gap-3 cursor-pointer p-2.5 rounded-xl hover:bg-white/5 transition-colors group">
+        <label
+          key={opt}
+          onClick={() => toggle(opt)}
+          className="flex items-start gap-3 cursor-pointer p-2.5 rounded-xl hover:bg-white/5 transition-colors group"
+        >
           <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all ${selected.includes(opt) ? "bg-[#C9921A] border-[#C9921A]" : "border-white/20 group-hover:border-[#C9921A]/50"}`}>
             {selected.includes(opt) && <CheckCircle className="w-3 h-3 text-[#0A1628]" />}
           </div>
@@ -149,11 +153,14 @@ export default function RegistrationPage() {
     e.preventDefault();
     if (step < STEPS.length) { setStep(step + 1); return; }
 
-    // Final submission → write to Supabase
+    // Final submission → via API (uses service role, bypasses RLS)
     setSubmitting(true);
     setSubmitError("");
     try {
-      const { id, trackId } = await insertRegistration({
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
         status: "pending",
         adminNotes: "",
         salutation: form.salutation,
@@ -204,7 +211,13 @@ export default function RegistrationPage() {
         photoConsent: form.photoConsent,
         newsletterOptIn: form.newsletterOptIn,
         termsAccepted: form.termsAccepted,
+        }),
       });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || "Submission failed");
+      }
+      const { trackId } = await res.json();
       setRegId(trackId);
 
       // Auto-subscribe if opted in
