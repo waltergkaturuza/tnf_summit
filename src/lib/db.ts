@@ -5,7 +5,7 @@
 
 import { supabase } from "./supabase";
 import { generateRegistrationTrackId } from "./trackId";
-import type { Registration, ContactMessage, NewsletterSubscriber, Speaker, Update, Abstract, UpdateComment, UpdateReactionCounts } from "./adminData";
+import type { Registration, ContactMessage, NewsletterSubscriber, Speaker, Update, Abstract, UpdateComment, UpdateReactionCounts, UpdateAttachment } from "./adminData";
 
 // ── Type map: JS camelCase → Postgres snake_case ──────────────────────────────
 
@@ -406,6 +406,14 @@ function rowToUpdate(row: Record<string, unknown>): Update {
     published: !!(row.published as boolean),
     publishedAt: (row.published_at as string) ?? null,
     eventDate: (row.event_date as string) ?? null,
+    eventStartAt: (row.event_start_at as string) ?? null,
+    eventEndAt: (row.event_end_at as string) ?? null,
+    eventVenue: (row.event_venue as string) ?? "",
+    eventCity: (row.event_city as string) ?? "",
+    eventCountry: (row.event_country as string) ?? "",
+    registrationType: (row.registration_type as Update["registrationType"]) ?? "none",
+    registrationUrl: (row.registration_url as string) ?? "",
+    registrationPageSlug: (row.registration_page_slug as string) ?? "",
     displayOrder: (row.display_order as number) ?? 0,
   };
 }
@@ -445,6 +453,14 @@ export async function insertUpdate(u: Omit<Update, "id" | "createdAt" | "updated
     published: u.published,
     published_at: u.published ? new Date().toISOString() : null,
     event_date: u.eventDate || null,
+    event_start_at: u.eventStartAt || null,
+    event_end_at: u.eventEndAt || null,
+    event_venue: u.eventVenue || null,
+    event_city: u.eventCity || null,
+    event_country: u.eventCountry || null,
+    registration_type: u.registrationType || "none",
+    registration_url: u.registrationUrl || null,
+    registration_page_slug: u.registrationPageSlug || null,
     display_order: u.displayOrder ?? 0,
   };
   const { data, error } = await supabase.schema("tnf_summit").from("updates").insert(row).select("*").single();
@@ -465,6 +481,14 @@ export async function updateUpdate(id: string, updates: Partial<Update>): Promis
     clean.published_at = updates.published ? new Date().toISOString() : null;
   }
   if (updates.eventDate !== undefined) clean.event_date = updates.eventDate || null;
+  if (updates.eventStartAt !== undefined) clean.event_start_at = updates.eventStartAt || null;
+  if (updates.eventEndAt !== undefined) clean.event_end_at = updates.eventEndAt || null;
+  if (updates.eventVenue !== undefined) clean.event_venue = updates.eventVenue || null;
+  if (updates.eventCity !== undefined) clean.event_city = updates.eventCity || null;
+  if (updates.eventCountry !== undefined) clean.event_country = updates.eventCountry || null;
+  if (updates.registrationType !== undefined) clean.registration_type = updates.registrationType || "none";
+  if (updates.registrationUrl !== undefined) clean.registration_url = updates.registrationUrl || null;
+  if (updates.registrationPageSlug !== undefined) clean.registration_page_slug = updates.registrationPageSlug || null;
   if (updates.displayOrder !== undefined) clean.display_order = updates.displayOrder;
   const { error } = await supabase.schema("tnf_summit").from("updates").update(clean).eq("id", id);
   if (error) throw error;
@@ -532,6 +556,94 @@ export async function setUpdateReaction(updateId: string, voterKey: string, isLi
     .schema("tnf_summit")
     .from("update_reactions")
     .upsert({ update_id: updateId, voter_key: voterKey, is_like: isLike }, { onConflict: "update_id,voter_key" });
+  if (error) throw error;
+}
+
+// ── UPDATE ATTACHMENTS ────────────────────────────────────────────────────────
+
+function rowToAttachment(row: Record<string, unknown>): UpdateAttachment {
+  return {
+    id: row.id as string,
+    createdAt: row.created_at as string,
+    updateId: row.update_id as string,
+    name: (row.name as string) ?? "",
+    type: (row.type as UpdateAttachment["type"]) ?? "document",
+    category: (row.category as UpdateAttachment["category"]) ?? "other",
+    storageBucket: (row.storage_bucket as string) ?? null,
+    storagePath: (row.storage_path as string) ?? null,
+    publicUrl: (row.public_url as string) ?? "",
+    showOnEvent: !!(row.show_on_event),
+    showInResources: !!(row.show_in_resources),
+    displayOrder: (row.display_order as number) ?? 0,
+  };
+}
+
+export async function fetchUpdateAttachments(updateId: string, options?: { showOnEvent?: boolean; showInResources?: boolean }): Promise<UpdateAttachment[]> {
+  let q = supabase
+    .schema("tnf_summit")
+    .from("update_attachments")
+    .select("*")
+    .eq("update_id", updateId)
+    .order("display_order", { ascending: true })
+    .order("created_at", { ascending: true });
+  if (options?.showOnEvent !== undefined) q = q.eq("show_on_event", options.showOnEvent);
+  if (options?.showInResources !== undefined) q = q.eq("show_in_resources", options.showInResources);
+  const { data, error } = await q;
+  if (error) throw error;
+  return (data ?? []).map((r) => rowToAttachment(r as Record<string, unknown>));
+}
+
+export async function fetchAttachmentsForResources(): Promise<(UpdateAttachment & { updateTitle?: string })[]> {
+  const { data, error } = await supabase
+    .schema("tnf_summit")
+    .from("update_attachments")
+    .select("*, updates!inner(title)")
+    .eq("show_in_resources", true)
+    .order("display_order", { ascending: true })
+    .order("created_at", { ascending: true });
+  if (error) throw error;
+  const rows = (data ?? []) as (Record<string, unknown> & { updates?: { title?: string } })[];
+  return rows.map((r) => {
+    const att = rowToAttachment(r);
+    return { ...att, updateTitle: r.updates?.title };
+  });
+}
+
+export async function insertUpdateAttachment(a: Omit<UpdateAttachment, "id" | "createdAt">): Promise<UpdateAttachment> {
+  const row = {
+    update_id: a.updateId,
+    name: a.name,
+    type: a.type ?? "document",
+    category: a.category ?? "other",
+    storage_bucket: a.storageBucket || null,
+    storage_path: a.storagePath || null,
+    public_url: a.publicUrl,
+    show_on_event: a.showOnEvent ?? true,
+    show_in_resources: a.showInResources ?? false,
+    display_order: a.displayOrder ?? 0,
+  };
+  const { data, error } = await supabase.schema("tnf_summit").from("update_attachments").insert(row).select("*").single();
+  if (error) throw error;
+  return rowToAttachment(data as Record<string, unknown>);
+}
+
+export async function updateUpdateAttachment(id: string, updates: Partial<UpdateAttachment>): Promise<void> {
+  const clean: Record<string, unknown> = {};
+  if (updates.name !== undefined) clean.name = updates.name;
+  if (updates.type !== undefined) clean.type = updates.type;
+  if (updates.category !== undefined) clean.category = updates.category;
+  if (updates.storageBucket !== undefined) clean.storage_bucket = updates.storageBucket;
+  if (updates.storagePath !== undefined) clean.storage_path = updates.storagePath;
+  if (updates.publicUrl !== undefined) clean.public_url = updates.publicUrl;
+  if (updates.showOnEvent !== undefined) clean.show_on_event = updates.showOnEvent;
+  if (updates.showInResources !== undefined) clean.show_in_resources = updates.showInResources;
+  if (updates.displayOrder !== undefined) clean.display_order = updates.displayOrder;
+  const { error } = await supabase.schema("tnf_summit").from("update_attachments").update(clean).eq("id", id);
+  if (error) throw error;
+}
+
+export async function deleteUpdateAttachment(id: string): Promise<void> {
+  const { error } = await supabase.schema("tnf_summit").from("update_attachments").delete().eq("id", id);
   if (error) throw error;
 }
 

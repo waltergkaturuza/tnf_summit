@@ -103,7 +103,17 @@ export type Update = {
   imageUrl: string;
   published: boolean;
   publishedAt: string | null;
+  /** Legacy simple event date (YYYY-MM-DD) */
   eventDate: string | null;
+  /** Rich event metadata (optional) */
+  eventStartAt?: string | null;
+  eventEndAt?: string | null;
+  eventVenue?: string;
+  eventCity?: string;
+  eventCountry?: string;
+  registrationType?: "none" | "external" | "internal";
+  registrationUrl?: string;
+  registrationPageSlug?: string;
   displayOrder: number;
 };
 
@@ -117,6 +127,24 @@ export type UpdateComment = {
 };
 
 export type UpdateReactionCounts = { likes: number; dislikes: number; userReaction: "like" | "dislike" | null };
+
+export type UpdateAttachmentType = "pdf" | "document" | "link" | "other";
+export type UpdateAttachmentCategory = "concept_note" | "schedule" | "brochure" | "agenda" | "other";
+
+export type UpdateAttachment = {
+  id: string;
+  createdAt: string;
+  updateId: string;
+  name: string;
+  type: UpdateAttachmentType;
+  category: UpdateAttachmentCategory;
+  storageBucket: string | null;
+  storagePath: string | null;
+  publicUrl: string;
+  showOnEvent: boolean;
+  showInResources: boolean;
+  displayOrder: number;
+};
 
 export type AbstractParticipation = "oral" | "poster" | "panel" | "workshop" | "other";
 export type AbstractStatus = "submitted" | "under_review" | "accepted" | "rejected";

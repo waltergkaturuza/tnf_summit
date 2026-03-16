@@ -3,12 +3,13 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import EventCountdown from "@/components/EventCountdown";
 import {
   ArrowLeft, Calendar, FolderOpen, ExternalLink, ThumbsUp, ThumbsDown,
-  MessageCircle, Send, User, UserX,
+  MessageCircle, Send, User, UserX, MapPin, FileDown,
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
-import type { Update, UpdateComment } from "@/lib/adminData";
+import type { Update, UpdateComment, UpdateAttachment } from "@/lib/adminData";
 import {
   fetchUpdateComments,
   insertUpdateComment,
@@ -28,7 +29,7 @@ function getOrCreateVoterKey(): string {
   return key;
 }
 
-export default function UpdateDetailContent({ update }: { update: Update }) {
+export default function UpdateDetailContent({ update, attachments = [] }: { update: Update; attachments?: UpdateAttachment[] }) {
   const { t } = useLanguage();
   const [comments, setComments] = useState<UpdateComment[]>([]);
   const [reaction, setReaction] = useState<{ likes: number; dislikes: number; userReaction: "like" | "dislike" | null }>({ likes: 0, dislikes: 0, userReaction: null });
@@ -136,6 +137,88 @@ export default function UpdateDetailContent({ update }: { update: Update }) {
             </a>
           )}
         </motion.article>
+
+        {/* Event detail: countdown, venue, registration */}
+        {update.type === "event" && (
+          <motion.section
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="glass rounded-2xl border border-white/10 p-6 mb-8"
+          >
+            {update.eventStartAt && new Date(update.eventStartAt) > new Date() && (
+              <div className="mb-6">
+                <EventCountdown
+                  targetDate={new Date(update.eventStartAt)}
+                  label={t.updates.countdownToEvent}
+                />
+              </div>
+            )}
+            {(update.eventVenue || update.eventCity || update.eventCountry) && (
+              <div className="flex items-start gap-3 text-slate-300 mb-6">
+                <MapPin className="w-5 h-5 text-[#C9921A] shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-xs uppercase tracking-widest font-medium text-theme-primary mb-1">
+                    {t.updates.eventVenue}
+                  </p>
+                  <p className="text-sm">
+                    {[update.eventVenue, update.eventCity, update.eventCountry]
+                      .filter(Boolean)
+                      .join(", ")}
+                  </p>
+                </div>
+              </div>
+            )}
+            {update.registrationType && update.registrationType !== "none" && (
+              <div>
+                {update.registrationType === "external" && update.registrationUrl ? (
+                  <a
+                    href={update.registrationUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 btn-gold px-5 py-2.5 rounded-xl text-sm font-bold"
+                  >
+                    {t.updates.registerForEvent} <ExternalLink className="w-4 h-4" />
+                  </a>
+                ) : update.registrationType === "internal" && update.registrationPageSlug ? (
+                  <Link
+                    href={`/${update.registrationPageSlug}`}
+                    className="inline-flex items-center gap-2 btn-gold px-5 py-2.5 rounded-xl text-sm font-bold"
+                  >
+                    {t.updates.registerForEvent} <ExternalLink className="w-4 h-4" />
+                  </Link>
+                ) : null}
+              </div>
+            )}
+          </motion.section>
+        )}
+
+        {/* Resources & attachments */}
+        {attachments.length > 0 && (
+          <motion.section
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8"
+          >
+            <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+              <FileDown className="w-5 h-5 text-[#C9921A]" /> {t.updates.resourcesTitle}
+            </h2>
+            <div className="flex flex-wrap gap-3">
+              {attachments.map((att) => (
+                <a
+                  key={att.id}
+                  href={att.publicUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 glass rounded-xl border border-white/10 px-4 py-3 hover:border-[#C9921A]/40 transition-colors"
+                >
+                  <FileDown className="w-4 h-4 text-[#C9921A]" />
+                  <span className="text-sm font-medium text-white">{att.name}</span>
+                  <ExternalLink className="w-3.5 h-3.5 text-slate-500" />
+                </a>
+              ))}
+            </div>
+          </motion.section>
+        )}
 
         {/* Like / Dislike */}
         <div className="flex items-center gap-4 mb-8 py-4 border-y border-white/10">

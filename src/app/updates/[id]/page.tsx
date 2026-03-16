@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { fetchUpdateById } from "@/lib/db";
+import { fetchUpdateById, fetchUpdateAttachments } from "@/lib/db";
 import UpdateDetailContent from "./UpdateDetailContent";
 
 type Props = { params: Promise<{ id: string }> };
@@ -13,7 +13,10 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function UpdateDetailPage({ params }: Props) {
   const { id } = await params;
-  const update = await fetchUpdateById(id);
+  const [update, attachments] = await Promise.all([
+    fetchUpdateById(id),
+    fetchUpdateAttachments(id, { showOnEvent: true }),
+  ]);
   if (!update) notFound();
-  return <UpdateDetailContent update={update} />;
+  return <UpdateDetailContent update={update} attachments={attachments} />;
 }

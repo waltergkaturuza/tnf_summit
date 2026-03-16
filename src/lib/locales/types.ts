@@ -203,6 +203,8 @@ export type GalleryTranslations = {
   availableTitle: string;
   liveCoverageTitle: string;
   followTitle: string;
+  resourcesTitle: string;
+  resourcesSub: string;
 };
 
 /** Contact page */
@@ -272,6 +274,11 @@ export type UpdatesTranslations = {
   abstractLabel: string;
   registrationLabel: string;
   statusLabel: string;
+  countdownToEvent: string;
+  eventVenue: string;
+  registerForEvent: string;
+  resourcesTitle: string;
+  noResources: string;
 };
 
 /** Track Status page */

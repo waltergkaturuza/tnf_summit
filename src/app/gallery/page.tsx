@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { fetchPublicGallery, type MediaFile } from "@/lib/storage";
+import { fetchAttachmentsForResources } from "@/lib/db";
 
 function FadeIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef(null);
@@ -102,6 +103,7 @@ export default function GalleryPage() {
   const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState("venue");
   const [liveFiles, setLiveFiles]   = useState<MediaFile[]>([]);
+  const [resources, setResources]   = useState<Awaited<ReturnType<typeof fetchAttachmentsForResources>>>([]);
   const [galleryLoading, setGalleryLoading] = useState(true);
   const [lightboxIndex, setLightboxIndex]   = useState<number | null>(null);
 
@@ -110,6 +112,10 @@ export default function GalleryPage() {
       setLiveFiles(f.filter(x => x.mediaType === "image" || x.mediaType === "video"));
       setGalleryLoading(false);
     }).catch(() => setGalleryLoading(false));
+  }, []);
+
+  useEffect(() => {
+    fetchAttachmentsForResources().then(setResources).catch(() => setResources([]));
   }, []);
 
   return (
@@ -235,6 +241,55 @@ export default function GalleryPage() {
                       <div className="mt-3 text-[10px] px-2 py-0.5 rounded-full inline-block" style={{ background: `${img.color}20`, color: img.color }}>
                         Coming Sept 2026
                       </div>
+                    </div>
+                  </div>
+                </FadeIn>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Resources & Downloads (from update attachments) */}
+      {resources.length > 0 && (
+        <section id="resources" className="py-20 section-gradient">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <FadeIn>
+              <div className="text-center mb-12">
+                <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">{t.gallery.heroBadge}</span>
+                <h2 className="text-3xl font-black text-white mt-3">{t.gallery.resourcesTitle}</h2>
+                <p className="mt-2 text-theme-primary">{t.gallery.resourcesSub}</p>
+              </div>
+            </FadeIn>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {Object.entries(
+                resources.reduce<Record<string, typeof resources>>((acc, r) => {
+                  const cat = r.category.replace("_", " ");
+                  if (!acc[cat]) acc[cat] = [];
+                  acc[cat].push(r);
+                  return acc;
+                }, {})
+              ).map(([category, items]) => (
+                <FadeIn key={category}>
+                  <div className="glass rounded-2xl p-5 h-full">
+                    <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-3">{category}</h3>
+                    <div className="space-y-2">
+                      {items.map((att) => (
+                        <a
+                          key={att.id}
+                          href={att.publicUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-white/5 transition-colors group"
+                        >
+                          <Download className="w-4 h-4 text-[#C9921A] shrink-0" />
+                          <span className="text-sm text-theme-primary group-hover:text-white truncate flex-1">{att.name}</span>
+                          {att.updateTitle && (
+                            <span className="text-xs text-slate-500 truncate max-w-[120px]">{att.updateTitle}</span>
+                          )}
+                          <ExternalLink className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                        </a>
+                      ))}
                     </div>
                   </div>
                 </FadeIn>

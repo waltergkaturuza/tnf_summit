@@ -17,7 +17,17 @@ CREATE TABLE IF NOT EXISTS tnf_summit.updates (
   image_url    TEXT DEFAULT '',
   published    BOOLEAN NOT NULL DEFAULT FALSE,
   published_at TIMESTAMPTZ,
+  -- Legacy simple event date (kept for backwards-compatibility / filtering)
   event_date   DATE,
+  -- New richer event metadata
+  event_start_at   TIMESTAMPTZ,
+  event_end_at     TIMESTAMPTZ,
+  event_venue      TEXT,
+  event_city       TEXT,
+  event_country    TEXT,
+  registration_type TEXT DEFAULT 'none',          -- none | external | internal
+  registration_url  TEXT DEFAULT '',
+  registration_page_slug TEXT DEFAULT '',
   display_order INT NOT NULL DEFAULT 0,
 
   CONSTRAINT updates_title_not_empty CHECK (title <> '')
@@ -26,6 +36,7 @@ CREATE TABLE IF NOT EXISTS tnf_summit.updates (
 CREATE INDEX idx_updates_published ON tnf_summit.updates (published) WHERE published = TRUE;
 CREATE INDEX idx_updates_published_at ON tnf_summit.updates (published_at DESC NULLS LAST);
 CREATE INDEX idx_updates_type ON tnf_summit.updates (type);
+CREATE INDEX idx_updates_event_start_at ON tnf_summit.updates (event_start_at);
 
 ALTER TABLE tnf_summit.updates ENABLE ROW LEVEL SECURITY;
 

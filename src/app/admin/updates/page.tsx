@@ -1,11 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Edit3, Trash2, X, Save, Newspaper, Calendar, Image as ImageIcon, Link as LinkIcon } from "lucide-react";
+import { Plus, Edit3, Trash2, X, Save, Newspaper, Calendar, Image as ImageIcon, Link as LinkIcon, FileDown } from "lucide-react";
 import { useAdmin } from "@/context/AdminContext";
 import { supabase } from "@/lib/supabase";
-import type { Update, UpdateType } from "@/lib/adminData";
+import {
+  fetchUpdateAttachments,
+  insertUpdateAttachment,
+  deleteUpdateAttachment,
+} from "@/lib/db";
+import type { Update, UpdateType, UpdateAttachment, UpdateAttachmentType, UpdateAttachmentCategory } from "@/lib/adminData";
 
 const UPDATE_CATEGORIES = ["News", "Business", "International Relations", "Social", "Social Justice & Labour Affairs", "Staff", "Events"];
 
@@ -19,17 +24,30 @@ const blankUpdate: Omit<Update, "id" | "createdAt" | "updatedAt"> = {
   published: false,
   publishedAt: null,
   eventDate: null,
+  eventStartAt: null,
+  eventEndAt: null,
+  eventVenue: "",
+  eventCity: "",
+  eventCountry: "",
+  registrationType: "none",
+  registrationUrl: "",
+  registrationPageSlug: "",
   displayOrder: 0,
 };
 
+const ATTACHMENT_TYPES: UpdateAttachmentType[] = ["pdf", "document", "link", "other"];
+const ATTACHMENT_CATEGORIES: UpdateAttachmentCategory[] = ["concept_note", "schedule", "brochure", "agenda", "other"];
+
 function UpdateModal({
   update,
+  updateId,
   onClose,
   onSave,
   isNew,
   notifyOnPublish,
 }: {
   update: Omit<Update, "id" | "createdAt" | "updatedAt">;
+  updateId?: string;
   onClose: () => void;
   onSave: (data: Omit<Update, "id" | "createdAt" | "updatedAt">, notify: boolean) => void;
   isNew?: boolean;
@@ -37,6 +55,27 @@ function UpdateModal({
 }) {
   const [form, setForm] = useState(update);
   const [notify, setNotify] = useState(!!notifyOnPublish);
+  const [attachments, setAttachments] = useState<UpdateAttachment[]>([]);
+  const [addingAttachment, setAddingAttachment] = useState(false);
+  const [newAtt, setNewAtt] = useState({
+    name: "",
+    type: "document" as UpdateAttachmentType,
+    category: "other" as UpdateAttachmentCategory,
+    publicUrl: "",
+    showOnEvent: true,
+    showInResources: false,
+  });
+
+  const loadAttachments = useCallback(async () => {
+    if (!updateId) return;
+    const list = await fetchUpdateAttachments(updateId);
+    setAttachments(list);
+  }, [updateId]);
+
+  useEffect(() => {
+    if (updateId) loadAttachments();
+  }, [updateId, loadAttachments]);
+
   const set = (k: keyof typeof form, v: string | number | boolean | null) =>
     setForm((prev) => ({ ...prev, [k]: v }));
   const inputClass =
@@ -105,16 +144,99 @@ function UpdateModal({
             />
           </div>
           {form.type === "event" && (
-            <div>
-              <label className="text-slate-400 text-xs font-semibold mb-1.5 block flex items-center gap-1">
-                <Calendar className="w-3.5 h-3.5" /> Event date
-              </label>
-              <input
-                type="date"
-                value={form.eventDate ?? ""}
-                onChange={(e) => set("eventDate", e.target.value || null)}
-                className={inputClass}
-              />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="text-slate-400 text-xs font-semibold mb-1.5 block flex items-center gap-1">
+                  <Calendar className="w-3.5 h-3.5" /> Event start (date &amp; time)
+                </label>
+                <input
+                  type="datetime-local"
+                  value={form.eventStartAt ?? ""}
+                  onChange={(e) => {
+                    const value = e.target.value || null;
+                    set("eventStartAt", value);
+                    if (!form.eventDate && value) {
+                      set("eventDate", value.slice(0, 10));
+                    }
+                  }}
+                  className={inputClass}
+                />
+              </div>
+              <div>
+                <label className="text-slate-400 text-xs font-semibold mb-1.5 block flex items-center gap-1">
+                  <Calendar className="w-3.5 h-3.5" /> Event end (optional)
+                </label>
+                <input
+                  type="datetime-local"
+                  value={form.eventEndAt ?? ""}
+                  onChange={(e) => set("eventEndAt", e.target.value || null)}
+                  className={inputClass}
+                />
+              </div>
+              <div>
+                <label className="text-slate-400 text-xs font-semibold mb-1.5 block">Venue</label>
+                <input
+                  type="text"
+                  value={form.eventVenue ?? ""}
+                  onChange={(e) => set("eventVenue", e.target.value)}
+                  className={inputClass}
+                  placeholder="e.g. ZITF Exhibition Centre"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-slate-400 text-xs font-semibold mb-1.5 block">City</label>
+                  <input
+                    type="text"
+                    value={form.eventCity ?? ""}
+                    onChange={(e) => set("eventCity", e.target.value)}
+                    className={inputClass}
+                    placeholder="e.g. Bulawayo"
+                  />
+                </div>
+                <div>
+                  <label className="text-slate-400 text-xs font-semibold mb-1.5 block">Country</label>
+                  <input
+                    type="text"
+                    value={form.eventCountry ?? ""}
+                    onChange={(e) => set("eventCountry", e.target.value)}
+                    className={inputClass}
+                    placeholder="e.g. Zimbabwe"
+                  />
+                </div>
+              </div>
+              <div className="md:col-span-2">
+                <label className="text-slate-400 text-xs font-semibold mb-1.5 block">Registration</label>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <select
+                    value={form.registrationType ?? "none"}
+                    onChange={(e) => set("registrationType", e.target.value as any)}
+                    className={selectClass}
+                  >
+                    <option value="none">No registration link</option>
+                    <option value="external">External link</option>
+                    <option value="internal">Internal page</option>
+                  </select>
+                  {form.registrationType === "external" && (
+                    <input
+                      type="url"
+                      value={form.registrationUrl ?? ""}
+                      onChange={(e) => set("registrationUrl", e.target.value)}
+                      className={inputClass}
+                      placeholder="Registration URL (https://...)"
+                    />
+                  )}
+                  {form.registrationType === "internal" && (
+                    <input
+                      type="text"
+                      value={form.registrationPageSlug ?? ""}
+                      onChange={(e) => set("registrationPageSlug", e.target.value)}
+                      className={inputClass}
+                      placeholder="Internal path, e.g. /job-skills-summit-2026"
+                    />
+                  )}
+                </div>
+              </div>
             </div>
           )}
           <div>
@@ -141,6 +263,158 @@ function UpdateModal({
               placeholder="https://... or paste from Media Library"
             />
           </div>
+
+          {/* Attachments (only when editing existing update) */}
+          {updateId && (
+            <div className="border-t border-white/10 pt-4">
+              <label className="text-slate-400 text-xs font-semibold mb-2 block flex items-center gap-1">
+                <FileDown className="w-3.5 h-3.5" /> Resources & Attachments
+              </label>
+              <p className="text-slate-500 text-xs mb-3">
+                Add concept notes, schedules, brochures. Show on event page and/or in Gallery resources.
+              </p>
+              {attachments.length > 0 && (
+                <div className="space-y-2 mb-3">
+                  {attachments.map((a) => (
+                    <div
+                      key={a.id}
+                      className="flex items-center justify-between gap-2 glass rounded-lg px-3 py-2 text-sm"
+                    >
+                      <div className="min-w-0 flex-1">
+                        <span className="text-white font-medium truncate block">{a.name}</span>
+                        <span className="text-slate-500 text-xs">{a.type} · {a.category}</span>
+                      </div>
+                      <div className="flex items-center gap-1 shrink-0">
+                        {a.showOnEvent && <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400">Event</span>}
+                        {a.showInResources && <span className="text-[10px] px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-400">Resources</span>}
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            if (confirm("Remove this attachment?")) {
+                              await deleteUpdateAttachment(a.id);
+                              loadAttachments();
+                            }
+                          }}
+                          className="p-1 rounded text-slate-500 hover:text-red-400"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {addingAttachment ? (
+                <div className="glass rounded-xl p-4 space-y-3">
+                  <input
+                    type="text"
+                    value={newAtt.name}
+                    onChange={(e) => setNewAtt((p) => ({ ...p, name: e.target.value }))}
+                    className={inputClass}
+                    placeholder="Display name (e.g. Concept Note PDF)"
+                  />
+                  <input
+                    type="url"
+                    value={newAtt.publicUrl}
+                    onChange={(e) => setNewAtt((p) => ({ ...p, publicUrl: e.target.value }))}
+                    className={inputClass}
+                    placeholder="URL (from Media Library or external)"
+                  />
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-slate-500 text-xs mb-1 block">Type</label>
+                      <select
+                        value={newAtt.type}
+                        onChange={(e) => setNewAtt((p) => ({ ...p, type: e.target.value as UpdateAttachmentType }))}
+                        className={selectClass}
+                      >
+                        {ATTACHMENT_TYPES.map((t) => (
+                          <option key={t} value={t}>{t}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-slate-500 text-xs mb-1 block">Category</label>
+                      <select
+                        value={newAtt.category}
+                        onChange={(e) => setNewAtt((p) => ({ ...p, category: e.target.value as UpdateAttachmentCategory }))}
+                        className={selectClass}
+                      >
+                        {ATTACHMENT_CATEGORIES.map((c) => (
+                          <option key={c} value={c}>{c.replace("_", " ")}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  <div className="flex gap-4">
+                    <label className="flex items-center gap-2 cursor-pointer text-sm text-slate-400">
+                      <input
+                        type="checkbox"
+                        checked={newAtt.showOnEvent}
+                        onChange={(e) => setNewAtt((p) => ({ ...p, showOnEvent: e.target.checked }))}
+                        className="w-3.5 h-3.5 rounded border-white/20"
+                      />
+                      Show on event page
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer text-sm text-slate-400">
+                      <input
+                        type="checkbox"
+                        checked={newAtt.showInResources}
+                        onChange={(e) => setNewAtt((p) => ({ ...p, showInResources: e.target.checked }))}
+                        className="w-3.5 h-3.5 rounded border-white/20"
+                      />
+                      Show in Gallery resources
+                    </label>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        if (!newAtt.name.trim() || !newAtt.publicUrl.trim()) return;
+                        await insertUpdateAttachment({
+                          updateId,
+                          name: newAtt.name.trim(),
+                          type: newAtt.type,
+                          category: newAtt.category,
+                          storageBucket: null,
+                          storagePath: null,
+                          publicUrl: newAtt.publicUrl.trim(),
+                          showOnEvent: newAtt.showOnEvent,
+                          showInResources: newAtt.showInResources,
+                          displayOrder: 0,
+                        });
+                        setNewAtt({ name: "", type: "document", category: "other", publicUrl: "", showOnEvent: true, showInResources: false });
+                        setAddingAttachment(false);
+                        loadAttachments();
+                      }}
+                      className="btn-gold px-4 py-2 rounded-lg text-xs font-bold"
+                    >
+                      Add
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setAddingAttachment(false);
+                        setNewAtt({ name: "", type: "document", category: "other", publicUrl: "", showOnEvent: true, showInResources: false });
+                      }}
+                      className="px-4 py-2 rounded-lg glass text-slate-400 text-xs"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setAddingAttachment(true)}
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg glass text-slate-400 hover:text-white text-sm"
+                >
+                  <Plus className="w-4 h-4" /> Add attachment
+                </button>
+              )}
+            </div>
+          )}
+
           <div className="flex items-center gap-3 pt-2">
             <label className="flex items-center gap-2 cursor-pointer">
               <input
@@ -365,8 +639,17 @@ export default function UpdatesPage() {
               published: editing.published,
               publishedAt: editing.publishedAt,
               eventDate: editing.eventDate,
+              eventStartAt: editing.eventStartAt ?? null,
+              eventEndAt: editing.eventEndAt ?? null,
+              eventVenue: editing.eventVenue ?? "",
+              eventCity: editing.eventCity ?? "",
+              eventCountry: editing.eventCountry ?? "",
+              registrationType: editing.registrationType ?? "none",
+              registrationUrl: editing.registrationUrl ?? "",
+              registrationPageSlug: editing.registrationPageSlug ?? "",
               displayOrder: editing.displayOrder,
             }}
+            updateId={editing.id}
             onClose={() => setEditing(null)}
             onSave={handleSave}
             notifyOnPublish={false}

@@ -310,6 +310,8 @@ const en: FullTranslations = {
     availableTitle: "What Will Be Available",
     liveCoverageTitle: "Live & Hybrid Coverage",
     followTitle: "Follow the Summit",
+    resourcesTitle: "Resources & Downloads",
+    resourcesSub: "Concept notes, schedules, brochures and other documents from summit events.",
   },
 
   contact: {
@@ -416,6 +418,11 @@ const en: FullTranslations = {
     abstractLabel: "Abstract",
     registrationLabel: "Registration",
     statusLabel: "Status",
+    countdownToEvent: "Countdown to Event",
+    eventVenue: "Venue",
+    registerForEvent: "Register for this Event",
+    resourcesTitle: "Resources & Downloads",
+    noResources: "No resources available for this event.",
   },
 
   trackStatus: {
