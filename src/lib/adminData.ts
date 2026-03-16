@@ -111,6 +111,7 @@ export type Update = {
   eventVenue?: string;
   eventCity?: string;
   eventCountry?: string;
+  eventRoom?: string;
   registrationType?: "none" | "external" | "internal";
   registrationUrl?: string;
   registrationPageSlug?: string;
@@ -128,8 +129,8 @@ export type UpdateComment = {
 
 export type UpdateReactionCounts = { likes: number; dislikes: number; userReaction: "like" | "dislike" | null };
 
-export type UpdateAttachmentType = "pdf" | "document" | "link" | "other";
-export type UpdateAttachmentCategory = "concept_note" | "schedule" | "brochure" | "agenda" | "other";
+export type UpdateAttachmentType = "concept_note" | "programme" | "schedule" | "brochure" | "press_release" | "other";
+export type UpdateAttachmentCategory = "documents" | "media" | "programme" | "press" | "reports";
 
 export type UpdateAttachment = {
   id: string;

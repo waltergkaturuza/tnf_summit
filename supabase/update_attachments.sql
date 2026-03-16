@@ -9,8 +9,8 @@ CREATE TABLE IF NOT EXISTS tnf_summit.update_attachments (
   created_at       TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   update_id        UUID NOT NULL REFERENCES tnf_summit.updates(id) ON DELETE CASCADE,
   name             TEXT NOT NULL,
-  type             TEXT NOT NULL DEFAULT 'document',   -- pdf | document | link | other
-  category         TEXT NOT NULL DEFAULT 'other',     -- concept_note | schedule | brochure | agenda | other
+  type             TEXT NOT NULL DEFAULT 'other',     -- concept_note | programme | schedule | brochure | press_release | other
+  category         TEXT NOT NULL DEFAULT 'documents', -- documents | media | programme | press | reports (for resources grouping)
   storage_bucket   TEXT,
   storage_path     TEXT,
   public_url       TEXT NOT NULL,                     -- from storage or external URL

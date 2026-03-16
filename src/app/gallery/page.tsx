@@ -10,6 +10,15 @@ import {
 import { useLanguage } from "@/context/LanguageContext";
 import { fetchPublicGallery, type MediaFile } from "@/lib/storage";
 import { fetchAttachmentsForResources } from "@/lib/db";
+import type { UpdateAttachmentCategory } from "@/lib/adminData";
+
+const RESOURCE_CATEGORY_LABELS: Record<UpdateAttachmentCategory, string> = {
+  documents: "Documents",
+  media: "Media",
+  programme: "Programme",
+  press: "Press",
+  reports: "Reports",
+};
 
 function FadeIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef(null);
@@ -264,7 +273,7 @@ export default function GalleryPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {Object.entries(
                 resources.reduce<Record<string, typeof resources>>((acc, r) => {
-                  const cat = r.category.replace("_", " ");
+                  const cat = r.category;
                   if (!acc[cat]) acc[cat] = [];
                   acc[cat].push(r);
                   return acc;
@@ -272,7 +281,7 @@ export default function GalleryPage() {
               ).map(([category, items]) => (
                 <FadeIn key={category}>
                   <div className="glass rounded-2xl p-5 h-full">
-                    <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-3">{category}</h3>
+                    <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-3">{RESOURCE_CATEGORY_LABELS[category as UpdateAttachmentCategory] ?? category}</h3>
                     <div className="space-y-2">
                       {items.map((att) => (
                         <a

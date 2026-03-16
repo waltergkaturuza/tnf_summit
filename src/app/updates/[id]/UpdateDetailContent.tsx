@@ -161,7 +161,7 @@ export default function UpdateDetailContent({ update, attachments = [] }: { upda
                     {t.updates.eventVenue}
                   </p>
                   <p className="text-sm">
-                    {[update.eventVenue, update.eventCity, update.eventCountry]
+                    {[update.eventVenue, update.eventRoom, update.eventCity, update.eventCountry]
                       .filter(Boolean)
                       .join(", ")}
                   </p>

@@ -411,6 +411,7 @@ function rowToUpdate(row: Record<string, unknown>): Update {
     eventVenue: (row.event_venue as string) ?? "",
     eventCity: (row.event_city as string) ?? "",
     eventCountry: (row.event_country as string) ?? "",
+    eventRoom: (row.event_room as string) ?? "",
     registrationType: (row.registration_type as Update["registrationType"]) ?? "none",
     registrationUrl: (row.registration_url as string) ?? "",
     registrationPageSlug: (row.registration_page_slug as string) ?? "",
@@ -458,6 +459,7 @@ export async function insertUpdate(u: Omit<Update, "id" | "createdAt" | "updated
     event_venue: u.eventVenue || null,
     event_city: u.eventCity || null,
     event_country: u.eventCountry || null,
+    event_room: u.eventRoom || null,
     registration_type: u.registrationType || "none",
     registration_url: u.registrationUrl || null,
     registration_page_slug: u.registrationPageSlug || null,
@@ -486,6 +488,7 @@ export async function updateUpdate(id: string, updates: Partial<Update>): Promis
   if (updates.eventVenue !== undefined) clean.event_venue = updates.eventVenue || null;
   if (updates.eventCity !== undefined) clean.event_city = updates.eventCity || null;
   if (updates.eventCountry !== undefined) clean.event_country = updates.eventCountry || null;
+  if (updates.eventRoom !== undefined) clean.event_room = updates.eventRoom || null;
   if (updates.registrationType !== undefined) clean.registration_type = updates.registrationType || "none";
   if (updates.registrationUrl !== undefined) clean.registration_url = updates.registrationUrl || null;
   if (updates.registrationPageSlug !== undefined) clean.registration_page_slug = updates.registrationPageSlug || null;
@@ -561,14 +564,19 @@ export async function setUpdateReaction(updateId: string, voterKey: string, isLi
 
 // ── UPDATE ATTACHMENTS ────────────────────────────────────────────────────────
 
+const VALID_ATTACHMENT_TYPES: UpdateAttachment["type"][] = ["concept_note", "programme", "schedule", "brochure", "press_release", "other"];
+const VALID_ATTACHMENT_CATEGORIES: UpdateAttachment["category"][] = ["documents", "media", "programme", "press", "reports"];
+
 function rowToAttachment(row: Record<string, unknown>): UpdateAttachment {
+  const rawType = (row.type as string) ?? "other";
+  const rawCat = (row.category as string) ?? "documents";
   return {
     id: row.id as string,
     createdAt: row.created_at as string,
     updateId: row.update_id as string,
     name: (row.name as string) ?? "",
-    type: (row.type as UpdateAttachment["type"]) ?? "document",
-    category: (row.category as UpdateAttachment["category"]) ?? "other",
+    type: VALID_ATTACHMENT_TYPES.includes(rawType as UpdateAttachment["type"]) ? (rawType as UpdateAttachment["type"]) : "other",
+    category: VALID_ATTACHMENT_CATEGORIES.includes(rawCat as UpdateAttachment["category"]) ? (rawCat as UpdateAttachment["category"]) : "documents",
     storageBucket: (row.storage_bucket as string) ?? null,
     storagePath: (row.storage_path as string) ?? null,
     publicUrl: (row.public_url as string) ?? "",
@@ -629,8 +637,8 @@ export async function insertUpdateAttachment(a: Omit<UpdateAttachment, "id" | "c
   const row = {
     update_id: a.updateId,
     name: a.name,
-    type: a.type ?? "document",
-    category: a.category ?? "other",
+    type: a.type ?? "other",
+    category: a.category ?? "documents",
     storage_bucket: a.storageBucket || null,
     storage_path: a.storagePath || null,
     public_url: a.publicUrl,

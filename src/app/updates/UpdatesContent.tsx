@@ -97,11 +97,14 @@ export default function UpdatesContent({ initialUpdates }: { initialUpdates: Upd
                       )}
                       <div className="p-6 sm:p-8">
                         <div className="flex flex-wrap items-center gap-3 text-slate-500 text-sm mb-2">
-                          {featured.eventDate ? (
-                            <span className="flex items-center gap-1"><Calendar className="w-4 h-4" />{new Date(featured.eventDate).toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric", year: "numeric" })}</span>
+                          {(featured.eventStartAt || featured.eventDate) ? (
+                            <span className="flex items-center gap-1"><Calendar className="w-4 h-4" />{new Date(featured.eventStartAt || featured.eventDate!).toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric", year: "numeric" })}</span>
                           ) : featured.publishedAt ? (
                             <span className="flex items-center gap-1"><Calendar className="w-4 h-4" />{new Date(featured.publishedAt).toLocaleDateString()}</span>
                           ) : null}
+                          {featured.type === "event" && featured.eventCity && (
+                            <span className="flex items-center gap-1 text-[#C9921A]">{featured.eventCity}</span>
+                          )}
                           <span className="flex items-center gap-1"><FolderOpen className="w-4 h-4" />{featured.category}</span>
                         </div>
                         <h2 className="text-2xl sm:text-3xl font-black text-white mb-3 group-hover:text-[#F5B730] transition-colors">{featured.title}</h2>
@@ -129,7 +132,7 @@ export default function UpdatesContent({ initialUpdates }: { initialUpdates: Upd
                             </div>
                           )}
                           <div className="min-w-0 flex-1">
-                            <p className="text-slate-500 text-xs mb-0.5">{u.category} · {u.eventDate ? new Date(u.eventDate).toLocaleDateString() : u.publishedAt ? new Date(u.publishedAt).toLocaleDateString() : ""}</p>
+                            <p className="text-slate-500 text-xs mb-0.5">{u.category}{u.type === "event" && u.eventCity ? ` · ${u.eventCity}` : ""} · {(u.eventStartAt || u.eventDate) ? new Date(u.eventStartAt || u.eventDate!).toLocaleDateString() : u.publishedAt ? new Date(u.publishedAt).toLocaleDateString() : ""}</p>
                             <h4 className="text-white font-bold group-hover:text-[#F5B730] transition-colors line-clamp-2">{u.title}</h4>
                             <p className="text-slate-400 text-sm line-clamp-1 mt-0.5">{u.description || "—"}</p>
                           </div>

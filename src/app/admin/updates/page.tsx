@@ -16,12 +16,22 @@ import type { Update, UpdateType, UpdateAttachment, UpdateAttachmentType, Update
 
 const UPDATE_CATEGORIES = ["News", "Business", "International Relations", "Social", "Social Justice & Labour Affairs", "Staff", "Events"];
 
-const ATTACHMENT_CATEGORY_LABELS: Record<UpdateAttachmentCategory, string> = {
+const ATTACHMENT_TYPES: UpdateAttachmentType[] = ["concept_note", "programme", "schedule", "brochure", "press_release", "other"];
+const ATTACHMENT_TYPE_LABELS: Record<UpdateAttachmentType, string> = {
   concept_note: "Concept Note",
+  programme: "Programme",
   schedule: "Schedule",
   brochure: "Brochure",
-  agenda: "Agenda",
+  press_release: "Press Release",
   other: "Other",
+};
+const ATTACHMENT_CATEGORIES: UpdateAttachmentCategory[] = ["documents", "media", "programme", "press", "reports"];
+const ATTACHMENT_CATEGORY_LABELS: Record<UpdateAttachmentCategory, string> = {
+  documents: "Documents",
+  media: "Media",
+  programme: "Programme",
+  press: "Press",
+  reports: "Reports",
 };
 
 const blankUpdate: Omit<Update, "id" | "createdAt" | "updatedAt"> = {
@@ -39,14 +49,12 @@ const blankUpdate: Omit<Update, "id" | "createdAt" | "updatedAt"> = {
   eventVenue: "",
   eventCity: "",
   eventCountry: "",
+  eventRoom: "",
   registrationType: "none",
   registrationUrl: "",
   registrationPageSlug: "",
   displayOrder: 0,
 };
-
-const ATTACHMENT_TYPES: UpdateAttachmentType[] = ["pdf", "document", "link", "other"];
-const ATTACHMENT_CATEGORIES: UpdateAttachmentCategory[] = ["concept_note", "schedule", "brochure", "agenda", "other"];
 
 function UpdateModal({
   update,
@@ -59,18 +67,19 @@ function UpdateModal({
   update: Omit<Update, "id" | "createdAt" | "updatedAt">;
   updateId?: string;
   onClose: () => void;
-  onSave: (data: Omit<Update, "id" | "createdAt" | "updatedAt">, notify: boolean) => void;
+  onSave: (data: Omit<Update, "id" | "createdAt" | "updatedAt">, notify: boolean, pendingAttachments?: { name: string; type: UpdateAttachmentType; category: UpdateAttachmentCategory; publicUrl: string; showOnEvent: boolean; showInResources: boolean }[]) => void;
   isNew?: boolean;
   notifyOnPublish?: boolean;
 }) {
   const [form, setForm] = useState(update);
   const [notify, setNotify] = useState(!!notifyOnPublish);
   const [attachments, setAttachments] = useState<UpdateAttachment[]>([]);
+  const [pendingAttachments, setPendingAttachments] = useState<{ name: string; type: UpdateAttachmentType; category: UpdateAttachmentCategory; publicUrl: string; showOnEvent: boolean; showInResources: boolean }[]>([]);
   const [addingAttachment, setAddingAttachment] = useState(false);
   const [newAtt, setNewAtt] = useState({
     name: "",
-    type: "document" as UpdateAttachmentType,
-    category: "other" as UpdateAttachmentCategory,
+    type: "other" as UpdateAttachmentType,
+    category: "documents" as UpdateAttachmentCategory,
     publicUrl: "",
     showOnEvent: true,
     showInResources: false,
@@ -111,10 +120,15 @@ function UpdateModal({
         className="relative w-full max-w-2xl bg-[var(--bg-surface)] rounded-2xl border border-white/10 overflow-hidden mb-4"
       >
         <div className="flex items-center justify-between p-5 border-b border-white/5">
-          <h2 className="text-white font-black text-lg flex items-center gap-2">
-            <Newspaper className="w-5 h-5 text-[#C9921A]" />
-            {isNew ? "New Update or Event" : "Edit Update"}
-          </h2>
+          <div>
+            <h2 className="text-white font-black text-lg flex items-center gap-2">
+              <Newspaper className="w-5 h-5 text-[#C9921A]" />
+              {isNew ? "New Update or Event" : "Edit Update"}
+            </h2>
+            <p className="text-slate-500 text-xs mt-1">
+              For events, please fill in date/time, venue, registration info and resources.
+            </p>
+          </div>
           <button onClick={onClose} className="p-2 rounded-lg glass text-slate-400 hover:text-white">
             <X className="w-4 h-4" />
           </button>
@@ -219,6 +233,16 @@ function UpdateModal({
                   />
                 </div>
               </div>
+              <div>
+                <label className="text-slate-400 text-xs font-semibold mb-1.5 block">Room (optional)</label>
+                <input
+                  type="text"
+                  value={form.eventRoom ?? ""}
+                  onChange={(e) => set("eventRoom", e.target.value)}
+                  className={inputClass}
+                  placeholder="e.g. Room A, Plenary Hall"
+                />
+              </div>
               <div className="md:col-span-2">
                 <label className="text-slate-400 text-xs font-semibold mb-1.5 block">Registration</label>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -278,44 +302,47 @@ function UpdateModal({
             />
           </div>
 
-          {/* Attachments (only when editing existing update) */}
-          {updateId && (
-            <div className="border-t border-white/10 pt-4">
-              <label className="text-slate-400 text-xs font-semibold mb-2 block flex items-center gap-1">
-                <FileDown className="w-3.5 h-3.5" /> Resources & Attachments
-              </label>
-              <p className="text-slate-500 text-xs mb-3">
-                Add concept notes, schedules, brochures. Show on event page and/or in Gallery resources.
-              </p>
-              {attachments.length > 0 && (
+          {/* Attachments (common to news + events) */}
+          <div className="border-t border-white/10 pt-4">
+            <label className="text-slate-400 text-xs font-semibold mb-2 block flex items-center gap-1">
+              <FileDown className="w-3.5 h-3.5" /> Resources & Attachments
+            </label>
+            <p className="text-slate-500 text-xs mb-3">
+              Add concept notes, schedules, brochures. Show on event page and/or in Gallery resources.
+            </p>
+            {(updateId ? attachments : pendingAttachments).length > 0 && (
                 <div className="space-y-2 mb-3">
-                  {attachments.map((a) => (
-                    <div
-                      key={a.id}
-                      className="flex items-center justify-between gap-2 glass rounded-lg px-3 py-2 text-sm"
-                    >
-                      <div className="min-w-0 flex-1">
-                        <span className="text-white font-medium truncate block">{a.name}</span>
-                        <span className="text-slate-500 text-xs">{a.type} · {ATTACHMENT_CATEGORY_LABELS[a.category]}</span>
-                      </div>
-                      <div className="flex items-center gap-1 shrink-0">
-                        {a.showOnEvent && <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400">Event</span>}
-                        {a.showInResources && <span className="text-[10px] px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-400">Resources</span>}
-                        <button
-                          type="button"
-                          onClick={async () => {
-                            if (confirm("Remove this attachment?")) {
-                              await deleteUpdateAttachment(a.id);
-                              loadAttachments();
-                            }
-                          }}
-                          className="p-1 rounded text-slate-500 hover:text-red-400"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
+                  {updateId
+                    ? attachments.map((a) => (
+                        <div key={a.id} className="flex items-center justify-between gap-2 glass rounded-lg px-3 py-2 text-sm">
+                          <div className="min-w-0 flex-1">
+                            <span className="text-white font-medium truncate block">{a.name}</span>
+                            <span className="text-slate-500 text-xs">{ATTACHMENT_TYPE_LABELS[a.type]} · {ATTACHMENT_CATEGORY_LABELS[a.category]}</span>
+                          </div>
+                          <div className="flex items-center gap-1 shrink-0">
+                            {a.showOnEvent && <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400">Event</span>}
+                            {a.showInResources && <span className="text-[10px] px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-400">Resources</span>}
+                            <button type="button" onClick={async () => { if (confirm("Remove this attachment?")) { await deleteUpdateAttachment(a.id); loadAttachments(); } }} className="p-1 rounded text-slate-500 hover:text-red-400">
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </div>
+                      ))
+                    : pendingAttachments.map((a, i) => (
+                        <div key={i} className="flex items-center justify-between gap-2 glass rounded-lg px-3 py-2 text-sm">
+                          <div className="min-w-0 flex-1">
+                            <span className="text-white font-medium truncate block">{a.name}</span>
+                            <span className="text-slate-500 text-xs">{ATTACHMENT_TYPE_LABELS[a.type]} · {ATTACHMENT_CATEGORY_LABELS[a.category]}</span>
+                          </div>
+                          <div className="flex items-center gap-1 shrink-0">
+                            {a.showOnEvent && <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400">Event</span>}
+                            {a.showInResources && <span className="text-[10px] px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-400">Resources</span>}
+                            <button type="button" onClick={() => setPendingAttachments((p) => p.filter((_, j) => j !== i))} className="p-1 rounded text-slate-500 hover:text-red-400">
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
                 </div>
               )}
               {addingAttachment ? (
@@ -390,7 +417,7 @@ function UpdateModal({
                         className={selectClass}
                       >
                         {ATTACHMENT_TYPES.map((t) => (
-                          <option key={t} value={t}>{t}</option>
+                          <option key={t} value={t}>{ATTACHMENT_TYPE_LABELS[t]}</option>
                         ))}
                       </select>
                     </div>
@@ -432,21 +459,25 @@ function UpdateModal({
                       type="button"
                       onClick={async () => {
                         if (!newAtt.name.trim() || !newAtt.publicUrl.trim()) return;
-                        await insertUpdateAttachment({
-                          updateId,
-                          name: newAtt.name.trim(),
-                          type: newAtt.type,
-                          category: newAtt.category,
-                          storageBucket: null,
-                          storagePath: null,
-                          publicUrl: newAtt.publicUrl.trim(),
-                          showOnEvent: newAtt.showOnEvent,
-                          showInResources: newAtt.showInResources,
-                          displayOrder: 0,
-                        });
-                        setNewAtt({ name: "", type: "document", category: "other", publicUrl: "", showOnEvent: true, showInResources: false });
+                        if (updateId) {
+                          await insertUpdateAttachment({
+                            updateId,
+                            name: newAtt.name.trim(),
+                            type: newAtt.type,
+                            category: newAtt.category,
+                            storageBucket: null,
+                            storagePath: null,
+                            publicUrl: newAtt.publicUrl.trim(),
+                            showOnEvent: newAtt.showOnEvent,
+                            showInResources: newAtt.showInResources,
+                            displayOrder: 0,
+                          });
+                          loadAttachments();
+                        } else {
+                          setPendingAttachments((p) => [...p, { ...newAtt, name: newAtt.name.trim(), publicUrl: newAtt.publicUrl.trim() }]);
+                        }
+                        setNewAtt({ name: "", type: "other", category: "documents", publicUrl: "", showOnEvent: true, showInResources: false });
                         setAddingAttachment(false);
-                        loadAttachments();
                       }}
                       className="btn-gold px-4 py-2 rounded-lg text-xs font-bold"
                     >
@@ -456,7 +487,7 @@ function UpdateModal({
                       type="button"
                       onClick={() => {
                         setAddingAttachment(false);
-                        setNewAtt({ name: "", type: "document", category: "other", publicUrl: "", showOnEvent: true, showInResources: false });
+                        setNewAtt({ name: "", type: "other", category: "documents", publicUrl: "", showOnEvent: true, showInResources: false });
                       }}
                       className="px-4 py-2 rounded-lg glass text-slate-400 text-xs"
                     >
@@ -474,7 +505,6 @@ function UpdateModal({
                 </button>
               )}
             </div>
-          )}
 
           <div className="flex items-center gap-3 pt-2">
             <label className="flex items-center gap-2 cursor-pointer">
@@ -502,7 +532,7 @@ function UpdateModal({
           )}
           <div className="flex gap-3 pt-2">
             <button
-              onClick={() => onSave(form, notify)}
+              onClick={() => onSave(form, notify, isNew ? pendingAttachments : undefined)}
               className="flex-1 btn-gold py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2"
             >
               <Save className="w-4 h-4" />
@@ -596,7 +626,8 @@ export default function UpdatesPage() {
 
   const handleSave = async (
     data: Omit<Update, "id" | "createdAt" | "updatedAt">,
-    notify: boolean
+    notify: boolean,
+    pendingAttachments?: { name: string; type: import("@/lib/adminData").UpdateAttachmentType; category: import("@/lib/adminData").UpdateAttachmentCategory; publicUrl: string; showOnEvent: boolean; showInResources: boolean }[]
   ) => {
     try {
       if (editing) {
@@ -615,6 +646,23 @@ export default function UpdatesPage() {
         setEditing(null);
       } else {
         const created = await addUpdate(data);
+        if (pendingAttachments?.length) {
+          const { insertUpdateAttachment } = await import("@/lib/db");
+          for (const att of pendingAttachments) {
+            await insertUpdateAttachment({
+              updateId: created.id,
+              name: att.name,
+              type: att.type,
+              category: att.category,
+              storageBucket: null,
+              storagePath: null,
+              publicUrl: att.publicUrl,
+              showOnEvent: att.showOnEvent,
+              showInResources: att.showInResources,
+              displayOrder: 0,
+            });
+          }
+        }
         if (data.published && notify) {
           const { data: sess } = await supabase.auth.getSession();
           await fetch("/api/notify-subscribers", {
@@ -769,6 +817,7 @@ export default function UpdatesPage() {
               eventVenue: editing.eventVenue ?? "",
               eventCity: editing.eventCity ?? "",
               eventCountry: editing.eventCountry ?? "",
+              eventRoom: editing.eventRoom ?? "",
               registrationType: editing.registrationType ?? "none",
               registrationUrl: editing.registrationUrl ?? "",
               registrationPageSlug: editing.registrationPageSlug ?? "",

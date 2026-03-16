@@ -14,12 +14,20 @@ import {
 } from "@/lib/db";
 import type { UpdateAttachment, UpdateAttachmentCategory } from "@/lib/adminData";
 
-const CATEGORY_LABELS: Record<UpdateAttachmentCategory, string> = {
+const TYPE_LABELS: Record<string, string> = {
   concept_note: "Concept Note",
+  programme: "Programme",
   schedule: "Schedule",
   brochure: "Brochure",
-  agenda: "Agenda",
+  press_release: "Press Release",
   other: "Other",
+};
+const CATEGORY_LABELS: Record<UpdateAttachmentCategory, string> = {
+  documents: "Documents",
+  media: "Media",
+  programme: "Programme",
+  press: "Press",
+  reports: "Reports",
 };
 
 type AttachmentWithUpdate = UpdateAttachment & { updateTitle?: string };
@@ -126,7 +134,7 @@ export default function ResourcesPage() {
                     {a.name}
                   </a>
                   <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-600 text-slate-400">
-                    {a.type}
+                    {TYPE_LABELS[a.type] ?? a.type}
                   </span>
                   <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-600 text-slate-400">
                     {CATEGORY_LABELS[a.category]}
