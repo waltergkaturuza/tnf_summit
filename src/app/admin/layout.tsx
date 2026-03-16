@@ -10,6 +10,7 @@ import {
   LogOut, Menu, X, ChevronRight, Settings, Shield,
   UserCheck, MessageSquare, BarChart2, FolderOpen,
   CreditCard, Activity, UserCog, Newspaper, FileText,
+  Download,
 } from "lucide-react";
 import { useAdmin } from "@/context/AdminContext";
 
@@ -21,6 +22,7 @@ const navItems = [
   { href: "/admin/speakers",      label: "Speakers",      icon: Mic,              group: "content" },
   { href: "/admin/media",         label: "Media Library", icon: FolderOpen,       group: "content" },
   { href: "/admin/updates",       label: "Updates & News", icon: Newspaper,       group: "content" },
+  { href: "/admin/resources",    label: "Resources",      icon: Download,         group: "content" },
   { href: "/admin/abstracts",    label: "Abstracts",      icon: FileText,         group: "content" },
   { href: "/admin/messages",      label: "Messages",      icon: MessageSquare,    group: "comms" },
   { href: "/admin/newsletter",    label: "Newsletter",    icon: Bell,             group: "comms" },

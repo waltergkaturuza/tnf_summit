@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Edit3, Trash2, X, Save, Newspaper, Calendar, Image as ImageIcon, Link as LinkIcon, FileDown } from "lucide-react";
+import { Plus, Edit3, Trash2, X, Save, Newspaper, Calendar, Image as ImageIcon, Link as LinkIcon, FileDown, Upload, FolderOpen } from "lucide-react";
 import { useAdmin } from "@/context/AdminContext";
 import { supabase } from "@/lib/supabase";
 import {
@@ -10,9 +11,18 @@ import {
   insertUpdateAttachment,
   deleteUpdateAttachment,
 } from "@/lib/db";
+import { uploadFile, fetchMediaFiles, type MediaFile } from "@/lib/storage";
 import type { Update, UpdateType, UpdateAttachment, UpdateAttachmentType, UpdateAttachmentCategory } from "@/lib/adminData";
 
 const UPDATE_CATEGORIES = ["News", "Business", "International Relations", "Social", "Social Justice & Labour Affairs", "Staff", "Events"];
+
+const ATTACHMENT_CATEGORY_LABELS: Record<UpdateAttachmentCategory, string> = {
+  concept_note: "Concept Note",
+  schedule: "Schedule",
+  brochure: "Brochure",
+  agenda: "Agenda",
+  other: "Other",
+};
 
 const blankUpdate: Omit<Update, "id" | "createdAt" | "updatedAt"> = {
   type: "news",
@@ -65,6 +75,10 @@ function UpdateModal({
     showOnEvent: true,
     showInResources: false,
   });
+  const [uploadingFile, setUploadingFile] = useState(false);
+  const [showMediaPicker, setShowMediaPicker] = useState(false);
+  const [mediaFiles, setMediaFiles] = useState<MediaFile[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const loadAttachments = useCallback(async () => {
     if (!updateId) return;
@@ -282,7 +296,7 @@ function UpdateModal({
                     >
                       <div className="min-w-0 flex-1">
                         <span className="text-white font-medium truncate block">{a.name}</span>
-                        <span className="text-slate-500 text-xs">{a.type} · {a.category}</span>
+                        <span className="text-slate-500 text-xs">{a.type} · {ATTACHMENT_CATEGORY_LABELS[a.category]}</span>
                       </div>
                       <div className="flex items-center gap-1 shrink-0">
                         {a.showOnEvent && <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400">Event</span>}
@@ -313,13 +327,60 @@ function UpdateModal({
                     className={inputClass}
                     placeholder="Display name (e.g. Concept Note PDF)"
                   />
-                  <input
-                    type="url"
-                    value={newAtt.publicUrl}
-                    onChange={(e) => setNewAtt((p) => ({ ...p, publicUrl: e.target.value }))}
-                    className={inputClass}
-                    placeholder="URL (from Media Library or external)"
-                  />
+                  <div className="space-y-2">
+                    <label className="text-slate-500 text-xs block">File or URL</label>
+                    <div className="flex gap-2">
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,image/*"
+                        className="hidden"
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (!file) return;
+                          setUploadingFile(true);
+                          try {
+                            const m = await uploadFile(file, "documents", file.name.replace(/\.[^.]+$/, ""), "");
+                            setNewAtt((p) => ({ ...p, publicUrl: m.publicUrl, name: p.name || m.originalName }));
+                          } catch (err) {
+                            console.error(err);
+                            alert("Upload failed. Try again or paste URL.");
+                          } finally {
+                            setUploadingFile(false);
+                            e.target.value = "";
+                          }
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={uploadingFile}
+                        className="flex items-center gap-2 px-3 py-2 rounded-lg glass text-slate-400 hover:text-white text-sm disabled:opacity-50"
+                      >
+                        <Upload className="w-4 h-4" />
+                        {uploadingFile ? "Uploading…" : "Upload file"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setShowMediaPicker(true);
+                          fetchMediaFiles().then((f) =>
+                            setMediaFiles(f.filter((m) => m.category === "documents" || m.category === "resources"))
+                          );
+                        }}
+                        className="flex items-center gap-2 px-3 py-2 rounded-lg glass text-slate-400 hover:text-white text-sm"
+                      >
+                        <FolderOpen className="w-4 h-4" /> Pick from Media Library
+                      </button>
+                    </div>
+                    <input
+                      type="url"
+                      value={newAtt.publicUrl}
+                      onChange={(e) => setNewAtt((p) => ({ ...p, publicUrl: e.target.value }))}
+                      className={inputClass}
+                      placeholder="Or paste URL (external or from Media Library)"
+                    />
+                  </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="text-slate-500 text-xs mb-1 block">Type</label>
@@ -341,7 +402,7 @@ function UpdateModal({
                         className={selectClass}
                       >
                         {ATTACHMENT_CATEGORIES.map((c) => (
-                          <option key={c} value={c}>{c.replace("_", " ")}</option>
+                          <option key={c} value={c}>{ATTACHMENT_CATEGORY_LABELS[c]}</option>
                         ))}
                       </select>
                     </div>
@@ -452,16 +513,80 @@ function UpdateModal({
             </button>
           </div>
         </div>
+
+        {/* Media Library picker modal */}
+        <AnimatePresence>
+          {showMediaPicker && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 z-10 flex items-center justify-center p-4 bg-black/80"
+              onClick={() => setShowMediaPicker(false)}
+            >
+              <motion.div
+                initial={{ scale: 0.95 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0.95 }}
+                onClick={(e) => e.stopPropagation()}
+                className="bg-[var(--bg-surface)] rounded-2xl border border-white/10 w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col"
+              >
+                <div className="flex items-center justify-between p-4 border-b border-white/10">
+                  <h3 className="text-white font-bold flex items-center gap-2">
+                    <FolderOpen className="w-4 h-4 text-[#C9921A]" /> Pick from Media Library
+                  </h3>
+                  <button onClick={() => setShowMediaPicker(false)} className="p-2 rounded-lg glass text-slate-400 hover:text-white">
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+                <div className="flex-1 overflow-y-auto p-4">
+                  {mediaFiles.length === 0 ? (
+                    <p className="text-slate-500 text-sm text-center py-8">No documents or resources in Media Library. Upload via Media Library first.</p>
+                  ) : (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                      {mediaFiles.map((f) => (
+                        <button
+                          key={f.id}
+                          type="button"
+                          onClick={() => {
+                            setNewAtt((p) => ({ ...p, publicUrl: f.publicUrl, name: p.name || f.originalName }));
+                            setShowMediaPicker(false);
+                          }}
+                          className="flex flex-col items-center gap-2 p-3 rounded-xl glass hover:border-[#C9921A]/40 border border-white/5 text-left w-full"
+                        >
+                          <div className="w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center">
+                            <FileDown className="w-6 h-6 text-slate-500" />
+                          </div>
+                          <span className="text-xs text-white font-medium truncate w-full">{f.originalName}</span>
+                          <span className="text-[10px] text-slate-500">{f.category}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
     </motion.div>
   );
 }
 
 export default function UpdatesPage() {
+  const searchParams = useSearchParams();
   const { updates, updatesLoading, addUpdate, updateUpdate, deleteUpdate, refreshUpdates } = useAdmin();
   const [filter, setFilter] = useState<"all" | "published" | "draft">("all");
   const [editing, setEditing] = useState<Update | null>(null);
   const [adding, setAdding] = useState(false);
+
+  const editId = searchParams.get("edit");
+  useEffect(() => {
+    if (editId && updates.length > 0) {
+      const u = updates.find((x) => x.id === editId);
+      if (u) setEditing(u);
+    }
+  }, [editId, updates]);
 
   const filtered = updates.filter((u) => {
     if (filter === "published") return u.published;

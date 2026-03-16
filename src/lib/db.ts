@@ -609,6 +609,22 @@ export async function fetchAttachmentsForResources(): Promise<(UpdateAttachment 
   });
 }
 
+/** Admin: fetch all attachments with update info */
+export async function fetchAllAttachmentsForAdmin(): Promise<(UpdateAttachment & { updateTitle?: string })[]> {
+  const { data, error } = await supabase
+    .schema("tnf_summit")
+    .from("update_attachments")
+    .select("*, updates(title)")
+    .order("display_order", { ascending: true })
+    .order("created_at", { ascending: true });
+  if (error) throw error;
+  const rows = (data ?? []) as (Record<string, unknown> & { updates?: { title?: string } })[];
+  return rows.map((r) => {
+    const att = rowToAttachment(r);
+    return { ...att, updateTitle: r.updates?.title };
+  });
+}
+
 export async function insertUpdateAttachment(a: Omit<UpdateAttachment, "id" | "createdAt">): Promise<UpdateAttachment> {
   const row = {
     update_id: a.updateId,
