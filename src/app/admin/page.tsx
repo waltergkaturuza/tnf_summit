@@ -92,18 +92,6 @@ export default function AdminLoginPage() {
               </motion.div>
             )}
 
-            {/* Setup instructions */}
-            <div className="glass rounded-xl p-4 space-y-2">
-              <p className="text-[#C9921A] text-xs font-bold flex items-center gap-1.5">
-                <Shield className="w-3.5 h-3.5" /> Supabase Auth Setup
-              </p>
-              <ol className="text-slate-400 text-xs space-y-1 list-decimal list-inside leading-relaxed">
-                <li>Go to your Supabase Dashboard → <strong className="text-white">Authentication → Users</strong></li>
-                <li>Click <strong className="text-white">Add User</strong> → enter your admin email &amp; password</li>
-                <li>Come back here and sign in with those credentials</li>
-              </ol>
-            </div>
-
             <button type="submit" disabled={loading}
               className="w-full btn-gold py-3.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 disabled:opacity-50">
               {loading
