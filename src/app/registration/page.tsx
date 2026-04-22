@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { registrationFees } from "@/lib/data";
+import { getRegistrationFeeUsd, REGISTRATION_FEES_USD } from "@/lib/registrationFee";
 import { insertRegistration, subscribeEmail } from "@/lib/db";
 import { getCountryNames } from "@/lib/countries";
 
@@ -39,15 +40,6 @@ const sessionOptions = [
 const excursions = ["Victoria Falls Rainforest Walk (UNESCO)", "Zambezi River Morning Boat Cruise", "Morning Game Drive — Zambezi National Park", "No excursion"];
 const investmentAreas = ["Agriculture / Agro-processing", "Renewable Energy / Clean Tech", "Mining & Mineral Processing", "Manufacturing & Industrialisation", "FinTech / Digital Finance", "Infrastructure", "Tourism / Eco-tourism", "Healthcare", "Education / TVET", "Other"];
 const countries = getCountryNames();
-
-const fees: Record<string, { early: number; standard: number }> = {
-  "Government / Public Sector": { early: 400, standard: 550 },
-  "Private Sector / Corporates": { early: 700, standard: 950 },
-  "International Organisations / DFIs": { early: 400, standard: 550 },
-  "Youth Delegates (Under 35)": { early: 150, standard: 200 },
-  "African Civil Society / MSMEs": { early: 200, standard: 300 },
-  "Virtual / Hybrid Attendance": { early: 100, standard: 150 },
-};
 
 type FormData = {
   salutation: string; firstName: string; lastName: string; gender: string;
@@ -133,12 +125,14 @@ export default function RegistrationPage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [regId, setRegId] = useState(`REG-${String(Math.floor(1000 + Math.random() * 9000))}`);
+  const [iveriRedirecting, setIveriRedirecting] = useState(false);
+  const [cardPaymentNotice, setCardPaymentNotice] = useState("");
 
   const set = (field: keyof FormData, value: FormData[keyof FormData]) => setForm(prev => ({ ...prev, [field]: value }));
 
-  const selectedFee = fees[form.category];
   const isEarlyBird = true; // before 30 June 2026
-  const feeAmount = selectedFee ? (isEarlyBird ? selectedFee.early : selectedFee.standard) : 0;
+  const feeAmount = form.category ? (getRegistrationFeeUsd(form.category, isEarlyBird) ?? 0) : 0;
+  const selectedFeeRow = form.category ? REGISTRATION_FEES_USD[form.category] : undefined;
 
   const canProceed = () => {
     if (step === 1) return form.firstName && form.lastName && form.email && form.phone && form.country && form.salutation;
@@ -156,6 +150,7 @@ export default function RegistrationPage() {
     // Final submission → direct Supabase insert (requires anon INSERT policy)
     setSubmitting(true);
     setSubmitError("");
+    setCardPaymentNotice("");
     try {
       const { trackId } = await insertRegistration({
         status: "pending",
@@ -211,6 +206,54 @@ export default function RegistrationPage() {
       });
       setRegId(trackId);
 
+      if (form.paymentMethod === "Credit / Debit Card" && feeAmount > 0) {
+        setIveriRedirecting(true);
+        try {
+          const res = await fetch("/api/payments/iveri/start", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              trackId,
+              email: form.email,
+              category: form.category,
+              isEarlyBird,
+            }),
+          });
+          const data = (await res.json().catch(() => ({}))) as {
+            action?: string;
+            fields?: Record<string, string>;
+            error?: string;
+          };
+          if (res.ok && data.action && data.fields) {
+            const formEl = document.createElement("form");
+            formEl.method = "POST";
+            formEl.action = data.action;
+            formEl.style.display = "none";
+            for (const [name, value] of Object.entries(data.fields)) {
+              const input = document.createElement("input");
+              input.type = "hidden";
+              input.name = name;
+              input.value = value;
+              formEl.appendChild(input);
+            }
+            document.body.appendChild(formEl);
+            formEl.submit();
+            return;
+          }
+          setCardPaymentNotice(
+            data.error
+              ? `Card checkout could not start (${data.error}). Use bank transfer or another method — we will invoice you by email.`
+              : "Card checkout is unavailable. Use bank transfer or another method — we will invoice you by email."
+          );
+        } catch {
+          setCardPaymentNotice(
+            "Card checkout could not be reached. Use bank transfer or another method — we will invoice you by email."
+          );
+        } finally {
+          setIveriRedirecting(false);
+        }
+      }
+
       // Auto-subscribe if opted in
       if (form.newsletterOptIn) {
         await subscribeEmail(form.email, "registration").catch(() => {});
@@ -226,12 +269,24 @@ export default function RegistrationPage() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-[var(--bg-primary)] pt-20 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-[var(--bg-primary)] pt-20 flex items-center justify-center px-4 relative">
+        {iveriRedirecting && (
+          <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[var(--bg-primary)]/95 backdrop-blur-sm">
+            <div className="w-12 h-12 border-2 border-[#C9921A] border-t-transparent rounded-full animate-spin mb-4" />
+            <p className="text-white font-semibold">Redirecting to secure card payment…</p>
+            <p className="text-sm text-theme-primary mt-2 max-w-sm text-center">You are being sent to our payment partner (iVeri). Do not close this window.</p>
+          </div>
+        )}
         <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="text-center max-w-3xl w-full">
           <div className="w-24 h-24 rounded-full bg-emerald-500/20 border-2 border-emerald-500/50 flex items-center justify-center mx-auto mb-6">
             <CheckCircle className="w-12 h-12 text-emerald-400" />
           </div>
           <h2 className="text-4xl font-black text-white mb-3">Registration Submitted!</h2>
+          {cardPaymentNotice && (
+            <div className="mb-6 rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-100/90 text-left max-w-xl mx-auto">
+              {cardPaymentNotice}
+            </div>
+          )}
           <p className="text-lg mb-2 text-theme-primary">Welcome to the TNF Global Summit 2026, <strong className="text-[#F5B730]">{form.salutation} {form.firstName} {form.lastName}</strong></p>
           <p className="mb-8 text-theme-primary">A confirmation and invoice will be sent to <strong className="text-white">{form.email}</strong> within 24 hours.</p>
           <div className="glass-gold rounded-2xl p-6 mb-6 text-left space-y-3">
@@ -722,7 +777,7 @@ export default function RegistrationPage() {
                       <p className="text-sm mt-1 text-theme-primary">Select your preferred payment method. An invoice will be issued within 24 hours.</p>
                     </div>
 
-                    {selectedFee && (
+                    {selectedFeeRow && (
                       <div className="glass-gold rounded-2xl p-5">
                         <h3 className="text-[#C9921A] text-xs font-bold uppercase mb-3">Registration Fee Summary</h3>
                         <div className="flex items-center justify-between mb-2">
@@ -735,8 +790,8 @@ export default function RegistrationPage() {
                           </div>
                           <div className="text-right">
                             <div className="text-xs text-theme-primary">Standard Rate</div>
-                            <div className="text-theme-primary text-xl font-bold line-through">USD {selectedFee.standard}</div>
-                            <div className="text-emerald-400 text-xs font-bold">Save USD {selectedFee.standard - selectedFee.early}</div>
+                            <div className="text-theme-primary text-xl font-bold line-through">USD {selectedFeeRow.standard}</div>
+                            <div className="text-emerald-400 text-xs font-bold">Save USD {selectedFeeRow.standard - selectedFeeRow.early}</div>
                           </div>
                         </div>
                       </div>

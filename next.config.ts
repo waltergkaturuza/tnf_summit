@@ -1,5 +1,8 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {};
+/** Single `node` process deploy (cPanel, VPS, etc.) — produces `.next/standalone`. */
+const nextConfig: NextConfig = {
+  output: "standalone",
+};
 
 export default nextConfig;

@@ -6,6 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "postbuild": "node scripts/standalone-assets.cjs",
+    "start:cpanel": "node .next/standalone/server.js",
     "lint": "eslint"
   },
   "dependencies": {
