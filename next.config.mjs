@@ -1,3 +1,8 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Single `node` process deploy (cPanel, VPS, etc.) — produces `.next/standalone`.
@@ -13,6 +18,14 @@ const nextConfig = {
 
   webpack: (config) => {
     if (config.parallelism !== 0) config.parallelism = 1;
+    // Explicit @ → src (some Linux/cPanel + symlinked node_modules breaks tsconfig paths only)
+    const src = path.join(__dirname, "src");
+    config.resolve = config.resolve ?? {};
+    const prev = config.resolve.alias;
+    config.resolve.alias =
+      Array.isArray(prev)
+        ? [...prev, { name: "@", alias: src }]
+        : { ...(prev && typeof prev === "object" ? prev : {}), "@": src };
     return config;
   },
 };
