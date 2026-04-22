@@ -7,6 +7,7 @@
     "build": "node scripts/run-next-build.cjs",
     "start": "next start",
     "postbuild": "node scripts/standalone-assets.cjs",
+    "pack:cpanel": "node scripts/package-cpanel-deploy.cjs",
     "start:cpanel": "node .next/standalone/server.js",
     "lint": "eslint"
   },

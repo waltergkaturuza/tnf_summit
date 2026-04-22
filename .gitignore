@@ -45,3 +45,6 @@ next-env.d.ts
 .env.local
 .env*.local
 
+# cPanel offline deploy zip (from npm run pack:cpanel)
+cpanel-standalone-upload.zip
+
