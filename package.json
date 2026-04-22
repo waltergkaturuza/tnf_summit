@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "postbuild": "node scripts/standalone-assets.cjs",
     "start:cpanel": "node .next/standalone/server.js",
