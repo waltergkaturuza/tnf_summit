@@ -8,6 +8,9 @@ const nextConfig = {
   // Single `node` process deploy (cPanel, VPS, etc.) — produces `.next/standalone`.
   // Plain JS so `next build` does not require the `typescript` package in production installs.
   output: "standalone",
+  // Parent folders may contain another package-lock.json; without this, Next can infer
+  // the wrong workspace root and omit or misplace `.next/standalone/server.js`.
+  outputFileTracingRoot: __dirname,
 
   // cPanel/CloudLinux: avoid pthread / process limit exhaustion (SIGABRT) on `next build`
   experimental: {
