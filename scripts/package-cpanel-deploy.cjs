@@ -1,8 +1,13 @@
 /**
- * After `npm run build` on your machine or CI, creates a single zip of the
- * Next.js standalone output for upload to cPanel (no `npm run build` on the server).
+ * OFFLINE cPanel deploy (run on your PC, GitHub Actions, or any machine with Node):
+ * 1) npm ci
+ * 2) npm run build
+ * 3) node scripts/package-cpanel-deploy.cjs   (or: npm run pack:cpanel)
+ * 4) Upload cpanel-standalone-upload.zip to cPanel; extract into .next/standalone/
  *
- * Usage: node scripts/package-cpanel-deploy.cjs
+ * Do NOT run this on cPanel – shared hosting has no `npm` in the default shell and
+ * may not be able to build. If you must run a Node tool on cPanel, use the full
+ * venv path, e.g.: ~/nodevenv/tnf_summit/20/bin/npm
  */
 
 const fs = require("fs");
