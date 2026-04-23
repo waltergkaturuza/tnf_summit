@@ -30,7 +30,7 @@ const SETTING_GROUPS: SettingGroup[] = [
   {
     id: "conference", label: "Conference Information", icon: Calendar, color: "#C9921A",
     fields: [
-      { key: "conference_name",    label: "Conference Name",  type: "text",  placeholder: "TNF Global Summit…" },
+      { key: "conference_name",    label: "Conference Name",  type: "text",  placeholder: "Zimbabwe TNF Global Summit…" },
       { key: "conference_theme",   label: "Theme",            type: "text",  placeholder: "Inclusive Growth…" },
       { key: "conference_edition", label: "Edition",          type: "text",  placeholder: "11th" },
       { key: "conference_year",    label: "Year",             type: "text",  placeholder: "2026" },

@@ -54,7 +54,7 @@ export async function POST(req: Request) {
       email: email.trim(),
       merchantReference: trackId.slice(0, 20),
       merchantTrace: trackId.slice(0, 64),
-      lineItemDescription: "TNF Global Summit 2026 — Delegate registration",
+      lineItemDescription: "Zimbabwe TNF Global Summit 2026 — Delegate registration",
       baseUrl,
     });
     return NextResponse.json({ action, fields });

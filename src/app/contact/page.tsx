@@ -132,7 +132,7 @@ export default function ContactPage() {
               <div className="glass-gold rounded-2xl p-5">
                 <div className="text-2xl mb-2">📅</div>
                 <h3 className="text-white font-bold mb-1">{t.contact.summitDates}</h3>
-                <div className="text-[#F5B730] font-bold">20–26 September 2026</div>
+                <div className="text-[#F5B730] font-bold">21–25 September 2026</div>
                 <div className="text-xs mt-1 text-theme-primary">{t.contact.summitDatesVenue}</div>
                 <div className="divider-gold my-3" />
                 <div className="text-[#F5B730] font-bold text-sm">{t.contact.earlyBirdCloses}</div>

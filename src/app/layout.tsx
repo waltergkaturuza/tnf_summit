@@ -3,11 +3,11 @@ import "./globals.css";
 import ClientLayout from "@/components/ClientLayout";
 
 export const metadata: Metadata = {
-  title: "TNF Global Summit 2026 | Inclusive Growth, Decent Work & Investment Promotion",
+  title: "Zimbabwe TNF Global Summit 2026 | Inclusive Growth, Decent Work, Beneficiation, and Investment Promotion",
   description:
-    "Africa's premier tripartite-led global convening platform. 20–26 September 2026 at Elephant Hills Resort, Victoria Falls, Zimbabwe. 1,500–2,000 delegates. Organised by the Tripartite Negotiating Forum (TNF).",
+    "Africa's premier tripartite-led global convening platform. 21–25 September 2026 at Elephant Hills Resort, Victoria Falls, Zimbabwe. 1,500–2,000 delegates. Organised by the Tripartite Negotiating Forum (TNF).",
   keywords: [
-    "TNF Global Summit",
+    "Zimbabwe TNF Global Summit",
     "Tripartite Negotiating Forum",
     "Zimbabwe",
     "Victoria Falls",
@@ -19,17 +19,17 @@ export const metadata: Metadata = {
     "Investment Promotion",
   ],
   openGraph: {
-    title: "TNF Global Summit 2026 — Victoria Falls, Zimbabwe",
+    title: "Zimbabwe TNF Global Summit 2026 — Victoria Falls, Zimbabwe",
     description:
-      "Africa's premier tripartite-led global convening platform. 20–26 September 2026 at Elephant Hills Resort, Victoria Falls, Zimbabwe.",
+      "Africa's premier tripartite-led global convening platform. 21–25 September 2026 at Elephant Hills Resort, Victoria Falls, Zimbabwe.",
     type: "website",
     locale: "en_ZA",
-    siteName: "TNF Global Summit 2026",
+    siteName: "Zimbabwe TNF Global Summit 2026",
   },
   twitter: {
     card: "summary_large_image",
-    title: "TNF Global Summit 2026",
-    description: "20–26 September 2026 | Victoria Falls, Zimbabwe | #TNFGlobalSummit",
+    title: "Zimbabwe TNF Global Summit 2026",
+    description: "21–25 September 2026 | Victoria Falls, Zimbabwe | #TNFGlobalSummit",
   },
   robots: { index: true, follow: true },
 };

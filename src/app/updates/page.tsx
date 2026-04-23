@@ -4,8 +4,8 @@ import UpdatesContent from "./UpdatesContent";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Updates & News | TNF Global Summit",
-  description: "Latest news and upcoming events for the TNF Global Summit.",
+  title: "Updates & News | Zimbabwe TNF Global Summit",
+  description: "Latest news and upcoming events for the Zimbabwe TNF Global Summit.",
 };
 
 export default async function UpdatesPage() {

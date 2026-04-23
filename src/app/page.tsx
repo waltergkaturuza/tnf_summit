@@ -338,16 +338,16 @@ export default function HomePage() {
             </div>
           </FadeIn>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-3">
-            {["✈️", "💼", "💡", "🌱", "🎓", "🦁", "🏡"].map((emoji, i) => {
-              const day = t.home.weekDays[i];
-              const colors = ["#64748B", "#3B82F6", "#8B5CF6", "#10B981", "#EC4899", "#F59E0B", "#94A3B8"];
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
+            {t.home.weekDays.map((day, i) => {
+              const emojis = ["📋", "💼", "🌱", "🎓", "🦁", "🏡", "✈️"];
+              const colors = ["#64748B", "#3B82F6", "#8B5CF6", "#10B981", "#F59E0B", "#EC4899", "#94A3B8"];
               return (
-                <FadeIn key={i} delay={i * 0.07}>
+                <FadeIn key={day.date} delay={i * 0.07}>
                   <div className="glass rounded-xl p-4 card-hover text-center border border-white/5 h-full">
-                    <div className="text-2xl mb-2">{emoji}</div>
+                    <div className="text-2xl mb-2">{emojis[i] ?? "📅"}</div>
                     <div className="text-xs mb-1 text-theme-primary">{day.date}</div>
-                    <div className="text-sm font-bold mb-2" style={{ color: colors[i] }}>{day.label}</div>
+                    <div className="text-sm font-bold mb-2" style={{ color: colors[i % colors.length] }}>{day.label}</div>
                     <p className="text-xs leading-relaxed text-theme-primary">{day.desc}</p>
                   </div>
                 </FadeIn>

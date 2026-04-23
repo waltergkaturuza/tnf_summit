@@ -236,7 +236,7 @@ export default function AboutPage() {
             <FadeIn delay={0.2}>
               <div className="space-y-4">
                 {[
-                  { title: "Summit Week", value: "20–26 Sep 2026", icon: "📅" },
+                  { title: "Summit Week", value: "21–25 Sep 2026", icon: "📅" },
                   { title: "Official Opening Day", value: "Wednesday 23 September", icon: "🎊" },
                   { title: "Gala Dinner", value: "Wednesday 23 Sep — Black Tie", icon: "🎭" },
                   { title: "Innovation Challenge Finals", value: "During Gala Dinner", icon: "🏆" },

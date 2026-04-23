@@ -73,7 +73,7 @@ function MessageModal({ msg, onClose, onUpdate }: {
               <Send className="w-4 h-4" />Mark Replied & Save
             </button>
             <button onClick={() => { save("read"); onClose(); }} className="px-4 py-2.5 rounded-xl glass text-slate-300 hover:text-white text-sm font-semibold">Mark Read</button>
-            <a href={`mailto:${msg.email}?subject=Re: ${encodeURIComponent(msg.enquiryType)} — TNF Global Summit 2026`} className="px-4 py-2.5 rounded-xl glass text-[#C9921A] hover:text-[#F5B730] text-sm font-semibold flex items-center gap-1.5">
+            <a href={`mailto:${msg.email}?subject=Re: ${encodeURIComponent(msg.enquiryType)} — Zimbabwe TNF Global Summit 2026`} className="px-4 py-2.5 rounded-xl glass text-[#C9921A] hover:text-[#F5B730] text-sm font-semibold flex items-center gap-1.5">
               <Mail className="w-3.5 h-3.5" />Email
             </a>
           </div>

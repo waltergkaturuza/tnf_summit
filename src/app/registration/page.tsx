@@ -287,7 +287,7 @@ export default function RegistrationPage() {
               {cardPaymentNotice}
             </div>
           )}
-          <p className="text-lg mb-2 text-theme-primary">Welcome to the TNF Global Summit 2026, <strong className="text-[#F5B730]">{form.salutation} {form.firstName} {form.lastName}</strong></p>
+          <p className="text-lg mb-2 text-theme-primary">Welcome to the Zimbabwe TNF Global Summit 2026, <strong className="text-[#F5B730]">{form.salutation} {form.firstName} {form.lastName}</strong></p>
           <p className="mb-8 text-theme-primary">A confirmation and invoice will be sent to <strong className="text-white">{form.email}</strong> within 24 hours.</p>
           <div className="glass-gold rounded-2xl p-6 mb-6 text-left space-y-3">
             <h3 className="text-[#F5B730] font-bold text-lg mb-4">Registration Summary</h3>
@@ -309,7 +309,7 @@ export default function RegistrationPage() {
             )}
           </div>
           <div className="glass rounded-xl p-4 text-sm text-theme-primary mb-6">
-            <strong className="text-white">Next steps:</strong> You will receive an invoice by email. Payment is due within 14 days. Your badge will be ready for collection at Delegate Registration on <strong className="text-white">20 September 2026</strong>.
+            <strong className="text-white">Next steps:</strong> You will receive an invoice by email. Payment is due within 14 days. Your badge will be ready for collection at Delegate Registration on <strong className="text-white">21 September 2026</strong>.
           </div>
           <div className="flex flex-wrap justify-center gap-3">
             <a href="/" className="btn-gold px-8 py-3 rounded-xl text-sm font-bold inline-flex items-center gap-2">Back to Home <ArrowRight className="w-4 h-4" /></a>
@@ -331,7 +331,7 @@ export default function RegistrationPage() {
           <h1 className="text-4xl sm:text-5xl font-black text-white mt-2 mb-2">
             Delegate <span className="gradient-text">Registration</span>
           </h1>
-          <p className="text-theme-primary">TNF Global Summit 2026 · Victoria Falls, Zimbabwe · Early bird closes <strong className="text-white">30 June 2026</strong></p>
+          <p className="text-theme-primary">Zimbabwe TNF Global Summit 2026 · Victoria Falls, Zimbabwe · Early bird closes <strong className="text-white">30 June 2026</strong></p>
         </div>
       </section>
 

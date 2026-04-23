@@ -2,8 +2,8 @@ import Link from "next/link";
 import { Shield, Mail, ArrowLeft } from "lucide-react";
 
 export const metadata = {
-  title: "Privacy Policy | TNF Global Summit 2026",
-  description: "Privacy Policy for the TNF Global Summit 2026 website and registration system.",
+  title: "Privacy Policy | Zimbabwe TNF Global Summit 2026",
+  description: "Privacy Policy for the Zimbabwe TNF Global Summit 2026 website and registration system.",
 };
 
 export default function PrivacyPage() {
@@ -24,7 +24,7 @@ export default function PrivacyPage() {
           <div>
             <h1 className="text-3xl sm:text-4xl font-black text-white">Privacy Policy</h1>
             <p className="mt-1 text-sm text-theme-primary">
-              TNF Global Summit 2026 · Last updated: March 2026
+              Zimbabwe TNF Global Summit 2026 · Last updated: March 2026
             </p>
           </div>
         </div>
@@ -34,10 +34,10 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-white font-bold text-lg mb-3">1. Introduction</h2>
             <p>
-              The Tripartite Negotiating Forum (TNF) Secretariat (&ldquo;we&rdquo;, &ldquo;our&rdquo;, or &ldquo;us&rdquo;) is committed to protecting the privacy and personal information of delegates, participants, partners, and visitors to the TNF Global Summit 2026 website and registration platform (&ldquo;the Platform&rdquo;).
+              The Tripartite Negotiating Forum (TNF) Secretariat (&ldquo;we&rdquo;, &ldquo;our&rdquo;, or &ldquo;us&rdquo;) is committed to protecting the privacy and personal information of delegates, participants, partners, and visitors to the Zimbabwe TNF Global Summit 2026 website and registration platform (&ldquo;the Platform&rdquo;).
             </p>
             <p className="mt-3">
-              This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website at <span className="text-[#C9921A]">www.tnfzim.org/summit2026</span> or register for the TNF Global Summit on Inclusive Growth, Decent Work and Investment Promotion (&ldquo;the Summit&rdquo;).
+              This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website at <span className="text-[#C9921A]">www.tnfzim.org/summit2026</span> or register for the Zimbabwe TNF Global Summit on Inclusive Growth, Decent Work, Beneficiation, and Investment Promotion (&ldquo;the Summit&rdquo;).
             </p>
           </section>
 
@@ -141,7 +141,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-white font-bold text-lg mb-3">7. Photography & Video at the Summit</h2>
             <p>
-              By attending the TNF Global Summit 2026, you acknowledge that official photography and video recording will take place at all Summit sessions, social events, and excursions. Images and recordings may be used in official Summit publications, social media, press releases, and future promotional materials. If you do not consent to being photographed or filmed, please notify the TNF Secretariat in writing prior to the Summit.
+              By attending the Zimbabwe TNF Global Summit 2026, you acknowledge that official photography and video recording will take place at all Summit sessions, social events, and excursions. Images and recordings may be used in official Summit publications, social media, press releases, and future promotional materials. If you do not consent to being photographed or filmed, please notify the TNF Secretariat in writing prior to the Summit.
             </p>
           </section>
 

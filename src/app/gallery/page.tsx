@@ -364,7 +364,7 @@ export default function GalleryPage() {
               <div className="text-5xl mb-6">📺</div>
               <h2 className="text-3xl font-black text-white mb-4">Live & Hybrid Coverage</h2>
               <p className="mb-8 leading-relaxed text-theme-primary">
-                The TNF Global Summit will offer hybrid attendance with live streaming of plenary sessions. Virtual delegates can participate in real-time from anywhere in the world.
+                The Zimbabwe TNF Global Summit will offer hybrid attendance with live streaming of plenary sessions. Virtual delegates can participate in real-time from anywhere in the world.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                 {[

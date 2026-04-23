@@ -74,7 +74,7 @@ export default function DonatePage() {
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#C9921A]/20 border border-[#C9921A]/30 mb-6">
               <Heart className="w-8 h-8 text-[#C9921A]" />
             </div>
-            <h1 className="text-3xl sm:text-4xl font-black text-white mb-4">Support the TNF Global Summit</h1>
+            <h1 className="text-3xl sm:text-4xl font-black text-white mb-4">Support the Zimbabwe TNF Global Summit</h1>
             <p className="text-theme-primary max-w-2xl mx-auto">
               Your donation helps us deliver inclusive growth, decent work, and investment promotion across Africa. 
               Bank transfer details are below — use your name or organisation as the payment reference.

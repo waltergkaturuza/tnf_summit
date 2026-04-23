@@ -109,7 +109,7 @@ export default function Navbar() {
                 <Image src="/tnf-icon.png" alt="TNF Logo" fill className="object-contain" priority />
               </div>
               <div className="hidden sm:block leading-tight">
-                <div className={`font-bold text-sm transition-colors ${isDark ? "text-white" : "text-[#0A1628]"}`}>TNF Global Summit</div>
+                <div className={`font-bold text-sm transition-colors ${isDark ? "text-white" : "text-[#0A1628]"}`}>Zimbabwe TNF Global Summit</div>
                 <div className="text-[#C9921A] text-xs">Victoria Falls 2026</div>
               </div>
             </Link>

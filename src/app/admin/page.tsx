@@ -53,7 +53,7 @@ export default function AdminLoginPage() {
             <Shield className="w-5 h-5 text-[#C9921A]" />
             <h1 className="text-2xl font-black text-white">Admin Portal</h1>
           </div>
-          <p className="text-slate-500 text-sm">TNF Global Summit 2026 — Management System</p>
+          <p className="text-slate-500 text-sm">Zimbabwe TNF Global Summit 2026 — Management System</p>
         </div>
 
         <div className="glass rounded-2xl p-8 border border-white/5">

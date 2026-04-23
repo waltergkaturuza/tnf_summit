@@ -53,12 +53,12 @@ export async function POST(request: NextRequest) {
         ${description ? `<p>${escapeHtml(description.slice(0, 500))}${description.length > 500 ? "…" : ""}</p>` : ""}
         ${link ? `<p><a href="${escapeHtml(link)}">Read more</a></p>` : ""}
         <p><a href="${updatesUrl}">View all updates & news</a></p>
-        <p style="color:#888;font-size:12px;">You received this because you subscribed to TNF Global Summit updates.</p>
+        <p style="color:#888;font-size:12px;">You received this because you subscribed to Zimbabwe TNF Global Summit updates.</p>
       `;
       const { data: sendData, error: sendError } = await resend.emails.send({
         from: process.env.RESEND_FROM || "TNF Summit <updates@resend.dev>",
         to: emails,
-        subject: `TNF Global Summit: ${title.slice(0, 80)}`,
+        subject: `Zimbabwe TNF Global Summit: ${title.slice(0, 80)}`,
         html,
       });
       if (sendError) {

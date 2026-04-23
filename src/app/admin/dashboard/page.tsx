@@ -108,7 +108,7 @@ export default function DashboardPage() {
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-black text-white">Dashboard</h1>
-        <p className="text-slate-400 text-sm mt-1">TNF Global Summit 2026 — 20–26 September · Victoria Falls</p>
+        <p className="text-slate-400 text-sm mt-1">Zimbabwe TNF Global Summit 2026 — 21–25 September · Victoria Falls</p>
       </div>
 
       {/* Alert for pending */}

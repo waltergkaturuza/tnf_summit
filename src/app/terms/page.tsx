@@ -2,8 +2,8 @@ import Link from "next/link";
 import { FileText, Mail, ArrowLeft } from "lucide-react";
 
 export const metadata = {
-  title: "Terms of Use | TNF Global Summit 2026",
-  description: "Terms of Use for the TNF Global Summit 2026 website and registration platform.",
+  title: "Terms of Use | Zimbabwe TNF Global Summit 2026",
+  description: "Terms of Use for the Zimbabwe TNF Global Summit 2026 website and registration platform.",
 };
 
 export default function TermsPage() {
@@ -24,7 +24,7 @@ export default function TermsPage() {
           <div>
             <h1 className="text-3xl sm:text-4xl font-black text-white">Terms of Use</h1>
             <p className="mt-1 text-sm text-theme-primary">
-              TNF Global Summit 2026 · Last updated: March 2026
+              Zimbabwe TNF Global Summit 2026 · Last updated: March 2026
             </p>
           </div>
         </div>
@@ -34,7 +34,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-white font-bold text-lg mb-3">1. Acceptance of Terms</h2>
             <p>
-              By accessing or using the TNF Global Summit 2026 website and registration platform (&ldquo;the Platform&rdquo;), you agree to be bound by these Terms of Use. If you do not agree to these terms, please discontinue use of the Platform immediately.
+              By accessing or using the Zimbabwe TNF Global Summit 2026 website and registration platform (&ldquo;the Platform&rdquo;), you agree to be bound by these Terms of Use. If you do not agree to these terms, please discontinue use of the Platform immediately.
             </p>
             <p className="mt-3">
               The Platform is operated by the Tripartite Negotiating Forum (TNF) Secretariat (&ldquo;the Organiser&rdquo;) and developed and maintained by{" "}
@@ -124,7 +124,7 @@ export default function TermsPage() {
               All content on the Platform, including but not limited to text, graphics, logos, programme documents, session materials, recordings, and photographs, is the property of the TNF Secretariat or its content providers and is protected by applicable intellectual property laws.
             </p>
             <p className="mt-3">
-              Delegates and media may use official Summit content for non-commercial reporting and communication purposes, provided that proper attribution is given to the TNF Global Summit 2026 and the TNF Secretariat.
+              Delegates and media may use official Summit content for non-commercial reporting and communication purposes, provided that proper attribution is given to the Zimbabwe TNF Global Summit 2026 and the TNF Secretariat.
             </p>
           </section>
 

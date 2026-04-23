@@ -163,7 +163,7 @@ export default function SponsorsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn>
             <div className="text-center mb-10">
-              <h2 className="text-3xl font-black text-white">Why Sponsor the TNF Global Summit?</h2>
+              <h2 className="text-3xl font-black text-white">Why Sponsor the Zimbabwe TNF Global Summit?</h2>
               <p className="mt-3 max-w-2xl mx-auto text-theme-primary">
                 Unparalleled access to Africa&apos;s most senior decision-makers, investors and policy shapers.
               </p>
