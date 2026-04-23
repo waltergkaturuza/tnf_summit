@@ -11,7 +11,7 @@ import {
 import { useLanguage } from "@/context/LanguageContext";
 import { registrationFees } from "@/lib/data";
 import { getRegistrationFeeUsd, REGISTRATION_FEES_USD } from "@/lib/registrationFee";
-import { insertRegistration, subscribeEmail } from "@/lib/db";
+import { subscribeEmail } from "@/lib/db";
 import { getCountryNames } from "@/lib/countries";
 
 const STEPS = [
@@ -147,63 +147,72 @@ export default function RegistrationPage() {
     e.preventDefault();
     if (step < STEPS.length) { setStep(step + 1); return; }
 
-    // Final submission → direct Supabase insert (requires anon INSERT policy)
+    // Final submission → server API (service role) so RLS does not block public registration
     setSubmitting(true);
     setSubmitError("");
     setCardPaymentNotice("");
     try {
-      const { trackId } = await insertRegistration({
-        status: "pending",
-        adminNotes: "",
-        salutation: form.salutation,
-        firstName: form.firstName,
-        lastName: form.lastName,
-        gender: form.gender,
-        dateOfBirth: form.dateOfBirth,
-        nationality: form.nationality,
-        passportNumber: form.passportNumber,
-        organisation: form.organisation,
-        department: form.department,
-        jobTitle: form.jobTitle,
-        sector: form.sector,
-        organisationWebsite: form.orgWebsite,
-        email: form.email,
-        phone: form.phone,
-        whatsapp: form.whatsapp,
-        country: form.country,
-        city: form.city,
-        category: form.category,
-        attendanceMode: form.attendanceMode as "in-person" | "virtual" | "hybrid",
-        daysAttending: form.daysAttending,
-        requiresAccommodation: form.requiresAccommodation === "yes",
-        arrivalDate: form.arrivalDate,
-        departureDate: form.departureDate,
-        roomType: form.roomType,
-        airportTransfer: form.airportTransfer === "yes",
-        specialNeeds: form.specialNeeds,
-        dietaryRequirements: form.dietaryRequirements,
-        sessionInterests: form.sessionInterests,
-        excursionPreference: form.excursionPreference,
-        applyInnovation: form.applyInnovation === "yes",
-        startupName: form.startupName,
-        startupStage: form.startupStage,
-        startupDescription: form.startupDescription,
-        bilateralMeetings: form.bilateralMeetings === "yes",
-        investmentAreas: form.investmentInterests.join(", "),
-        investmentInterests: form.investmentInterests,
-        isMedia: form.isMedia === "yes",
-        mediaOrganisation: form.mediaOrganisation,
-        mediaType: form.mediaType,
-        paymentMethod: form.paymentMethod,
-        invoiceRequired: form.invoiceRequired === "yes",
-        billingOrganisation: form.billingOrganisation,
-        feeAmount,
-        paymentStatus: "unpaid",
-        privacyConsent: form.privacyConsent,
-        photoConsent: form.photoConsent,
-        newsletterOptIn: form.newsletterOptIn,
-        termsAccepted: form.termsAccepted,
+      const regRes = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          status: "pending",
+          adminNotes: "",
+          salutation: form.salutation,
+          firstName: form.firstName,
+          lastName: form.lastName,
+          gender: form.gender,
+          dateOfBirth: form.dateOfBirth,
+          nationality: form.nationality,
+          passportNumber: form.passportNumber,
+          organisation: form.organisation,
+          department: form.department,
+          jobTitle: form.jobTitle,
+          sector: form.sector,
+          organisationWebsite: form.orgWebsite,
+          email: form.email,
+          phone: form.phone,
+          whatsapp: form.whatsapp,
+          country: form.country,
+          city: form.city,
+          category: form.category,
+          attendanceMode: form.attendanceMode,
+          daysAttending: form.daysAttending,
+          requiresAccommodation: form.requiresAccommodation === "yes",
+          arrivalDate: form.arrivalDate,
+          departureDate: form.departureDate,
+          roomType: form.roomType,
+          airportTransfer: form.airportTransfer === "yes",
+          specialNeeds: form.specialNeeds,
+          dietaryRequirements: form.dietaryRequirements,
+          sessionInterests: form.sessionInterests,
+          excursionPreference: form.excursionPreference,
+          applyInnovation: form.applyInnovation === "yes",
+          startupName: form.startupName,
+          startupStage: form.startupStage,
+          startupDescription: form.startupDescription,
+          bilateralMeetings: form.bilateralMeetings === "yes",
+          investmentInterests: form.investmentInterests,
+          isMedia: form.isMedia === "yes",
+          mediaOrganisation: form.mediaOrganisation,
+          mediaType: form.mediaType,
+          paymentMethod: form.paymentMethod,
+          invoiceRequired: form.invoiceRequired === "yes",
+          billingOrganisation: form.billingOrganisation,
+          feeAmount,
+          paymentStatus: "unpaid",
+          privacyConsent: form.privacyConsent,
+          photoConsent: form.photoConsent,
+          newsletterOptIn: form.newsletterOptIn,
+          termsAccepted: form.termsAccepted,
+        }),
       });
+      const regJson = (await regRes.json().catch(() => ({}))) as { error?: string; trackId?: string };
+      if (!regRes.ok) {
+        throw new Error(regJson.error || "Registration failed");
+      }
+      const trackId = regJson.trackId;
+      if (!trackId) throw new Error("No registration reference returned");
       setRegId(trackId);
 
       if (form.paymentMethod === "Credit / Debit Card" && feeAmount > 0) {

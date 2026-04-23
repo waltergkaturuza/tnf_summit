@@ -11,8 +11,16 @@ type Body = {
   isEarlyBird?: boolean;
 };
 
+function getIveriApplicationId(): string {
+  return (
+    process.env.IVERI_APPLICATION_ID?.trim() ||
+    process.env.IVERI_APP_ID?.trim() ||
+    ""
+  );
+}
+
 export async function POST(req: Request) {
-  const applicationId = process.env.IVERI_APPLICATION_ID?.trim();
+  const applicationId = getIveriApplicationId();
   if (!applicationId) {
     return NextResponse.json({ error: "Card payments are not configured." }, { status: 503 });
   }
