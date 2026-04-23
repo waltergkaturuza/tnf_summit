@@ -62,7 +62,7 @@ const en: FullTranslations = {
     ],
     registerCtaBadge: "Early Bird Closes 30 June 2026",
     registerCtaHeading: "Secure Your Seat Today",
-    registerCtaSub: "Join 1,500+ ministers, policymakers, investors and innovators at Africa's premier tripartite summit. Early bird rates from USD 100.",
+    registerCtaSub: "Join 1,500+ ministers, policymakers, investors and innovators at Africa's premier tripartite summit. Flat registration fee USD 1,500 per delegate.",
     viewAllFees: "View All Fees",
     partnersHeading: "Partners & Organisers",
     partnersSub: "Official Partners",
@@ -363,8 +363,8 @@ const en: FullTranslations = {
       { label: "Office Hours", value: "" },
     ],
     faqs: [
-      { q: "When does early bird registration close?", a: "Early bird rates close on 30 June 2026. After this date, standard rates apply. We strongly recommend registering early to secure your place." },
-      { q: "Is virtual/hybrid attendance available?", a: "Yes. Virtual attendance is available at USD 100 (early bird) / USD 150 (standard). Virtual delegates access live-streamed plenary sessions and participate in Q&A via the Summit App." },
+      { q: "What is the registration fee?", a: "The delegate registration fee is a flat USD 1,500 per person for all categories, including virtual attendance. Payment terms are on your invoice." },
+      { q: "Is virtual/hybrid attendance available?", a: "Yes. Virtual and hybrid attendance use the same flat USD 1,500 delegate fee. Virtual delegates access live-streamed plenary sessions and participate in Q&A via the Summit App." },
       { q: "How do I apply for the TNF Innovation Challenge?", a: "Innovation Challenge applications are available via the registration form. Select 'Apply for Innovation Challenge' and you will receive a dedicated application form by email." },
       { q: "Can I request a bilateral meeting with other delegates?", a: "Yes. All registered delegates can pre-book bilateral meetings via the Summit App. Bilateral meeting pre-bookings open on the first Summit day (21 September 2026)." },
       { q: "Are there group registration rates?", a: "Group rates are available for organisations registering 5 or more delegates. Please contact info@tnfzim.com for group registration packages." },
@@ -375,7 +375,7 @@ const en: FullTranslations = {
   registration: {
     heroBadge: "Secure Your Seat",
     heroTitle: "Delegate Registration",
-    heroSub: "Zimbabwe TNF Global Summit 2026 · Victoria Falls, Zimbabwe · Early bird closes 30 June 2026",
+    heroSub: "Zimbabwe TNF Global Summit 2026 · Victoria Falls, Zimbabwe · Flat fee USD 1,500 per delegate",
     steps: [
       { label: "Personal" },
       { label: "Professional" },

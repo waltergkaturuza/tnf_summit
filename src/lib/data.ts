@@ -645,51 +645,443 @@ export const program: DaySchedule[] = [
   },
 ];
 
+/** Flat delegate registration fee (USD) — all categories. Kept in sync with `registrationFee.ts`. */
+const DELEGATE_FEE_USD = 1500;
+
 export const registrationFees = [
   {
     category: "Government / Public Sector",
-    earlyBird: 400,
-    standard: 550,
+    earlyBird: DELEGATE_FEE_USD,
+    standard: DELEGATE_FEE_USD,
     icon: "Building",
     color: "#3B82F6",
   },
   {
     category: "Private Sector / Corporates",
-    earlyBird: 700,
-    standard: 950,
+    earlyBird: DELEGATE_FEE_USD,
+    standard: DELEGATE_FEE_USD,
     icon: "Briefcase",
     color: "#C9921A",
     popular: true,
   },
   {
     category: "International Organisations / DFIs",
-    earlyBird: 400,
-    standard: 550,
+    earlyBird: DELEGATE_FEE_USD,
+    standard: DELEGATE_FEE_USD,
     icon: "Globe",
     color: "#10B981",
   },
   {
     category: "Youth Delegates (Under 35)",
-    earlyBird: 150,
-    standard: 200,
+    earlyBird: DELEGATE_FEE_USD,
+    standard: DELEGATE_FEE_USD,
     icon: "Users",
     color: "#8B5CF6",
   },
   {
     category: "African Civil Society / MSMEs",
-    earlyBird: 200,
-    standard: 300,
+    earlyBird: DELEGATE_FEE_USD,
+    standard: DELEGATE_FEE_USD,
     icon: "Heart",
     color: "#EC4899",
   },
   {
     category: "Virtual / Hybrid Attendance",
-    earlyBird: 100,
-    standard: 150,
+    earlyBird: DELEGATE_FEE_USD,
+    standard: DELEGATE_FEE_USD,
     icon: "Monitor",
     color: "#14B8A6",
   },
 ];
+
+/** 25% off list sponsorship investment (e.g. 100,000 → 75,000 USD). */
+export const SPONSORSHIP_DISCOUNT_RATE = 0.25;
+
+export type ThemeSponsorshipPackageTier = "platinum" | "gold" | "silver" | "official_partner";
+
+export type ThemeSponsorshipOffer = {
+  /** Unique row id for UI (e.g. `A`, `B-platinum`, `B-gold`) */
+  offerKey: string;
+  themeId: string;
+  themeLabel: string;
+  packageTier: ThemeSponsorshipPackageTier;
+  packageLabel: string;
+  /** List price before 25% reduction */
+  listPriceUsd: number;
+  /** Investment after 25% reduction */
+  priceUsd: number;
+  /** One-line package benefits (from official theme deck) */
+  benefitsLine?: string;
+};
+
+/** Theme A — Africa's $3.4 Trillion Investment Frontier: three tiers (list USD → 25% off), per official slide. */
+const THEME_A_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | "offerKey">[] = [
+  {
+    packageTier: "platinum",
+    packageLabel: "Platinum",
+    listPriceUsd: 75_000,
+    priceUsd: 56_250,
+    benefitsLine:
+      "Session naming rights + keynote address + 8 passes + VIP bilateral matchmaking",
+  },
+  {
+    packageTier: "gold",
+    packageLabel: "Gold",
+    listPriceUsd: 40_000,
+    priceUsd: 30_000,
+    benefitsLine: "Co-sponsor branding + 5-minute address + 5 passes + deal-room access",
+  },
+  {
+    packageTier: "silver",
+    packageLabel: "Silver",
+    listPriceUsd: 20_000,
+    priceUsd: 15_000,
+    benefitsLine: "Session branding + exhibition stand + 3 passes + investor matchmaking",
+  },
+];
+
+/** Theme B — AI, Automation & the Jobs of Tomorrow: three tiers (list USD → 25% off), per official slide. */
+const THEME_B_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | "offerKey">[] = [
+  {
+    packageTier: "platinum",
+    packageLabel: "Platinum",
+    listPriceUsd: 75_000,
+    priceUsd: 56_250,
+    benefitsLine:
+      "Session naming + ILO Monitor co-branding + AI showcase stage + 8 passes",
+  },
+  {
+    packageTier: "gold",
+    packageLabel: "Gold",
+    listPriceUsd: 40_000,
+    priceUsd: 30_000,
+    benefitsLine: "Tech demo zone + speaking slot + 5 passes + digital branding package",
+  },
+  {
+    packageTier: "silver",
+    packageLabel: "Silver",
+    listPriceUsd: 20_000,
+    priceUsd: 15_000,
+    benefitsLine: "Workshop branding + 3 passes + logo on all digital assets & app",
+  },
+];
+
+/** Theme C — Green Growth as a Competitive Advantage (Opening Day premium), per official slide. */
+const THEME_C_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | "offerKey">[] = [
+  {
+    packageTier: "platinum",
+    packageLabel: "Platinum",
+    listPriceUsd: 85_000,
+    priceUsd: 63_750,
+    benefitsLine:
+      "Opening Day co-branding + keynote stage + green zone exhibition + ESG co-report + 8 passes",
+  },
+  {
+    packageTier: "gold",
+    packageLabel: "Gold",
+    listPriceUsd: 45_000,
+    priceUsd: 33_750,
+    benefitsLine:
+      "Climate Finance session branding + speaking slot + green bonds workshop + 5 passes",
+  },
+  {
+    packageTier: "silver",
+    packageLabel: "Silver",
+    listPriceUsd: 22_000,
+    priceUsd: 16_500,
+    benefitsLine: "Carbon market workshop sponsor + logo on green investment brief + 3 passes",
+  },
+];
+
+/** Theme G — Industrialisation & Value Chain Integration (core beneficiation / beneficiation priority tier), per official slide. */
+const THEME_G_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | "offerKey">[] = [
+  {
+    packageTier: "platinum",
+    packageLabel: "Platinum",
+    listPriceUsd: 90_000,
+    priceUsd: 67_500,
+    benefitsLine:
+      "Beneficiation summit naming + ministerial panel seat + investment brief + 10 passes",
+  },
+  {
+    packageTier: "gold",
+    packageLabel: "Gold",
+    listPriceUsd: 50_000,
+    priceUsd: 37_500,
+    benefitsLine: "SEZ/manufacturing session sponsor + deal facilitation access + 6 passes",
+  },
+  {
+    packageTier: "silver",
+    packageLabel: "Silver",
+    listPriceUsd: 25_000,
+    priceUsd: 18_750,
+    benefitsLine: "Workshop sponsor + value chain exhibition stand + 4 passes + report feature",
+  },
+];
+
+/** Theme E — Digital Finance & the FinTech Revolution, per official slide. */
+const THEME_E_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | "offerKey">[] = [
+  {
+    packageTier: "platinum",
+    packageLabel: "Platinum",
+    listPriceUsd: 75_000,
+    priceUsd: 56_250,
+    benefitsLine:
+      "FinTech stage naming + live pitch branding + RBZ session co-brand + 8 passes",
+  },
+  {
+    packageTier: "gold",
+    packageLabel: "Gold",
+    listPriceUsd: 40_000,
+    priceUsd: 30_000,
+    benefitsLine: "Digital finance session + FinTech showcase stand + summit app feature + 5 passes",
+  },
+  {
+    packageTier: "silver",
+    packageLabel: "Silver",
+    listPriceUsd: 20_000,
+    priceUsd: 15_000,
+    benefitsLine: "Blockchain workshop sponsor + logo on digital assets + 3 passes",
+  },
+];
+
+/** Theme I — Youth Entrepreneurship & Africa's Demographic Dividend (TNF Innovation Challenge), per official slide. */
+const THEME_I_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | "offerKey">[] = [
+  {
+    packageTier: "platinum",
+    packageLabel: "Platinum",
+    listPriceUsd: 60_000,
+    priceUsd: 45_000,
+    benefitsLine:
+      "Innovation Challenge title sponsor + prize fund branding + Gala Dinner recognition + 8 passes",
+  },
+  {
+    packageTier: "gold",
+    packageLabel: "Gold",
+    listPriceUsd: 32_000,
+    priceUsd: 24_000,
+    benefitsLine:
+      "Innovation stage sponsor + pitch showcase branding + investor panel seat + 5 passes",
+  },
+  {
+    packageTier: "silver",
+    packageLabel: "Silver",
+    listPriceUsd: 16_000,
+    priceUsd: 12_000,
+    benefitsLine: "Youth forum co-sponsor + mentorship programme branding + 3 passes",
+  },
+];
+
+const THEME_LIST_USD: Record<string, { tier: ThemeSponsorshipPackageTier; listUsd: number }> = {
+  D: { tier: "gold", listUsd: 85_000 },
+  F: { tier: "gold", listUsd: 80_000 },
+  H: { tier: "silver", listUsd: 60_000 },
+  J: { tier: "silver", listUsd: 55_000 },
+  K: { tier: "silver", listUsd: 55_000 },
+  L: { tier: "official_partner", listUsd: 40_000 },
+  M: { tier: "gold", listUsd: 90_000 },
+  N: { tier: "gold", listUsd: 90_000 },
+};
+
+const tierLabels: Record<ThemeSponsorshipPackageTier, string> = {
+  platinum: "Platinum",
+  gold: "Gold",
+  silver: "Silver",
+  official_partner: "Official Partner",
+};
+
+function themeOfferFromId(theme: (typeof themes)[0]): ThemeSponsorshipOffer {
+  const row = THEME_LIST_USD[theme.id] ?? { tier: "official_partner" as const, listUsd: 30_000 };
+  const priceUsd = Math.round(row.listUsd * (1 - SPONSORSHIP_DISCOUNT_RATE));
+  return {
+    offerKey: `${theme.id}-${row.tier}`,
+    themeId: theme.id,
+    themeLabel: theme.label,
+    packageTier: row.tier,
+    packageLabel: tierLabels[row.tier],
+    listPriceUsd: row.listUsd,
+    priceUsd,
+  };
+}
+
+/** All package rows for a theme (Themes A–C, E, G & I have Platinum, Gold, Silver; others have one row). */
+export function getThemeSponsorshipTiers(themeId: string): ThemeSponsorshipOffer[] {
+  if (themeId === "A") {
+    const themeA = themes.find((th) => th.id === "A");
+    const label = themeA?.label ?? "Africa's $3.4 Trillion Investment Frontier";
+    return THEME_A_TIER_DEFS.map((t) => ({
+      offerKey: `A-${t.packageTier}`,
+      themeId: "A",
+      themeLabel: label,
+      ...t,
+    }));
+  }
+  if (themeId === "B") {
+    const themeB = themes.find((th) => th.id === "B");
+    const label = themeB?.label ?? "AI, Automation & the Jobs of Tomorrow";
+    return THEME_B_TIER_DEFS.map((t) => ({
+      offerKey: `B-${t.packageTier}`,
+      themeId: "B",
+      themeLabel: label,
+      ...t,
+    }));
+  }
+  if (themeId === "C") {
+    const themeC = themes.find((th) => th.id === "C");
+    const label = themeC?.label ?? "Green Growth as a Competitive Advantage";
+    return THEME_C_TIER_DEFS.map((t) => ({
+      offerKey: `C-${t.packageTier}`,
+      themeId: "C",
+      themeLabel: label,
+      ...t,
+    }));
+  }
+  if (themeId === "E") {
+    const themeE = themes.find((th) => th.id === "E");
+    const label = themeE?.label ?? "Digital Finance & the FinTech Revolution";
+    return THEME_E_TIER_DEFS.map((t) => ({
+      offerKey: `E-${t.packageTier}`,
+      themeId: "E",
+      themeLabel: label,
+      ...t,
+    }));
+  }
+  if (themeId === "G") {
+    const themeG = themes.find((th) => th.id === "G");
+    const label = themeG?.label ?? "Industrialisation & Value Chain Integration";
+    return THEME_G_TIER_DEFS.map((t) => ({
+      offerKey: `G-${t.packageTier}`,
+      themeId: "G",
+      themeLabel: label,
+      ...t,
+    }));
+  }
+  if (themeId === "I") {
+    const themeI = themes.find((th) => th.id === "I");
+    const label = themeI?.label ?? "Youth Entrepreneurship & Africa's Demographic Dividend";
+    return THEME_I_TIER_DEFS.map((t) => ({
+      offerKey: `I-${t.packageTier}`,
+      themeId: "I",
+      themeLabel: label,
+      ...t,
+    }));
+  }
+  const theme = themes.find((th) => th.id === themeId);
+  if (!theme) return [];
+  return [themeOfferFromId(theme)];
+}
+
+/** One “primary” row per theme (for the theme dropdown) — first tier. */
+export const themeSponsorshipOffers: ThemeSponsorshipOffer[] = themes.map((th) => getThemeSponsorshipTiers(th.id)[0]);
+
+/** Full table: every theme–tier line (Themes A–C, E, G & I = 3 rows each). */
+export const themeSponsorshipTiersFlat: ThemeSponsorshipOffer[] = themes.flatMap((th) => getThemeSponsorshipTiers(th.id));
+
+export function getThemeSponsorshipOffer(themeId: string): ThemeSponsorshipOffer | undefined {
+  return getThemeSponsorshipTiers(themeId)[0];
+}
+
+/** Specific tier (e.g. for contact ?theme=B&tier=gold). */
+export function getThemeSponsorshipOfferTier(
+  themeId: string,
+  tier: ThemeSponsorshipPackageTier
+): ThemeSponsorshipOffer | undefined {
+  return getThemeSponsorshipTiers(themeId).find((o) => o.packageTier === tier);
+}
+
+/** Summit-wide partnership: exhibition + visibility for the full duration of the summit (separate from theme packages). */
+export type SummitWidePartnershipTierId = "platinum" | "gold" | "silver" | "bronze";
+
+export type SummitWidePartnershipTier = {
+  id: SummitWidePartnershipTierId;
+  shortLabel: string;
+  title: string;
+  priceBand: string;
+  passesAndAccess: string;
+  benefits: string[];
+  headerColor: string;
+  panelBg: string;
+};
+
+const SUMMIT_WIDE_TIERS: SummitWidePartnershipTier[] = [
+  {
+    id: "platinum",
+    shortLabel: "Platinum",
+    title: "Platinum Title Partner",
+    priceBand: "USD 100,000+",
+    passesAndAccess: "10 VIP passes + 4 Ministerial Gala seats + dedicated VIP lounge access",
+    benefits: [
+      "Exclusive naming rights to one full plenary session; co-branding on the Official Opening Ceremony stage",
+      "Premium logo on main stage backdrop, all printed materials, website homepage, app splash screen, and branded lanyards",
+      "Full-page inside-front-cover advertisement in the Summit Programme (print run 2,000+)",
+      "10-minute keynote at the Opening Ceremony and a seat on the Summit Advisory Board",
+      "Private hosted ministerial bilateral meeting and an exclusive 20-person investor roundtable",
+      "Headline credit in all media releases and a joint press statement with the TNF Secretariat",
+      "First right of refusal for a Summit 2027 Platinum partnership",
+    ],
+    headerColor: "#1D4ED8",
+    panelBg: "rgba(29, 78, 216, 0.12)",
+  },
+  {
+    id: "gold",
+    shortLabel: "Gold",
+    title: "Gold Partner",
+    priceBand: "USD 50,000 – 99,999",
+    passesAndAccess: "6 full-access passes + 2 Gala seats",
+    benefits: [
+      "Dedicated exhibition stand (6×3 m) in a prime location for the full summit",
+      "Logo on stage backdrop and all printed materials; half-page ad in the Summit Programme",
+      "5-minute welcome address at one themed session",
+      "Investor deal-room access and bilateral matchmaking",
+      "Featured as a Gold Partner in the Summit Report",
+      "Recognition at the Welcome Cocktail and Gala Dinner",
+    ],
+    headerColor: "#C9921A",
+    panelBg: "rgba(201, 146, 26, 0.1)",
+  },
+  {
+    id: "silver",
+    shortLabel: "Silver",
+    title: "Silver Partner",
+    priceBand: "USD 25,000 – 49,999",
+    passesAndAccess: "4 full-access passes + 1 Gala seat",
+    benefits: [
+      "Exhibition stand (3×3 m) with product showcase for the full summit",
+      "Logo on the website, app, and Summit Programme; quarter-page ad in the Summit Programme",
+      "10-minute speaking slot in a relevant workshop",
+      "Access to all networking and social events",
+      "Listed as a Silver Partner in the Summit Report",
+    ],
+    headerColor: "#0D9488",
+    panelBg: "rgba(13, 148, 136, 0.1)",
+  },
+  {
+    id: "bronze",
+    shortLabel: "Bronze",
+    title: "Bronze Partner",
+    priceBand: "USD 10,000 – 24,999",
+    passesAndAccess: "2 full-access passes",
+    benefits: [
+      "Tabletop display in the Exhibition Hall for the full summit",
+      "Logo on the website and Summit Programme",
+      "3 branded social media mentions; full networking access at all social events",
+      "Listed in the Summit Report; certificate of sponsorship partnership",
+    ],
+    headerColor: "#A855F7",
+    panelBg: "rgba(168, 85, 247, 0.1)",
+  },
+];
+
+export const summitWidePartnershipIntro =
+  "For organisations that want exhibition space and brand visibility for the full duration of the summit — in addition to theme-specific and event packages — we offer four summit-wide partnership tiers.";
+
+export const summitWidePartnershipTiers: SummitWidePartnershipTier[] = SUMMIT_WIDE_TIERS;
+
+export function getSummitWidePartnershipTier(
+  id: string
+): SummitWidePartnershipTier | undefined {
+  return SUMMIT_WIDE_TIERS.find((t) => t.id === id);
+}
 
 export const sponsors = {
   platinum: [

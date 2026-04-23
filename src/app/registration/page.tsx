@@ -62,7 +62,7 @@ const initialForm: FormData = {
   organisation: "", department: "", jobTitle: "", sector: "", orgWebsite: "",
   email: "", confirmEmail: "", phone: "", whatsapp: "", country: "", city: "",
   category: "", attendanceMode: "in-person", daysAttending: [],
-  requiresAccommodation: "yes", arrivalDate: "2026-09-20", departureDate: "2026-09-26",
+  requiresAccommodation: "yes", arrivalDate: "2026-09-21", departureDate: "2026-09-25",
   roomType: "", airportTransfer: "yes", specialNeeds: "",
   dietaryRequirements: "", sessionInterests: [], excursionPreference: "",
   applyInnovation: "no", startupName: "", startupStage: "", startupDescription: "",
@@ -303,7 +303,7 @@ export default function RegistrationPage() {
             </div>
             {feeAmount > 0 && (
               <div className="border-t border-white/10 pt-3 flex justify-between items-center">
-                <span className="text-theme-primary">Early Bird Fee (until 30 June 2026):</span>
+                <span className="text-theme-primary">Registration fee (flat rate):</span>
                 <span className="text-[#F5B730] text-2xl font-black">USD {feeAmount}</span>
               </div>
             )}
@@ -331,7 +331,7 @@ export default function RegistrationPage() {
           <h1 className="text-4xl sm:text-5xl font-black text-white mt-2 mb-2">
             Delegate <span className="gradient-text">Registration</span>
           </h1>
-          <p className="text-theme-primary">Zimbabwe TNF Global Summit 2026 · Victoria Falls, Zimbabwe · Early bird closes <strong className="text-white">30 June 2026</strong></p>
+          <p className="text-theme-primary">Zimbabwe TNF Global Summit 2026 · Victoria Falls, Zimbabwe · Flat registration fee <strong className="text-white">USD 1,500</strong> per delegate</p>
         </div>
       </section>
 
@@ -341,7 +341,7 @@ export default function RegistrationPage() {
         {form.category && (
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="glass-gold rounded-xl px-5 py-3 mb-6 flex items-center justify-between">
             <div className="text-sm text-theme-primary">{form.category}</div>
-            <div className="text-[#F5B730] font-black text-lg">USD {feeAmount} <span className="text-xs font-normal text-theme-primary">early bird</span></div>
+            <div className="text-[#F5B730] font-black text-lg">USD {feeAmount} <span className="text-xs font-normal text-theme-primary">flat fee</span></div>
           </motion.div>
         )}
 
@@ -554,7 +554,7 @@ export default function RegistrationPage() {
                   <div className="space-y-6">
                     <div className="mb-2">
                       <h2 className="text-xl font-black text-white">Attendance & Category</h2>
-                      <p className="text-sm mt-1 text-theme-primary">Select your delegate category. Your registration fee is determined by category and attendance mode.</p>
+                      <p className="text-sm mt-1 text-theme-primary">Select your delegate category for reporting and networking. The registration fee is a flat USD 1,500 per delegate (all categories).</p>
                     </div>
 
                     <Field label="Delegate Category" required>
@@ -569,7 +569,9 @@ export default function RegistrationPage() {
                             </div>
                             <div className="text-right flex-shrink-0 ml-4">
                               <div className="text-[#F5B730] font-black">USD {fee.earlyBird}</div>
-                              <div className="text-xs line-through text-theme-primary">USD {fee.standard}</div>
+                              {fee.standard !== fee.earlyBird && (
+                                <div className="text-xs line-through text-theme-primary">USD {fee.standard}</div>
+                              )}
                             </div>
                           </button>
                         ))}
@@ -783,16 +785,16 @@ export default function RegistrationPage() {
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-sm text-theme-primary">{form.category}</span>
                         </div>
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <div className="text-xs text-theme-primary">Early Bird Rate (valid until 30 June 2026)</div>
-                            <div className="text-[#F5B730] text-3xl font-black mt-1">USD {feeAmount}</div>
-                          </div>
-                          <div className="text-right">
-                            <div className="text-xs text-theme-primary">Standard Rate</div>
-                            <div className="text-theme-primary text-xl font-bold line-through">USD {selectedFeeRow.standard}</div>
-                            <div className="text-emerald-400 text-xs font-bold">Save USD {selectedFeeRow.standard - selectedFeeRow.early}</div>
-                          </div>
+                        <div>
+                          <div className="text-xs text-theme-primary">Flat delegate fee (all categories)</div>
+                          <div className="text-[#F5B730] text-3xl font-black mt-1">USD {feeAmount}</div>
+                          {selectedFeeRow.standard !== selectedFeeRow.early && (
+                            <div className="mt-2 text-right text-xs">
+                              <span className="text-theme-primary">Standard: </span>
+                              <span className="line-through text-theme-primary">USD {selectedFeeRow.standard}</span>
+                              <span className="text-emerald-400 font-bold ml-2">Save USD {selectedFeeRow.standard - selectedFeeRow.early}</span>
+                            </div>
+                          )}
                         </div>
                       </div>
                     )}
@@ -859,7 +861,7 @@ export default function RegistrationPage() {
                       </div>
                       {feeAmount > 0 && (
                         <div className="border-t border-white/10 pt-3 flex justify-between">
-                          <span className="text-sm text-theme-primary">Early Bird Fee:</span>
+                          <span className="text-sm text-theme-primary">Registration fee (flat):</span>
                           <span className="text-[#F5B730] font-black text-lg">USD {feeAmount}</span>
                         </div>
                       )}

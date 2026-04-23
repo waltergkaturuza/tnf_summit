@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import {
@@ -8,7 +9,12 @@ import {
   Clock, MessageSquare, User, Building, ChevronDown
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
-import { summitInfo } from "@/lib/data";
+import {
+  getThemeSponsorshipOffer,
+  getSummitWidePartnershipTier,
+  SPONSORSHIP_DISCOUNT_RATE,
+  summitInfo,
+} from "@/lib/data";
 
 function FadeIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef(null);
@@ -39,8 +45,9 @@ const contactHrefs = [
 ];
 const contactColors = ["#3B82F6", "#06B6D4", "#10B981", "#C9921A", "#8B5CF6", "#F59E0B"];
 
-export default function ContactPage() {
+function ContactPageContent() {
   const { t } = useLanguage();
+  const searchParams = useSearchParams();
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
@@ -49,6 +56,32 @@ export default function ContactPage() {
     name: "", email: "", phone: "", organisation: "",
     enquiryType: "", message: "",
   });
+
+  useEffect(() => {
+    const wide = searchParams.get("summitWide");
+    if (wide) {
+      const sw = getSummitWidePartnershipTier(wide);
+      setForm((prev) => {
+        if (prev.message.trim()) return prev;
+        const msg = sw
+          ? `I would like to enquire about a Summit-Wide Full Partnership: ${sw.title}. Investment band: ${sw.priceBand}. Passes & access: ${sw.passesAndAccess}.`
+          : `I would like to enquire about a Summit-Wide Full Partnership (tier: ${wide}).`;
+        return { ...prev, enquiryType: "Sponsorship / Partnership", message: msg };
+      });
+      return;
+    }
+    const theme = searchParams.get("theme");
+    if (!theme) return;
+    const offer = getThemeSponsorshipOffer(theme);
+    setForm((prev) => {
+      if (prev.message.trim()) return prev;
+      const pct = Math.round(SPONSORSHIP_DISCOUNT_RATE * 100);
+      const msg = offer
+        ? `I would like to enquire about sponsoring Spotlight Theme ${offer.themeId}: ${offer.themeLabel}. Package: ${offer.packageLabel}. List investment USD ${offer.listPriceUsd.toLocaleString()}; after ${pct}% reduction: USD ${offer.priceUsd.toLocaleString()}.`
+        : `I would like to enquire about sponsoring spotlight theme ${theme}.`;
+      return { ...prev, enquiryType: "Sponsorship / Partnership", message: msg };
+    });
+  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -303,5 +336,19 @@ export default function ContactPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ContactPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[var(--bg-primary)] pt-20 flex items-center justify-center text-theme-primary text-sm">
+          Loading…
+        </div>
+      }
+    >
+      <ContactPageContent />
+    </Suspense>
   );
 }

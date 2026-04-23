@@ -5,7 +5,13 @@ import { useRef, useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Star, Globe, CheckCircle, Mail, TrendingUp } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
-import { sponsors } from "@/lib/data";
+import {
+  sponsors,
+  themeSponsorshipOffers,
+  SPONSORSHIP_DISCOUNT_RATE,
+  summitWidePartnershipTiers,
+  summitWidePartnershipIntro,
+} from "@/lib/data";
 import { fetchPublicSponsorLogos, type MediaFile } from "@/lib/storage";
 
 function FadeIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
@@ -102,6 +108,9 @@ const whySponsor = [
 export default function SponsorsPage() {
   const { t } = useLanguage();
   const [logos, setLogos] = useState<MediaFile[]>([]);
+  const [sponsorThemeId, setSponsorThemeId] = useState(themeSponsorshipOffers[0]?.themeId ?? "A");
+
+  const selectedOffer = themeSponsorshipOffers.find((o) => o.themeId === sponsorThemeId) ?? themeSponsorshipOffers[0];
 
   useEffect(() => {
     fetchPublicSponsorLogos().then(setLogos).catch(() => {});
@@ -204,6 +213,135 @@ export default function SponsorsPage() {
         </div>
       </section>
 
+      {/* Summit-wide partnership — full-duration exhibition + visibility */}
+      <section className="py-20 section-gradient border-t border-white/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeIn>
+            <div className="text-center mb-10 max-w-3xl mx-auto">
+              <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Summit-wide partnership tiers</span>
+              <h2 className="text-3xl sm:text-4xl font-black text-white mt-3">Full summit partnership & exhibition</h2>
+              <p className="mt-4 text-sm text-theme-primary leading-relaxed">{summitWidePartnershipIntro}</p>
+            </div>
+          </FadeIn>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+            {summitWidePartnershipTiers.map((sw, i) => (
+              <FadeIn key={sw.id} delay={i * 0.05}>
+                <div
+                  className="flex flex-col h-full glass rounded-2xl overflow-hidden border border-white/10 card-hover"
+                  style={{ background: sw.panelBg }}
+                >
+                  <div
+                    className="px-4 py-3 text-center"
+                    style={{ backgroundColor: sw.headerColor }}
+                  >
+                    <div className="text-[10px] font-bold uppercase tracking-widest text-white/90">Full summit</div>
+                    <h3 className="text-base font-black text-white leading-tight mt-1">{sw.title}</h3>
+                    <div className="text-sm font-bold text-white/95 mt-2">{sw.priceBand}</div>
+                  </div>
+                  <div className="p-4 flex-1 flex flex-col">
+                    <p className="text-xs text-[#F5B730] font-semibold mb-3">Passes &amp; access</p>
+                    <p className="text-xs text-theme-primary leading-relaxed mb-4">{sw.passesAndAccess}</p>
+                    <p className="text-xs font-bold uppercase text-theme-primary mb-2">Key benefits</p>
+                    <ul className="space-y-2 text-xs text-theme-primary flex-1 list-disc pl-4 marker:text-white/30">
+                      {sw.benefits.map((b) => (
+                        <li key={b} className="leading-snug">
+                          {b}
+                        </li>
+                      ))}
+                    </ul>
+                    <Link
+                      href={`/contact?summitWide=${encodeURIComponent(sw.id)}`}
+                      className="mt-5 inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-xs font-bold text-white transition-opacity hover:opacity-90"
+                      style={{ backgroundColor: sw.headerColor }}
+                    >
+                      Enquire
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Theme-linked sponsorship (25% off list) */}
+      <section className="py-20 section-gradient">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeIn>
+            <div className="text-center mb-10">
+              <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Spotlight themes</span>
+              <h2 className="text-3xl sm:text-4xl font-black text-white mt-3">Sponsor a theme category</h2>
+              <p className="mt-3 max-w-2xl mx-auto text-theme-primary text-sm">
+                Each of the 14 spotlight themes is tied to a sponsorship package tier. Published list investments have been reduced by{" "}
+                {Math.round(SPONSORSHIP_DISCOUNT_RATE * 100)}% (e.g. USD 100,000 → USD 75,000). Choose your theme, review the package and investment, then contact the partnerships team.
+              </p>
+            </div>
+          </FadeIn>
+
+          <FadeIn delay={0.05}>
+            <div className="glass rounded-2xl p-6 sm:p-8 border border-[#C9921A]/20 mb-10">
+              <label className="block text-xs font-bold uppercase tracking-wide text-theme-primary mb-2">Select spotlight theme</label>
+              <div className="flex flex-col sm:flex-row gap-4 sm:items-end">
+                <div className="flex-1">
+                  <select
+                    value={sponsorThemeId}
+                    onChange={(e) => setSponsorThemeId(e.target.value)}
+                    className="w-full bg-[var(--bg-surface)] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#C9921A]/60"
+                  >
+                    {themeSponsorshipOffers.map((o) => (
+                      <option key={o.themeId} value={o.themeId}>
+                        {o.themeId} — {o.themeLabel}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {selectedOffer && (
+                  <div className="glass-gold rounded-xl px-5 py-3 text-center sm:text-left">
+                    <div className="text-xs text-theme-primary uppercase">Package</div>
+                    <div className="text-lg font-black text-white">{selectedOffer.packageLabel}</div>
+                    <div className="text-xs text-theme-primary mt-1">
+                      <span className="line-through opacity-70">USD {selectedOffer.listPriceUsd.toLocaleString()}</span>
+                      <span className="text-[#F5B730] font-bold ml-2">USD {selectedOffer.priceUsd.toLocaleString()}</span>
+                    </div>
+                  </div>
+                )}
+                {selectedOffer && (
+                  <Link
+                    href={`/contact?theme=${encodeURIComponent(selectedOffer.themeId)}`}
+                    className="inline-flex items-center justify-center gap-2 btn-gold px-6 py-3 rounded-xl text-sm font-bold shrink-0"
+                  >
+                    Enquire about this theme
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                )}
+              </div>
+            </div>
+          </FadeIn>
+
+          <div className="grid grid-cols-1 gap-2 max-h-[420px] overflow-y-auto pr-1">
+            {themeSponsorshipOffers.map((o) => (
+              <FadeIn key={o.themeId}>
+                <div
+                  className={`glass rounded-xl px-4 py-3 flex flex-wrap items-center justify-between gap-2 text-sm border ${
+                    o.themeId === sponsorThemeId ? "border-[#C9921A]/50 bg-[#C9921A]/5" : "border-white/5"
+                  }`}
+                >
+                  <div className="font-bold text-white w-8 shrink-0">{o.themeId}</div>
+                  <div className="flex-1 min-w-[200px] text-theme-primary">{o.themeLabel}</div>
+                  <div className="text-xs uppercase text-theme-primary w-24">{o.packageLabel}</div>
+                  <div className="text-right">
+                    <span className="line-through text-theme-primary text-xs mr-2">USD {o.listPriceUsd.toLocaleString()}</span>
+                    <span className="text-[#F5B730] font-black">USD {o.priceUsd.toLocaleString()}</span>
+                  </div>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Sponsorship Tiers */}
       <section className="py-20 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -211,6 +349,9 @@ export default function SponsorsPage() {
             <div className="text-center mb-14">
               <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Sponsorship</span>
               <h2 className="text-4xl font-black text-white mt-3">{t.sponsors.packagesTitle}</h2>
+              <p className="mt-3 max-w-xl mx-auto text-sm text-theme-primary">
+                Package benefits below align with the Platinum, Gold, Silver and Official Partner levels attached to each spotlight theme in the table above.
+              </p>
             </div>
           </FadeIn>
 
