@@ -1,5 +1,14 @@
 /**
- * iVeri Lite — Full Redirect form fields (Hosted Payment Page).
+ * iVeri Lite — Full Redirect to the Hosted Payment Page (not LiteBox).
+ *
+ * We intentionally do **not** use the LiteBox modal (`jquery.litebox.js`). Full Redirect
+ * posts the browser to `…/Lite/Authorise.aspx` and returns via success/fail/error URLs—
+ * reliable across ad blockers, corporate firewalls, and strict browser privacy settings.
+ * LiteBox is optional in iVeri’s guide; this integration matches the “primary” flow above.
+ *
+ * Field construction belongs in a trusted server route (`/api/payments/iveri/start`) so
+ * amount, application id, and trace cannot be tampered with from the client.
+ *
  * @see https://www.iveri.co.za/docs/lite-developer-guide-9
  */
 

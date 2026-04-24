@@ -1,3 +1,8 @@
+/**
+ * Starts iVeri **Full Redirect** (Hosted Payment Page). Returns `action` + `fields` for a
+ * client-side form POST to the gateway; all sensitive fields are built here, not from raw client input.
+ * Amount is derived from `category` + early-bird rules server-side.
+ */
 import { NextResponse } from "next/server";
 import { buildIveriLiteFormFields } from "@/lib/iveri";
 import { getRegistrationFeeUsd } from "@/lib/registrationFee";
