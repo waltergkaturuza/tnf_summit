@@ -7,18 +7,43 @@ import { NextRequest, NextResponse } from "next/server";
  */
 export const runtime = "nodejs";
 
+function copyRelevantFormFields(out: URLSearchParams, form: URLSearchParams) {
+  form.forEach((v, k) => {
+    if (typeof v !== "string" || v.length > 2000) return;
+    const lower = k.toLowerCase();
+    if (
+      lower.startsWith("lite_") ||
+      lower.startsWith("ecom_") ||
+      lower.startsWith("merchant") ||
+      k === "trace" ||
+      k === "kind"
+    ) {
+      out.set(k, v);
+    }
+  });
+}
+
+/**
+ * iVeri may send the browser to the "error" or another return URL, but the POST body
+ * is authoritative for approval. Prefer card status / result over `kind` in the URL.
+ */
+function normalizeIveriKind(out: URLSearchParams) {
+  const card =
+    out.get("Lite_Payment_Card_Status") ||
+    out.get("lite_payment_card_status") ||
+    out.get("Lite_Payment_CardStatus");
+  if (card === "0" || card === "00") {
+    out.set("kind", "success");
+  }
+}
+
 function mergeToPaymentCompleteQuery(requestUrl: URL, form: URLSearchParams | null): URLSearchParams {
   const out = new URLSearchParams();
   new URLSearchParams(requestUrl.search).forEach((v, k) => {
     out.set(k, v);
   });
   if (form) {
-    form.forEach((v, k) => {
-      if (typeof v !== "string" || v.length > 2000) return;
-      if (/^(Lite_|Ecom_|Merchant)/i.test(k) || k === "trace" || k === "kind") {
-        out.set(k, v);
-      }
-    });
+    copyRelevantFormFields(out, form);
   }
   let trace = out.get("trace");
   if (!trace && form) {
@@ -27,8 +52,9 @@ function mergeToPaymentCompleteQuery(requestUrl: URL, form: URLSearchParams | nu
   }
   if (!out.get("kind") && form) {
     const st = form.get("Lite_Payment_Card_Status") || form.get("lite_payment_card_status");
-    if (st === "0") out.set("kind", "success");
+    if (st === "0" || st === "00") out.set("kind", "success");
   }
+  normalizeIveriKind(out);
   return out;
 }
 

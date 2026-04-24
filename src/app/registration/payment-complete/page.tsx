@@ -17,7 +17,7 @@ function PaymentCompleteInner() {
   let message = "";
   let icon: ReactNode = <AlertTriangle className="w-12 h-12 text-amber-400" />;
 
-  if (kind === "success" || status === "0") {
+  if (kind === "success" || status === "0" || status === "00") {
     title = "Payment successful";
     message =
       "Thank you. Your card payment was submitted successfully. You will receive a confirmation by email. Keep your registration reference for your records.";
@@ -34,8 +34,16 @@ function PaymentCompleteInner() {
     icon = <RefreshCw className="w-12 h-12 text-amber-400" />;
   } else if (kind === "error") {
     title = "Payment could not be completed";
-    message =
-      "Something went wrong while starting or completing the payment. Please contact info@tnfzim.com with your registration reference, or try again.";
+    if (!status && !desc.trim()) {
+      message =
+        "The secure payment page may not have opened (e.g. blocked popup or network issue), or the session ended before payment. Try again from Registration, use another browser, or pay by bank transfer — we will invoice you by email. If this keeps happening, contact info@tnfzim.com with your registration reference below.";
+    } else {
+      message =
+        "Something went wrong while starting or completing the payment. Please contact info@tnfzim.com with your registration reference, or try again.";
+      if (desc.trim()) {
+        message += ` Details: ${desc}`;
+      }
+    }
     icon = <XCircle className="w-12 h-12 text-red-400" />;
   } else {
     title = "Payment status";
