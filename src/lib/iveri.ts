@@ -57,8 +57,9 @@ export function buildIveriLiteFormFields(input: BuildIveriLiteFormInput): { acti
   const amountStr = String(amountCents);
   const appBraced = formatIveriApplicationId(input.applicationIdRaw);
   const base = input.baseUrl.replace(/\/$/, "");
+  /** Use API route so iVeri's POST-back is accepted; route 303-redirects to the public page (GET-only). */
   const q = (kind: string) =>
-    `${base}/registration/payment-complete?kind=${encodeURIComponent(kind)}&trace=${encodeURIComponent(input.merchantTrace)}`;
+    `${base}/api/payments/iveri/return?kind=${encodeURIComponent(kind)}&trace=${encodeURIComponent(input.merchantTrace)}`;
 
   const fields: Record<string, string> = {
     Lite_Merchant_ApplicationId: appBraced,
