@@ -15,7 +15,9 @@
 import { createHash } from "crypto";
 
 const DEFAULT_GATEWAY = "https://portal.host.iveri.com/Lite/Authorise.aspx";
+/** Hash input for Lite_Transaction_Token; must use the same resource string as the hosted pay page. */
 const TOKEN_RESOURCE = "/Lite/Authorise.aspx";
+const DEFAULT_INFO_GATEWAY = "https://portal.host.iveri.com/Lite/AuthoriseInfo.aspx";
 
 export function formatIveriApplicationId(raw: string): string {
   const inner = raw.trim().replace(/^\{|\}$/g, "").toUpperCase();
@@ -29,6 +31,7 @@ function unixTimeUtcSeconds(): number {
 /**
  * When BackOffice has "Enable Token Verification" = Yes and a Lite Shared Secret.
  * Concat order: secretKey + time + resource + applicationId + amount + email
+ * The `email` string must be **byte-identical** to `Ecom_BillTo_Online_Email` on the submitted form.
  */
 export function generateLiteTransactionToken(
   secretKey: string,
@@ -66,9 +69,15 @@ export function buildIveriLiteFormFields(input: BuildIveriLiteFormInput): { acti
   const amountStr = String(amountCents);
   const appBraced = formatIveriApplicationId(input.applicationIdRaw);
   const base = input.baseUrl.replace(/\/$/, "");
+  const email = input.email.trim().slice(0, 40);
+  const merchantReference = input.merchantReference.trim().slice(0, 20);
+  const merchantTrace = input.merchantTrace.trim().slice(0, 64);
+  if (!email) {
+    throw new Error("Invalid email for payment");
+  }
   /** Use API route so iVeri's POST-back is accepted; route 303-redirects to the public page (GET-only). */
   const q = (kind: string) =>
-    `${base}/api/payments/iveri/return?kind=${encodeURIComponent(kind)}&trace=${encodeURIComponent(input.merchantTrace)}`;
+    `${base}/api/payments/iveri/return?kind=${encodeURIComponent(kind)}&trace=${encodeURIComponent(merchantTrace)}`;
 
   const fields: Record<string, string> = {
     Lite_Merchant_ApplicationId: appBraced,
@@ -81,12 +90,13 @@ export function buildIveriLiteFormFields(input: BuildIveriLiteFormInput): { acti
     Lite_Order_LineItems_Quantity_1: "1",
     Lite_Order_LineItems_Amount_1: amountStr,
     Lite_ConsumerOrderID_PreFix: "TNF",
-    Ecom_BillTo_Online_Email: input.email.slice(0, 40),
+    Ecom_BillTo_Online_Email: email,
     Ecom_Payment_Card_Protocols: "IVERI",
-    Ecom_ConsumerOrderID: "AUTOGENERATE",
+    /** Prefer a merchant-set order id; iVeri only recommends AUTOGENERATE if impossible. */
+    Ecom_ConsumerOrderID: merchantReference,
     Ecom_TransactionComplete: "False",
-    Lite_Merchant_Trace: input.merchantTrace.slice(0, 64),
-    MerchantReference: input.merchantReference.slice(0, 20),
+    Lite_Merchant_Trace: merchantTrace,
+    MerchantReference: merchantReference,
     Lite_Currency_AlphaCode: (input.currencyAlphaCode ?? "USD").slice(0, 3),
   };
 
@@ -95,7 +105,7 @@ export function buildIveriLiteFormFields(input: BuildIveriLiteFormInput): { acti
       input.sharedSecret.trim(),
       appBraced,
       amountStr,
-      input.email.trim()
+      email
     );
   }
 
@@ -107,4 +117,104 @@ export function buildIveriLiteFormFields(input: BuildIveriLiteFormInput): { acti
 
 export function defaultIveriGatewayUrl(): string {
   return process.env.IVERI_GATEWAY_URL?.trim() || DEFAULT_GATEWAY;
+}
+
+/** Post-payment transaction status (same host family as the Authorise payment URL). */
+export function defaultIveriAuthoriseInfoUrl(gatewayUrl?: string): string {
+  if (process.env.IVERI_AUTHORISE_INFO_URL?.trim()) {
+    return process.env.IVERI_AUTHORISE_INFO_URL.trim();
+  }
+  const g = (gatewayUrl || defaultIveriGatewayUrl()).trim();
+  if (g.includes("Authorise.aspx")) {
+    return g.replace(/Authorise\.aspx/gi, "AuthoriseInfo.aspx");
+  }
+  return DEFAULT_INFO_GATEWAY;
+}
+
+export type LiteAuthoriseInfoResult = {
+  ok: boolean;
+  httpStatus: number;
+  /** True if gateway reports an approved / successful card authorisation. */
+  approved: boolean;
+  cardStatus: string;
+  error?: string;
+  /** Truncated raw response for logs only (not for UI). */
+  rawExcerpt: string;
+};
+
+/**
+ * Server-side: query the hosted gateway for the latest status of a transaction.
+ * @see iVeri Lite — AuthoriseInfo.aspx; use with `Lite_Merchant_Trace` (or `OriginalMerchantTrace` per your acquirer).
+ */
+export async function queryLiteAuthoriseInfo(input: {
+  applicationIdRaw: string;
+  merchantTrace: string;
+  authoriseInfoUrl?: string;
+}): Promise<LiteAuthoriseInfoResult> {
+  const appBraced = formatIveriApplicationId(input.applicationIdRaw);
+  const url = (input.authoriseInfoUrl || defaultIveriAuthoriseInfoUrl()).trim();
+  const trace = input.merchantTrace.trim();
+  if (!trace) {
+    return {
+      ok: false,
+      httpStatus: 0,
+      approved: false,
+      cardStatus: "",
+      error: "Missing merchant trace",
+      rawExcerpt: "",
+    };
+  }
+  const body = new URLSearchParams({
+    Lite_Merchant_ApplicationId: appBraced,
+    /** Match the trace sent in the initial Lite authorisation. */
+    Lite_Merchant_Trace: trace,
+  });
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: body.toString(),
+      signal: AbortSignal.timeout(20_000),
+    });
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "fetch failed";
+    return { ok: false, httpStatus: 0, approved: false, cardStatus: "", error: msg, rawExcerpt: "" };
+  }
+  const text = await res.text();
+  const rawExcerpt = text.slice(0, 2000);
+  const parsed = parseAuthoriseInfoResponse(text);
+  return {
+    ok: res.ok,
+    httpStatus: res.status,
+    approved: parsed.approved,
+    cardStatus: parsed.cardStatus,
+    error: parsed.approved ? undefined : parsed.error,
+    rawExcerpt,
+  };
+}
+
+function parseAuthoriseInfoResponse(htmlOrText: string): {
+  approved: boolean;
+  cardStatus: string;
+  error?: string;
+} {
+  const t = htmlOrText;
+  const statusMatch =
+    /name=["']Lite_Payment_Card_Status["'][^>]*value=["'](\d*)["']/i.exec(t) ||
+    /Lite_Payment_Card_Status=(\d+)/i.exec(t) ||
+    /Lite_Payment_Card_Status[^;\s]+[;\s]+(\d+)/i.exec(t);
+  const st = (statusMatch?.[1] ?? "").trim();
+  if (st === "0" || st === "00") {
+    return { approved: true, cardStatus: st };
+  }
+  const desc =
+    /name=["']Lite_Result_Description["'][^>]*value=["']([^"']*)["']/i.exec(t)?.[1] ||
+    /Lite_Result_Description=([^&<\s]+)/i.exec(t)?.[1] ||
+    "";
+  return {
+    approved: false,
+    cardStatus: st,
+    error: desc ? desc.slice(0, 200) : st ? `Card status: ${st}` : "Could not parse AuthoriseInfo response",
+  };
 }

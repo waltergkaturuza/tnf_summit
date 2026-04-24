@@ -1,24 +1,41 @@
 import { NextRequest, NextResponse } from "next/server";
+import { queryLiteAuthoriseInfo } from "@/lib/iveri";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
 /**
  * Full Redirect return handler: iVeri often **POSTs** the result to the merchant URL.
- * Next.js `page.tsx` only allows GET, so this route accepts POST, merges gateway fields, optionally
- * marks the registration **paid** when `Lite_Payment_Card_Status` is approved, then 303-redirects
- * to `/registration/payment-complete`.
+ * Next.js `page.tsx` only allows GET, so this route accepts POST, merges fields, 303-redirects
+ * to `/registration/payment-complete`. We **do not** mark `paid` from the return payload alone —
+ * we confirm via **AuthoriseInfo.aspx** + `Lite_Merchant_Trace` first.
  */
 export const runtime = "nodejs";
 
-/** When the gateway reports an approved card, mark the registration row as paid (best-effort). */
-async function syncRegistrationPaidFromGateway(out: URLSearchParams) {
-  const card =
-    out.get("Lite_Payment_Card_Status") ||
-    out.get("lite_payment_card_status") ||
-    "";
-  if (card !== "0" && card !== "00") return;
-  const trace =
-    (out.get("trace") || out.get("Lite_Merchant_Trace") || "").trim();
+function getIveriApplicationIdFromEnv(): string {
+  return process.env.IVERI_APPLICATION_ID?.trim() || process.env.IVERI_APP_ID?.trim() || "";
+}
+
+/** After return, re-query the gateway; only then set `payment_status: paid` in Supabase. */
+async function verifyAuthoriseInfoAndMarkPaidIfApproved(out: URLSearchParams) {
+  const trace = (out.get("trace") || out.get("Lite_Merchant_Trace") || "").trim();
   if (!trace || !supabaseAdmin) return;
+  const appId = getIveriApplicationIdFromEnv();
+  if (!appId) {
+    console.error("[api/payments/iveri/return] IVERI_APPLICATION_ID missing; cannot run AuthoriseInfo verification");
+    return;
+  }
+  const info = await queryLiteAuthoriseInfo({
+    applicationIdRaw: appId,
+    merchantTrace: trace,
+  });
+  if (!info.approved) {
+    console.warn(
+      "[api/payments/iveri/return] AuthoriseInfo did not confirm success:",
+      info.error || info.cardStatus,
+      "http=",
+      info.httpStatus
+    );
+    return;
+  }
   const { error } = await supabaseAdmin
     .schema("tnf_summit")
     .from("registrations")
@@ -83,7 +100,7 @@ function mergeToPaymentCompleteQuery(requestUrl: URL, form: URLSearchParams | nu
 export async function GET(request: NextRequest) {
   const u = new URL(request.url);
   const out = mergeToPaymentCompleteQuery(u, null);
-  await syncRegistrationPaidFromGateway(out);
+  await verifyAuthoriseInfoAndMarkPaidIfApproved(out);
   return NextResponse.redirect(
     new URL(`${u.origin}/registration/payment-complete?${out.toString()}`),
     303
@@ -114,7 +131,7 @@ export async function POST(request: NextRequest) {
   }
 
   const out = mergeToPaymentCompleteQuery(u, form);
-  await syncRegistrationPaidFromGateway(out);
+  await verifyAuthoriseInfoAndMarkPaidIfApproved(out);
   const dest = new URL(`${u.origin}/registration/payment-complete?${out.toString()}`);
 
   if (dest.toString().length > 8000) {
