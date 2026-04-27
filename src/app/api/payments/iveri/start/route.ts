@@ -5,6 +5,7 @@
  */
 import { NextResponse } from "next/server";
 import { buildIveriLiteFormFields, getIveriApplicationId } from "@/lib/iveri";
+import { logIveriStartCert } from "@/lib/iveriCertLog";
 import { getRegistrationFeeUsd } from "@/lib/registrationFee";
 
 export const runtime = "nodejs";
@@ -61,6 +62,12 @@ export async function POST(req: Request) {
       merchantTrace: trackId.slice(0, 64),
       lineItemDescription: "Zimbabwe TNF Global Summit 2026 — Delegate registration",
       baseUrl,
+    });
+    logIveriStartCert({
+      trackId: trackId.trim(),
+      amountUsd: feeUsd,
+      category: category.trim(),
+      payerEmail: email.trim(),
     });
     return NextResponse.json({ action, fields });
   } catch (e: unknown) {

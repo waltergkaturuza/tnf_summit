@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getIveriApplicationId, queryLiteAuthoriseInfo } from "@/lib/iveri";
+import { getIveriApplicationId, queryLiteAuthoriseInfo, type LiteAuthoriseInfoResult } from "@/lib/iveri";
+import { logIveriReturnCert } from "@/lib/iveriCertLog";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
 /**
@@ -14,14 +15,21 @@ export const runtime = "nodejs";
  * After return, re-query the gateway; only then set `payment_status: paid` in Supabase.
  * If AuthoriseInfo does not confirm approval, we set `kind=error` and pass the gateway
  * message in `Lite_Result_Description` so the payment-complete page is not a vague failure.
+ * AuthoriseInfo runs whenever we have a trace + application id (even if Supabase is unset) for certification logs.
  */
-async function verifyAuthoriseInfoAndMarkPaidIfApproved(out: URLSearchParams) {
+async function verifyAuthoriseInfoAndMarkPaidIfApproved(out: URLSearchParams): Promise<{
+  authorise: LiteAuthoriseInfoResult | null;
+  dbMarkedPaid: boolean;
+  authoriseSkipped?: string;
+}> {
   const trace = (out.get("trace") || out.get("Lite_Merchant_Trace") || "").trim();
-  if (!trace || !supabaseAdmin) return;
+  if (!trace) {
+    return { authorise: null, dbMarkedPaid: false, authoriseSkipped: "missing_trace" };
+  }
   const appId = getIveriApplicationId();
   if (!appId) {
     console.error("[api/payments/iveri/return] IVERI_APPLICATION_ID missing; cannot run AuthoriseInfo verification");
-    return;
+    return { authorise: null, dbMarkedPaid: false, authoriseSkipped: "missing_application_id" };
   }
   const info = await queryLiteAuthoriseInfo({
     applicationIdRaw: appId,
@@ -42,7 +50,10 @@ async function verifyAuthoriseInfoAndMarkPaidIfApproved(out: URLSearchParams) {
     if (info.cardStatus) {
       out.set("Lite_Payment_Card_Status", info.cardStatus);
     }
-    return;
+    return { authorise: info, dbMarkedPaid: false };
+  }
+  if (!supabaseAdmin) {
+    return { authorise: info, dbMarkedPaid: false, authoriseSkipped: "no_supabase_admin" };
   }
   const { error } = await supabaseAdmin
     .schema("tnf_summit")
@@ -51,7 +62,9 @@ async function verifyAuthoriseInfoAndMarkPaidIfApproved(out: URLSearchParams) {
     .eq("track_id", trace);
   if (error) {
     console.error("[api/payments/iveri/return] payment_status update:", error.message);
+    return { authorise: info, dbMarkedPaid: false };
   }
+  return { authorise: info, dbMarkedPaid: true };
 }
 
 function copyRelevantFormFields(out: URLSearchParams, form: URLSearchParams) {
@@ -108,7 +121,8 @@ function mergeToPaymentCompleteQuery(requestUrl: URL, form: URLSearchParams | nu
 export async function GET(request: NextRequest) {
   const u = new URL(request.url);
   const out = mergeToPaymentCompleteQuery(u, null);
-  await verifyAuthoriseInfoAndMarkPaidIfApproved(out);
+  const v = await verifyAuthoriseInfoAndMarkPaidIfApproved(out);
+  logIveriReturnCert({ method: "GET", out, authorise: v.authorise, dbMarkedPaid: v.dbMarkedPaid, authoriseSkipped: v.authoriseSkipped });
   return NextResponse.redirect(
     new URL(`${u.origin}/registration/payment-complete?${out.toString()}`),
     303
@@ -139,7 +153,8 @@ export async function POST(request: NextRequest) {
   }
 
   const out = mergeToPaymentCompleteQuery(u, form);
-  await verifyAuthoriseInfoAndMarkPaidIfApproved(out);
+  const v = await verifyAuthoriseInfoAndMarkPaidIfApproved(out);
+  logIveriReturnCert({ method: "POST", out, authorise: v.authorise, dbMarkedPaid: v.dbMarkedPaid, authoriseSkipped: v.authoriseSkipped });
   const dest = new URL(`${u.origin}/registration/payment-complete?${out.toString()}`);
 
   if (dest.toString().length > 8000) {

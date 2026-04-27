@@ -27,7 +27,7 @@ const DEFAULT_INFO_GATEWAY = "https://portal.host.iveri.com/Lite/AuthoriseInfo.a
  *   Live:  98f2d5ee-bb8d-4997-87e2-55b8bc9674a2  → set IVERI_APPLICATION_ID on Vercel Production
  *   Test:  16fa0786-9cda-433b-be56-a00975d7667a  → Preview/sandbox, or this fallback
  *
- * Fallback is used only when IVERI_APPLICATION_ID / IVERI_APP_ID are unset.
+ * Fallback is used only when IVERI_APPLICATION_ID is unset.
  */
 const IVERI_SANDBOX_FALLBACK_APPLICATION_ID = "16fa0786-9cda-433b-be56-a00975d7667a";
 
@@ -38,14 +38,13 @@ export function formatIveriApplicationId(raw: string): string {
 
 /** Raw Application ID from env (no braces), else sandbox fallback. Use on payment start and AuthoriseInfo. */
 export function getIveriApplicationId(): string {
-  const fromEnv =
-    process.env.IVERI_APPLICATION_ID?.trim() || process.env.IVERI_APP_ID?.trim() || "";
+  const fromEnv = process.env.IVERI_APPLICATION_ID?.trim() || "";
   if (fromEnv) {
     return fromEnv;
   }
   if (process.env.NODE_ENV === "production") {
     console.warn(
-      "[iveri] IVERI_APPLICATION_ID / IVERI_APP_ID not set; using built-in sandbox Application ID. " +
+      "[iveri] IVERI_APPLICATION_ID not set; using built-in sandbox Application ID. " +
         "Set IVERI_APPLICATION_ID in the environment (e.g. Vercel) for live or explicit test config."
     );
   }
