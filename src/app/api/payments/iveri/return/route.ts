@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { queryLiteAuthoriseInfo } from "@/lib/iveri";
+import { getIveriApplicationId, queryLiteAuthoriseInfo } from "@/lib/iveri";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
 /**
@@ -10,15 +10,11 @@ import { supabaseAdmin } from "@/lib/supabaseAdmin";
  */
 export const runtime = "nodejs";
 
-function getIveriApplicationIdFromEnv(): string {
-  return process.env.IVERI_APPLICATION_ID?.trim() || process.env.IVERI_APP_ID?.trim() || "";
-}
-
 /** After return, re-query the gateway; only then set `payment_status: paid` in Supabase. */
 async function verifyAuthoriseInfoAndMarkPaidIfApproved(out: URLSearchParams) {
   const trace = (out.get("trace") || out.get("Lite_Merchant_Trace") || "").trim();
   if (!trace || !supabaseAdmin) return;
-  const appId = getIveriApplicationIdFromEnv();
+  const appId = getIveriApplicationId();
   if (!appId) {
     console.error("[api/payments/iveri/return] IVERI_APPLICATION_ID missing; cannot run AuthoriseInfo verification");
     return;

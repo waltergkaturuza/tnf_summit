@@ -4,11 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/run-next-build.cjs",
+    "build": "next build",
     "start": "next start",
-    "postbuild": "node scripts/standalone-assets.cjs",
-    "pack:cpanel": "node scripts/package-cpanel-deploy.cjs",
-    "start:cpanel": "node .next/standalone/server.js",
     "lint": "eslint"
   },
   "dependencies": {

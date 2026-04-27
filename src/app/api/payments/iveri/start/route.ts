@@ -4,7 +4,7 @@
  * Amount is derived from `category` + early-bird rules server-side.
  */
 import { NextResponse } from "next/server";
-import { buildIveriLiteFormFields } from "@/lib/iveri";
+import { buildIveriLiteFormFields, getIveriApplicationId } from "@/lib/iveri";
 import { getRegistrationFeeUsd } from "@/lib/registrationFee";
 
 export const runtime = "nodejs";
@@ -15,14 +15,6 @@ type Body = {
   category?: string;
   isEarlyBird?: boolean;
 };
-
-function getIveriApplicationId(): string {
-  return (
-    process.env.IVERI_APPLICATION_ID?.trim() ||
-    process.env.IVERI_APP_ID?.trim() ||
-    ""
-  );
-}
 
 export async function POST(req: Request) {
   const applicationId = getIveriApplicationId();

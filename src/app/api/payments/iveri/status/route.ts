@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { queryLiteAuthoriseInfo } from "@/lib/iveri";
+import { getIveriApplicationId, queryLiteAuthoriseInfo } from "@/lib/iveri";
 
 /**
  * Server-side: re-check a transaction on the iVeri AuthoriseInfo endpoint using `Lite_Merchant_Trace`
@@ -8,7 +8,7 @@ import { queryLiteAuthoriseInfo } from "@/lib/iveri";
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
-  const applicationId = process.env.IVERI_APPLICATION_ID?.trim() || process.env.IVERI_APP_ID?.trim();
+  const applicationId = getIveriApplicationId();
   if (!applicationId) {
     return NextResponse.json({ error: "Card payments are not configured." }, { status: 503 });
   }
