@@ -20,13 +20,13 @@ const TOKEN_RESOURCE = "/Lite/Authorise.aspx";
 const DEFAULT_INFO_GATEWAY = "https://portal.host.iveri.com/Lite/AuthoriseInfo.aspx";
 
 /**
- * iVeri **sandbox** Application ID (Lite test / pilot). Used only when
- * `IVERI_APPLICATION_ID` and `IVERI_APP_ID` are both unset in the environment
- * (e.g. Vercel misconfiguration). Set `IVERI_APPLICATION_ID` to your **live** ID in
- * Production when you go live; that value always wins.
+ * iVeri Back Office → Application Identifiers (copy-paste, must match exactly):
+ *   Live:  98f2d5ee-bb8d-4997-87e2-55b8bc9674a2  → set IVERI_APPLICATION_ID on Vercel Production
+ *   Test:  16fa0788-9cda-433b-be56-a00975d7667a  → Preview/sandbox, or this fallback
+ *
+ * Fallback is used only when IVERI_APPLICATION_ID / IVERI_APP_ID are unset.
  */
-/** Must match iVeri Back Office → Test Mode Application ID (Lite). */
-const IVERI_SANDBOX_FALLBACK_APPLICATION_ID = "16fe0786-9eda-433b-be56-a00975d7667a";
+const IVERI_SANDBOX_FALLBACK_APPLICATION_ID = "16fa0788-9cda-433b-be56-a00975d7667a";
 
 export function formatIveriApplicationId(raw: string): string {
   const inner = raw.trim().replace(/^\{|\}$/g, "").toUpperCase();
