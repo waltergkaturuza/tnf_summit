@@ -22,11 +22,11 @@ const DEFAULT_INFO_GATEWAY = "https://portal.host.iveri.com/Lite/AuthoriseInfo.a
 /**
  * iVeri Back Office → Application Identifiers (copy-paste, must match exactly):
  *   Live:  98f2d5ee-bb8d-4997-87e2-55b8bc9674a2  → set IVERI_APPLICATION_ID on Vercel Production
- *   Test:  16fa0788-9cda-433b-be56-a00975d7667a  → Preview/sandbox, or this fallback
+ *   Test:  16fa0786-9cda-433b-be56-a00975d7667a  → Preview/sandbox, or this fallback
  *
  * Fallback is used only when IVERI_APPLICATION_ID / IVERI_APP_ID are unset.
  */
-const IVERI_SANDBOX_FALLBACK_APPLICATION_ID = "16fa0788-9cda-433b-be56-a00975d7667a";
+const IVERI_SANDBOX_FALLBACK_APPLICATION_ID = "16fa0786-9cda-433b-be56-a00975d7667a";
 
 export function formatIveriApplicationId(raw: string): string {
   const inner = raw.trim().replace(/^\{|\}$/g, "").toUpperCase();
