@@ -9,6 +9,9 @@
  * Field construction belongs in a trusted server route (`/api/payments/iveri/start`) so
  * amount, application id, and trace cannot be tampered with from the client.
  *
+ * Application **Merchant City / Address / Country / Trading name / Technical email** in
+ * iVeri Back Office must match `summitInfo` merchant fields in `@/lib/data` (not set per-tx here).
+ *
  * @see https://www.iveri.co.za/docs/lite-developer-guide-9
  */
 

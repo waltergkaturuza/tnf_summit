@@ -16,8 +16,16 @@ export const summitInfo = {
   mainWebsite: "https://tnfzim.com",
   email: "info@tnfzim.com",
   emailAlt: "tnfsecretariat@gmail.com",
+  /** Gateway / iVeri technical contact (also set in iVeri Back Office → Application). */
+  merchantTechnicalEmail: "waltergkaturuza@gmail.com",
+  /** Trading / legal display name for payment profile and partnerships. */
+  tradingName: "TNF Zimbabwe",
+  /** Merchant locality — must match iVeri Application (City). */
+  merchantCity: "HARARE",
+  merchantCountry: "Zimbabwe",
   phone: "+263 242 783 030",
   phoneLocal: "0242 783 030",
+  /** Registered / trading address (Merchant Address in iVeri). */
   address: "East Wing Block 3 Celestial Park, Borrowdale, Harare, Zimbabwe",
   social: {
     twitter: "https://x.com/TNFZimbabwe",

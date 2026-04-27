@@ -8,7 +8,6 @@ import { useLanguage } from "@/context/LanguageContext";
 import {
   sponsors,
   themeSponsorshipOffers,
-  SPONSORSHIP_DISCOUNT_RATE,
   summitWidePartnershipTiers,
   summitWidePartnershipIntro,
 } from "@/lib/data";
@@ -274,8 +273,7 @@ export default function SponsorsPage() {
               <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Spotlight themes</span>
               <h2 className="text-3xl sm:text-4xl font-black text-white mt-3">Sponsor a theme category</h2>
               <p className="mt-3 max-w-2xl mx-auto text-theme-primary text-sm">
-                Each of the 14 spotlight themes is tied to a sponsorship package tier. Published list investments have been reduced by{" "}
-                {Math.round(SPONSORSHIP_DISCOUNT_RATE * 100)}% (e.g. USD 100,000 → USD 75,000). Choose your theme, review the package and investment, then contact the partnerships team.
+                Each of the 14 spotlight themes is tied to a sponsorship package tier. Investment amounts below are in USD (including the current promotional rate from published list prices). Choose your theme, review the package and investment, then contact the partnerships team.
               </p>
             </div>
           </FadeIn>
@@ -301,9 +299,8 @@ export default function SponsorsPage() {
                   <div className="glass-gold rounded-xl px-5 py-3 text-center sm:text-left">
                     <div className="text-xs text-theme-primary uppercase">Package</div>
                     <div className="text-lg font-black text-white">{selectedOffer.packageLabel}</div>
-                    <div className="text-xs text-theme-primary mt-1">
-                      <span className="line-through opacity-70">USD {selectedOffer.listPriceUsd.toLocaleString()}</span>
-                      <span className="text-[#F5B730] font-bold ml-2">USD {selectedOffer.priceUsd.toLocaleString()}</span>
+                    <div className="text-sm text-[#F5B730] font-bold mt-1">
+                      USD {selectedOffer.priceUsd.toLocaleString()}
                     </div>
                   </div>
                 )}
@@ -332,7 +329,6 @@ export default function SponsorsPage() {
                   <div className="flex-1 min-w-[200px] text-theme-primary">{o.themeLabel}</div>
                   <div className="text-xs uppercase text-theme-primary w-24">{o.packageLabel}</div>
                   <div className="text-right">
-                    <span className="line-through text-theme-primary text-xs mr-2">USD {o.listPriceUsd.toLocaleString()}</span>
                     <span className="text-[#F5B730] font-black">USD {o.priceUsd.toLocaleString()}</span>
                   </div>
                 </div>
