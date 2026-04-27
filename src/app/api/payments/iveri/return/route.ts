@@ -10,7 +10,11 @@ import { supabaseAdmin } from "@/lib/supabaseAdmin";
  */
 export const runtime = "nodejs";
 
-/** After return, re-query the gateway; only then set `payment_status: paid` in Supabase. */
+/**
+ * After return, re-query the gateway; only then set `payment_status: paid` in Supabase.
+ * If AuthoriseInfo does not confirm approval, we set `kind=error` and pass the gateway
+ * message in `Lite_Result_Description` so the payment-complete page is not a vague failure.
+ */
 async function verifyAuthoriseInfoAndMarkPaidIfApproved(out: URLSearchParams) {
   const trace = (out.get("trace") || out.get("Lite_Merchant_Trace") || "").trim();
   if (!trace || !supabaseAdmin) return;
@@ -30,6 +34,14 @@ async function verifyAuthoriseInfoAndMarkPaidIfApproved(out: URLSearchParams) {
       "http=",
       info.httpStatus
     );
+    out.set("kind", "error");
+    const err = (info.error || "").trim();
+    if (err && !out.get("Lite_Result_Description")?.trim() && !out.get("lite_result_description")?.trim()) {
+      out.set("Lite_Result_Description", err.slice(0, 500));
+    }
+    if (info.cardStatus) {
+      out.set("Lite_Payment_Card_Status", info.cardStatus);
+    }
     return;
   }
   const { error } = await supabaseAdmin
