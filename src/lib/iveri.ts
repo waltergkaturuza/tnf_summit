@@ -25,7 +25,8 @@ const DEFAULT_INFO_GATEWAY = "https://portal.host.iveri.com/Lite/AuthoriseInfo.a
  * (e.g. Vercel misconfiguration). Set `IVERI_APPLICATION_ID` to your **live** ID in
  * Production when you go live; that value always wins.
  */
-const IVERI_SANDBOX_FALLBACK_APPLICATION_ID = "16fa0786-9cda-433b-be56-a00975d7667a";
+/** Must match iVeri Back Office → Test Mode Application ID (Lite). */
+const IVERI_SANDBOX_FALLBACK_APPLICATION_ID = "16fe0786-9eda-433b-be56-a00975d7667a";
 
 export function formatIveriApplicationId(raw: string): string {
   const inner = raw.trim().replace(/^\{|\}$/g, "").toUpperCase();
