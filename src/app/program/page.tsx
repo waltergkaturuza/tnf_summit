@@ -163,8 +163,9 @@ export default function ProgramPage() {
 
   const currentDay = program[activeDay];
   const sessionTypes = t.program.sessionTypes;
+  const visibleDaySessions = currentDay.sessions.filter((s) => !s.hidden);
 
-  const filteredSessions = currentDay.sessions.filter((s) => {
+  const filteredSessions = visibleDaySessions.filter((s) => {
     const typeMatch = activeType === "all" || s.type === activeType;
     const roomMatch = activeRoom === "all" || s.room === activeRoom || s.room === "BOTH" || s.room === "ALL";
     const searchMatch =
@@ -247,7 +248,7 @@ export default function ProgramPage() {
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-[#C9921A] text-2xl font-black">{currentDay.sessions.length}</div>
+                <div className="text-[#C9921A] text-2xl font-black">{visibleDaySessions.length}</div>
                 <div className="text-xs text-theme-primary">{t.program.sessions}</div>
               </div>
             </div>

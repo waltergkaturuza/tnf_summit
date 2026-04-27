@@ -56,6 +56,8 @@ export type Session = {
   description?: string;
   speakers?: string[];
   isNew?: boolean;
+  /** Hide from /program while schedule details are TBC (set false when confirmed). */
+  hidden?: boolean;
 };
 
 export type DaySchedule = {
@@ -370,6 +372,7 @@ export const program: DaySchedule[] = [
         room: "A",
         type: "ceremony",
         themes: [],
+        hidden: true, // TBC — show again when line-up is confirmed: set false
         description: "Zimbabwe TNF Global Summit Inaugural Official Opening. Welcome — TNF Executive Director. Remarks from Employers, ZCTU. Addresses from AU Commission Chairperson, ILO Director-General. Keynote Address — H.E. President of the Republic of Zimbabwe. Official Declaration: Launch of the Zimbabwe TNF Global Summit as Africa's Premier Tripartite Convening Platform. Marimba ensemble and traditional Zimbabwean dance.",
       },
       {
