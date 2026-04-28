@@ -80,6 +80,8 @@ export type BuildIveriLiteFormInput = {
   lineItemDescription: string;
   baseUrl: string;
   currencyAlphaCode?: string;
+  /** Passed to `/api/payments/iveri/return` so the browser lands on the right thank-you page. */
+  returnNext?: "registration" | "donate";
 };
 
 export function buildIveriLiteFormFields(input: BuildIveriLiteFormInput): { action: string; fields: Record<string, string> } {
@@ -96,9 +98,12 @@ export function buildIveriLiteFormFields(input: BuildIveriLiteFormInput): { acti
   if (!email) {
     throw new Error("Invalid email for payment");
   }
+  const next = input.returnNext === "donate" ? "donate" : "registration";
   /** Use API route so iVeri's POST-back is accepted; route 303-redirects to the public page (GET-only). */
   const q = (kind: string) =>
-    `${base}/api/payments/iveri/return?kind=${encodeURIComponent(kind)}&trace=${encodeURIComponent(merchantTrace)}`;
+    `${base}/api/payments/iveri/return?kind=${encodeURIComponent(kind)}&trace=${encodeURIComponent(
+      merchantTrace
+    )}&next=${encodeURIComponent(next)}`;
 
   const fields: Record<string, string> = {
     Lite_Merchant_ApplicationId: appBraced,

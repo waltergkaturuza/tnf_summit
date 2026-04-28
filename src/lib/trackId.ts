@@ -28,3 +28,7 @@ export function generateRegistrationTrackId(): string {
 export function generateAbstractTrackId(): string {
   return `TNF-ABS-${ddmmyy()}-${randomSegment(6)}`;
 }
+
+export function generateDonationTrackId(): string {
+  return `TNF-DON-${ddmmyy()}-${randomSegment(6)}`;
+}

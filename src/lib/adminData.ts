@@ -1,6 +1,29 @@
 export type RegistrationStatus = "pending" | "confirmed" | "cancelled" | "waitlisted";
 export type AttendanceMode = "in-person" | "virtual" | "hybrid";
 
+export type DonationPaymentStatus = "unpaid" | "paid" | "failed" | "refunded" | "partial";
+
+export type Donation = {
+  id: string;
+  createdAt: string;
+  trackId: string;
+  donorType: "individual" | "organisation";
+  firstName: string;
+  lastName: string;
+  organisation: string | null;
+  email: string;
+  phone: string | null;
+  categoryKey: string;
+  categoryLabel: string;
+  amountUsd: number;
+  currency: string;
+  paymentMethod: string;
+  paymentStatus: DonationPaymentStatus;
+  message: string | null;
+  paidAt: string | null;
+  adminNotes: string | null;
+};
+
 export type Registration = {
   id: string;
   createdAt: string;

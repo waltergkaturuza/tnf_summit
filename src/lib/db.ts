@@ -5,7 +5,7 @@
 
 import { supabase } from "./supabase";
 import { generateRegistrationTrackId } from "./trackId";
-import type { Registration, ContactMessage, NewsletterSubscriber, Speaker, Update, Abstract, UpdateComment, UpdateReactionCounts, UpdateAttachment } from "./adminData";
+import type { Registration, Donation, ContactMessage, NewsletterSubscriber, Speaker, Update, Abstract, UpdateComment, UpdateReactionCounts, UpdateAttachment } from "./adminData";
 
 // ── Type map: JS camelCase → Postgres snake_case ──────────────────────────────
 
@@ -164,6 +164,36 @@ function rowToSubscriber(row: Record<string, unknown>): NewsletterSubscriber {
   };
 }
 
+function rowToDonation(row: Record<string, unknown>): Donation {
+  return {
+    id: row.id as string,
+    createdAt: row.created_at as string,
+    trackId: (row.track_id as string) ?? "",
+    donorType: (row.donor_type as Donation["donorType"]) ?? "individual",
+    firstName: (row.first_name as string) ?? "",
+    lastName: (row.last_name as string) ?? "",
+    organisation: (row.organisation as string) ?? null,
+    email: (row.email as string) ?? "",
+    phone: (row.phone as string) ?? null,
+    categoryKey: (row.category_key as string) ?? "",
+    categoryLabel: (row.category_label as string) ?? "",
+    amountUsd: Number(row.amount_usd) || 0,
+    currency: (row.currency as string) ?? "USD",
+    paymentMethod: (row.payment_method as string) ?? "",
+    paymentStatus: (row.payment_status as Donation["paymentStatus"]) ?? "unpaid",
+    message: (row.message as string) ?? null,
+    paidAt: (row.paid_at as string) ?? null,
+    adminNotes: (row.admin_notes as string) ?? null,
+  };
+}
+
+function donationToRow(d: Partial<Donation>) {
+  return {
+    admin_notes: d.adminNotes,
+    payment_status: d.paymentStatus,
+  };
+}
+
 // ── REGISTRATIONS ──────────────────────────────────────────────────────────────
 
 export async function fetchRegistrations(): Promise<Registration[]> {
@@ -206,6 +236,29 @@ export async function deleteRegistration(id: string): Promise<void> {
     .schema("tnf_summit")
     .from("registrations")
     .delete()
+    .eq("id", id);
+  if (error) throw error;
+}
+
+// ── DONATIONS ─────────────────────────────────────────────────────────────────
+
+export async function fetchDonations(): Promise<Donation[]> {
+  const { data, error } = await supabase
+    .schema("tnf_summit")
+    .from("donations")
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return (data ?? []).map(rowToDonation);
+}
+
+export async function updateDonation(id: string, updates: Partial<Donation>): Promise<void> {
+  const row = donationToRow(updates);
+  const clean = Object.fromEntries(Object.entries(row).filter(([, v]) => v !== undefined));
+  const { error } = await supabase
+    .schema("tnf_summit")
+    .from("donations")
+    .update(clean)
     .eq("id", id);
   if (error) throw error;
 }

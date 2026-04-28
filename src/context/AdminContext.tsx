@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
 import { supabase } from "@/lib/supabase";
 import * as db from "@/lib/db";
-import type { Registration, ContactMessage, NewsletterSubscriber, Speaker, Update, Abstract } from "@/lib/adminData";
+import type { Registration, Donation, ContactMessage, NewsletterSubscriber, Speaker, Update, Abstract } from "@/lib/adminData";
 
 type AdminContextType = {
   isAuthenticated: boolean;
@@ -16,6 +16,11 @@ type AdminContextType = {
   updateRegistration: (id: string, updates: Partial<Registration>) => Promise<void>;
   deleteRegistration: (id: string) => Promise<void>;
   refreshRegistrations: () => Promise<void>;
+
+  donations: Donation[];
+  donationsLoading: boolean;
+  updateDonation: (id: string, updates: Partial<Donation>) => Promise<void>;
+  refreshDonations: () => Promise<void>;
 
   messages: ContactMessage[];
   msgsLoading: boolean;
@@ -55,6 +60,9 @@ export function AdminProvider({ children }: { children: ReactNode }) {
 
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [regsLoading, setRegsLoading] = useState(false);
+
+  const [donations, setDonations] = useState<Donation[]>([]);
+  const [donationsLoading, setDonationsLoading] = useState(false);
 
   const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [msgsLoading, setMsgsLoading] = useState(false);
@@ -100,9 +108,15 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     setUpdatesLoading(true);
     setAbstractsLoading(true);
 
+    setDonationsLoading(true);
+
     try {
-      const [regs, msgs, subs, spks, upds, abs] = await Promise.all([
+      const [regs, dons, msgs, subs, spks, upds, abs] = await Promise.all([
         db.fetchRegistrations(),
+        db.fetchDonations().catch((e) => {
+          console.warn("Donations table may be missing; run Supabase migration:", e);
+          return [] as Donation[];
+        }),
         db.fetchMessages(),
         db.fetchSubscribers(),
         db.fetchSpeakers(),
@@ -110,6 +124,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
         db.fetchAbstracts(),
       ]);
       setRegistrations(regs);
+      setDonations(dons);
       setMessages(msgs);
       setSubscribers(subs);
       setSpeakers(spks);
@@ -119,6 +134,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       console.error("Failed to load admin data:", err);
     } finally {
       setRegsLoading(false);
+      setDonationsLoading(false);
       setMsgsLoading(false);
       setSubsLoading(false);
       setSpksLoading(false);
@@ -138,6 +154,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   const logout = async () => {
     await supabase.auth.signOut();
     setRegistrations([]);
+    setDonations([]);
     setMessages([]);
     setSubscribers([]);
     setSpeakers([]);
@@ -160,6 +177,17 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   const deleteRegistration = async (id: string) => {
     await db.deleteRegistration(id);
     setRegistrations(prev => prev.filter(r => r.id !== id));
+  };
+
+  const refreshDonations = useCallback(async () => {
+    setDonationsLoading(true);
+    try { setDonations(await db.fetchDonations()); }
+    finally { setDonationsLoading(false); }
+  }, []);
+
+  const updateDonation = async (id: string, updates: Partial<Donation>) => {
+    await db.updateDonation(id, updates);
+    setDonations(prev => prev.map(d => d.id === id ? { ...d, ...updates } : d));
   };
 
   // ── Messages ──────────────────────────────────────────────────────────────
@@ -281,6 +309,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     <AdminContext.Provider value={{
       isAuthenticated, authLoading, login, logout,
       registrations, regsLoading, updateRegistration, deleteRegistration, refreshRegistrations,
+      donations, donationsLoading, updateDonation, refreshDonations,
       messages, msgsLoading, updateMessage, deleteMessage,
       subscribers, subsLoading, updateSubscriber, deleteSubscriber,
       speakers, spksLoading, updateSpeaker, addSpeaker, deleteSpeaker,

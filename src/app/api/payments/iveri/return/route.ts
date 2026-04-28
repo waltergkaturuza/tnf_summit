@@ -56,6 +56,20 @@ async function verifyAuthoriseInfoAndMarkPaidIfApproved(out: URLSearchParams): P
   if (!supabaseAdmin) {
     return { authorise: info, dbMarkedPaid: false, authoriseSkipped: "no_supabase_admin" };
   }
+  const paidAt = new Date().toISOString();
+  if (trace.startsWith("TNF-DON-")) {
+    const { error } = await supabaseAdmin
+      .schema("tnf_summit")
+      .from("donations")
+      .update({ payment_status: "paid", paid_at: paidAt })
+      .eq("track_id", trace);
+    if (error) {
+      console.error("[api/payments/iveri/return] donations payment update:", error.message);
+      return { authorise: info, dbMarkedPaid: false };
+    }
+    return { authorise: info, dbMarkedPaid: true };
+  }
+
   const { error } = await supabaseAdmin
     .schema("tnf_summit")
     .from("registrations")
@@ -68,6 +82,10 @@ async function verifyAuthoriseInfoAndMarkPaidIfApproved(out: URLSearchParams): P
   return { authorise: info, dbMarkedPaid: true };
 }
 
+function paymentCompletePath(out: URLSearchParams): string {
+  return out.get("next") === "donate" ? "/donate/payment-complete" : "/registration/payment-complete";
+}
+
 function copyRelevantFormFields(out: URLSearchParams, form: URLSearchParams) {
   form.forEach((v, k) => {
     if (typeof v !== "string" || v.length > 2000) return;
@@ -77,7 +95,8 @@ function copyRelevantFormFields(out: URLSearchParams, form: URLSearchParams) {
       lower.startsWith("ecom_") ||
       lower.startsWith("merchant") ||
       k === "trace" ||
-      k === "kind"
+      k === "kind" ||
+      k === "next"
     ) {
       out.set(k, v);
     }
@@ -116,6 +135,8 @@ function mergeToPaymentCompleteQuery(requestUrl: URL, form: URLSearchParams | nu
     if (st === "0" || st === "00") out.set("kind", "success");
   }
   normalizeIveriKind(out);
+  const tr = (out.get("trace") || "").trim();
+  if (!out.get("next") && tr.startsWith("TNF-DON-")) out.set("next", "donate");
   return out;
 }
 
@@ -124,10 +145,8 @@ export async function GET(request: NextRequest) {
   const out = mergeToPaymentCompleteQuery(u, null);
   const v = await verifyAuthoriseInfoAndMarkPaidIfApproved(out);
   logIveriReturnCert({ method: "GET", out, authorise: v.authorise, dbMarkedPaid: v.dbMarkedPaid, authoriseSkipped: v.authoriseSkipped });
-  return NextResponse.redirect(
-    new URL(`${u.origin}/registration/payment-complete?${out.toString()}`),
-    303
-  );
+  const pathGet = paymentCompletePath(out);
+  return NextResponse.redirect(new URL(`${u.origin}${pathGet}?${out.toString()}`), 303);
 }
 
 export async function POST(request: NextRequest) {
@@ -156,12 +175,15 @@ export async function POST(request: NextRequest) {
   const out = mergeToPaymentCompleteQuery(u, form);
   const v = await verifyAuthoriseInfoAndMarkPaidIfApproved(out);
   logIveriReturnCert({ method: "POST", out, authorise: v.authorise, dbMarkedPaid: v.dbMarkedPaid, authoriseSkipped: v.authoriseSkipped });
-  const dest = new URL(`${u.origin}/registration/payment-complete?${out.toString()}`);
+  const pathPost = paymentCompletePath(out);
+  const dest = new URL(`${u.origin}${pathPost}?${out.toString()}`);
 
   if (dest.toString().length > 8000) {
     const m = new URLSearchParams();
     m.set("kind", out.get("kind") || "error");
     m.set("trace", out.get("trace") || "");
+    const nxt = out.get("next");
+    if (nxt) m.set("next", nxt);
     m.set(
       "Lite_Payment_Card_Status",
       out.get("Lite_Payment_Card_Status") || out.get("lite_payment_card_status") || ""
@@ -170,10 +192,7 @@ export async function POST(request: NextRequest) {
       "Lite_Result_Description",
       (out.get("Lite_Result_Description") || out.get("lite_result_description") || "").slice(0, 500)
     );
-    return NextResponse.redirect(
-      new URL(`${u.origin}/registration/payment-complete?${m.toString()}`),
-      303
-    );
+    return NextResponse.redirect(new URL(`${u.origin}${pathPost}?${m.toString()}`), 303);
   }
 
   return NextResponse.redirect(dest, 303);

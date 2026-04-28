@@ -37,6 +37,45 @@ export const summitInfo = {
   icon: "/tnf-icon.png",
 };
 
+/** Donation “themes” / categories for the short donate form (amount is free-text USD). */
+export type DonationCategoryDef = {
+  key: string;
+  label: string;
+  description?: string;
+};
+
+export const donationCategories: DonationCategoryDef[] = [
+  {
+    key: "general",
+    label: "General support",
+    description: "Unrestricted support for summit delivery and logistics",
+  },
+  {
+    key: "scholarship",
+    label: "Delegate scholarships",
+    description: "Help under-represented delegates attend",
+  },
+  {
+    key: "youth_innovation",
+    label: "Youth & innovation",
+    description: "Youth forum, pitch programmes, and innovation activities",
+  },
+  {
+    key: "media_comms",
+    label: "Media & communications",
+    description: "Coverage, storytelling, and summit communications",
+  },
+  {
+    key: "csr_partnership",
+    label: "CSR / partnership gift",
+    description: "Corporate or institutional contribution without a full sponsorship package",
+  },
+];
+
+export function getDonationCategoryLabel(key: string): string {
+  return donationCategories.find((c) => c.key === key)?.label ?? key;
+}
+
 export const themes = [
   { id: "A", label: "Africa's $3.4 Trillion Investment Frontier", color: "#EF4444", icon: "TrendingUp" },
   { id: "B", label: "AI, Automation & the Jobs of Tomorrow", color: "#3B82F6", icon: "Cpu" },

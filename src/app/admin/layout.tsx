@@ -10,7 +10,7 @@ import {
   LogOut, Menu, X, ChevronRight, Settings, Shield,
   UserCheck, MessageSquare, BarChart2, FolderOpen,
   CreditCard, Activity, UserCog, Newspaper, FileText,
-  Download,
+  Download, Heart,
 } from "lucide-react";
 import { useAdmin } from "@/context/AdminContext";
 
@@ -18,6 +18,7 @@ const navItems = [
   { href: "/admin/dashboard",     label: "Dashboard",     icon: LayoutDashboard, group: "" },
   { href: "/admin/analytics",     label: "Analytics",     icon: BarChart2,        group: "" },
   { href: "/admin/registrations", label: "Registrations", icon: Users,            group: "management" },
+  { href: "/admin/donations",    label: "Donations",    icon: Heart,              group: "management" },
   { href: "/admin/payments",      label: "Payments",      icon: CreditCard,       group: "management" },
   { href: "/admin/speakers",      label: "Speakers",      icon: Mic,              group: "content" },
   { href: "/admin/media",         label: "Media Library", icon: FolderOpen,       group: "content" },

@@ -7,24 +7,26 @@ import { supabaseAdmin } from "./supabaseAdmin";
  * Do not log full card numbers — gateway usually masks PAN in return fields; we never add PAN in code.
  */
 
-/** Store payload in `audit_trail` so Admin → Payments → Card activity can list interactions (Vercel logs are not queryable in-app). */
+/** Store payload in `audit_trail` so Admin → Payments → Card activity can list it.
+ * If `action` is a DB enum without `iveri_gateway_event`, we fall back to `payment_updated`
+ * (same row is still matched via `details._iveriCertEvent`). */
 function persistIveriGatewayAudit(details: Record<string, unknown>): void {
   if (!supabaseAdmin) return;
   const ref = String(details.registrationRef ?? "").trim();
-  void supabaseAdmin
-    .schema("tnf_summit")
-    .from("audit_trail")
-    .insert({
-      action: "iveri_gateway_event",
-      entity_type: "iveri_lite",
-      entity_id: ref.slice(0, 200) || "—",
-      entity_label: `${String(details.event ?? "iveri")} · ${ref.slice(0, 40) || "?"}`,
-      performed_by: "system",
-      details,
-    })
-    .then(({ error }) => {
-      if (error) console.warn("[iveri-cert] audit_trail insert failed:", error.message);
-    });
+  const row = {
+    entity_type: "iveri_lite",
+    entity_id: ref.slice(0, 200) || "—",
+    entity_label: `${String(details.event ?? "iveri")} · ${ref.slice(0, 40) || "?"}`,
+    performed_by: "system",
+    details: { _iveriCertEvent: true, ...details },
+  };
+  void (async () => {
+    const r1 = await supabaseAdmin!.schema("tnf_summit").from("audit_trail").insert({ ...row, action: "iveri_gateway_event" });
+    if (!r1.error) return;
+    console.warn("[iveri-cert] audit_trail insert (iveri_gateway_event):", r1.error.message);
+    const r2 = await supabaseAdmin!.schema("tnf_summit").from("audit_trail").insert({ ...row, action: "payment_updated" });
+    if (r2.error) console.warn("[iveri-cert] audit_trail insert (payment_updated fallback):", r2.error.message);
+  })();
 }
 
 function pick(out: URLSearchParams, ...keys: string[]): string {
@@ -40,6 +42,7 @@ export function logIveriStartCert(input: {
   amountUsd: number;
   category: string;
   payerEmail: string;
+  flow?: "registration" | "donation";
 }): void {
   const line = {
     event: "iveri_start" as const,
@@ -49,6 +52,7 @@ export function logIveriStartCert(input: {
     currency: "USD",
     category: input.category,
     email: input.payerEmail,
+    flow: input.flow ?? "registration",
     createdAt: new Date().toISOString(),
   };
   console.log(`[iveri-cert] ${JSON.stringify(line)}`);

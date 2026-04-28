@@ -145,18 +145,31 @@ export default function PaymentsPage() {
         invoiceOverdue: invs.filter(i => i.status === "overdue").length,
       }));
 
-      const { data: gwData } = await supabase.schema("tnf_summit").from("audit_trail")
-        .select("id,created_at,details")
-        .eq("action", "iveri_gateway_event")
+      const { data: gwData, error: gwErr } = await supabase.schema("tnf_summit").from("audit_trail")
+        .select("id,created_at,action,details")
         .order("created_at", { ascending: false })
-        .limit(500);
-      setGatewayLog(
-        (gwData ?? []).map((r: Record<string, unknown>) => ({
-          id: r.id as string,
-          createdAt: r.created_at as string,
-          details: (r.details && typeof r.details === "object" ? r.details : {}) as Record<string, unknown>,
-        }))
-      );
+        .limit(2000);
+
+      const isIveriGatewayRow = (r: Record<string, unknown>) => {
+        if (r.action === "iveri_gateway_event") return true;
+        const d = r.details;
+        return Boolean(d && typeof d === "object" && (d as Record<string, unknown>)._iveriCertEvent === true);
+      };
+
+      if (gwErr) {
+        console.error("[admin/payments] audit_trail (card activity):", gwErr.message);
+        setGatewayLog([]);
+      } else {
+        setGatewayLog(
+          (gwData ?? [])
+            .filter(isIveriGatewayRow)
+            .map((r: Record<string, unknown>) => ({
+              id: r.id as string,
+              createdAt: r.created_at as string,
+              details: (r.details && typeof r.details === "object" ? r.details : {}) as Record<string, unknown>,
+            }))
+        );
+      }
     } finally { setLoading(false); }
   }, []);
 
@@ -348,9 +361,11 @@ export default function PaymentsPage() {
           {activeTab === "gateway" && (
             <div className="space-y-3">
               <p className="text-slate-500 text-sm">
-                Each row is a saved <code className="text-[#C9921A]/90">iveri_start</code> or{" "}
-                <code className="text-[#C9921A]/90">iveri_return</code> step. Requires{" "}
-                <code className="text-slate-400">SUPABASE_SERVICE_ROLE_KEY</code> on the server so events can be stored. Expand a row for full JSON.
+                Each row is an <code className="text-[#C9921A]/90">iveri_start</code> or{" "}
+                <code className="text-[#C9921A]/90">iveri_return</code> payload stored in{" "}
+                <code className="text-slate-400">audit_trail</code> (marker <code className="text-slate-400">_iveriCertEvent</code>).
+                Server writes need a valid <code className="text-slate-400">SUPABASE_SERVICE_ROLE_KEY</code> in Vercel — if the Supabase integration shows{" "}
+                <strong className="text-amber-400/90">Needs Attention</strong>, reconnect or paste the service_role key from Supabase → Project Settings → API, then redeploy.
               </p>
               <div className="glass rounded-2xl border border-white/5 overflow-hidden">
                 <div className="overflow-x-auto">
