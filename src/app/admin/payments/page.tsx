@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, Fragment } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   CreditCard, DollarSign, TrendingUp, Clock, AlertCircle,
   CheckCircle, FileText, Search, Filter, RefreshCw,
-  Download, Plus, X, ChevronDown, Eye, Edit3, Send,
+  Download, Plus, X, ChevronDown, Eye, Edit3, Send, ChevronRight,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { logAudit } from "@/lib/audit";
@@ -23,6 +23,12 @@ type RegPayment = {
   paymentStatus: PaymentStatus;
   paymentMethod: string;
   createdAt: string;
+};
+
+type GatewayAuditRow = {
+  id: string;
+  createdAt: string;
+  details: Record<string, unknown>;
 };
 
 type Invoice = {
@@ -59,9 +65,11 @@ function usd(cents: number) { return `$${(cents / 100).toLocaleString(undefined,
 function fmtFee(amount: number) { return `$${amount.toLocaleString()}` ;}
 
 export default function PaymentsPage() {
-  const [activeTab, setActiveTab] = useState<"overview" | "payments" | "invoices">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "payments" | "invoices" | "gateway">("overview");
   const [payments, setPayments] = useState<RegPayment[]>([]);
   const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [gatewayLog, setGatewayLog] = useState<GatewayAuditRow[]>([]);
+  const [expandedGatewayId, setExpandedGatewayId] = useState<string | null>(null);
   const [loading, setLoading]   = useState(true);
   const [search, setSearch]     = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
@@ -136,6 +144,19 @@ export default function PaymentsPage() {
         invoicePaid:    invs.filter(i => i.status === "paid").length,
         invoiceOverdue: invs.filter(i => i.status === "overdue").length,
       }));
+
+      const { data: gwData } = await supabase.schema("tnf_summit").from("audit_trail")
+        .select("id,created_at,details")
+        .eq("action", "iveri_gateway_event")
+        .order("created_at", { ascending: false })
+        .limit(500);
+      setGatewayLog(
+        (gwData ?? []).map((r: Record<string, unknown>) => ({
+          id: r.id as string,
+          createdAt: r.created_at as string,
+          details: (r.details && typeof r.details === "object" ? r.details : {}) as Record<string, unknown>,
+        }))
+      );
     } finally { setLoading(false); }
   }, []);
 
@@ -183,6 +204,13 @@ export default function PaymentsPage() {
     i.payeeEmail.toLowerCase().includes(search.toLowerCase())
   );
 
+  const gatewaySearch = search.toLowerCase();
+  const filteredGateway = gatewayLog.filter((row) => {
+    if (!gatewaySearch) return true;
+    const blob = JSON.stringify(row.details).toLowerCase();
+    return blob.includes(gatewaySearch);
+  });
+
   return (
     <div className="space-y-6 pb-8">
       {/* Header */}
@@ -226,7 +254,7 @@ export default function PaymentsPage() {
 
       {/* Tabs */}
       <div className="flex gap-1 bg-white/3 rounded-xl p-1 w-fit">
-        {([["overview", "Overview"], ["payments", "Payments"], ["invoices", "Invoices"]] as const).map(([tab, label]) => (
+        {([["overview", "Overview"], ["payments", "Payments"], ["gateway", "Card activity"], ["invoices", "Invoices"]] as const).map(([tab, label]) => (
           <button key={tab} onClick={() => setActiveTab(tab)}
             className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
               activeTab === tab ? "bg-[#C9921A]/15 text-[#F5B730] border border-[#C9921A]/20" : "text-slate-400 hover:text-white"
@@ -241,8 +269,12 @@ export default function PaymentsPage() {
         <div className="flex items-center gap-3 flex-wrap">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-            <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search…"
-              className="w-60 bg-white/5 border border-white/10 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-[#C9921A]/50" />
+            <input
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder={activeTab === "gateway" ? "Search ref, email, status…" : "Search…"}
+              className="w-60 bg-white/5 border border-white/10 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-[#C9921A]/50"
+            />
           </div>
           {activeTab === "payments" && (
             <div className="relative">
@@ -308,6 +340,104 @@ export default function PaymentsPage() {
                     <span className="font-black text-lg" style={{ color: r.color }}>{r.value}</span>
                   </div>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {/* iVeri card gateway log (from audit_trail; same data as [iveri-cert] server logs) */}
+          {activeTab === "gateway" && (
+            <div className="space-y-3">
+              <p className="text-slate-500 text-sm">
+                Each row is a saved <code className="text-[#C9921A]/90">iveri_start</code> or{" "}
+                <code className="text-[#C9921A]/90">iveri_return</code> step. Requires{" "}
+                <code className="text-slate-400">SUPABASE_SERVICE_ROLE_KEY</code> on the server so events can be stored. Expand a row for full JSON.
+              </p>
+              <div className="glass rounded-2xl border border-white/5 overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-white/5">
+                        {["Time", "Step", "Registration ref", "Authorised", "DB → paid", "Note", ""].map((h) => (
+                          <th key={h} className="text-left px-4 py-3 text-slate-400 text-xs font-semibold uppercase tracking-wide whitespace-nowrap">
+                            {h}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredGateway.map((row) => {
+                        const d = row.details;
+                        const ev = String(d.event ?? "");
+                        const ref = String(d.registrationRef ?? "");
+                        const ok = d.success === true;
+                        const db = d.dbPaymentStatusUpdated === true;
+                        const desc = String(d.description ?? d.authoriseInfoError ?? "").slice(0, 80);
+                        return (
+                          <Fragment key={row.id}>
+                            <tr className="border-b border-white/3 hover:bg-white/2">
+                              <td className="px-4 py-3 text-slate-500 whitespace-nowrap">
+                                {new Date(row.createdAt).toLocaleString()}
+                              </td>
+                              <td className="px-4 py-3">
+                                <span className="text-[#C9921A] font-mono text-xs">{ev || "—"}</span>
+                              </td>
+                              <td className="px-4 py-3 text-white font-mono text-xs max-w-[140px] truncate" title={ref}>
+                                {ref || "—"}
+                              </td>
+                              <td className="px-4 py-3">
+                                {ev === "iveri_return" ? (
+                                  <span className={`text-xs font-bold ${ok ? "text-emerald-400" : "text-slate-500"}`}>
+                                    {ok ? "Yes" : "No"}
+                                  </span>
+                                ) : (
+                                  <span className="text-slate-600">—</span>
+                                )}
+                              </td>
+                              <td className="px-4 py-3">
+                                {ev === "iveri_return" ? (
+                                  <span className={`text-xs font-bold ${db ? "text-emerald-400" : "text-slate-500"}`}>
+                                    {db ? "Yes" : "No"}
+                                  </span>
+                                ) : (
+                                  <span className="text-slate-600">—</span>
+                                )}
+                              </td>
+                              <td className="px-4 py-3 text-slate-500 text-xs max-w-[200px] truncate" title={desc}>
+                                {desc || "—"}
+                              </td>
+                              <td className="px-4 py-3">
+                                <button
+                                  type="button"
+                                  onClick={() => setExpandedGatewayId((id) => (id === row.id ? null : row.id))}
+                                  className="p-1 text-slate-400 hover:text-[#C9921A]"
+                                  aria-label="Toggle details"
+                                >
+                                  <ChevronRight className={`w-4 h-4 transition-transform ${expandedGatewayId === row.id ? "rotate-90" : ""}`} />
+                                </button>
+                              </td>
+                            </tr>
+                            {expandedGatewayId === row.id && (
+                              <tr className="bg-black/20">
+                                <td colSpan={7} className="px-4 py-3">
+                                  <pre className="text-xs text-slate-400 overflow-x-auto max-h-64 overflow-y-auto font-mono p-3 rounded-lg bg-white/3 border border-white/5">
+                                    {JSON.stringify(d, null, 2)}
+                                  </pre>
+                                </td>
+                              </tr>
+                            )}
+                          </Fragment>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+                {filteredGateway.length === 0 && (
+                  <div className="text-center py-12 text-slate-600 text-sm">
+                    {gatewayLog.length === 0
+                      ? "No card gateway events yet. Complete a test payment with card — entries appear after /api/payments/iveri/start and /return run."
+                      : "No rows match your search."}
+                  </div>
+                )}
               </div>
             </div>
           )}

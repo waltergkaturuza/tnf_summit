@@ -1,10 +1,31 @@
 import type { LiteAuthoriseInfoResult } from "./iveri";
+import { supabaseAdmin } from "./supabaseAdmin";
 
 /**
  * One JSON object per line, prefix `[iveri-cert]` for Vercel / function log search.
  * Shape is inspired by typical acquirer certification exports (success, status, code, description, amounts).
  * Do not log full card numbers — gateway usually masks PAN in return fields; we never add PAN in code.
  */
+
+/** Store payload in `audit_trail` so Admin → Payments → Card activity can list interactions (Vercel logs are not queryable in-app). */
+function persistIveriGatewayAudit(details: Record<string, unknown>): void {
+  if (!supabaseAdmin) return;
+  const ref = String(details.registrationRef ?? "").trim();
+  void supabaseAdmin
+    .schema("tnf_summit")
+    .from("audit_trail")
+    .insert({
+      action: "iveri_gateway_event",
+      entity_type: "iveri_lite",
+      entity_id: ref.slice(0, 200) || "—",
+      entity_label: `${String(details.event ?? "iveri")} · ${ref.slice(0, 40) || "?"}`,
+      performed_by: "system",
+      details,
+    })
+    .then(({ error }) => {
+      if (error) console.warn("[iveri-cert] audit_trail insert failed:", error.message);
+    });
+}
 
 function pick(out: URLSearchParams, ...keys: string[]): string {
   for (const k of keys) {
@@ -31,6 +52,7 @@ export function logIveriStartCert(input: {
     createdAt: new Date().toISOString(),
   };
   console.log(`[iveri-cert] ${JSON.stringify(line)}`);
+  persistIveriGatewayAudit(line);
 }
 
 export function logIveriReturnCert(input: {
@@ -91,4 +113,5 @@ export function logIveriReturnCert(input: {
   }
 
   console.log(`[iveri-cert] ${JSON.stringify(line)}`);
+  persistIveriGatewayAudit(line);
 }

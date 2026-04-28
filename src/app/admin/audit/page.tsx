@@ -53,6 +53,7 @@ const ACTION_CONFIG: Record<string, { icon: React.ElementType; color: string; la
   attachment_created:     { icon: Paperclip, color: "#0EA5E9", label: "Attachment Added" },
   attachment_deleted:     { icon: Trash2,    color: "#EF4444", label: "Attachment Removed" },
   resource_download:      { icon: Download,  color: "#8B5CF6", label: "Resource Downloaded" },
+  iveri_gateway_event:    { icon: CreditCard, color: "#C9921A", label: "iVeri gateway (card)" },
 };
 
 function getActionCfg(action: string) {

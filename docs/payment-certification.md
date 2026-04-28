@@ -8,6 +8,8 @@ Each hosted payment run emits **one line per API step** in Vercel (or local term
 2. Filter by: **`[iveri-cert]`** (or export log range after test day).
 3. Lines are valid JSON after the prefix; you can concatenate into an array for submission.
 
+The same payload is also stored in Supabase **`audit_trail`** with action **`iveri_gateway_event`** (when `SUPABASE_SERVICE_ROLE_KEY` is set on the server). View it under **Admin → Payments & Invoices → Card activity**.
+
 ## Events
 
 | `event`        | When |

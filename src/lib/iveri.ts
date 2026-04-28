@@ -42,12 +42,6 @@ export function getIveriApplicationId(): string {
   if (fromEnv) {
     return fromEnv;
   }
-  if (process.env.NODE_ENV === "production") {
-    console.warn(
-      "[iveri] IVERI_APPLICATION_ID not set; using built-in sandbox Application ID. " +
-        "Set IVERI_APPLICATION_ID in the environment (e.g. Vercel) for live or explicit test config."
-    );
-  }
   return IVERI_SANDBOX_FALLBACK_APPLICATION_ID;
 }
 

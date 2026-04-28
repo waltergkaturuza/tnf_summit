@@ -9,6 +9,7 @@ export type AuditAction =
   | "subscriber_added" | "subscriber_removed"
   | "media_uploaded" | "media_deleted"
   | "invoice_generated" | "invoice_marked_paid" | "payment_updated"
+  | "iveri_gateway_event"
   | "settings_updated" | "user_created" | "user_updated" | "user_deleted";
 
 export async function logAudit(
