@@ -49,3 +49,6 @@ next-env.d.ts
 # cPanel offline deploy zip (from npm run pack:cpanel)
 cpanel-standalone-upload.zip
 
+# Supabase CLI (local link state, temp files)
+supabase/.temp/
+supabase/.branches/

@@ -1,0 +1,1 @@
+-- Optional seed data for `supabase db reset` (local). Remote deploy uses migrations only.

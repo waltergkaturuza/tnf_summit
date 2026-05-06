@@ -229,10 +229,15 @@ export default function RegistrationPage() {
             }),
           });
           const data = (await res.json().catch(() => ({}))) as {
+            redirectUrl?: string;
             action?: string;
             fields?: Record<string, string>;
             error?: string;
           };
+          if (res.ok && data.redirectUrl) {
+            window.location.href = data.redirectUrl;
+            return;
+          }
           if (res.ok && data.action && data.fields) {
             const formEl = document.createElement("form");
             formEl.method = "POST";
@@ -283,7 +288,7 @@ export default function RegistrationPage() {
           <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[var(--bg-primary)]/95 backdrop-blur-sm">
             <div className="w-12 h-12 border-2 border-[#C9921A] border-t-transparent rounded-full animate-spin mb-4" />
             <p className="text-white font-semibold">Redirecting to secure card payment…</p>
-            <p className="text-sm text-theme-primary mt-2 max-w-sm text-center">You are being sent to our payment partner (iVeri). Do not close this window.</p>
+            <p className="text-sm text-theme-primary mt-2 max-w-sm text-center">You are being sent to our payment partner. Do not close this window.</p>
           </div>
         )}
         <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="text-center max-w-3xl w-full">

@@ -122,10 +122,15 @@ export default function DonatePage() {
         body: JSON.stringify({ trackId }),
       });
       const payData = (await payRes.json().catch(() => ({}))) as {
+        redirectUrl?: string;
         action?: string;
         fields?: Record<string, string>;
         error?: string;
       };
+      if (payRes.ok && payData.redirectUrl) {
+        window.location.href = payData.redirectUrl;
+        return;
+      }
       if (payRes.ok && payData.action && payData.fields) {
         const formEl = document.createElement("form");
         formEl.method = "POST";
@@ -157,7 +162,7 @@ export default function DonatePage() {
         <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[var(--bg-primary)]/95 backdrop-blur-sm">
           <div className="w-12 h-12 border-2 border-[#d49a26] border-t-transparent rounded-full animate-spin mb-4" />
           <p className="text-white font-semibold">Redirecting to secure card payment…</p>
-          <p className="text-sm text-theme-primary mt-2 max-w-sm text-center">You are being sent to our payment partner (iVeri). Do not close this window.</p>
+          <p className="text-sm text-theme-primary mt-2 max-w-sm text-center">You are being sent to our payment partner. Do not close this window.</p>
         </div>
       )}
 

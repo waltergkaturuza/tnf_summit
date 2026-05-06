@@ -1,8 +1,8 @@
 /**
- * Starts iVeri **Full Redirect** (Hosted Payment Page). Returns `action` + `fields` for a
- * client-side form POST to the gateway; sensitive fields are built here.
- * Registration: amount from category + early-bird rules.
- * Donation: amount and email loaded from `donations` by `track_id` (TNF-DON-*).
+ * Payment starter endpoint.
+ * - Active provider can be switched via PAYMENT_PROVIDER (`zikimall` | `iveri`).
+ * - iVeri flow remains fully implemented for production go-live.
+ * - ZikiMall flow redirects users to the hosted biller page for interim use.
  */
 import { NextResponse } from "next/server";
 import { buildIveriLiteFormFields, getIveriApplicationId } from "@/lib/iveri";
@@ -24,9 +24,33 @@ function isDonationTrack(id: string): boolean {
   return id.trim().startsWith("TNF-DON-");
 }
 
+function activeProvider(): "zikimall" | "iveri" {
+  const raw = (process.env.PAYMENT_PROVIDER || "zikimall").trim().toLowerCase();
+  return raw === "iveri" ? "iveri" : "zikimall";
+}
+
+function buildZikiMallRedirect(args: {
+  trackId: string;
+  email: string;
+  amountUsd: number;
+  category: string;
+  flow: "registration" | "donation";
+}): string {
+  const base = process.env.ZIKIMALL_PAYMENT_URL?.trim() || "https://zikimall.com/biller?bId=2484";
+  const u = new URL(base);
+  // Non-breaking metadata for reconciliation; ZikiMall can ignore unknown params.
+  u.searchParams.set("ref", args.trackId);
+  u.searchParams.set("email", args.email);
+  u.searchParams.set("amount", String(Math.round(args.amountUsd * 100) / 100));
+  u.searchParams.set("category", args.category);
+  u.searchParams.set("flow", args.flow);
+  return u.toString();
+}
+
 export async function POST(req: Request) {
-  const applicationId = getIveriApplicationId();
-  if (!applicationId) {
+  const provider = activeProvider();
+  const applicationId = provider === "iveri" ? getIveriApplicationId() : "standby";
+  if (provider === "iveri" && !applicationId) {
     return NextResponse.json({ error: "Card payments are not configured." }, { status: 503 });
   }
 
@@ -83,6 +107,17 @@ export async function POST(req: Request) {
       const catLabel = getDonationCategoryLabel(catKey);
       const lineItemDescription = `Zimbabwe TNF Global Summit 2026 — Donation (${catLabel})`.slice(0, 255);
 
+      if (provider === "zikimall") {
+        const redirectUrl = buildZikiMallRedirect({
+          trackId: trackId.trim(),
+          email: payerEmail,
+          amountUsd,
+          category: catKey,
+          flow: "donation",
+        });
+        return NextResponse.json({ provider, redirectUrl });
+      }
+
       const { action, fields } = buildIveriLiteFormFields({
         applicationIdRaw: applicationId,
         gatewayUrl: process.env.IVERI_GATEWAY_URL,
@@ -102,7 +137,7 @@ export async function POST(req: Request) {
         payerEmail,
         flow: "donation",
       });
-      return NextResponse.json({ action, fields });
+      return NextResponse.json({ provider, action, fields });
     }
 
     if (!email || !category) {
@@ -112,6 +147,17 @@ export async function POST(req: Request) {
     const feeUsd = getRegistrationFeeUsd(category, isEarlyBird);
     if (feeUsd == null || feeUsd <= 0) {
       return NextResponse.json({ error: "No payable fee for this category" }, { status: 400 });
+    }
+
+    if (provider === "zikimall") {
+      const redirectUrl = buildZikiMallRedirect({
+        trackId: trackId.trim(),
+        email: email.trim(),
+        amountUsd: feeUsd,
+        category: category.trim(),
+        flow: "registration",
+      });
+      return NextResponse.json({ provider, redirectUrl });
     }
 
     const { action, fields } = buildIveriLiteFormFields({
@@ -133,7 +179,7 @@ export async function POST(req: Request) {
       payerEmail: email.trim(),
       flow: "registration",
     });
-    return NextResponse.json({ action, fields });
+    return NextResponse.json({ provider, action, fields });
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : "Payment setup failed";
     return NextResponse.json({ error: msg }, { status: 400 });
