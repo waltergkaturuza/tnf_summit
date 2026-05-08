@@ -26,7 +26,7 @@ function isDonationTrack(id: string): boolean {
 }
 
 function activeProvider(): "zikimall" | "iveri" {
-  const raw = (process.env.PAYMENT_PROVIDER || "zikimall").trim().toLowerCase();
+  const raw = (process.env.PAYMENT_PROVIDER || "iveri").trim().toLowerCase();
   return raw === "iveri" ? "iveri" : "zikimall";
 }
 
