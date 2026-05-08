@@ -350,6 +350,15 @@ export default function RegistrationPage() {
       </section>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+        <div className="mb-6 rounded-2xl border border-[#C9921A]/30 bg-[#C9921A]/10 px-5 py-4">
+          <p className="text-sm text-slate-200">
+            Already registered and have a reference? If payment failed earlier, use{" "}
+            <a href="/pay-by-reference" className="font-bold text-[#F5B730] underline underline-offset-4">
+              Pay by Reference
+            </a>{" "}
+            to restart payment with your existing track ID (registration or donation). No need to complete the registration form again.
+          </p>
+        </div>
 
         {/* Fee summary bar */}
         {form.category && (

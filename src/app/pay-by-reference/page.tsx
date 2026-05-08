@@ -15,46 +15,16 @@ export default function PayByReferencePage() {
     setError("");
     setSubmitting(true);
     try {
-      const res = await fetch("/api/payments/iveri/start", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          trackId: trackId.trim().toUpperCase(),
-          email: email.trim(),
-        }),
-      });
-      const data = (await res.json().catch(() => ({}))) as {
-        redirectUrl?: string;
-        action?: string;
-        fields?: Record<string, string>;
-        error?: string;
-      };
-
-      if (res.ok && data.redirectUrl) {
-        window.location.href = data.redirectUrl;
-        return;
-      }
-      if (res.ok && data.action && data.fields) {
-        const formEl = document.createElement("form");
-        formEl.method = "POST";
-        formEl.action = data.action;
-        formEl.style.display = "none";
-        for (const [name, value] of Object.entries(data.fields)) {
-          const input = document.createElement("input");
-          input.type = "hidden";
-          input.name = name;
-          input.value = value;
-          formEl.appendChild(input);
-        }
-        document.body.appendChild(formEl);
-        formEl.submit();
-        return;
-      }
-      setError(data.error || "Could not restart payment. Check your details and try again.");
+      const u = new URL("/api/payments/iveri/start", window.location.origin);
+      u.searchParams.set("trackId", trackId.trim().toUpperCase());
+      u.searchParams.set("email", email.trim());
+      window.location.href = u.toString();
+      return;
     } catch {
       setError("Could not connect to the payment service. Please try again.");
-    } finally {
       setSubmitting(false);
+    } finally {
+      // redirect path above leaves page; keep submitting state on success
     }
   }
 

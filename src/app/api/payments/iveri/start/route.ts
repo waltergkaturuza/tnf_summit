@@ -309,5 +309,32 @@ export async function GET(req: Request) {
   if (payload.redirectUrl) {
     return NextResponse.redirect(payload.redirectUrl, 302);
   }
-  return NextResponse.json(payload, { status: 200 });
+  if (payload.action && payload.fields) {
+    const inputs = Object.entries(payload.fields)
+      .map(
+        ([k, v]) =>
+          `<input type="hidden" name="${escapeHtml(k)}" value="${escapeHtml(String(v))}" />`
+      )
+      .join("");
+    const html = `<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Redirecting to secure payment…</title>
+  </head>
+  <body>
+    <p style="font-family:system-ui,sans-serif;padding:16px;">Redirecting to secure payment page…</p>
+    <form id="pay" method="POST" action="${escapeHtml(payload.action)}">
+      ${inputs}
+    </form>
+    <script>document.getElementById('pay')?.submit();</script>
+  </body>
+</html>`;
+    return new NextResponse(html, {
+      status: 200,
+      headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" },
+    });
+  }
+  return NextResponse.json({ error: "Payment restart payload missing." }, { status: 500 });
 }

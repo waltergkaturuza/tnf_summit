@@ -64,43 +64,14 @@ function PaymentCompleteInner() {
     setRetryError("");
     setRetrying(true);
     try {
-      const res = await fetch("/api/payments/iveri/start", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ trackId: trace, email: payerEmail || undefined }),
-      });
-      const data = (await res.json().catch(() => ({}))) as {
-        redirectUrl?: string;
-        action?: string;
-        fields?: Record<string, string>;
-        error?: string;
-      };
-
-      if (res.ok && data.redirectUrl) {
-        window.location.href = data.redirectUrl;
-        return;
-      }
-      if (res.ok && data.action && data.fields) {
-        const formEl = document.createElement("form");
-        formEl.method = "POST";
-        formEl.action = data.action;
-        formEl.style.display = "none";
-        for (const [name, value] of Object.entries(data.fields)) {
-          const input = document.createElement("input");
-          input.type = "hidden";
-          input.name = name;
-          input.value = value;
-          formEl.appendChild(input);
-        }
-        document.body.appendChild(formEl);
-        formEl.submit();
-        return;
-      }
-      setRetryError(data.error || "Could not restart card payment. Please try again in a moment.");
+      const u = new URL("/api/payments/iveri/start", window.location.origin);
+      u.searchParams.set("trackId", trace);
+      if (payerEmail) u.searchParams.set("email", payerEmail);
+      window.location.href = u.toString();
+      return;
     } catch {
-      setRetryError("Could not connect to payment service. Please check your internet and try again.");
-    } finally {
       setRetrying(false);
+      setRetryError("Could not open payment service. Please check your internet and try again.");
     }
   }
 
