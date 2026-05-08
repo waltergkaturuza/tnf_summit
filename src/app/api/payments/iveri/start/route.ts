@@ -330,12 +330,19 @@ export async function GET(req: Request) {
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Redirecting to secure payment…</title>
   </head>
-  <body>
-    <p style="font-family:system-ui,sans-serif;padding:16px;">Redirecting to secure payment page…</p>
+  <body style="font-family:system-ui,sans-serif;background:#0a1f3d;color:#fff;">
+    <div style="max-width:560px;margin:40px auto;padding:20px;border:1px solid rgba(255,255,255,.15);border-radius:14px;background:rgba(255,255,255,.03);">
+      <h2 style="margin:0 0 8px 0;">Redirecting to secure payment…</h2>
+      <p style="opacity:.9;line-height:1.5;">If you are not automatically redirected, tap the button below.</p>
     <form id="pay" method="POST" action="${escapeHtml(payload.action)}">
       ${inputs}
+        <button type="submit" style="margin-top:10px;background:#c9921a;color:#0a1628;font-weight:700;border:0;border-radius:10px;padding:10px 14px;cursor:pointer;">
+          Continue to Secure Payment
+        </button>
     </form>
-    <script>document.getElementById('pay')?.submit();</script>
+      <p style="margin-top:12px;font-size:12px;opacity:.7;">You will be taken to our payment partner (iVeri).</p>
+    </div>
+    <script>setTimeout(function(){ document.getElementById('pay')?.submit(); }, 100);</script>
   </body>
 </html>`;
     return new NextResponse(html, {
