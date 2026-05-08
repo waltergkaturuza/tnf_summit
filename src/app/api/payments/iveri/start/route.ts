@@ -334,6 +334,7 @@ export async function GET(req: Request) {
     <div style="max-width:560px;margin:40px auto;padding:20px;border:1px solid rgba(255,255,255,.15);border-radius:14px;background:rgba(255,255,255,.03);">
       <h2 style="margin:0 0 8px 0;">Redirecting to secure payment…</h2>
       <p style="opacity:.9;line-height:1.5;">If you are not automatically redirected, tap the button below.</p>
+      <p id="count" style="font-size:13px;opacity:.8;margin:6px 0 10px 0;">Auto-redirect in 6 seconds…</p>
     <form id="pay" method="POST" action="${escapeHtml(payload.action)}">
       ${inputs}
         <button type="submit" style="margin-top:10px;background:#c9921a;color:#0a1628;font-weight:700;border:0;border-radius:10px;padding:10px 14px;cursor:pointer;">
@@ -342,7 +343,21 @@ export async function GET(req: Request) {
     </form>
       <p style="margin-top:12px;font-size:12px;opacity:.7;">You will be taken to our payment partner (iVeri).</p>
     </div>
-    <script>setTimeout(function(){ document.getElementById('pay')?.submit(); }, 100);</script>
+    <script>
+      (function () {
+        var secs = 6;
+        var countEl = document.getElementById('count');
+        var timer = setInterval(function () {
+          secs -= 1;
+          if (secs <= 0) {
+            clearInterval(timer);
+            document.getElementById('pay')?.submit();
+            return;
+          }
+          if (countEl) countEl.textContent = 'Auto-redirect in ' + secs + ' seconds…';
+        }, 1000);
+      })();
+    </script>
   </body>
 </html>`;
     return new NextResponse(html, {
