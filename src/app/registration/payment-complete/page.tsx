@@ -1,11 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import { Suspense, type ReactNode } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { CheckCircle, XCircle, AlertTriangle, RefreshCw } from "lucide-react";
 
 function PaymentCompleteInner() {
+  const [retrying, setRetrying] = useState(false);
+  const [retryError, setRetryError] = useState<string>("");
   const search = useSearchParams();
   const kind = search.get("kind") ?? "";
   const trace = search.get("trace") ?? "";
@@ -50,6 +53,53 @@ function PaymentCompleteInner() {
     message = "Return to the home page or contact us if you need help completing registration.";
   }
 
+  const canRetry = !!trace && !(kind === "success" || status === "0" || status === "00");
+
+  async function retryPayment() {
+    if (!trace || retrying) return;
+    setRetryError("");
+    setRetrying(true);
+    try {
+      const res = await fetch("/api/payments/iveri/start", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ trackId: trace }),
+      });
+      const data = (await res.json().catch(() => ({}))) as {
+        redirectUrl?: string;
+        action?: string;
+        fields?: Record<string, string>;
+        error?: string;
+      };
+
+      if (res.ok && data.redirectUrl) {
+        window.location.href = data.redirectUrl;
+        return;
+      }
+      if (res.ok && data.action && data.fields) {
+        const formEl = document.createElement("form");
+        formEl.method = "POST";
+        formEl.action = data.action;
+        formEl.style.display = "none";
+        for (const [name, value] of Object.entries(data.fields)) {
+          const input = document.createElement("input");
+          input.type = "hidden";
+          input.name = name;
+          input.value = value;
+          formEl.appendChild(input);
+        }
+        document.body.appendChild(formEl);
+        formEl.submit();
+        return;
+      }
+      setRetryError(data.error || "Could not restart card payment. Please try again in a moment.");
+    } catch {
+      setRetryError("Could not connect to payment service. Please check your internet and try again.");
+    } finally {
+      setRetrying(false);
+    }
+  }
+
   return (
     <div className="min-h-screen bg-[var(--bg-primary)] pt-24 flex items-center justify-center px-4">
       <div className="text-center max-w-lg w-full glass-gold rounded-2xl p-8">
@@ -69,7 +119,22 @@ function PaymentCompleteInner() {
             {desc && <span>{desc}</span>}
           </p>
         )}
+        {retryError && (
+          <p className="text-xs mb-4 rounded-lg border border-red-500/35 bg-red-500/10 px-3 py-2 text-red-200">
+            {retryError}
+          </p>
+        )}
         <div className="flex flex-wrap justify-center gap-3">
+          {canRetry && (
+            <button
+              type="button"
+              onClick={() => void retryPayment()}
+              disabled={retrying}
+              className="btn-gold px-6 py-2.5 rounded-xl text-sm font-bold disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {retrying ? "Opening payment..." : "Try Card Again"}
+            </button>
+          )}
           <Link href="/" className="btn-gold px-6 py-2.5 rounded-xl text-sm font-bold">
             Home
           </Link>
