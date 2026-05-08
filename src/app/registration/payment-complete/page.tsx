@@ -132,7 +132,7 @@ function PaymentCompleteInner() {
               disabled={retrying}
               className="btn-gold px-6 py-2.5 rounded-xl text-sm font-bold disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              {retrying ? "Opening payment..." : "Try Card Again"}
+              {retrying ? "Opening payment..." : "Try Different Card"}
             </button>
           )}
           <Link href="/" className="btn-gold px-6 py-2.5 rounded-xl text-sm font-bold">
@@ -142,6 +142,11 @@ function PaymentCompleteInner() {
             Registration
           </Link>
         </div>
+        {canRetry && (
+          <p className="text-xs mt-4 text-theme-primary/90">
+            On the secure payment page, enter a different card number/expiry/CVV or update the saved card details before submitting.
+          </p>
+        )}
         <p className="text-xs mt-8 text-theme-primary">
           Questions?{" "}
           <a href="mailto:info@tnfzim.com" className="text-[#C9921A] underline">
