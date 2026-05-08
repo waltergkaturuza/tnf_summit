@@ -48,6 +48,13 @@ function buildZikiMallRedirect(args: {
   return u.toString();
 }
 
+function merchantReferenceForAttempt(trackId: string): string {
+  // Keep iVeri trace stable (trackId), but vary merchant reference to avoid duplicate-order lockouts.
+  const base = trackId.trim().replace(/[^A-Za-z0-9-]/g, "").slice(0, 14);
+  const stamp = String(Date.now()).slice(-6);
+  return `${base}-${stamp}`.slice(0, 20);
+}
+
 function escapeHtml(s: string): string {
   return s
     .replace(/&/g, "&amp;")
@@ -175,7 +182,7 @@ async function resolveAndBuildStart(body: Body): Promise<
         sharedSecret: process.env.IVERI_SHARED_SECRET,
         amountUsd,
         email: payerEmail,
-        merchantReference: trackId.slice(0, 20),
+        merchantReference: merchantReferenceForAttempt(trackId),
         merchantTrace: trackId.slice(0, 64),
         lineItemDescription,
         baseUrl,
@@ -245,7 +252,7 @@ async function resolveAndBuildStart(body: Body): Promise<
       sharedSecret: process.env.IVERI_SHARED_SECRET,
       amountUsd: feeUsd,
       email: resolvedEmail,
-      merchantReference: trackId.slice(0, 20),
+      merchantReference: merchantReferenceForAttempt(trackId),
       merchantTrace: trackId.slice(0, 64),
       lineItemDescription: "Zimbabwe TNF Global Summit 2026 — Delegate registration",
       baseUrl,
