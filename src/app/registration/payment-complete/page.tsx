@@ -12,6 +12,10 @@ function PaymentCompleteInner() {
   const search = useSearchParams();
   const kind = search.get("kind") ?? "";
   const trace = search.get("trace") ?? "";
+  const payerEmail =
+    search.get("Ecom_BillTo_Online_Email") ??
+    search.get("ecom_billto_online_email") ??
+    "";
   const status = search.get("Lite_Payment_Card_Status") ?? search.get("lite_payment_card_status") ?? "";
   const desc =
     search.get("Lite_Result_Description") ?? search.get("lite_result_description") ?? "";
@@ -63,7 +67,7 @@ function PaymentCompleteInner() {
       const res = await fetch("/api/payments/iveri/start", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ trackId: trace }),
+        body: JSON.stringify({ trackId: trace, email: payerEmail || undefined }),
       });
       const data = (await res.json().catch(() => ({}))) as {
         redirectUrl?: string;
@@ -140,6 +144,9 @@ function PaymentCompleteInner() {
           </Link>
           <Link href="/registration" className="btn-outline-gold px-6 py-2.5 rounded-xl text-sm font-semibold">
             Registration
+          </Link>
+          <Link href="/pay-by-reference" className="btn-outline-gold px-6 py-2.5 rounded-xl text-sm font-semibold">
+            Pay by Reference
           </Link>
         </div>
         {canRetry && (

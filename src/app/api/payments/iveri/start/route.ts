@@ -279,10 +279,24 @@ export async function POST(req: Request) {
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const trackId = (url.searchParams.get("trackId") || "").trim();
+  const email = (url.searchParams.get("email") || "").trim();
+  const category = (url.searchParams.get("category") || "").trim();
+  const earlyRaw = (url.searchParams.get("isEarlyBird") || "").trim().toLowerCase();
+  const isEarlyBird =
+    earlyRaw === "true" || earlyRaw === "1" || earlyRaw === "yes"
+      ? true
+      : earlyRaw === "false" || earlyRaw === "0" || earlyRaw === "no"
+        ? false
+        : undefined;
   if (!trackId) {
     return NextResponse.json({ error: "Missing trackId" }, { status: 400 });
   }
-  const result = await resolveAndBuildStart({ trackId });
+  const result = await resolveAndBuildStart({
+    trackId,
+    email: email || undefined,
+    category: category || undefined,
+    isEarlyBird,
+  });
   if (result.status !== 200) {
     return NextResponse.json(result.payload, { status: result.status });
   }
