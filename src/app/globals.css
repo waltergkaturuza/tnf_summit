@@ -292,3 +292,11 @@ html.light .btn-outline-gold:hover {
 .theme-d { background: rgba(236, 72, 153, 0.15); border-color: rgba(236, 72, 153, 0.4); }
 .theme-e { background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.4); }
 .theme-f { background: rgba(139, 92, 246, 0.15); border-color: rgba(139, 92, 246, 0.4); }
+
+/* Google Translate widget — reduce top chrome / layout jump */
+.goog-te-banner-frame {
+  display: none !important;
+}
+body {
+  top: 0 !important;
+}

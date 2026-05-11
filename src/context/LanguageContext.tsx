@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useMemo, ReactNode } from "react";
 import { fullTranslations } from "@/lib/locales";
 import type { Language } from "@/lib/locales/types";
 import type { FullTranslations } from "@/lib/locales/types";
@@ -27,13 +27,21 @@ type LanguageContextType = {
 
 const LanguageContext = createContext<LanguageContextType | null>(null);
 
+/**
+ * Site copy is authored in English (`en`). User-facing translation is handled by the
+ * Google Translate widget (see `GoogleTranslateRoot` + `LanguageSelector`), not locale bundles.
+ */
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<Language>("en");
-  return (
-    <LanguageContext.Provider value={{ language, setLanguage, t: fullTranslations[language], langs: languageLabels }}>
-      {children}
-    </LanguageContext.Provider>
+  const value = useMemo<LanguageContextType>(
+    () => ({
+      language: "en",
+      setLanguage: () => {},
+      t: fullTranslations.en,
+      langs: languageLabels,
+    }),
+    [],
   );
+  return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 }
 
 export function useLanguage() {

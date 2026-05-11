@@ -7,20 +7,19 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ExternalLink, Search, Sun, Moon, Monitor, ChevronDown, Command } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useLanguage, type Language } from "@/context/LanguageContext";
+import { useLanguage } from "@/context/LanguageContext";
+import { LanguageSelector } from "./LanguageSelector";
 import SearchModal from "./SearchModal";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [langOpen, setLangOpen] = useState(false);
   const [themeOpen, setThemeOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
-  const { language, setLanguage, t, langs } = useLanguage();
-  const langRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
   const themeRef = useRef<HTMLDivElement>(null);
   const participateRef = useRef<HTMLDivElement>(null);
   const programRef = useRef<HTMLDivElement>(null);
@@ -57,7 +56,6 @@ export default function Navbar() {
   // Close dropdowns when clicking outside
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (langRef.current && !langRef.current.contains(e.target as Node)) setLangOpen(false);
       if (themeRef.current && !themeRef.current.contains(e.target as Node)) setThemeOpen(false);
       if (participateRef.current && !participateRef.current.contains(e.target as Node)) setParticipateOpen(false);
       if (programRef.current && !programRef.current.contains(e.target as Node)) setProgramOpen(false);
@@ -196,55 +194,12 @@ export default function Navbar() {
                 </span>
               </button>
 
-              {/* Language Switcher */}
-              <div ref={langRef} className="relative">
-                <button
-                  onClick={() => { setLangOpen(!langOpen); setThemeOpen(false); }}
-                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-bold transition-all border ${
-                    isDark
-                      ? "text-slate-300 hover:text-white bg-white/5 border-white/10 hover:border-white/20"
-                      : "text-slate-600 hover:text-[#0A1628] bg-black/5 border-black/10 hover:border-black/20"
-                  }`}
-                  title="Change language"
-                >
-                  <span className="text-base leading-none">{langs[language].flag}</span>
-                  <span className="hidden sm:inline text-xs">{langs[language].short}</span>
-                  <ChevronDown className={`w-3 h-3 transition-transform ${langOpen ? "rotate-180" : ""}`} />
-                </button>
-
-                <AnimatePresence>
-                  {langOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -8, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: -8, scale: 0.95 }}
-                      transition={{ duration: 0.15 }}
-                      className="absolute right-0 top-full mt-2 w-44 rounded-xl overflow-hidden shadow-2xl border z-50"
-                      style={{ background: "var(--bg-surface)", borderColor: "var(--border)" }}
-                    >
-                      {(Object.keys(langs) as Language[]).map(lang => (
-                        <button
-                          key={lang}
-                          onClick={() => { setLanguage(lang); setLangOpen(false); }}
-                          className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-all ${
-                            language === lang ? "bg-[#C9921A]/15 text-[#F5B730]" : ""
-                          }`}
-                          style={{ color: language === lang ? undefined : "var(--text-secondary)" }}
-                        >
-                          <span className="text-base">{langs[lang].flag}</span>
-                          <span className="flex-1 text-left font-medium">{langs[lang].label}</span>
-                          {language === lang && <div className="w-1.5 h-1.5 rounded-full bg-[#C9921A]" />}
-                        </button>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+              <LanguageSelector dark={isDark} />
 
               {/* Theme Toggle */}
               <div ref={themeRef} className="relative">
                 <button
-                  onClick={() => { setThemeOpen(!themeOpen); setLangOpen(false); }}
+                  onClick={() => setThemeOpen(!themeOpen)}
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm transition-all border ${
                     isDark
                       ? "text-slate-300 hover:text-white bg-white/5 border-white/10 hover:border-white/20"
@@ -382,22 +337,9 @@ export default function Navbar() {
 
               {/* Language + Theme controls */}
               <div className="py-4 border-t border-b space-y-3 mb-5" style={{ borderColor: "var(--border)" }}>
-                {/* Language picker */}
-                <div>
+                <div className="w-full">
                   <p className="text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: "var(--text-muted)" }}>Language</p>
-                  <div className="grid grid-cols-4 gap-1.5">
-                    {(Object.keys(langs) as Language[]).map(lang => (
-                      <button
-                        key={lang}
-                        onClick={() => setLanguage(lang)}
-                        className={`flex flex-col items-center gap-1 p-2 rounded-xl text-[10px] font-bold border transition-all ${language === lang ? "bg-[#C9921A]/15 border-[#C9921A]/40 text-[#F5B730]" : "border-transparent"}`}
-                        style={{ color: language === lang ? undefined : "var(--text-muted)", background: language === lang ? undefined : "var(--bg-card)" }}
-                      >
-                        <span className="text-lg">{langs[lang].flag}</span>
-                        {langs[lang].short}
-                      </button>
-                    ))}
-                  </div>
+                  <LanguageSelector dark={isDark} />
                 </div>
 
                 {/* Theme picker */}
