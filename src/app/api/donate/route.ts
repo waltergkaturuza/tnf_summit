@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { donationCategories, getDonationCategoryLabel } from "@/lib/data";
+import { donationCategories, getDonationCategoryLabel, themes } from "@/lib/data";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { generateDonationTrackId } from "@/lib/trackId";
 
@@ -17,6 +17,7 @@ type Body = {
   email?: string;
   phone?: string;
   categoryKey?: string;
+  themeId?: string;
   categoryOther?: string;
   amountUsd?: number;
   message?: string;
@@ -41,6 +42,7 @@ export async function POST(req: Request) {
   const email = (body.email ?? "").trim().toLowerCase();
   const phone = (body.phone ?? "").trim().slice(0, 40);
   const categoryKey = (body.categoryKey ?? "").trim() || "general";
+  const themeId = (body.themeId ?? "").trim().toUpperCase();
   const categoryOther = (body.categoryOther ?? "").trim().slice(0, 120);
   const message = (body.message ?? "").trim().slice(0, 2000);
 
@@ -49,6 +51,10 @@ export async function POST(req: Request) {
   }
   if (!ALLOWED.has(categoryKey)) {
     return NextResponse.json({ error: "Invalid donation category." }, { status: 400 });
+  }
+  const theme = themes.find((t) => t.id === themeId);
+  if (categoryKey === "global_themes_fund" && !theme) {
+    return NextResponse.json({ error: "Please select a valid Summit theme." }, { status: 400 });
   }
   if (categoryKey === "other" && !categoryOther) {
     return NextResponse.json({ error: "Please provide your donation category." }, { status: 400 });
@@ -70,7 +76,12 @@ export async function POST(req: Request) {
   }
 
   const trackId = generateDonationTrackId();
-  const categoryLabel = categoryKey === "other" ? categoryOther : getDonationCategoryLabel(categoryKey);
+  const categoryLabel =
+    categoryKey === "other"
+      ? categoryOther
+      : categoryKey === "global_themes_fund" && theme
+        ? `${getDonationCategoryLabel(categoryKey)} — Theme ${theme.id}: ${theme.label}`
+        : getDonationCategoryLabel(categoryKey);
 
   const { data, error } = await supabaseAdmin
     .schema("tnf_summit")

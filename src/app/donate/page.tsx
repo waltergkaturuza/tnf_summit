@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowLeft, Heart, CreditCard, Copy, Check, Building2, Hash, Globe, Loader2 } from "lucide-react";
 import { getSetting } from "@/lib/db";
-import { donationCategories } from "@/lib/data";
+import { donationCategories, themes } from "@/lib/data";
 
 const PAYMENT_KEYS = [
   "payment_bank_name",
@@ -54,6 +54,7 @@ export default function DonatePage() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [categoryKey, setCategoryKey] = useState(donationCategories[0]?.key ?? "general");
+  const [themeId, setThemeId] = useState("");
   const [categoryOther, setCategoryOther] = useState("");
   const [amountUsd, setAmountUsd] = useState<string>("");
   const [message, setMessage] = useState("");
@@ -93,6 +94,11 @@ export default function DonatePage() {
         setCardSubmitting(false);
         return;
       }
+      if (categoryKey === "global_themes_fund" && !themeId) {
+        setCardError("Please select a Summit theme.");
+        setCardSubmitting(false);
+        return;
+      }
       if (categoryKey === "other" && !categoryOther.trim()) {
         setCardError("Please provide your donation category under Other.");
         setCardSubmitting(false);
@@ -110,6 +116,7 @@ export default function DonatePage() {
           email: email.trim(),
           phone: phone.trim(),
           categoryKey,
+          themeId: themeId || undefined,
           categoryOther: categoryOther.trim(),
           amountUsd: amt,
           message: message.trim(),
@@ -280,7 +287,12 @@ export default function DonatePage() {
                 <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Category</label>
                 <select
                   value={categoryKey}
-                  onChange={(e) => setCategoryKey(e.target.value)}
+                  onChange={(e) => {
+                    const next = e.target.value;
+                    setCategoryKey(next);
+                    if (next !== "global_themes_fund") setThemeId("");
+                    if (next !== "other") setCategoryOther("");
+                  }}
                   className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-primary)] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#d49a26]/40"
                 >
                   {donationCategories.map((c) => (
@@ -293,6 +305,24 @@ export default function DonatePage() {
                   {donationCategories.find((c) => c.key === categoryKey)?.description}
                 </p>
               </div>
+              {categoryKey === "global_themes_fund" && (
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Select theme</label>
+                  <select
+                    required
+                    value={themeId}
+                    onChange={(e) => setThemeId(e.target.value)}
+                    className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-primary)] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#d49a26]/40"
+                  >
+                    <option value="">Choose a theme</option>
+                    {themes.map((th) => (
+                      <option key={th.id} value={th.id}>
+                        Theme {th.id}: {th.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
               {categoryKey === "other" && (
                 <div>
                   <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Other category</label>

@@ -53,6 +53,11 @@ function ContactPageContent() {
     name: "", email: "", phone: "", organisation: "",
     enquiryType: "", message: "",
   });
+  const directContacts = [
+    { name: "Racheal", phone: "0779560229", href: "tel:+263779560229" },
+    { name: "Llyod", phone: "0773402440", href: "tel:+263773402440" },
+    { name: "Emanuel", phone: "0719879890", href: "tel:+263719879890" },
+  ];
 
   useEffect(() => {
     const wide = searchParams.get("summitWide");
@@ -168,6 +173,32 @@ function ContactPageContent() {
                 <div className="text-xs mt-1 text-theme-primary">{t.contact.summitDatesVenue}</div>
                 <div className="divider-gold my-3" />
                 <div className="text-[#F5B730] font-bold text-sm">{t.contact.earlyBirdCloses}</div>
+              </div>
+            </FadeIn>
+
+            <FadeIn delay={0.25}>
+              <div className="glass rounded-2xl p-5 border border-white/10">
+                <h3 className="text-white font-bold mb-3">Direct Contacts</h3>
+                <div className="space-y-2.5 text-sm">
+                  {directContacts.map((c) => (
+                    <div key={c.phone} className="flex items-center justify-between gap-3 rounded-lg bg-white/5 px-3 py-2">
+                      <span className="text-theme-primary">Contact {c.name}</span>
+                      <a href={c.href} className="font-semibold text-[#F5B730] hover:underline">
+                        {c.phone}
+                      </a>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-4 border-t border-white/10 pt-3 text-xs text-theme-primary">
+                  Official emails:{" "}
+                  <a href={`mailto:${summitInfo.email}`} className="text-[#F5B730] hover:underline">
+                    {summitInfo.email}
+                  </a>
+                  {" · "}
+                  <a href={`mailto:${summitInfo.emailAlt}`} className="text-[#F5B730] hover:underline">
+                    {summitInfo.emailAlt}
+                  </a>
+                </div>
               </div>
             </FadeIn>
           </div>
