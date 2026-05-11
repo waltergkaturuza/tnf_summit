@@ -293,10 +293,37 @@ html.light .btn-outline-gold:hover {
 .theme-e { background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.4); }
 .theme-f { background: rgba(139, 92, 246, 0.15); border-color: rgba(139, 92, 246, 0.4); }
 
-/* Google Translate widget — reduce top chrome / layout jump */
-.goog-te-banner-frame {
+/*
+ * Google Website Translator — hide the top banner iframe so it does not cover
+ * our fixed navbar. Google sets body { top: 40px } when the bar is present.
+ */
+iframe.goog-te-banner-frame,
+.goog-te-banner-frame,
+.goog-te-banner-frame.skiptranslate {
   display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  position: absolute !important;
+  left: -9999px !important;
+  border: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
+
+html,
 body {
+  position: static !important;
   top: 0 !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+body.translated-ltr,
+body.translated-rtl {
+  top: 0 !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
 }

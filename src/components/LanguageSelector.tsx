@@ -48,6 +48,26 @@ function triggerGoogleTranslate(langCode: string) {
   return false;
 }
 
+function stripGoogleTranslateBanner() {
+  if (typeof document === "undefined") return;
+  document.querySelectorAll("iframe.goog-te-banner-frame, .goog-te-banner-frame").forEach((node) => {
+    const el = node as HTMLElement;
+    el.style.setProperty("display", "none", "important");
+    el.style.setProperty("visibility", "hidden", "important");
+    el.style.setProperty("height", "0", "important");
+    el.style.setProperty("width", "0", "important");
+    el.style.setProperty("overflow", "hidden", "important");
+    el.style.setProperty("position", "absolute", "important");
+    el.style.setProperty("left", "-9999px", "important");
+  });
+  document.body.style.setProperty("top", "0", "important");
+  document.body.style.setProperty("position", "static", "important");
+  document.body.style.setProperty("margin-top", "0", "important");
+  document.body.style.setProperty("padding-top", "0", "important");
+  document.documentElement.style.setProperty("margin-top", "0", "important");
+  document.documentElement.style.setProperty("padding-top", "0", "important");
+}
+
 /** Mount once (non-admin public shell). Hidden host + Google script + TranslateElement. */
 export function GoogleTranslateRoot() {
   useEffect(() => {
@@ -58,8 +78,17 @@ export function GoogleTranslateRoot() {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const w = window as any;
       if (!w.google?.translate?.TranslateElement) return;
+      const InlineLayout = w.google.translate.TranslateElement.InlineLayout;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      new w.google.translate.TranslateElement({ pageLanguage: "en", autoDisplay: false }, "google_translate_element");
+      new w.google.translate.TranslateElement(
+        {
+          pageLanguage: "en",
+          autoDisplay: false,
+          ...(InlineLayout?.SIMPLE != null ? { layout: InlineLayout.SIMPLE } : {}),
+        },
+        "google_translate_element",
+      );
+      stripGoogleTranslateBanner();
     };
 
     const script = document.createElement("script");
@@ -67,6 +96,21 @@ export function GoogleTranslateRoot() {
     script.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
     script.async = true;
     document.body.appendChild(script);
+  }, []);
+
+  /* Re-apply when Google injects / mutates the banner (CSS alone is sometimes beaten by inline styles). */
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    stripGoogleTranslateBanner();
+    const mo = new MutationObserver(() => stripGoogleTranslateBanner());
+    mo.observe(document.documentElement, { childList: true, subtree: true });
+    const fast = window.setInterval(stripGoogleTranslateBanner, 400);
+    const stopFast = window.setTimeout(() => clearInterval(fast), 20000);
+    return () => {
+      mo.disconnect();
+      clearInterval(fast);
+      clearTimeout(stopFast);
+    };
   }, []);
 
   return <div id="google_translate_element" className="hidden" aria-hidden />;
