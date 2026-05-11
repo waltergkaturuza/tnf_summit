@@ -9,7 +9,6 @@ import {
   FileText, ChevronDown, MapPin,
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
-import { registrationFees } from "@/lib/data";
 import { subscribeEmail } from "@/lib/db";
 import { getCountryNames } from "@/lib/countries";
 
@@ -23,19 +22,56 @@ const STEPS = [
   { id: 7, label: "Confirm", icon: CheckCircle },
 ];
 
-const salutations = ["Mr", "Mrs", "Ms", "Dr", "Prof", "Hon", "H.E.", "Ambassador", "Rev", "Eng"];
-const genders = ["Male", "Female", "Non-binary", "Prefer not to say"];
+const salutations = ["Mr", "Mrs", "Ms", "Dr", "Prof", "Hon", "H.E.", "Ambassador", "Rev", "Eng", "Other"];
+const genders = ["Male", "Female", "Non-binary", "Prefer not to say", "Other"];
 const sectors = ["Government / Public Sector", "Private Sector / Corporate", "International Organisation / DFI", "Civil Society / NGO", "Academic / Research", "Media / Press", "Youth-Led Enterprise / MSME", "Other"];
 const dietaryOptions = ["No special requirements", "Vegetarian", "Vegan", "Halal", "Kosher", "Gluten-free", "Dairy-free", "Other (specify in notes)"];
 const roomTypes = ["Single Room", "Double Room (single occupancy)", "Twin Room (sharing)", "Suite"];
 const paymentMethods = ["Bank Transfer (Invoice)", "Credit / Debit Card", "Mobile Money (EcoCash / InnBucks)"];
-const sessionOptions = [
-  "Day 1 — Inclusive Growth, Smart Investment & Policy Coherence (Mon 21 Sep)",
-  "Day 2 — Digitalisation, Platform Economy & Financial Innovation (Tue 22 Sep)",
-  "Day 3 — Official Opening + Climate Change & Green Jobs (Wed 23 Sep)",
-  "Day 4 — Youth, Women, Skills & Future of Work (Thu 24 Sep)",
-  "Excursions Day — Victoria Falls Experience (Fri 25 Sep)",
+const participationTypes = ["Delegate", "Exhibitor"] as const;
+const sessionOptionsByDay = [
+  {
+    day: "Day 1 (Mon 21 Sep)",
+    sessions: [
+      "Opening Plenary: Inclusive Growth & Smart Investment",
+      "Policy Coherence Roundtable",
+      "Structured Social Dialogue Session",
+    ],
+  },
+  {
+    day: "Day 2 (Tue 22 Sep)",
+    sessions: [
+      "Digitalisation & Platform Economy Plenary",
+      "FinTech & Financial Innovation Session",
+      "Investment Facilitation Workshop",
+    ],
+  },
+  {
+    day: "Day 3 (Wed 23 Sep)",
+    sessions: [
+      "Official Opening Ceremony",
+      "Climate Change & Green Jobs Session",
+      "Ministerial High-Level Dialogue",
+    ],
+  },
+  {
+    day: "Day 4 (Thu 24 Sep)",
+    sessions: [
+      "Youth, Women & Skills Plenary",
+      "Future of Work Session",
+      "Closing Commitments Session",
+    ],
+  },
+  {
+    day: "Day 5 (Fri 25 Sep)",
+    sessions: [
+      "Victoria Falls Excursion Briefing",
+      "Zambezi Networking Cruise",
+      "Summit Wrap-up Networking Session",
+    ],
+  },
 ];
+const ALL_DAY_KEYS = sessionOptionsByDay.map((x) => x.day);
 const excursions = ["Victoria Falls Rainforest Walk (UNESCO)", "Zambezi River Morning Boat Cruise", "Morning Game Drive — Zambezi National Park", "No excursion"];
 const investmentAreas = ["Agriculture / Agro-processing", "Renewable Energy / Clean Tech", "Mining & Mineral Processing", "Manufacturing & Industrialisation", "FinTech / Digital Finance", "Infrastructure", "Tourism / Eco-tourism", "Healthcare", "Education / TVET", "Other"];
 const countries = getCountryNames();
@@ -45,7 +81,7 @@ type FormData = {
   dateOfBirth: string; nationality: string; passportNumber: string;
   organisation: string; department: string; jobTitle: string; sector: string; orgWebsite: string;
   email: string; confirmEmail: string; phone: string; whatsapp: string; country: string; city: string;
-  category: string; attendanceMode: string; daysAttending: string[];
+  participationType: string; attendanceMode: string; daysAttending: string[];
   requiresAccommodation: string; arrivalDate: string; departureDate: string;
   roomType: string; airportTransfer: string; specialNeeds: string;
   dietaryRequirements: string; sessionInterests: string[]; excursionPreference: string;
@@ -60,7 +96,7 @@ const initialForm: FormData = {
   salutation: "", firstName: "", lastName: "", gender: "", dateOfBirth: "", nationality: "", passportNumber: "",
   organisation: "", department: "", jobTitle: "", sector: "", orgWebsite: "",
   email: "", confirmEmail: "", phone: "", whatsapp: "", country: "", city: "",
-  category: "", attendanceMode: "in-person", daysAttending: [],
+  participationType: "", attendanceMode: "in-person", daysAttending: [],
   requiresAccommodation: "yes", arrivalDate: "2026-09-21", departureDate: "2026-09-25",
   roomType: "", airportTransfer: "yes", specialNeeds: "",
   dietaryRequirements: "", sessionInterests: [], excursionPreference: "",
@@ -131,11 +167,15 @@ export default function RegistrationPage() {
 
   const isEarlyBird = true; // before 30 June 2026
   const feeAmount = 1500;
+  const selectedDayKeys = ALL_DAY_KEYS.filter((day) =>
+    form.sessionInterests.some((session) => session.startsWith(`${day} :: `))
+  );
+  const selectedDayCount = selectedDayKeys.length;
 
   const canProceed = () => {
     if (step === 1) return form.firstName && form.lastName && form.email && form.phone && form.country && form.salutation;
     if (step === 2) return form.organisation && form.jobTitle && form.sector;
-    if (step === 3) return form.category && form.attendanceMode;
+    if (step === 3) return form.participationType && form.attendanceMode && form.sessionInterests.length > 0;
     if (step === 6) return form.paymentMethod;
     if (step === 7) return form.privacyConsent && form.termsAccepted;
     return true;
@@ -173,9 +213,9 @@ export default function RegistrationPage() {
           whatsapp: form.whatsapp,
           country: form.country,
           city: form.city,
-          category: form.category,
+          category: form.participationType,
           attendanceMode: form.attendanceMode,
-          daysAttending: form.daysAttending,
+          daysAttending: selectedDayKeys,
           requiresAccommodation: form.requiresAccommodation === "yes",
           arrivalDate: form.arrivalDate,
           departureDate: form.departureDate,
@@ -222,7 +262,7 @@ export default function RegistrationPage() {
             body: JSON.stringify({
               trackId,
               email: form.email,
-              category: form.category,
+              category: form.participationType || "Delegate",
               isEarlyBird,
             }),
           });
@@ -308,7 +348,7 @@ export default function RegistrationPage() {
               <div><span className="text-theme-primary">Status:</span><div className="text-amber-400 font-bold">Pending Confirmation</div></div>
               <div><span className="text-theme-primary">Name:</span><div className="text-white">{form.salutation} {form.firstName} {form.lastName}</div></div>
               <div><span className="text-theme-primary">Organisation:</span><div className="text-white">{form.organisation}</div></div>
-              <div><span className="text-theme-primary">Category:</span><div className="text-white">{form.category}</div></div>
+              <div><span className="text-theme-primary">Participation Type:</span><div className="text-white">{form.participationType}</div></div>
               <div><span className="text-theme-primary">Attendance:</span><div className="text-white capitalize">{form.attendanceMode}</div></div>
               <div><span className="text-theme-primary">Country:</span><div className="text-white">{form.country}</div></div>
               <div><span className="text-theme-primary">Payment Method:</span><div className="text-white">{form.paymentMethod}</div></div>
@@ -359,9 +399,9 @@ export default function RegistrationPage() {
         </div>
 
         {/* Fee summary bar */}
-        {form.category && (
+        {form.participationType && (
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="glass-gold rounded-xl px-5 py-3 mb-6 flex items-center justify-between">
-            <div className="text-sm text-theme-primary">{form.category}</div>
+            <div className="text-sm text-theme-primary">{form.participationType}</div>
             <div className="text-[#F5B730] font-black text-lg">USD {feeAmount} <span className="text-xs font-normal text-theme-primary">flat fee</span></div>
           </motion.div>
         )}
@@ -574,23 +614,24 @@ export default function RegistrationPage() {
                 {step === 3 && (
                   <div className="space-y-6">
                     <div className="mb-2">
-                      <h2 className="text-xl font-black text-white">Attendance & Category</h2>
-                      <p className="text-sm mt-1 text-theme-primary">Select your delegate category for reporting and networking. The registration fee is a flat USD 1,500 per delegate (all categories).</p>
+                      <h2 className="text-xl font-black text-white">Attendance & Participation</h2>
+                      <p className="text-sm mt-1 text-theme-primary">Choose your participation type and select specific sessions by day. This helps the team identify attendees booked for fewer than 5 days for fee adjustments.</p>
                     </div>
 
-                    <Field label="Delegate Category" required>
-                      <div className="grid grid-cols-1 gap-2">
-                        {registrationFees.map(fee => (
-                          <button key={fee.category} type="button" onClick={() => set("category", fee.category)}
-                            className={`flex items-center justify-between p-4 rounded-xl border text-left transition-all ${form.category === fee.category ? "border-[#C9921A] bg-[#C9921A]/10" : "glass border-white/10 hover:border-white/25"}`}
+                    <Field label="Participation Type" required>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {participationTypes.map((ptype) => (
+                          <button
+                            key={ptype}
+                            type="button"
+                            onClick={() => set("participationType", ptype)}
+                            className={`flex items-center justify-between p-4 rounded-xl border text-left transition-all ${form.participationType === ptype ? "border-[#C9921A] bg-[#C9921A]/10" : "glass border-white/10 hover:border-white/25"}`}
                           >
                             <div className="flex items-center gap-3">
-                              <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 transition-all ${form.category === fee.category ? "border-[#C9921A] bg-[#C9921A]" : "border-slate-500"}`} />
-                              <span className={`text-sm font-medium ${form.category === fee.category ? "text-white" : "text-theme-primary"}`}>{fee.category}</span>
+                              <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 transition-all ${form.participationType === ptype ? "border-[#C9921A] bg-[#C9921A]" : "border-slate-500"}`} />
+                              <span className={`text-sm font-medium ${form.participationType === ptype ? "text-white" : "text-theme-primary"}`}>{ptype}</span>
                             </div>
-                            <div className="text-right flex-shrink-0 ml-4">
-                              <div className="text-[#F5B730] font-black">USD 1500</div>
-                            </div>
+                            <div className="text-[#F5B730] font-black">USD 1500</div>
                           </button>
                         ))}
                       </div>
@@ -598,54 +639,67 @@ export default function RegistrationPage() {
 
                     <Field label="Attendance Mode" required>
                       <div className="flex gap-3">
-                        {[["in-person", "🏛 In-Person"], ["virtual", "💻 Virtual / Online"], ["hybrid", "🔀 Hybrid"]].map(([val, label]) => (
+                        {[["in-person", "🏛 In-Person"], ["hybrid", "🔀 Hybrid"]].map(([val, label]) => (
                           <ToggleButton key={val} value={val} current={form.attendanceMode} onChange={v => set("attendanceMode", v)}>{label}</ToggleButton>
                         ))}
                       </div>
                     </Field>
 
-                    <Field label="Days You Will Attend">
-                      <CheckboxGroup options={sessionOptions} selected={form.daysAttending} onChange={v => set("daysAttending", v)} />
+                    <Field label="Sessions You Will Attend (choose by day)" required>
+                      <div className="space-y-4">
+                        {sessionOptionsByDay.map((group) => (
+                          <div key={group.day} className="rounded-xl border border-white/10 p-3">
+                            <div className="text-xs font-bold uppercase tracking-wide text-[#F5B730] mb-2">{group.day}</div>
+                            <CheckboxGroup
+                              options={group.sessions.map((s) => `${group.day} :: ${s}`)}
+                              selected={form.sessionInterests}
+                              onChange={(v) => set("sessionInterests", v)}
+                            />
+                          </div>
+                        ))}
+                        <p className="text-xs text-theme-primary">
+                          Selected days: <strong className="text-white">{selectedDayCount}</strong>/5
+                          {selectedDayCount < 5 ? " (flagged for possible reduced fee review by admin)." : ""}
+                        </p>
+                      </div>
                     </Field>
 
-                    {form.attendanceMode !== "virtual" && (
+                    <div className="divider-gold" />
+                    <h3 className="text-white font-bold text-sm flex items-center gap-2"><Building className="w-4 h-4 text-[#C9921A]" />Accommodation at Elephant Hills Resort</h3>
+                    <Field label="Do you require accommodation assistance?">
+                      <div className="flex gap-3">
+                        <ToggleButton value="yes" current={form.requiresAccommodation} onChange={v => set("requiresAccommodation", v)}>Yes, please</ToggleButton>
+                        <ToggleButton value="no" current={form.requiresAccommodation} onChange={v => set("requiresAccommodation", v)}>No, self-arranged</ToggleButton>
+                      </div>
+                    </Field>
+                    {form.requiresAccommodation === "yes" && (
                       <>
-                        <div className="divider-gold" />
-                        <h3 className="text-white font-bold text-sm flex items-center gap-2"><Building className="w-4 h-4 text-[#C9921A]" />Accommodation at Elephant Hills Resort</h3>
-                        <Field label="Do you require accommodation assistance?">
-                          <div className="flex gap-3">
-                            <ToggleButton value="yes" current={form.requiresAccommodation} onChange={v => set("requiresAccommodation", v)}>Yes, please</ToggleButton>
-                            <ToggleButton value="no" current={form.requiresAccommodation} onChange={v => set("requiresAccommodation", v)}>No, self-arranged</ToggleButton>
+                        <div className="space-y-4">
+                          <div className="grid grid-cols-2 gap-4">
+                            <Field label="Arrival Date"><input type="date" value={form.arrivalDate} onChange={e => set("arrivalDate", e.target.value)} className={inputClass} /></Field>
+                            <Field label="Departure Date"><input type="date" value={form.departureDate} onChange={e => set("departureDate", e.target.value)} className={inputClass} /></Field>
                           </div>
-                        </Field>
-                        {form.requiresAccommodation === "yes" && (
-                          <div className="space-y-4">
-                            <div className="grid grid-cols-2 gap-4">
-                              <Field label="Arrival Date"><input type="date" value={form.arrivalDate} onChange={e => set("arrivalDate", e.target.value)} className={inputClass} /></Field>
-                              <Field label="Departure Date"><input type="date" value={form.departureDate} onChange={e => set("departureDate", e.target.value)} className={inputClass} /></Field>
+                          <Field label="Room Type Preference">
+                            <div className="relative">
+                              <select value={form.roomType} onChange={e => set("roomType", e.target.value)} className={selectClass}>
+                                <option value="">Select room type</option>
+                                {roomTypes.map(r => <option key={r}>{r}</option>)}
+                              </select>
+                              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-primary pointer-events-none" />
                             </div>
-                            <Field label="Room Type Preference">
-                              <div className="relative">
-                                <select value={form.roomType} onChange={e => set("roomType", e.target.value)} className={selectClass}>
-                                  <option value="">Select room type</option>
-                                  {roomTypes.map(r => <option key={r}>{r}</option>)}
-                                </select>
-                                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-primary pointer-events-none" />
-                              </div>
-                            </Field>
-                          </div>
-                        )}
-                        <Field label="Airport Transfer Required?">
-                          <div className="flex gap-3">
-                            <ToggleButton value="yes" current={form.airportTransfer} onChange={v => set("airportTransfer", v)}>Yes</ToggleButton>
-                            <ToggleButton value="no" current={form.airportTransfer} onChange={v => set("airportTransfer", v)}>No</ToggleButton>
-                          </div>
-                        </Field>
-                        <Field label="Special Access / Mobility Requirements">
-                          <textarea rows={2} placeholder="Please describe any mobility, accessibility or medical requirements..." value={form.specialNeeds} onChange={e => set("specialNeeds", e.target.value)} className={inputClass + " resize-none"} />
-                        </Field>
+                          </Field>
+                        </div>
                       </>
                     )}
+                    <Field label="Airport Transfer Required?">
+                      <div className="flex gap-3">
+                        <ToggleButton value="yes" current={form.airportTransfer} onChange={v => set("airportTransfer", v)}>Yes</ToggleButton>
+                        <ToggleButton value="no" current={form.airportTransfer} onChange={v => set("airportTransfer", v)}>No</ToggleButton>
+                      </div>
+                    </Field>
+                    <Field label="Special Access / Mobility Requirements">
+                      <textarea rows={2} placeholder="Please describe any mobility, accessibility or medical requirements..." value={form.specialNeeds} onChange={e => set("specialNeeds", e.target.value)} className={inputClass + " resize-none"} />
+                    </Field>
                   </div>
                 )}
 
@@ -666,22 +720,30 @@ export default function RegistrationPage() {
                       </div>
                     </Field>
                     <Field label="Sessions of Primary Interest">
-                      <CheckboxGroup options={sessionOptions} selected={form.sessionInterests} onChange={v => set("sessionInterests", v)} />
-                    </Field>
-                    {form.attendanceMode !== "virtual" && (
-                      <Field label="Excursion Preference (Fri 25 September)">
+                      {form.sessionInterests.length > 0 ? (
                         <div className="space-y-2">
-                          {excursions.map(ex => (
-                            <label key={ex} className={`flex items-center gap-3 cursor-pointer p-3 rounded-xl border transition-all ${form.excursionPreference === ex ? "border-[#C9921A] bg-[#C9921A]/10" : "glass border-white/10 hover:border-white/20"}`}>
-                              <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${form.excursionPreference === ex ? "border-[#C9921A] bg-[#C9921A]" : "border-slate-500"}`} />
-                              <input type="radio" name="excursion" value={ex} checked={form.excursionPreference === ex} onChange={e => set("excursionPreference", e.target.value)} className="hidden" />
-                              <span className={`text-sm ${form.excursionPreference === ex ? "text-white font-medium" : "text-theme-primary"}`}>{ex}</span>
-                            </label>
+                          {form.sessionInterests.map((session) => (
+                            <div key={session} className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white">
+                              {session}
+                            </div>
                           ))}
                         </div>
-                        <p className="text-xs mt-2 text-theme-primary">Excursion places are limited. First-come, first-served. Additional activities available at own cost.</p>
-                      </Field>
-                    )}
+                      ) : (
+                        <p className="text-sm text-theme-primary">No sessions selected yet. Go back to Attendance to choose sessions.</p>
+                      )}
+                    </Field>
+                    <Field label="Excursion Preference (Fri 25 September)">
+                      <div className="space-y-2">
+                        {excursions.map(ex => (
+                          <label key={ex} className={`flex items-center gap-3 cursor-pointer p-3 rounded-xl border transition-all ${form.excursionPreference === ex ? "border-[#C9921A] bg-[#C9921A]/10" : "glass border-white/10 hover:border-white/20"}`}>
+                            <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${form.excursionPreference === ex ? "border-[#C9921A] bg-[#C9921A]" : "border-slate-500"}`} />
+                            <input type="radio" name="excursion" value={ex} checked={form.excursionPreference === ex} onChange={e => set("excursionPreference", e.target.value)} className="hidden" />
+                            <span className={`text-sm ${form.excursionPreference === ex ? "text-white font-medium" : "text-theme-primary"}`}>{ex}</span>
+                          </label>
+                        ))}
+                      </div>
+                      <p className="text-xs mt-2 text-theme-primary">Excursion places are limited. First-come, first-served. Additional activities available at own cost.</p>
+                    </Field>
                   </div>
                 )}
 
@@ -699,7 +761,7 @@ export default function RegistrationPage() {
                         <Handshake className="w-5 h-5 text-[#C9921A] flex-shrink-0 mt-0.5" />
                         <div>
                           <h3 className="text-white font-bold text-sm">Bilateral Meeting Platform</h3>
-                          <p className="text-xs mt-1 text-theme-primary">Register to book one-on-one meetings with ministers, investors, and organisations via the Summit App.</p>
+                          <p className="text-xs mt-1 text-theme-primary">Register to book one-on-one meetings with ministers, investors, and organisations via email and website.</p>
                         </div>
                       </div>
                       <Field label="Register for bilateral meetings?">
@@ -856,7 +918,7 @@ export default function RegistrationPage() {
                           ["Organisation", form.organisation],
                           ["Job Title", form.jobTitle],
                           ["Country", form.country],
-                          ["Category", form.category],
+                          ["Participation Type", form.participationType],
                           ["Attendance", form.attendanceMode],
                           ["Payment", form.paymentMethod],
                         ].map(([label, value]) => value ? (
