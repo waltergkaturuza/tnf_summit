@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { registrationFees } from "@/lib/data";
-import { getRegistrationFeeUsd, REGISTRATION_FEES_USD } from "@/lib/registrationFee";
 import { subscribeEmail } from "@/lib/db";
 import { getCountryNames } from "@/lib/countries";
 
@@ -29,7 +28,7 @@ const genders = ["Male", "Female", "Non-binary", "Prefer not to say"];
 const sectors = ["Government / Public Sector", "Private Sector / Corporate", "International Organisation / DFI", "Civil Society / NGO", "Academic / Research", "Media / Press", "Youth-Led Enterprise / MSME", "Other"];
 const dietaryOptions = ["No special requirements", "Vegetarian", "Vegan", "Halal", "Kosher", "Gluten-free", "Dairy-free", "Other (specify in notes)"];
 const roomTypes = ["Single Room", "Double Room (single occupancy)", "Twin Room (sharing)", "Suite"];
-const paymentMethods = ["Bank Transfer (Invoice)", "Credit / Debit Card", "Mobile Money (EcoCash / InnBucks)", "PayPal", "Institutional Purchase Order"];
+const paymentMethods = ["Bank Transfer (Invoice)", "Credit / Debit Card", "Mobile Money (EcoCash / InnBucks)"];
 const sessionOptions = [
   "Day 1 — Inclusive Growth, Smart Investment & Policy Coherence (Mon 21 Sep)",
   "Day 2 — Digitalisation, Platform Economy & Financial Innovation (Tue 22 Sep)",
@@ -131,8 +130,7 @@ export default function RegistrationPage() {
   const set = (field: keyof FormData, value: FormData[keyof FormData]) => setForm(prev => ({ ...prev, [field]: value }));
 
   const isEarlyBird = true; // before 30 June 2026
-  const feeAmount = form.category ? (getRegistrationFeeUsd(form.category, isEarlyBird) ?? 0) : 0;
-  const selectedFeeRow = form.category ? REGISTRATION_FEES_USD[form.category] : undefined;
+  const feeAmount = 1500;
 
   const canProceed = () => {
     if (step === 1) return form.firstName && form.lastName && form.email && form.phone && form.country && form.salutation;
@@ -323,7 +321,7 @@ export default function RegistrationPage() {
             )}
           </div>
           <div className="glass rounded-xl p-4 text-sm text-theme-primary mb-6">
-            <strong className="text-white">Next steps:</strong> You will receive an invoice by email. Payment is due within 14 days. Your badge will be ready for collection at Delegate Registration on <strong className="text-white">21 September 2026</strong>.
+            <strong className="text-white">Next steps:</strong> You will receive an invoice by email. Payment is due within 3 days. Your badge will be ready for collection at Delegate Registration on <strong className="text-white">21 September 2026</strong>.
           </div>
           <div className="flex flex-wrap justify-center gap-3">
             <a href="/" className="btn-gold px-8 py-3 rounded-xl text-sm font-bold inline-flex items-center gap-2">Back to Home <ArrowRight className="w-4 h-4" /></a>
@@ -591,10 +589,7 @@ export default function RegistrationPage() {
                               <span className={`text-sm font-medium ${form.category === fee.category ? "text-white" : "text-theme-primary"}`}>{fee.category}</span>
                             </div>
                             <div className="text-right flex-shrink-0 ml-4">
-                              <div className="text-[#F5B730] font-black">USD {fee.earlyBird}</div>
-                              {fee.standard !== fee.earlyBird && (
-                                <div className="text-xs line-through text-theme-primary">USD {fee.standard}</div>
-                              )}
+                              <div className="text-[#F5B730] font-black">USD 1500</div>
                             </div>
                           </button>
                         ))}
@@ -802,25 +797,11 @@ export default function RegistrationPage() {
                       <p className="text-sm mt-1 text-theme-primary">Select your preferred payment method. An invoice will be issued within 24 hours.</p>
                     </div>
 
-                    {selectedFeeRow && (
-                      <div className="glass-gold rounded-2xl p-5">
-                        <h3 className="text-[#C9921A] text-xs font-bold uppercase mb-3">Registration Fee Summary</h3>
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm text-theme-primary">{form.category}</span>
-                        </div>
-                        <div>
-                          <div className="text-xs text-theme-primary">Flat delegate fee (all categories)</div>
-                          <div className="text-[#F5B730] text-3xl font-black mt-1">USD {feeAmount}</div>
-                          {selectedFeeRow.standard !== selectedFeeRow.early && (
-                            <div className="mt-2 text-right text-xs">
-                              <span className="text-theme-primary">Standard: </span>
-                              <span className="line-through text-theme-primary">USD {selectedFeeRow.standard}</span>
-                              <span className="text-emerald-400 font-bold ml-2">Save USD {selectedFeeRow.standard - selectedFeeRow.early}</span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
+                    <div className="glass-gold rounded-2xl p-5">
+                      <h3 className="text-[#C9921A] text-xs font-bold uppercase mb-3">Registration Fee Summary</h3>
+                      <div className="text-xs text-theme-primary">Registration fee</div>
+                      <div className="text-[#F5B730] text-3xl font-black mt-1">USD 1500</div>
+                    </div>
 
                     <Field label="Payment Method" required>
                       <div className="space-y-2">
@@ -849,7 +830,7 @@ export default function RegistrationPage() {
                     <div className="glass rounded-xl p-4 flex items-start gap-3">
                       <Info className="w-5 h-5 text-[#C9921A] flex-shrink-0 mt-0.5" />
                       <div className="text-xs leading-relaxed space-y-1 text-theme-primary">
-                        <p>Payment is due within <strong className="text-white">14 days</strong> of invoice date. Registration is only confirmed upon receipt of full payment.</p>
+                        <p>Payment is due within <strong className="text-white">3 days</strong> of invoice date. Registration is only confirmed upon receipt of full payment.</p>
                         <p>Bank transfer details will be included in your invoice. For mobile money, contact <a href="mailto:info@tnfzim.com" className="text-[#C9921A]">info@tnfzim.com</a>.</p>
                       </div>
                     </div>
@@ -893,7 +874,7 @@ export default function RegistrationPage() {
                     {/* Consents */}
                     <div className="space-y-3">
                       {[
-                        { key: "termsAccepted", required: true, label: <>I have read and agree to the <a href="/terms" target="_blank" className="text-[#C9921A] underline">Terms of Use</a> and understand that payment is due within 14 days of invoice.</> },
+                        { key: "termsAccepted", required: true, label: <>I have read and agree to the <a href="/terms" target="_blank" className="text-[#C9921A] underline">Terms of Use</a> and understand that payment is due within 3 days of invoice.</> },
                         { key: "privacyConsent", required: true, label: <>I have read and agree to the <a href="/privacy" target="_blank" className="text-[#C9921A] underline">Privacy Policy</a> and consent to the processing of my personal data for Summit administration purposes.</> },
                         { key: "photoConsent", required: false, label: "I consent to being photographed and filmed at Summit sessions and events. Images may be used in official Summit publications and social media." },
                         { key: "newsletterOptIn", required: false, label: "I would like to receive TNF Summit news, programme updates, and post-summit reports by email. I can unsubscribe at any time." },
