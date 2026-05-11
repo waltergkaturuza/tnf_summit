@@ -53,11 +53,6 @@ function ContactPageContent() {
     name: "", email: "", phone: "", organisation: "",
     enquiryType: "", message: "",
   });
-  const directContacts = [
-    { name: "Racheal", phone: "0779560229", href: "tel:+263779560229" },
-    { name: "Llyod", phone: "0773402440", href: "tel:+263773402440" },
-    { name: "Emanuel", phone: "0719879890", href: "tel:+263719879890" },
-  ];
 
   useEffect(() => {
     const wide = searchParams.get("summitWide");
@@ -123,13 +118,13 @@ function ContactPageContent() {
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-10">
           {/* Contact Details */}
           <div className="space-y-6">
             <FadeIn>
               <h2 className="text-2xl font-black text-white mb-6">{t.contact.secretariatTitle}</h2>
               <div className="space-y-4">
-                {t.contact.contactItems.map((item, i) => {
+                {t.contact.contactItems.slice(0, 5).map((item, i) => {
                   const entry = contactEntries[i];
                   if (!entry) return null;
                   const Icon = entry.icon;
@@ -164,8 +159,51 @@ function ContactPageContent() {
                 })}
               </div>
             </FadeIn>
+          </div>
 
-            <FadeIn delay={0.2}>
+          {/* Extra info column */}
+          <div className="space-y-6">
+            <FadeIn delay={0.12}>
+              <h2 className="text-2xl font-black text-white mb-6">Quick Info</h2>
+              <div className="space-y-4">
+                {t.contact.contactItems.slice(5).map((item, localIdx) => {
+                  const idx = localIdx + 5;
+                  const entry = contactEntries[idx];
+                  if (!entry) return null;
+                  const Icon = entry.icon;
+                  const href = entry.href;
+                  const value = entry.value;
+                  const color = entry.color;
+                  return (
+                    <div key={idx} className="glass rounded-xl p-4 flex items-start gap-4">
+                      <div
+                        className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                        style={{ background: `${color}20`, border: `1px solid ${color}30` }}
+                      >
+                        <Icon className="w-5 h-5" style={{ color }} />
+                      </div>
+                      <div>
+                        <div className="text-xs font-medium mb-0.5 text-theme-primary">{item.label}</div>
+                        {href ? (
+                          <a
+                            href={href}
+                            target={href.startsWith("http") ? "_blank" : undefined}
+                            rel="noopener noreferrer"
+                            className="text-white text-sm hover:text-[#F5B730] transition-colors font-medium"
+                          >
+                            {value}
+                          </a>
+                        ) : (
+                          <div className="text-white text-sm font-medium">{value}</div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </FadeIn>
+
+            <FadeIn delay={0.22}>
               <div className="glass-gold rounded-2xl p-5">
                 <div className="text-2xl mb-2">📅</div>
                 <h3 className="text-white font-bold mb-1">{t.contact.summitDates}</h3>
@@ -173,32 +211,6 @@ function ContactPageContent() {
                 <div className="text-xs mt-1 text-theme-primary">{t.contact.summitDatesVenue}</div>
                 <div className="divider-gold my-3" />
                 <div className="text-[#F5B730] font-bold text-sm">{t.contact.earlyBirdCloses}</div>
-              </div>
-            </FadeIn>
-
-            <FadeIn delay={0.25}>
-              <div className="glass rounded-2xl p-5 border border-white/10">
-                <h3 className="text-white font-bold mb-3">Direct Contacts</h3>
-                <div className="space-y-2.5 text-sm">
-                  {directContacts.map((c) => (
-                    <div key={c.phone} className="flex items-center justify-between gap-3 rounded-lg bg-white/5 px-3 py-2">
-                      <span className="text-theme-primary">Contact {c.name}</span>
-                      <a href={c.href} className="font-semibold text-[#F5B730] hover:underline">
-                        {c.phone}
-                      </a>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-4 border-t border-white/10 pt-3 text-xs text-theme-primary">
-                  Official emails:{" "}
-                  <a href={`mailto:${summitInfo.email}`} className="text-[#F5B730] hover:underline">
-                    {summitInfo.email}
-                  </a>
-                  {" · "}
-                  <a href={`mailto:${summitInfo.emailAlt}`} className="text-[#F5B730] hover:underline">
-                    {summitInfo.emailAlt}
-                  </a>
-                </div>
               </div>
             </FadeIn>
           </div>

@@ -180,7 +180,7 @@ export default function DonatePage() {
         </div>
       )}
 
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <Link href="/" className="inline-flex items-center gap-2 text-slate-400 hover:text-[#C9921A] text-sm font-semibold mb-8">
           <ArrowLeft className="w-4 h-4" /> Back to Home
         </Link>
@@ -196,8 +196,9 @@ export default function DonatePage() {
             </p>
           </div>
 
-          {/* Card donation — short form */}
-          <div className="glass rounded-2xl p-6 border border-white/10">
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 items-start">
+            {/* Card donation — short form */}
+            <div className="glass rounded-2xl p-6 border border-white/10 xl:col-span-2">
             <h2 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
               <CreditCard className="w-5 h-5 text-[#d49a26]" /> Donate by card
             </h2>
@@ -379,47 +380,48 @@ export default function DonatePage() {
                 )}
               </button>
             </form>
-          </div>
+            </div>
 
-          {/* Bank transfer details */}
-          <div className="glass rounded-2xl p-6 border border-white/10">
-            <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-              <CreditCard className="w-5 h-5 text-[#C9921A]" /> Bank transfer
-            </h2>
+            {/* Bank transfer details (side panel on desktop) */}
+            <aside className="glass rounded-2xl p-6 border border-white/10 xl:sticky xl:top-24">
+              <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                <CreditCard className="w-5 h-5 text-[#C9921A]" /> Bank transfer
+              </h2>
 
-            {loadingSettings ? (
-              <div className="flex items-center justify-center py-12">
-                <div className="w-8 h-8 border-2 border-[#C9921A]/30 border-t-[#C9921A] rounded-full animate-spin" />
-              </div>
-            ) : hasBankDetails ? (
-              <div className="space-y-3">
-                <CopyField label="Bank Name" value={bankName} icon={Building2} />
-                <CopyField label="Account Name" value={accountName} icon={CreditCard} />
-                <CopyField label="Account Number" value={accountNumber} icon={Hash} />
-                <CopyField label="Branch Code" value={branchCode} icon={Hash} />
-                <CopyField label="SWIFT / BIC" value={swift} icon={Globe} />
-                <div className="glass rounded-xl px-4 py-3 border border-white/10">
-                  <h4 className="text-white font-semibold text-sm">Currency</h4>
-                  <p className="text-theme-primary text-sm font-mono">{currency}</p>
+              {loadingSettings ? (
+                <div className="flex items-center justify-center py-12">
+                  <div className="w-8 h-8 border-2 border-[#C9921A]/30 border-t-[#C9921A] rounded-full animate-spin" />
                 </div>
-              </div>
-            ) : (
-              <p className="text-slate-500 text-sm py-4">
-                Bank details are being configured. Please contact{" "}
-                <a href="mailto:info@tnfzim.com" className="text-[#C9921A] hover:underline">
-                  info@tnfzim.com
-                </a>{" "}
-                for donation instructions.
-              </p>
-            )}
-
-            {hasBankDetails && (
-              <div className="mt-6 p-4 rounded-xl bg-[#C9921A]/10 border border-[#C9921A]/20">
-                <p className="text-slate-300 text-xs leading-relaxed">
-                  <strong className="text-[#F5B730]">Payment reference:</strong> Include your name or organisation when making the transfer so we can acknowledge your donation. For international transfers, use the SWIFT code above.
+              ) : hasBankDetails ? (
+                <div className="space-y-3">
+                  <CopyField label="Bank Name" value={bankName} icon={Building2} />
+                  <CopyField label="Account Name" value={accountName} icon={CreditCard} />
+                  <CopyField label="Account Number" value={accountNumber} icon={Hash} />
+                  <CopyField label="Branch Code" value={branchCode} icon={Hash} />
+                  <CopyField label="SWIFT / BIC" value={swift} icon={Globe} />
+                  <div className="glass rounded-xl px-4 py-3 border border-white/10">
+                    <h4 className="text-white font-semibold text-sm">Currency</h4>
+                    <p className="text-theme-primary text-sm font-mono">{currency}</p>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-slate-500 text-sm py-4">
+                  Bank details are being configured. Please contact{" "}
+                  <a href="mailto:info@tnfzim.com" className="text-[#C9921A] hover:underline">
+                    info@tnfzim.com
+                  </a>{" "}
+                  for donation instructions.
                 </p>
-              </div>
-            )}
+              )}
+
+              {hasBankDetails && (
+                <div className="mt-6 p-4 rounded-xl bg-[#C9921A]/10 border border-[#C9921A]/20">
+                  <p className="text-slate-300 text-xs leading-relaxed">
+                    <strong className="text-[#F5B730]">Payment reference:</strong> Include your name or organisation when making the transfer so we can acknowledge your donation. For international transfers, use the SWIFT code above.
+                  </p>
+                </div>
+              )}
+            </aside>
           </div>
 
           <div className="text-center">
