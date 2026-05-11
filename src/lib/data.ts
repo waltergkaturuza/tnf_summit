@@ -51,14 +51,9 @@ export const donationCategories: DonationCategoryDef[] = [
     description: "Unrestricted support for summit delivery and logistics",
   },
   {
-    key: "scholarship",
-    label: "Delegate scholarships",
-    description: "Help under-represented delegates attend",
-  },
-  {
-    key: "youth_innovation",
-    label: "Youth & innovation",
-    description: "Youth forum, pitch programmes, and innovation activities",
+    key: "global_themes_fund",
+    label: "Global Summit themes fund",
+    description: "Support delivery across all Summit themes and sessions",
   },
   {
     key: "media_comms",
@@ -67,8 +62,13 @@ export const donationCategories: DonationCategoryDef[] = [
   },
   {
     key: "csr_partnership",
-    label: "CSR / partnership gift",
+    label: "Partnership Gift",
     description: "Corporate or institutional contribution without a full sponsorship package",
+  },
+  {
+    key: "other",
+    label: "Other",
+    description: "Choose this if your preferred donation category is not listed",
   },
 ];
 
@@ -89,8 +89,8 @@ export const themes = [
   { id: "J", label: "Regional Integration: Making AfCFTA Work", color: "#14B8A6", icon: "Globe" },
   { id: "K", label: "Health, Well-being & Workplace Productivity", color: "#A78BFA", icon: "Heart" },
   { id: "L", label: "Infrastructure as a Development Multiplier", color: "#64748B", icon: "Building" },
-  { id: "M", label: "Zimbabwe's Indigenous Business Champions ★ NEW", color: "#C9921A", icon: "Star", isNew: true },
-  { id: "N", label: "Frontier Technologies & Cross-Regional Investment ★ NEW", color: "#6366F1", icon: "Zap", isNew: true },
+  { id: "M", label: "Zimbabwe's Indigenous Business Champions", color: "#C9921A", icon: "Star", isNew: true },
+  { id: "N", label: "Frontier Technologies & Cross-Regional Investment", color: "#6366F1", icon: "Zap", isNew: true },
 ];
 
 export type Session = {

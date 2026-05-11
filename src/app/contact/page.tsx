@@ -26,24 +26,21 @@ function FadeIn({ children, delay = 0, className = "" }: { children: React.React
   );
 }
 
-const contactIcons = [Mail, Mail, Phone, MapPin, Globe, Clock];
-const contactValues = [
-  summitInfo.email,
-  summitInfo.emailAlt,
-  `${summitInfo.phone} / ${summitInfo.phoneLocal}`,
-  summitInfo.address,
-  "tnfzim.com",
-  "Mon–Fri, 08:00–17:00 CAT (UTC+2)",
+const contactEntries: {
+  icon: React.ElementType;
+  value: string;
+  href?: string;
+  color: string;
+}[] = [
+  { icon: Mail, value: summitInfo.email, href: `mailto:${summitInfo.email}`, color: "#3B82F6" },
+  { icon: Mail, value: summitInfo.emailAlt, href: `mailto:${summitInfo.emailAlt}`, color: "#06B6D4" },
+  { icon: Phone, value: "Racheal — 0779560229", href: "tel:+263779560229", color: "#10B981" },
+  { icon: Phone, value: "Llyod — 0773402440", href: "tel:+263773402440", color: "#22C55E" },
+  { icon: Phone, value: "Emanuel — 0719879890", href: "tel:+263719879890", color: "#84CC16" },
+  { icon: MapPin, value: summitInfo.address, color: "#C9921A" },
+  { icon: Globe, value: "tnfzim.com", href: summitInfo.mainWebsite, color: "#8B5CF6" },
+  { icon: Clock, value: "Mon–Fri, 08:00–17:00 CAT (UTC+2)", color: "#F59E0B" },
 ];
-const contactHrefs = [
-  `mailto:${summitInfo.email}`,
-  `mailto:${summitInfo.emailAlt}`,
-  "tel:+2632427830",
-  undefined,
-  summitInfo.mainWebsite,
-  undefined,
-];
-const contactColors = ["#3B82F6", "#06B6D4", "#10B981", "#C9921A", "#8B5CF6", "#F59E0B"];
 
 function ContactPageContent() {
   const { t } = useLanguage();
@@ -128,10 +125,12 @@ function ContactPageContent() {
               <h2 className="text-2xl font-black text-white mb-6">{t.contact.secretariatTitle}</h2>
               <div className="space-y-4">
                 {t.contact.contactItems.map((item, i) => {
-                  const Icon = contactIcons[i] ?? Mail;
-                  const href = contactHrefs[i];
-                  const value = contactValues[i];
-                  const color = contactColors[i] ?? "#C9921A";
+                  const entry = contactEntries[i];
+                  if (!entry) return null;
+                  const Icon = entry.icon;
+                  const href = entry.href;
+                  const value = entry.value;
+                  const color = entry.color;
                   return (
                     <div key={i} className="glass rounded-xl p-4 flex items-start gap-4">
                       <div

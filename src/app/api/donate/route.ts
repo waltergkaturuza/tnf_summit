@@ -17,6 +17,7 @@ type Body = {
   email?: string;
   phone?: string;
   categoryKey?: string;
+  categoryOther?: string;
   amountUsd?: number;
   message?: string;
 };
@@ -40,6 +41,7 @@ export async function POST(req: Request) {
   const email = (body.email ?? "").trim().toLowerCase();
   const phone = (body.phone ?? "").trim().slice(0, 40);
   const categoryKey = (body.categoryKey ?? "").trim() || "general";
+  const categoryOther = (body.categoryOther ?? "").trim().slice(0, 120);
   const message = (body.message ?? "").trim().slice(0, 2000);
 
   if (!email || !email.includes("@")) {
@@ -47,6 +49,9 @@ export async function POST(req: Request) {
   }
   if (!ALLOWED.has(categoryKey)) {
     return NextResponse.json({ error: "Invalid donation category." }, { status: 400 });
+  }
+  if (categoryKey === "other" && !categoryOther) {
+    return NextResponse.json({ error: "Please provide your donation category." }, { status: 400 });
   }
 
   if (!firstName || !lastName) {
@@ -65,7 +70,7 @@ export async function POST(req: Request) {
   }
 
   const trackId = generateDonationTrackId();
-  const categoryLabel = getDonationCategoryLabel(categoryKey);
+  const categoryLabel = categoryKey === "other" ? categoryOther : getDonationCategoryLabel(categoryKey);
 
   const { data, error } = await supabaseAdmin
     .schema("tnf_summit")

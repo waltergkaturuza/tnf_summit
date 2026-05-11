@@ -54,7 +54,8 @@ export default function DonatePage() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [categoryKey, setCategoryKey] = useState(donationCategories[0]?.key ?? "general");
-  const [amountUsd, setAmountUsd] = useState<string>("50");
+  const [categoryOther, setCategoryOther] = useState("");
+  const [amountUsd, setAmountUsd] = useState<string>("");
   const [message, setMessage] = useState("");
 
   const [cardSubmitting, setCardSubmitting] = useState(false);
@@ -92,6 +93,11 @@ export default function DonatePage() {
         setCardSubmitting(false);
         return;
       }
+      if (categoryKey === "other" && !categoryOther.trim()) {
+        setCardError("Please provide your donation category under Other.");
+        setCardSubmitting(false);
+        return;
+      }
 
       const createRes = await fetch("/api/donate", {
         method: "POST",
@@ -104,6 +110,7 @@ export default function DonatePage() {
           email: email.trim(),
           phone: phone.trim(),
           categoryKey,
+          categoryOther: categoryOther.trim(),
           amountUsd: amt,
           message: message.trim(),
         }),
@@ -286,6 +293,18 @@ export default function DonatePage() {
                   {donationCategories.find((c) => c.key === categoryKey)?.description}
                 </p>
               </div>
+              {categoryKey === "other" && (
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Other category</label>
+                  <input
+                    required
+                    value={categoryOther}
+                    onChange={(e) => setCategoryOther(e.target.value)}
+                    placeholder="Enter donation category"
+                    className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-primary)] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#d49a26]/40"
+                  />
+                </div>
+              )}
 
               <div>
                 <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Amount (USD)</label>
