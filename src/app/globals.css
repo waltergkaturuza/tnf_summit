@@ -294,31 +294,23 @@ html.light .btn-outline-gold:hover {
 .theme-f { background: rgba(139, 92, 246, 0.15); border-color: rgba(139, 92, 246, 0.4); }
 
 /*
- * Google Website Translator — hide the top banner iframe so it does not cover
- * our fixed navbar. Google sets body { top: 40px } when the bar is present.
+ * Google Website Translator — hide only the top banner iframe so it does not cover
+ * the fixed navbar. Avoid broad html/body rules that can interfere with translation.
  */
-iframe.goog-te-banner-frame,
-.goog-te-banner-frame,
-.goog-te-banner-frame.skiptranslate {
+iframe.goog-te-banner-frame {
   display: none !important;
   visibility: hidden !important;
   height: 0 !important;
   width: 0 !important;
   max-height: 0 !important;
   overflow: hidden !important;
-  position: absolute !important;
-  left: -9999px !important;
   border: 0 !important;
   margin: 0 !important;
   padding: 0 !important;
 }
 
-html,
 body {
-  position: static !important;
   top: 0 !important;
-  margin-top: 0 !important;
-  padding-top: 0 !important;
 }
 
 body.translated-ltr,

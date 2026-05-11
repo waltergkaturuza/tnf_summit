@@ -48,24 +48,20 @@ function triggerGoogleTranslate(langCode: string) {
   return false;
 }
 
+/** Hide only the top promo/banner iframe and undo body offset — must not run on every DOM mutation or translation breaks. */
 function stripGoogleTranslateBanner() {
   if (typeof document === "undefined") return;
-  document.querySelectorAll("iframe.goog-te-banner-frame, .goog-te-banner-frame").forEach((node) => {
+  document.querySelectorAll("iframe.goog-te-banner-frame").forEach((node) => {
     const el = node as HTMLElement;
     el.style.setProperty("display", "none", "important");
     el.style.setProperty("visibility", "hidden", "important");
     el.style.setProperty("height", "0", "important");
     el.style.setProperty("width", "0", "important");
     el.style.setProperty("overflow", "hidden", "important");
-    el.style.setProperty("position", "absolute", "important");
-    el.style.setProperty("left", "-9999px", "important");
   });
   document.body.style.setProperty("top", "0", "important");
-  document.body.style.setProperty("position", "static", "important");
   document.body.style.setProperty("margin-top", "0", "important");
   document.body.style.setProperty("padding-top", "0", "important");
-  document.documentElement.style.setProperty("margin-top", "0", "important");
-  document.documentElement.style.setProperty("padding-top", "0", "important");
 }
 
 /** Mount once (non-admin public shell). Hidden host + Google script + TranslateElement. */
@@ -78,17 +74,12 @@ export function GoogleTranslateRoot() {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const w = window as any;
       if (!w.google?.translate?.TranslateElement) return;
-      const InlineLayout = w.google.translate.TranslateElement.InlineLayout;
+      // Default layout — SIMPLE was suspected of breaking translation with some widget versions.
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      new w.google.translate.TranslateElement(
-        {
-          pageLanguage: "en",
-          autoDisplay: false,
-          ...(InlineLayout?.SIMPLE != null ? { layout: InlineLayout.SIMPLE } : {}),
-        },
-        "google_translate_element",
-      );
-      stripGoogleTranslateBanner();
+      new w.google.translate.TranslateElement({ pageLanguage: "en", autoDisplay: false }, "google_translate_element");
+      queueMicrotask(stripGoogleTranslateBanner);
+      setTimeout(stripGoogleTranslateBanner, 400);
+      setTimeout(stripGoogleTranslateBanner, 2000);
     };
 
     const script = document.createElement("script");
@@ -98,18 +89,24 @@ export function GoogleTranslateRoot() {
     document.body.appendChild(script);
   }, []);
 
-  /* Re-apply when Google injects / mutates the banner (CSS alone is sometimes beaten by inline styles). */
+  /* Re-apply only when body gains/removes nodes (banner iframe), not on every translated text node. */
   useEffect(() => {
     if (typeof window === "undefined") return;
-    stripGoogleTranslateBanner();
-    const mo = new MutationObserver(() => stripGoogleTranslateBanner());
-    mo.observe(document.documentElement, { childList: true, subtree: true });
-    const fast = window.setInterval(stripGoogleTranslateBanner, 400);
-    const stopFast = window.setTimeout(() => clearInterval(fast), 20000);
+    const run = () => {
+      if (document.querySelector("iframe.goog-te-banner-frame")) stripGoogleTranslateBanner();
+    };
+    run();
+    const moBody = new MutationObserver(run);
+    moBody.observe(document.body, { childList: true });
+    const moHtml = new MutationObserver(run);
+    moHtml.observe(document.documentElement, { childList: true });
+    const t1 = window.setTimeout(run, 1000);
+    const t2 = window.setTimeout(run, 4000);
     return () => {
-      mo.disconnect();
-      clearInterval(fast);
-      clearTimeout(stopFast);
+      moBody.disconnect();
+      moHtml.disconnect();
+      clearTimeout(t1);
+      clearTimeout(t2);
     };
   }, []);
 
@@ -156,6 +153,8 @@ export function LanguageSelector({ dark }: { dark?: boolean }) {
       if (!triggerGoogleTranslate(code)) {
         setTimeout(() => triggerGoogleTranslate(code), 1000);
       }
+      setTimeout(stripGoogleTranslateBanner, 800);
+      setTimeout(stripGoogleTranslateBanner, 2800);
     }, 300);
   }, []);
 
