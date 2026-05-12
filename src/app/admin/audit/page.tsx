@@ -116,7 +116,7 @@ export default function AuditTrailPage() {
           <h1 className="text-2xl font-black text-white flex items-center gap-2">
             <Activity className="w-6 h-6 text-[#C9921A]" /> Audit Trail
           </h1>
-          <p className="text-slate-400 text-sm mt-1">System activity log — every admin action recorded</p>
+          <p className="text-slate-400 text-sm mt-1">System activity log, every admin action recorded</p>
         </div>
         <button onClick={() => load()} className="p-2 glass rounded-xl text-slate-400 hover:text-white">
           <RefreshCw className="w-4 h-4" />
@@ -185,7 +185,7 @@ export default function AuditTrailPage() {
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="text-white text-sm font-semibold">{cfg.label}</span>
                     {e.entityLabel && (
-                      <span className="text-slate-400 text-xs">— <span className="text-slate-300">{e.entityLabel}</span></span>
+                      <span className="text-slate-400 text-xs">· <span className="text-slate-300">{e.entityLabel}</span></span>
                     )}
                   </div>
                   <div className="flex items-center gap-3 mt-0.5">

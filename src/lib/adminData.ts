@@ -285,7 +285,7 @@ export function generateMockRegistrations(): Registration[] {
       airportTransfer: i % 4 !== 0,
       specialNeeds: "",
       dietaryRequirements: ["None", "Vegetarian", "Halal", "None", "None"][i % 5],
-      sessionInterests: ["Day 1 — Inclusive Growth", "Day 2 — Digitalisation"].slice(0, (i % 2) + 1),
+      sessionInterests: ["Day 1, Inclusive Growth", "Day 2, Digitalisation"].slice(0, (i % 2) + 1),
       excursionPreference: ["Victoria Falls Walk", "Zambezi Cruise", "Game Drive"][i % 3],
       applyInnovation: i % 7 === 0,
       startupName: i % 7 === 0 ? `TechVenture ${i}` : "",
@@ -306,7 +306,7 @@ export function generateMockRegistrations(): Registration[] {
       photoConsent: i % 4 !== 0,
       newsletterOptIn: i % 3 !== 0,
       termsAccepted: true,
-      adminNotes: i % 5 === 0 ? "VIP delegate — priority seating required." : "",
+      adminNotes: i % 5 === 0 ? "VIP delegate, priority seating required." : "",
     };
   });
 }
@@ -380,7 +380,7 @@ export function generateMockSpeakers(): Speaker[] {
       id: "SPK-002", name: "Gilbert F. Houngbo", title: "Director-General",
       organisation: "International Labour Organization (ILO)", country: "Switzerland",
       bio: "Mr Houngbo will deliver an address at the Official Opening Ceremony and will present at the Day 2 plenary on digitalisation.",
-      sessionTitle: "ILO Address — Future of Work", sessionDate: "Wednesday, 23 September 2026",
+      sessionTitle: "ILO Address, Future of Work", sessionDate: "Wednesday, 23 September 2026",
       sessionType: "Plenary", status: "confirmed",
       photoUrl: "", email: "dg@ilo.org", addedAt: "2026-02-05T00:00:00Z",
     },
@@ -388,7 +388,7 @@ export function generateMockSpeakers(): Speaker[] {
       id: "SPK-003", name: "Dr Akinwumi Adesina", title: "President",
       organisation: "African Development Bank Group", country: "Côte d'Ivoire",
       bio: "Dr Adesina is expected to address the High-Level Ministerial Plenary on Africa's $3.4 Trillion Investment Frontier.",
-      sessionTitle: "Africa's Investment Frontier — Keynote", sessionDate: "Monday, 21 September 2026",
+      sessionTitle: "Africa's Investment Frontier, Keynote", sessionDate: "Monday, 21 September 2026",
       sessionType: "Keynote", status: "tentative",
       photoUrl: "", email: "office.president@afdb.org", addedAt: "2026-02-10T00:00:00Z",
     },
@@ -402,7 +402,7 @@ export function generateMockSpeakers(): Speaker[] {
     },
     {
       id: "SPK-005", name: "Dr Yvonne Mkwanazi-Twala", title: "Director-General",
-      organisation: "ZIDA — Zimbabwe Investment and Development Agency", country: "Zimbabwe",
+      organisation: "ZIDA, Zimbabwe Investment and Development Agency", country: "Zimbabwe",
       bio: "The ZIDA DG will facilitate the Investment Pipeline & Deal Facilitation Session and the Zimbabwe Green Investment Spotlight.",
       sessionTitle: "Investing in Zimbabwe: Project Pipeline", sessionDate: "Monday, 21 September 2026",
       sessionType: "Special Session", status: "confirmed",

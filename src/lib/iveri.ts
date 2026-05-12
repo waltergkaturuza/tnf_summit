@@ -1,9 +1,9 @@
 /**
- * iVeri Lite — Full Redirect to the Hosted Payment Page (not LiteBox).
+ * iVeri Lite, Full Redirect to the Hosted Payment Page (not LiteBox).
  *
  * We intentionally do **not** use the LiteBox modal (`jquery.litebox.js`). Full Redirect
- * posts the browser to `…/Lite/Authorise.aspx` and returns via success/fail/error URLs—
- * reliable across ad blockers, corporate firewalls, and strict browser privacy settings.
+ * posts the browser to `…/Lite/Authorise.aspx` and returns via success/fail/error URLs.
+ * The flow is reliable across ad blockers, corporate firewalls, and strict browser privacy settings.
  * LiteBox is optional in iVeri’s guide; this integration matches the “primary” flow above.
  *
  * Field construction belongs in a trusted server route (`/api/payments/iveri/start`) so
@@ -170,7 +170,7 @@ export type LiteAuthoriseInfoResult = {
 
 /**
  * Server-side: query the hosted gateway for the latest status of a transaction.
- * @see iVeri Lite — AuthoriseInfo.aspx; use with `Lite_Merchant_Trace` (or `OriginalMerchantTrace` per your acquirer).
+ * @see iVeri Lite, AuthoriseInfo.aspx; use with `Lite_Merchant_Trace` (or `OriginalMerchantTrace` per your acquirer).
  */
 export async function queryLiteAuthoriseInfo(input: {
   applicationIdRaw: string;

@@ -1,5 +1,5 @@
 /**
- * db.ts — All database CRUD operations for the TNF Summit platform.
+ * db.ts, All database CRUD operations for the TNF Summit platform.
  * Every function talks to Supabase and returns typed results.
  */
 

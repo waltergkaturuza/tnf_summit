@@ -130,7 +130,7 @@ export default function UpdateDetailContent({ update, attachments = [] }: { upda
             </span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-black text-white mb-4">{update.title}</h1>
-          <div className="prose prose-invert max-w-none text-slate-300 whitespace-pre-wrap">{update.description || "—"}</div>
+          <div className="prose prose-invert max-w-none text-slate-300 whitespace-pre-wrap">{update.description || "-"}</div>
           {update.link && (
             <a href={update.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 mt-6 btn-gold px-5 py-2.5 rounded-xl text-sm font-bold">
               Read more <ExternalLink className="w-4 h-4" />

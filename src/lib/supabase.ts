@@ -13,7 +13,7 @@ if (typeof window !== "undefined") {
   }
 }
 
-// Browser client — used in components and context
+// Browser client, used in components and context
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,

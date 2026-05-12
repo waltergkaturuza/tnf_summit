@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     "Investment Promotion",
   ],
   openGraph: {
-    title: "Zimbabwe TNF Global Summit 2026 — Victoria Falls, Zimbabwe",
+    title: "Zimbabwe TNF Global Summit 2026, Victoria Falls, Zimbabwe",
     description:
       "Africa's premier tripartite-led global convening platform. 21–25 September 2026 at Elephant Hills Resort, Victoria Falls, Zimbabwe.",
     type: "website",

@@ -20,7 +20,7 @@ export const summitInfo = {
   merchantTechnicalEmail: "waltergkaturuza@gmail.com",
   /** Trading / legal display name for payment profile and partnerships. */
   tradingName: "TNF Zimbabwe",
-  /** Merchant locality — must match iVeri Application (City). */
+  /** Merchant locality, must match iVeri Application (City). */
   merchantCity: "HARARE",
   merchantCountry: "Zimbabwe",
   phone: "+263 242 783 030",
@@ -127,7 +127,7 @@ export const program: DaySchedule[] = [
         room: "BOTH",
         type: "networking",
         themes: [],
-        description: "Official registration and badge collection — Main Convention Foyer. Summit App activation, exhibition preview and bilateral pre-bookings.",
+        description: "Official registration and badge collection, Main Convention Foyer. Summit App activation, exhibition preview and bilateral pre-bookings.",
       },
       {
         id: "mon-1",
@@ -141,11 +141,11 @@ export const program: DaySchedule[] = [
       {
         id: "mon-2",
         time: "08:30–09:15",
-        title: "Opening Keynote — Day 1: Africa's $3.4 Trillion Investment Frontier",
+        title: "Opening Keynote, Day 1: Africa's $3.4 Trillion Investment Frontier",
         room: "A",
         type: "plenary",
         themes: ["A"],
-        description: "\"Driving Inclusive Economic Growth, Decent Work, Beneficiation, and Investment Promotion in a Changing Global Economy\" — Live launch: TNF Summit Investor Confidence Tracker. Delivered by a globally recognised economist or senior development leader.",
+        description: "\"Driving Inclusive Economic Growth, Decent Work, Beneficiation, and Investment Promotion in a Changing Global Economy\", Live launch: TNF Summit Investor Confidence Tracker. Delivered by a globally recognised economist or senior development leader.",
       },
       {
         id: "mon-3",
@@ -162,25 +162,25 @@ export const program: DaySchedule[] = [
         room: "A",
         type: "plenary",
         themes: ["A", "L"],
-        description: "\"Aligning Labour, Investment, Industrial and Social Policies for Inclusive and Sustainable Economic Growth\" — Panel: Ministers of Finance, Labour, Industry and Trade from 6 African nations. AfCFTA, infrastructure investment pipelines and bankable projects.",
+        description: "\"Aligning Labour, Investment, Industrial and Social Policies for Inclusive and Sustainable Economic Growth\", Panel: Ministers of Finance, Labour, Industry and Trade from 6 African nations. AfCFTA, infrastructure investment pipelines and bankable projects.",
       },
       {
         id: "mon-5a",
         time: "11:30–13:00",
-        title: "Plenary A — Smart Investment, Sectors and Value Chains",
+        title: "Plenary A, Smart Investment, Sectors and Value Chains",
         room: "A",
         type: "concurrent",
         themes: ["G"],
-        description: "Industrialisation & Value Chain Integration — Agriculture, Agro-Processing, Mining, Manufacturing, Trade Facilitation and Regional Value Chains.",
+        description: "Industrialisation & Value Chain Integration, Agriculture, Agro-Processing, Mining, Manufacturing, Trade Facilitation and Regional Value Chains.",
       },
       {
         id: "mon-5b",
         time: "11:30–13:00",
-        title: "Plenary B — Governance, Social Dialogue and the Investment Climate",
+        title: "Plenary B, Governance, Social Dialogue and the Investment Climate",
         room: "B",
         type: "concurrent",
         themes: ["H"],
-        description: "Social Dialogue as an Investment Signal — ESG Principles, Policy Certainty, Investment Confidence, Industrial Peace.",
+        description: "Social Dialogue as an Investment Signal, ESG Principles, Policy Certainty, Investment Confidence, Industrial Peace.",
       },
       {
         id: "mon-6",
@@ -211,11 +211,11 @@ export const program: DaySchedule[] = [
       {
         id: "mon-8",
         time: "15:30–16:15",
-        title: "Regional Integration Forum — Making AfCFTA Work",
+        title: "Regional Integration Forum, Making AfCFTA Work",
         room: "BOTH",
         type: "plenary",
         themes: ["J"],
-        description: "AfCFTA Implementation — Progress, Gaps and Opportunities. Cross-border labour mobility, skills portability and social protection under AfCFTA.",
+        description: "AfCFTA Implementation, Progress, Gaps and Opportunities. Cross-border labour mobility, skills portability and social protection under AfCFTA.",
       },
       {
         id: "mon-9a",
@@ -225,7 +225,7 @@ export const program: DaySchedule[] = [
         type: "special",
         themes: ["M"],
         isNew: true,
-        description: "\"Building Wealth from Within: How Zimbabwe's Indigenous Entrepreneurs Are Reshaping the Nation's Economic Landscape\" — High-energy panel with Zimbabwe's most prominent indigenous business leaders. Moderated panel (30 min) + live Q&A (15 min) + networking (15 min).",
+        description: "\"Building Wealth from Within: How Zimbabwe's Indigenous Entrepreneurs Are Reshaping the Nation's Economic Landscape\", High-energy panel with Zimbabwe's most prominent indigenous business leaders. Moderated panel (30 min) + live Q&A (15 min) + networking (15 min).",
       },
       {
         id: "mon-9b",
@@ -235,7 +235,7 @@ export const program: DaySchedule[] = [
         type: "special",
         themes: ["A", "G"],
         isNew: true,
-        description: "ZIDA-hosted investor session presenting bankable priority projects — Renewable energy, sustainable mining, agro-processing, manufacturing, eco-tourism. Letter of Intent signing ceremony. Facilitated by ZIDA Director-General.",
+        description: "ZIDA-hosted investor session presenting bankable priority projects, Renewable energy, sustainable mining, agro-processing, manufacturing, eco-tourism. Letter of Intent signing ceremony. Facilitated by ZIDA Director-General.",
       },
       {
         id: "mon-10",
@@ -253,7 +253,7 @@ export const program: DaySchedule[] = [
         room: "BOTH",
         type: "social",
         themes: [],
-        description: "Elephant Hills Resort — Terrace & Pool Deck. Cocktails, canapés, Zimbabwean cultural performances and announcement of TNF Innovation Challenge finalists. Dress Code: Smart Casual.",
+        description: "Elephant Hills Resort, Terrace & Pool Deck. Cocktails, canapés, Zimbabwean cultural performances and announcement of TNF Innovation Challenge finalists. Dress Code: Smart Casual.",
       },
     ],
   },
@@ -273,7 +273,7 @@ export const program: DaySchedule[] = [
       {
         id: "tue-2",
         time: "08:30–09:15",
-        title: "High-Level Plenary — Harnessing Digitalisation and Technological Change",
+        title: "High-Level Plenary, Harnessing Digitalisation and Technological Change",
         room: "A",
         type: "plenary",
         themes: ["B", "E"],
@@ -282,11 +282,11 @@ export const program: DaySchedule[] = [
       {
         id: "tue-3",
         time: "09:15–09:45",
-        title: "FinTech Special Feature — Digital Finance and the FinTech Revolution",
+        title: "FinTech Special Feature, Digital Finance and the FinTech Revolution",
         room: "A",
         type: "special",
         themes: ["E"],
-        description: "Address by Governor, Reserve Bank of Zimbabwe. Live FinTech Innovator Pitch — 3-minute rapid investment pitch from a leading African start-up.",
+        description: "Address by Governor, Reserve Bank of Zimbabwe. Live FinTech Innovator Pitch, 3-minute rapid investment pitch from a leading African start-up.",
       },
       {
         id: "tue-4",
@@ -299,20 +299,20 @@ export const program: DaySchedule[] = [
       {
         id: "tue-5a",
         time: "10:15–12:00",
-        title: "Plenary A — Platform Economy, Gig Work and Labour Rights",
+        title: "Plenary A, Platform Economy, Gig Work and Labour Rights",
         room: "A",
         type: "concurrent",
         themes: ["B"],
-        description: "AI, Automation & the Jobs of Tomorrow — Regulating the Platform and Gig Economy, Labour Rights in Non-Standard Work, Cross-Border Digital Labour Markets, Balancing Innovation and Regulation.",
+        description: "AI, Automation & the Jobs of Tomorrow, Regulating the Platform and Gig Economy, Labour Rights in Non-Standard Work, Cross-Border Digital Labour Markets, Balancing Innovation and Regulation.",
       },
       {
         id: "tue-5b",
         time: "10:15–12:00",
-        title: "Plenary B — Digital Finance, FinTech and Investment Ecosystems",
+        title: "Plenary B, Digital Finance, FinTech and Investment Ecosystems",
         room: "B",
         type: "concurrent",
         themes: ["E"],
-        description: "Digital Finance & the FinTech Revolution — Transforming Banking through Digitalisation, Digital Currencies, Investment Opportunities in Digital Finance, Cybersecurity and Regulation.",
+        description: "Digital Finance & the FinTech Revolution, Transforming Banking through Digitalisation, Digital Currencies, Investment Opportunities in Digital Finance, Cybersecurity and Regulation.",
       },
       {
         id: "tue-6",
@@ -343,11 +343,11 @@ export const program: DaySchedule[] = [
       {
         id: "tue-8a",
         time: "14:30–16:00",
-        title: "Structured Tripartite Engagement — Managing Digital Transformation",
+        title: "Structured Tripartite Engagement, Managing Digital Transformation",
         room: "A",
         type: "plenary",
         themes: ["H"],
-        description: "Social Dialogue as an Investment Signal — Managing Digital Transformation through Structured Social Dialogue. Peer Learning Forum on Governing Technological Change. ESC/TNF Roundtable on Collective Bargaining and New Forms of Work.",
+        description: "Social Dialogue as an Investment Signal, Managing Digital Transformation through Structured Social Dialogue. Peer Learning Forum on Governing Technological Change. ESC/TNF Roundtable on Collective Bargaining and New Forms of Work.",
       },
       {
         id: "tue-8b",
@@ -357,16 +357,16 @@ export const program: DaySchedule[] = [
         type: "special",
         themes: ["D"],
         isNew: true,
-        description: "\"Closing the Gap: Gender-Smart Investment and Financing for Women-Led Growth in Africa\" — High-level panel featuring African women investors, DFI leaders, and women-led enterprise CEOs. High-level panel (50 min) + moderated Q&A (40 min).",
+        description: "\"Closing the Gap: Gender-Smart Investment and Financing for Women-Led Growth in Africa\", High-level panel featuring African women investors, DFI leaders, and women-led enterprise CEOs. High-level panel (50 min) + moderated Q&A (40 min).",
       },
       {
         id: "tue-9",
         time: "16:00–17:00",
-        title: "TNF Innovation Challenge Pitches — Live Round 1",
+        title: "TNF Innovation Challenge Pitches, Live Round 1",
         room: "BOTH",
         type: "special",
         themes: ["I"],
-        description: "12 African youth finalists pitch digital and green economy solutions to a global investor panel. Live audience voting — Top 5 finalists proceed to Day 3 finals.",
+        description: "12 African youth finalists pitch digital and green economy solutions to a global investor panel. Live audience voting, Top 5 finalists proceed to Day 3 finals.",
       },
       {
         id: "tue-10a",
@@ -376,7 +376,7 @@ export const program: DaySchedule[] = [
         type: "special",
         themes: ["N"],
         isNew: true,
-        description: "\"Seizing the New Frontier\" — International multi-regional panel. Representatives from East Africa, West Africa (ECOWAS), Middle East/Gulf States, Asia-Pacific, Europe, Americas, and Zimbabwe (ZIDA). Format: 3-min opening statements × 7 regions + moderated cross-regional debate (25 min) + Q&A (10 min).",
+        description: "\"Seizing the New Frontier\", International multi-regional panel. Representatives from East Africa, West Africa (ECOWAS), Middle East/Gulf States, Asia-Pacific, Europe, Americas, and Zimbabwe (ZIDA). Format: 3-min opening statements × 7 regions + moderated cross-regional debate (25 min) + Q&A (10 min).",
       },
       {
         id: "tue-10b",
@@ -386,7 +386,7 @@ export const program: DaySchedule[] = [
         type: "special",
         themes: ["H"],
         isNew: true,
-        description: "\"Strengthening the Voice of Economic and Social Councils in Shaping the Digital and Green Economic Transition\" — Closed coordination session for ESC delegates, tripartite institution representatives. Peer exchange on governing technological change, aligning ESC positions ahead of AICESIS and UCESA general assemblies.",
+        description: "\"Strengthening the Voice of Economic and Social Councils in Shaping the Digital and Green Economic Transition\", Closed coordination session for ESC delegates, tripartite institution representatives. Peer exchange on governing technological change, aligning ESC positions ahead of AICESIS and UCESA general assemblies.",
       },
       {
         id: "tue-11",
@@ -395,13 +395,13 @@ export const program: DaySchedule[] = [
         room: "BOTH",
         type: "social",
         themes: ["A"],
-        description: "Elephant Hills Conference Centre — Sector Networking Tables. Facilitated by ZIDA. Sector tables: Agri-tech | Clean Energy | Mining | Manufacturing | FinTech | Infrastructure. Dress Code: Smart Casual.",
+        description: "Elephant Hills Conference Centre, Sector Networking Tables. Facilitated by ZIDA. Sector tables: Agri-tech | Clean Energy | Mining | Manufacturing | FinTech | Infrastructure. Dress Code: Smart Casual.",
       },
     ],
   },
   {
     date: "Wednesday, 23 September 2026",
-    dayLabel: "DAY 3 — OFFICIAL OPENING",
+    dayLabel: "DAY 3, OFFICIAL OPENING",
     theme: "Climate Change, Green Jobs & Sustainable Investment",
     sessions: [
       {
@@ -419,8 +419,8 @@ export const program: DaySchedule[] = [
         room: "A",
         type: "ceremony",
         themes: [],
-        hidden: true, // TBC — show again when line-up is confirmed: set false
-        description: "Zimbabwe TNF Global Summit Inaugural Official Opening. Welcome — TNF Executive Director. Remarks from Employers, ZCTU. Addresses from AU Commission Chairperson, ILO Director-General. Keynote Address — H.E. President of the Republic of Zimbabwe. Official Declaration: Launch of the Zimbabwe TNF Global Summit as Africa's Premier Tripartite Convening Platform. Marimba ensemble and traditional Zimbabwean dance.",
+        hidden: true, // TBC, show again when line-up is confirmed: set false
+        description: "Zimbabwe TNF Global Summit Inaugural Official Opening. Welcome, TNF Executive Director. Remarks from Employers, ZCTU. Addresses from AU Commission Chairperson, ILO Director-General. Keynote Address, H.E. President of the Republic of Zimbabwe. Official Declaration: Launch of the Zimbabwe TNF Global Summit as Africa's Premier Tripartite Convening Platform. Marimba ensemble and traditional Zimbabwean dance.",
       },
       {
         id: "wed-3",
@@ -433,7 +433,7 @@ export const program: DaySchedule[] = [
       {
         id: "wed-4",
         time: "11:00–11:45",
-        title: "Plenary Keynote — Addressing Climate Change through Green Growth",
+        title: "Plenary Keynote, Addressing Climate Change through Green Growth",
         room: "A",
         type: "plenary",
         themes: ["C"],
@@ -446,7 +446,7 @@ export const program: DaySchedule[] = [
         room: "A",
         type: "special",
         themes: ["C"],
-        description: "\"Zimbabwe as a Premier Green and Sustainable Investment Destination.\" Presentation by ZIDA — Priority green project pipeline. Sectors: Renewable energy, sustainable mining, green agriculture, eco-tourism. Live Expressions of Interest from attending investors.",
+        description: "\"Zimbabwe as a Premier Green and Sustainable Investment Destination.\" Presentation by ZIDA, Priority green project pipeline. Sectors: Renewable energy, sustainable mining, green agriculture, eco-tourism. Live Expressions of Interest from attending investors.",
       },
       {
         id: "wed-6",
@@ -459,7 +459,7 @@ export const program: DaySchedule[] = [
       {
         id: "wed-7a",
         time: "13:45–15:30",
-        title: "Plenary A — Green Jobs, Just Transition and Climate Resilience",
+        title: "Plenary A, Green Jobs, Just Transition and Climate Resilience",
         room: "A",
         type: "concurrent",
         themes: ["C"],
@@ -468,7 +468,7 @@ export const program: DaySchedule[] = [
       {
         id: "wed-7b",
         time: "13:45–15:30",
-        title: "Plenary B — Climate Finance, ESG and Sustainable Investment",
+        title: "Plenary B, Climate Finance, ESG and Sustainable Investment",
         room: "B",
         type: "concurrent",
         themes: ["C"],
@@ -508,7 +508,7 @@ export const program: DaySchedule[] = [
         room: "BOTH",
         type: "social",
         themes: [],
-        description: "Grand Ballroom, Elephant Hills Resort. Hosted by the Government of Zimbabwe and TNF Secretariat. TNF Innovation Challenge Finals — Top 5 pitches before a live investor jury. Announcement of Investment Commitments and Partnership Pledges. Dress Code: Black Tie / Formal African Attire.",
+        description: "Grand Ballroom, Elephant Hills Resort. Hosted by the Government of Zimbabwe and TNF Secretariat. TNF Innovation Challenge Finals, Top 5 pitches before a live investor jury. Announcement of Investment Commitments and Partnership Pledges. Dress Code: Black Tie / Formal African Attire.",
       },
     ],
   },
@@ -528,7 +528,7 @@ export const program: DaySchedule[] = [
       {
         id: "thu-2",
         time: "08:30–09:30",
-        title: "High-Level Plenary — Investing in People",
+        title: "High-Level Plenary, Investing in People",
         room: "A",
         type: "plenary",
         themes: ["D", "F", "I"],
@@ -545,16 +545,16 @@ export const program: DaySchedule[] = [
       {
         id: "thu-4a",
         time: "10:00–12:00",
-        title: "Plenary A — Youth Employment, Skills and Entrepreneurship",
+        title: "Plenary A, Youth Employment, Skills and Entrepreneurship",
         room: "A",
         type: "concurrent",
         themes: ["I", "F"],
-        description: "Reducing Youth NEET Rates, Strengthening School-to-Work Transition, Empowering Youth-Led Enterprises, Digital Entrepreneurship — How African Youth are Building Tech Giants.",
+        description: "Reducing Youth NEET Rates, Strengthening School-to-Work Transition, Empowering Youth-Led Enterprises, Digital Entrepreneurship, How African Youth are Building Tech Giants.",
       },
       {
         id: "thu-4b",
         time: "10:00–12:00",
-        title: "Plenary B — Women's Economic Empowerment & Workplace Transformation",
+        title: "Plenary B, Women's Economic Empowerment & Workplace Transformation",
         room: "B",
         type: "concurrent",
         themes: ["D", "K"],
@@ -584,7 +584,7 @@ export const program: DaySchedule[] = [
         room: "B",
         type: "workshop",
         themes: ["I"],
-        description: "Workshop 4: Strengthening Labour Inspection, Occupational Safety and Health in New Work Contexts. Workshop 5: Youth-Led MSMEs — Unlocking Investment, Mentorship and Scale-Up Pathways [THEME I].",
+        description: "Workshop 4: Strengthening Labour Inspection, Occupational Safety and Health in New Work Contexts. Workshop 5: Youth-Led MSMEs, Unlocking Investment, Mentorship and Scale-Up Pathways [THEME I].",
       },
       {
         id: "thu-7",
@@ -593,7 +593,7 @@ export const program: DaySchedule[] = [
         room: "BOTH",
         type: "ceremony",
         themes: [],
-        description: "Zimbabwe TNF Global Summit — Official Closing and Adoption of the Victoria Falls Declaration on Inclusive Growth, Decent Work, Beneficiation, and Investment. Remarks from CZI, ZCTU, Minister of Finance, ILO. Announcement: Summit 2027 Edition — Host Country and Theme.",
+        description: "Zimbabwe TNF Global Summit, Official Closing and Adoption of the Victoria Falls Declaration on Inclusive Growth, Decent Work, Beneficiation, and Investment. Remarks from CZI, ZCTU, Minister of Finance, ILO. Announcement: Summit 2027 Edition, Host Country and Theme.",
       },
       {
         id: "thu-8",
@@ -611,14 +611,14 @@ export const program: DaySchedule[] = [
         room: "BOTH",
         type: "social",
         themes: [],
-        description: "Zambezi Terrace — Elephant Hills Resort. Sundowner cocktails overlooking the Zambezi River. Live marimba and jazz. Dress Code: Smart Casual.",
+        description: "Zambezi Terrace, Elephant Hills Resort. Sundowner cocktails overlooking the Zambezi River. Live marimba and jazz. Dress Code: Smart Casual.",
       },
     ],
   },
   {
     date: "Friday, 25 September 2026",
     dayLabel: "EXCURSIONS DAY",
-    theme: "Victoria Falls Experience — Nature, Heritage & Networking",
+    theme: "Victoria Falls Experience, Nature, Heritage & Networking",
     sessions: [
       {
         id: "fri-1",
@@ -627,21 +627,21 @@ export const program: DaySchedule[] = [
         room: "BOTH",
         type: "networking",
         themes: [],
-        description: "Full breakfast before excursions depart. Delegates select preferred excursion during registration — places are limited.",
+        description: "Full breakfast before excursions depart. Delegates select preferred excursion during registration, places are limited.",
       },
       {
         id: "fri-2a",
         time: "08:00–10:30",
-        title: "Excursion A — Victoria Falls Rainforest Walk",
+        title: "Excursion A, Victoria Falls Rainforest Walk",
         room: "A",
         type: "excursion",
         themes: [],
-        description: "UNESCO World Heritage Site guided heritage walk — all 5 main viewpoints, one of the Seven Natural Wonders of the World. Expert guide commentary. Photography stops at Devil's Cataract, Main Falls and Rainbow Falls. ~2.5 km walk. Closed-toe shoes and light rain jacket recommended.",
+        description: "UNESCO World Heritage Site guided heritage walk, all 5 main viewpoints, one of the Seven Natural Wonders of the World. Expert guide commentary. Photography stops at Devil's Cataract, Main Falls and Rainbow Falls. ~2.5 km walk. Closed-toe shoes and light rain jacket recommended.",
       },
       {
         id: "fri-2b",
         time: "08:00–10:30",
-        title: "Excursion B — Zambezi River Morning Boat Cruise",
+        title: "Excursion B, Zambezi River Morning Boat Cruise",
         room: "B",
         type: "excursion",
         themes: [],
@@ -650,11 +650,11 @@ export const program: DaySchedule[] = [
       {
         id: "fri-3",
         time: "08:30–13:00",
-        title: "Excursion C — Morning Game Drive, Zambezi National Park",
+        title: "Excursion C, Morning Game Drive, Zambezi National Park",
         room: "BOTH",
         type: "excursion",
         themes: [],
-        description: "Early morning safari — Big Five. Open 4x4 safari vehicles with professional guides. Breakfast bush stop. Limited to 30 delegates per departure — book early. Neutral-coloured clothing recommended.",
+        description: "Early morning safari, Big Five. Open 4x4 safari vehicles with professional guides. Breakfast bush stop. Limited to 30 delegates per departure, book early. Neutral-coloured clothing recommended.",
       },
       {
         id: "fri-4",
@@ -671,7 +671,7 @@ export const program: DaySchedule[] = [
         room: "BOTH",
         type: "networking",
         themes: [],
-        description: "Bungee jump off Victoria Falls Bridge (111 metres) | White-water rafting — Grade 5 rapids | Helicopter 'Flight of Angels' | Sunset cruise on the Zambezi | Shopping and curio market | Spa and wellness treatments.",
+        description: "Bungee jump off Victoria Falls Bridge (111 metres) | White-water rafting, Grade 5 rapids | Helicopter 'Flight of Angels' | Sunset cruise on the Zambezi | Shopping and curio market | Spa and wellness treatments.",
       },
       {
         id: "fri-6",
@@ -689,13 +689,13 @@ export const program: DaySchedule[] = [
         room: "BOTH",
         type: "networking",
         themes: [],
-        description: "Hotel check-out, airport shuttles and onward travel as per your booking. The secretariat is available to assist. Thank you for attending the inaugural Zimbabwe TNF Global Summit — safe travels.",
+        description: "Hotel check-out, airport shuttles and onward travel as per your booking. The secretariat is available to assist. Thank you for attending the inaugural Zimbabwe TNF Global Summit, safe travels.",
       },
     ],
   },
 ];
 
-/** Flat delegate registration fee (USD) — all categories. Kept in sync with `registrationFee.ts`. */
+/** Flat delegate registration fee (USD), all categories. Kept in sync with `registrationFee.ts`. */
 const DELEGATE_FEE_USD = 1500;
 
 export const registrationFees = [
@@ -768,7 +768,7 @@ export type ThemeSponsorshipOffer = {
   benefitsIntro?: string;
 };
 
-/** Theme A — Africa's $3.4 Trillion Investment Frontier: three tiers (published USD), per official theme deck. */
+/** Theme A, Africa's $3.4 Trillion Investment Frontier: three tiers (published USD), per official theme deck. */
 const THEME_A_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | "offerKey">[] = [
   {
     packageTier: "platinum",
@@ -819,7 +819,7 @@ const THEME_A_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | 
   },
 ];
 
-/** Tagline + key sessions for spotlight themes that publish a sponsorship deck on the site. */
+/** Tagline + key sessions per theme. Keys A/B/C/E are independent; C and E are not interchangeable. */
 export const themeSpotlightSponsorshipDeck = {
   A: {
     tagline:
@@ -833,6 +833,18 @@ export const themeSpotlightSponsorshipDeck = {
     keySessions:
       "Harnessing Digitalisation Plenary | Platform Economy & Gig Work | Smart Cities & Digital Infrastructure",
   },
+  C: {
+    tagline:
+      "Climate finance, ESG investment, green jobs, just transition and the Africa Green Deal as economic strategy. (PREMIUM, Opening Day)",
+    keySessions:
+      "Official Opening Day Keynote | Climate Finance & Green Bonds | Green Jobs & Just Transition | Zimbabwe Green Investment Spotlight",
+  },
+  E: {
+    tagline:
+      "Expanding financial inclusion, digital currencies, FinTech ecosystems and cybersecurity across Africa.",
+    keySessions:
+      "RBZ Governor Address | Live FinTech Innovator Pitch | Digital Finance Plenary | Blockchain & DLT Workshop | Digital Currencies & CBDC",
+  },
 } as const;
 
 export type ThemeSpotlightDeckId = keyof typeof themeSpotlightSponsorshipDeck;
@@ -842,13 +854,15 @@ export function getThemeSpotlightSponsorshipDeck(
 ): (typeof themeSpotlightSponsorshipDeck)[ThemeSpotlightDeckId] | undefined {
   if (themeId === "A") return themeSpotlightSponsorshipDeck.A;
   if (themeId === "B") return themeSpotlightSponsorshipDeck.B;
+  if (themeId === "C") return themeSpotlightSponsorshipDeck.C;
+  if (themeId === "E") return themeSpotlightSponsorshipDeck.E;
   return undefined;
 }
 
 /** @deprecated Use {@link getThemeSpotlightSponsorshipDeck}("A") or {@link themeSpotlightSponsorshipDeck}.A */
 export const themeASponsorshipDeck = themeSpotlightSponsorshipDeck.A;
 
-/** Theme B — AI, Automation & the Jobs of Tomorrow: three tiers (published USD), per official theme deck. */
+/** Theme B, AI, Automation & the Jobs of Tomorrow: three tiers (published USD), per official theme deck. */
 const THEME_B_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | "offerKey">[] = [
   {
     packageTier: "platinum",
@@ -900,34 +914,66 @@ const THEME_B_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | 
   },
 ];
 
-/** Theme C — Green Growth as a Competitive Advantage (Opening Day premium), per official slide. */
+/** Theme C (Green Growth): independent from Theme E. Three tiers (published USD), per official theme deck (Opening Day premium). */
 const THEME_C_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | "offerKey">[] = [
   {
     packageTier: "platinum",
     packageLabel: "Platinum",
-    listPriceUsd: 85_000,
-    priceUsd: 63_750,
+    listPriceUsd: 30_000,
+    priceUsd: 30_000,
     benefitsLine:
-      "Opening Day co-branding + keynote stage + green zone exhibition + ESG co-report + 8 passes",
+      "All Gold plus: prime branding, 5-minute slot, 2 delegates, banners, acknowledgement, program/e-banner, 5 venue displays",
+    benefitsIntro: "Includes all Gold Sponsorship benefits plus:",
+    benefitsBullets: [
+      "Prime branding of the event and recognition as the main event partner",
+      "5-minute in-person marketing/speaking slot",
+      "Access to the participants list",
+      "Complimentary registration of 2 delegates",
+      "Hyperlinked banner on the Global Summit website",
+      "In-and-out conference venue advertising with 2 pull-up banners",
+      "Acknowledgement during conference intervals",
+      "Logo inclusion on the program and revolving electronic banner",
+      "5 prominent banner displays at the event venue",
+    ],
   },
   {
     packageTier: "gold",
     packageLabel: "Gold",
-    listPriceUsd: 45_000,
-    priceUsd: 33_750,
+    listPriceUsd: 25_000,
+    priceUsd: 25_000,
     benefitsLine:
-      "Climate Finance session branding + speaking slot + green bonds workshop + 5 passes",
+      "All Silver plus: pull-ups, acknowledgement, program/e-banner, delegates, material, breaks advert, site banner, 3 venue displays",
+    benefitsIntro: "Includes all Silver Sponsorship benefits plus:",
+    benefitsBullets: [
+      "In-and-out conference venue advertising with 2 pull-up banners",
+      "Acknowledgement during conference intervals",
+      "Logo inclusion on the program and revolving electronic banner",
+      "Complimentary registration of 2 delegates",
+      "Distribution of promotional material to delegates",
+      "1-minute advert during the Event Breaks on the Official Opening",
+      "Complimentary registration for 1 delegate",
+      "Hyperlinked banner on the Global Summit website",
+      "3 prominent banner displays at the event venue",
+    ],
   },
   {
     packageTier: "silver",
     packageLabel: "Silver",
-    listPriceUsd: 22_000,
-    priceUsd: 16_500,
-    benefitsLine: "Carbon market workshop sponsor + logo on green investment brief + 3 passes",
+    listPriceUsd: 20_000,
+    priceUsd: 20_000,
+    benefitsLine: "Carbon market workshop + green brief logo + 3 passes, collateral, VIP opening, delegate, site & venue banner",
+    benefitsBullets: [
+      "Carbon market workshop sponsor + logo on green investment brief + 3 passes",
+      "Distribution of promotional collateral to delegates",
+      "VIP invitation to the Official Opening",
+      "Complimentary registration for 1 delegate",
+      "Hyperlinked banner on the Global Summit website",
+      "1 prominent banner display at the event venue",
+    ],
   },
 ];
 
-/** Theme G — Industrialisation & Value Chain Integration (core beneficiation / beneficiation priority tier), per official slide. */
+/** Theme G, Industrialisation & Value Chain Integration (core beneficiation / beneficiation priority tier), per official slide. */
 const THEME_G_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | "offerKey">[] = [
   {
     packageTier: "platinum",
@@ -953,33 +999,60 @@ const THEME_G_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | 
   },
 ];
 
-/** Theme E — Digital Finance & the FinTech Revolution, per official slide. */
+/** Theme E (Digital Finance / FinTech): independent from Theme C; tier shapes may look similar but copy and prices are theme-specific. */
 const THEME_E_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | "offerKey">[] = [
   {
     packageTier: "platinum",
     packageLabel: "Platinum",
-    listPriceUsd: 75_000,
-    priceUsd: 56_250,
+    listPriceUsd: 35_000,
+    priceUsd: 35_000,
     benefitsLine:
-      "FinTech stage naming + live pitch branding + RBZ session co-brand + 8 passes",
+      "All Gold plus: prime branding, 5-minute slot, 2 delegates, site banner, 7 business invites, collateral distribution",
+    benefitsIntro: "Includes all Gold Sponsorship benefits plus:",
+    benefitsBullets: [
+      "Prime branding of the event and recognition as the main event partner",
+      "5-minute in-person marketing/speaking slot",
+      "Access to the participants list",
+      "Complimentary registration of 2 delegates",
+      "Hyperlinked banner on the Global Summit website",
+      "7 complimentary business invites",
+      "Distribution of promotional collateral to delegates",
+    ],
   },
   {
     packageTier: "gold",
     packageLabel: "Gold",
-    listPriceUsd: 40_000,
+    listPriceUsd: 30_000,
     priceUsd: 30_000,
-    benefitsLine: "Digital finance session + FinTech showcase stand + summit app feature + 5 passes",
+    benefitsLine:
+      "All Silver plus: digital finance branding + speaking slot + FinTech showcase + 5 passes, breaks advert, delegate, banners",
+    benefitsIntro: "Includes all Silver Sponsorship benefits plus:",
+    benefitsBullets: [
+      "Digital finance session branding + speaking slot + FinTech showcase + 5 passes",
+      "1-minute advert during the Event Breaks on the Official Opening",
+      "Complimentary registration for 1 delegate",
+      "Hyperlinked banner on the Global Summit website",
+      "3 prominent banner displays at the event venue",
+    ],
   },
   {
     packageTier: "silver",
     packageLabel: "Silver",
     listPriceUsd: 20_000,
-    priceUsd: 15_000,
-    benefitsLine: "Blockchain workshop sponsor + logo on digital assets + 3 passes",
+    priceUsd: 20_000,
+    benefitsLine: "Blockchain & DLT workshop + digital assets logo + 3 passes, collateral, VIP opening, delegate, banners",
+    benefitsBullets: [
+      "Blockchain & DLT workshop sponsor + logo on digital assets + 3 passes",
+      "Distribution of promotional collateral to delegates",
+      "VIP invitation to the Official Opening",
+      "Complimentary registration for 1 delegate",
+      "Hyperlinked banner on the Global Summit website",
+      "1 prominent banner display at the event venue",
+    ],
   },
 ];
 
-/** Theme I — Youth Entrepreneurship & Africa's Demographic Dividend (TNF Innovation Challenge), per official slide. */
+/** Theme I, Youth Entrepreneurship & Africa's Demographic Dividend (TNF Innovation Challenge), per official slide. */
 const THEME_I_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | "offerKey">[] = [
   {
     packageTier: "platinum",
@@ -1105,7 +1178,7 @@ export function getThemeSponsorshipTiers(themeId: string): ThemeSponsorshipOffer
   return [themeOfferFromId(theme)];
 }
 
-/** One “primary” row per theme (for the theme dropdown) — first tier. */
+/** One “primary” row per theme (for the theme dropdown), first tier. */
 export const themeSponsorshipOffers: ThemeSponsorshipOffer[] = themes.map((th) => getThemeSponsorshipTiers(th.id)[0]);
 
 /** Full table: every theme–tier line (Themes A–C, E, G & I = 3 rows each). */
@@ -1152,7 +1225,7 @@ const SUMMIT_WIDE_TIERS: SummitWidePartnershipTier[] = [
       "10-minute keynote address during Opening Ceremony + seat on hosted ministerial bilateral meeting + business roundtable",
       "Featured as Platinum Partner in Summit Magazine",
       "Appearance on all branded summit materials",
-      "First right of refusal for Summit 2027 — founding sponsor legacy recognition",
+      "First right of refusal for Summit 2027, founding sponsor legacy recognition",
     ],
     headerColor: "#152D4B",
     panelBg: "rgba(21, 45, 75, 0.14)",
@@ -1208,7 +1281,7 @@ const SUMMIT_WIDE_TIERS: SummitWidePartnershipTier[] = [
 ];
 
 export const summitWidePartnershipIntro =
-  "For organisations that want exhibition space and brand visibility for the full duration of the summit — in addition to theme-specific and event packages — we offer four summit-wide partnership tiers.";
+  "For organisations that want exhibition space and brand visibility for the full duration of the summit, in addition to theme-specific and event packages, we offer four summit-wide partnership tiers.";
 
 export const summitWidePartnershipTiers: SummitWidePartnershipTier[] = SUMMIT_WIDE_TIERS;
 
@@ -1252,7 +1325,7 @@ export const keyFacts = [
 export const whyAttend = [
   {
     audience: "Governments & Policymakers",
-    description: "Shape inclusive growth policies, forge bilateral investment partnerships, and influence continental and global agendas — all from one platform.",
+    description: "Shape inclusive growth policies, forge bilateral investment partnerships, and influence continental and global agendas, all from one platform.",
     icon: "Landmark",
     color: "#3B82F6",
   },
@@ -1263,8 +1336,8 @@ export const whyAttend = [
     color: "#C9921A",
   },
   {
-    audience: "Social Partners — Workers & Employers",
-    description: "Advance workers' and employers' interests in shaping the future of work, investment governance, and social protection — tripartism in action.",
+    audience: "Social Partners, Workers & Employers",
+    description: "Advance workers' and employers' interests in shaping the future of work, investment governance, and social protection, tripartism in action.",
     icon: "Handshake",
     color: "#10B981",
   },

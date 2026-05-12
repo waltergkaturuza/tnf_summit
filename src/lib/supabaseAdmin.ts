@@ -1,6 +1,6 @@
 /**
  * Server-side Supabase client with service role.
- * Bypasses RLS — use only for trusted server operations (e.g. public registration form).
+ * Bypasses RLS, use only for trusted server operations (e.g. public registration form).
  * NEVER expose this client to the browser.
  */
 import { createClient } from "@supabase/supabase-js";

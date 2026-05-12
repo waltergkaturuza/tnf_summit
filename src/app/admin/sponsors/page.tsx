@@ -19,11 +19,11 @@ type Sponsor = {
 };
 
 const initSponsors: Sponsor[] = [
-  { id: "SP-001", name: "Reserve Bank of Zimbabwe", tier: "platinum", website: "https://www.rbz.co.zw", description: "Central bank of Zimbabwe — Official Financial Partner", logoUrl: "", contactName: "Dr John Mangudya", contactEmail: "governor@rbz.co.zw", status: "confirmed", dealValue: "USD 50,000", addedAt: "2026-01-15T00:00:00Z" },
+  { id: "SP-001", name: "Reserve Bank of Zimbabwe", tier: "platinum", website: "https://www.rbz.co.zw", description: "Central bank of Zimbabwe, Official Financial Partner", logoUrl: "", contactName: "Dr John Mangudya", contactEmail: "governor@rbz.co.zw", status: "confirmed", dealValue: "USD 50,000", addedAt: "2026-01-15T00:00:00Z" },
   { id: "SP-002", name: "Zimbabwe Investment and Development Agency (ZIDA)", tier: "gold", website: "https://www.zida.gov.zw", description: "Zimbabwe's official investment promotion agency", logoUrl: "", contactName: "Mr Tafadzwa Chinamo", contactEmail: "ceo@zida.gov.zw", status: "confirmed", dealValue: "USD 25,000", addedAt: "2026-01-20T00:00:00Z" },
   { id: "SP-003", name: "FBC Holdings", tier: "gold", website: "https://www.fbc.co.zw", description: "Zimbabwe's leading financial services group", logoUrl: "", contactName: "Mr John Mushayavanhu", contactEmail: "jmushayavanhu@fbc.co.zw", status: "confirmed", dealValue: "USD 20,000", addedAt: "2026-02-01T00:00:00Z" },
   { id: "SP-004", name: "Econet Wireless Zimbabwe", tier: "silver", website: "https://www.econet.co.zw", description: "Zimbabwe's largest mobile network operator", logoUrl: "", contactName: "Mr Douglas Mboweni", contactEmail: "ceo@econet.co.zw", status: "negotiating", dealValue: "USD 15,000", addedAt: "2026-02-10T00:00:00Z" },
-  { id: "SP-005", name: "CBZ Holdings", tier: "silver", website: "https://www.cbz.co.zw", description: "Commercial Bank of Zimbabwe — Financial Sector Partner", logoUrl: "", contactName: "Mr Lawrence Nyazema", contactEmail: "ceo@cbz.co.zw", status: "confirmed", dealValue: "USD 10,000", addedAt: "2026-02-15T00:00:00Z" },
+  { id: "SP-005", name: "CBZ Holdings", tier: "silver", website: "https://www.cbz.co.zw", description: "Commercial Bank of Zimbabwe, Financial Sector Partner", logoUrl: "", contactName: "Mr Lawrence Nyazema", contactEmail: "ceo@cbz.co.zw", status: "confirmed", dealValue: "USD 10,000", addedAt: "2026-02-15T00:00:00Z" },
 ];
 
 const tierConfig = {

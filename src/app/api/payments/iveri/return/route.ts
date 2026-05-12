@@ -6,8 +6,8 @@ import { supabaseAdmin } from "@/lib/supabaseAdmin";
 /**
  * Full Redirect return handler: iVeri often **POSTs** the result to the merchant URL.
  * Next.js `page.tsx` only allows GET, so this route accepts POST, merges fields, then responds with
- * **HTTP 303 See Other** to `/registration/payment-complete` — that status is expected (redirect after POST),
- * not an error. We **do not** mark `paid` from the return payload alone — we confirm via
+ * **HTTP 303 See Other** to `/registration/payment-complete`, that status is expected (redirect after POST),
+ * not an error. We **do not** mark `paid` from the return payload alone, we confirm via
  * **AuthoriseInfo.aspx** + `Lite_Merchant_Trace` first.
  */
 export const runtime = "nodejs";

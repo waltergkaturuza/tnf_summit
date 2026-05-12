@@ -80,7 +80,7 @@ export async function POST(req: Request) {
     categoryKey === "other"
       ? categoryOther
       : categoryKey === "global_themes_fund" && theme
-        ? `${getDonationCategoryLabel(categoryKey)} — Theme ${theme.id}: ${theme.label}`
+        ? `${getDonationCategoryLabel(categoryKey)}, Theme ${theme.id}: ${theme.label}`
         : getDonationCategoryLabel(categoryKey);
 
   const { data, error } = await supabaseAdmin

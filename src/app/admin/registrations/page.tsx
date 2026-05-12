@@ -295,7 +295,7 @@ export default function RegistrationsPage() {
               {filtered.map(reg => (
                 <tr key={reg.id} className="border-b border-white/5 last:border-0 hover:bg-white/2 transition-colors">
                   <td className="px-4 py-3">
-                    <span className="text-[#C9921A] text-xs font-mono font-bold">{reg.trackId ?? "—"}</span>
+                    <span className="text-[#C9921A] text-xs font-mono font-bold">{reg.trackId ?? "-"}</span>
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">

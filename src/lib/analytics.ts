@@ -30,7 +30,7 @@ export async function trackPageView(path: string) {
       device_type: getDeviceType(),
     });
   } catch {
-    // Silently fail — never break the user experience for analytics
+    // Silently fail, never break the user experience for analytics
   }
 }
 

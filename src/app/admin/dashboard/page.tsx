@@ -108,7 +108,7 @@ export default function DashboardPage() {
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-black text-white">Dashboard</h1>
-        <p className="text-slate-400 text-sm mt-1">Zimbabwe TNF Global Summit 2026 — 21–25 September · Victoria Falls</p>
+        <p className="text-slate-400 text-sm mt-1">Zimbabwe TNF Global Summit 2026, 21–25 September · Victoria Falls</p>
       </div>
 
       {/* Alert for pending */}
@@ -125,19 +125,19 @@ export default function DashboardPage() {
       {/* Stats grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard label="Total Registrations" value={stats.total} sub={`${stats.inPerson} in-person · ${stats.virtual} virtual`} icon={Users} color="#3B82F6" href="/admin/registrations" />
-        <StatCard label="Confirmed" value={stats.confirmed} sub={stats.total > 0 ? `${Math.round(stats.confirmed / stats.total * 100)}% of total` : "—"} icon={CheckCircle} color="#10B981" href="/admin/registrations" />
+        <StatCard label="Confirmed" value={stats.confirmed} sub={stats.total > 0 ? `${Math.round(stats.confirmed / stats.total * 100)}% of total` : "-"} icon={CheckCircle} color="#10B981" href="/admin/registrations" />
         <StatCard label="Pending" value={stats.pending} sub="Awaiting confirmation" icon={Clock} color="#F59E0B" href="/admin/registrations" />
         <StatCard label="Revenue (USD)" value={`$${stats.revenue.toLocaleString()}`} sub="Confirmed paid registrations" icon={DollarSign} color="#C9921A" />
         <StatCard label="Unread Messages" value={stats.unread} sub={`${messages.length} total enquiries`} icon={MessageSquare} color="#8B5CF6" href="/admin/messages" />
         <StatCard label="Newsletter" value={stats.activeSubs} sub="Active subscribers" icon={Bell} color="#EC4899" href="/admin/newsletter" />
         <StatCard label="Speakers" value={stats.confSpeakers} sub={`${speakers.length} total · ${speakers.filter(s => s.status === "tentative").length} tentative`} icon={Mic} color="#0EA5E9" href="/admin/speakers" />
         <StatCard label="Countries" value={Object.keys(registrations.reduce((acc, r) => ({ ...acc, [r.country]: 1 }), {})).length} sub="Nationalities represented" icon={Globe} color="#14B8A6" />
-        <StatCard label="Resource Downloads" value={downloadCount ?? "—"} sub="Last 90 days" icon={Download} color="#8B5CF6" href="/admin/analytics" />
+        <StatCard label="Resource Downloads" value={downloadCount ?? "-"} sub="Last 90 days" icon={Download} color="#8B5CF6" href="/admin/analytics" />
         <StatCard label="Updates & News" value={updates.filter(u => u.published).length} sub={`${updates.length} total · ${updates.filter(u => !u.published).length} draft`} icon={Newspaper} color="#0EA5E9" href="/admin/updates" />
-        <StatCard label="Resources" value={attachmentsCount ?? "—"} sub="Attachments & documents" icon={Paperclip} color="#EC4899" href="/admin/resources" />
+        <StatCard label="Resources" value={attachmentsCount ?? "-"} sub="Attachments & documents" icon={Paperclip} color="#EC4899" href="/admin/resources" />
         <StatCard label="Abstracts" value={abstracts.length} sub="Submitted abstracts" icon={FileText} color="#10B981" href="/admin/abstracts" />
-        <StatCard label="Media Library" value={mediaCount ?? "—"} sub="Images, docs & videos" icon={FolderOpen} color="#F59E0B" href="/admin/media" />
-        <StatCard label="Audit Trail" value={auditCount ?? "—"} sub="Actions last 7 days" icon={Activity} color="#64748b" href="/admin/audit" />
+        <StatCard label="Media Library" value={mediaCount ?? "-"} sub="Images, docs & videos" icon={FolderOpen} color="#F59E0B" href="/admin/media" />
+        <StatCard label="Audit Trail" value={auditCount ?? "-"} sub="Actions last 7 days" icon={Activity} color="#64748b" href="/admin/audit" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

@@ -4,7 +4,7 @@ import { supabaseAdmin } from "./supabaseAdmin";
 /**
  * One JSON object per line, prefix `[iveri-cert]` for Vercel / function log search.
  * Shape is inspired by typical acquirer certification exports (success, status, code, description, amounts).
- * Do not log full card numbers — gateway usually masks PAN in return fields; we never add PAN in code.
+ * Do not log full card numbers, gateway usually masks PAN in return fields; we never add PAN in code.
  */
 
 /** Store payload in `audit_trail` so Admin → Payments → Card activity can list it.
@@ -15,7 +15,7 @@ function persistIveriGatewayAudit(details: Record<string, unknown>): void {
   const ref = String(details.registrationRef ?? "").trim();
   const row = {
     entity_type: "iveri_lite",
-    entity_id: ref.slice(0, 200) || "—",
+    entity_id: ref.slice(0, 200) || "-",
     entity_label: `${String(details.event ?? "iveri")} · ${ref.slice(0, 40) || "?"}`,
     performed_by: "system",
     details: { _iveriCertEvent: true, ...details },

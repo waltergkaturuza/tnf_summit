@@ -48,7 +48,7 @@ function triggerGoogleTranslate(langCode: string) {
   return false;
 }
 
-/** Hide only the top promo/banner iframe and undo body offset — must not run on every DOM mutation or translation breaks. */
+/** Hide only the top promo/banner iframe and undo body offset, must not run on every DOM mutation or translation breaks. */
 function stripGoogleTranslateBanner() {
   if (typeof document === "undefined") return;
   document.querySelectorAll("iframe.goog-te-banner-frame").forEach((node) => {
@@ -74,7 +74,7 @@ export function GoogleTranslateRoot() {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const w = window as any;
       if (!w.google?.translate?.TranslateElement) return;
-      // Default layout — SIMPLE was suspected of breaking translation with some widget versions.
+      // Default layout, SIMPLE was suspected of breaking translation with some widget versions.
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       new w.google.translate.TranslateElement({ pageLanguage: "en", autoDisplay: false }, "google_translate_element");
       queueMicrotask(stripGoogleTranslateBanner);

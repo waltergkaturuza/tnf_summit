@@ -213,7 +213,9 @@ export default function SettingsPage() {
                       <div key={field.key} className={isWide ? "sm:col-span-2" : ""}>
                         <label className="text-slate-400 text-xs font-semibold uppercase tracking-wide mb-1.5 block">
                           {field.label}
-                          {field.description && <span className="normal-case text-slate-600 ml-2 font-normal">— {field.description}</span>}
+                          {field.description && (
+                            <span className="normal-case text-slate-600 ml-2 font-normal"> ({field.description})</span>
+                          )}
                         </label>
                         {isBool ? (
                           <button onClick={() => setValues(v => ({ ...v, [field.key]: val === "true" ? "false" : "true" }))}

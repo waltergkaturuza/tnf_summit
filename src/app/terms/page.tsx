@@ -53,7 +53,7 @@ export default function TermsPage() {
             <ul className="space-y-2">
               {[
                 "Provide accurate, complete, and current information during registration",
-                "Use the Platform only for its intended purposes — Summit registration, programme access, and information",
+                "Use the Platform only for its intended purposes, Summit registration, programme access, and information",
                 "Not attempt to gain unauthorised access to any part of the Platform or its systems",
                 "Not use the Platform for any unlawful, harmful, or fraudulent purpose",
                 "Not reproduce, distribute, or commercially exploit Platform content without written consent from the TNF Secretariat",

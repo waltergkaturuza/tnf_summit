@@ -125,7 +125,7 @@ export default function Footer() {
       {/* Main Footer */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
-          {/* Brand — real TNF logo */}
+          {/* Brand, real TNF logo */}
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center gap-3 mb-2 group w-fit">
               <div className="relative h-12 w-40">
@@ -137,7 +137,7 @@ export default function Footer() {
                 />
               </div>
             </Link>
-            <p className="text-[#C9921A] text-xs font-semibold mb-4">Global Summit 2026 — Inaugural Edition</p>
+            <p className="text-[#C9921A] text-xs font-semibold mb-4">Global Summit 2026. Inaugural Edition</p>
             <p className="text-sm leading-relaxed mb-6 text-theme-primary">
               Africa&apos;s premier tripartite-led global convening platform on Inclusive Growth, Decent Work and Investment Promotion. Anchored in UN SDG 8, AU Agenda 2063, AfCFTA, and Zimbabwe&apos;s NDS2.
             </p>
@@ -171,7 +171,7 @@ export default function Footer() {
               </a>
             </div>
 
-            {/* Social icons — real TNF accounts */}
+            {/* Social icons, real TNF accounts */}
             <div className="flex items-center gap-3 mt-6">
               <a
                 href={summitInfo.social.twitter}
@@ -304,7 +304,7 @@ export default function Footer() {
               <Link href="/terms" className="text-theme-primary hover:opacity-80 transition-colors">
                 {t.footer.terms}
               </Link>
-              {/* Hidden admin link — very subtle, only for staff */}
+              {/* Hidden admin link, very subtle, only for staff */}
               <Link
                 href="/admin"
                 className="text-slate-700 hover:text-slate-400 transition-colors duration-300"

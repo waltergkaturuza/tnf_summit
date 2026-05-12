@@ -238,7 +238,7 @@ export default function AboutPage() {
                 {[
                   { title: "Summit Week", value: "21–25 Sep 2026", icon: "📅" },
                   { title: "Official Opening Day", value: "Wednesday 23 September", icon: "🎊" },
-                  { title: "Gala Dinner", value: "Wednesday 23 Sep — Black Tie", icon: "🎭" },
+                  { title: "Gala Dinner", value: "Wednesday 23 Sep, Black Tie", icon: "🎭" },
                   { title: "Innovation Challenge Finals", value: "During Gala Dinner", icon: "🏆" },
                   { title: "Excursions Day", value: "Friday 25 September", icon: "🦁" },
                   { title: "Nearest Airport", value: "Victoria Falls International Airport", icon: "✈️" },

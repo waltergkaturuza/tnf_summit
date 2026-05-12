@@ -364,7 +364,7 @@ export default function PaymentsPage() {
                 Each row is an <code className="text-[#C9921A]/90">iveri_start</code> or{" "}
                 <code className="text-[#C9921A]/90">iveri_return</code> payload stored in{" "}
                 <code className="text-slate-400">audit_trail</code> (marker <code className="text-slate-400">_iveriCertEvent</code>).
-                Server writes need a valid <code className="text-slate-400">SUPABASE_SERVICE_ROLE_KEY</code> in Vercel — if the Supabase integration shows{" "}
+                Server writes need a valid <code className="text-slate-400">SUPABASE_SERVICE_ROLE_KEY</code> in Vercel, if the Supabase integration shows{" "}
                 <strong className="text-amber-400/90">Needs Attention</strong>, reconnect or paste the service_role key from Supabase → Project Settings → API, then redeploy.
               </p>
               <div className="glass rounded-2xl border border-white/5 overflow-hidden">
@@ -394,10 +394,10 @@ export default function PaymentsPage() {
                                 {new Date(row.createdAt).toLocaleString()}
                               </td>
                               <td className="px-4 py-3">
-                                <span className="text-[#C9921A] font-mono text-xs">{ev || "—"}</span>
+                                <span className="text-[#C9921A] font-mono text-xs">{ev || "-"}</span>
                               </td>
                               <td className="px-4 py-3 text-white font-mono text-xs max-w-[140px] truncate" title={ref}>
-                                {ref || "—"}
+                                {ref || "-"}
                               </td>
                               <td className="px-4 py-3">
                                 {ev === "iveri_return" ? (
@@ -405,7 +405,7 @@ export default function PaymentsPage() {
                                     {ok ? "Yes" : "No"}
                                   </span>
                                 ) : (
-                                  <span className="text-slate-600">—</span>
+                                  <span className="text-slate-600">-</span>
                                 )}
                               </td>
                               <td className="px-4 py-3">
@@ -414,11 +414,11 @@ export default function PaymentsPage() {
                                     {db ? "Yes" : "No"}
                                   </span>
                                 ) : (
-                                  <span className="text-slate-600">—</span>
+                                  <span className="text-slate-600">-</span>
                                 )}
                               </td>
                               <td className="px-4 py-3 text-slate-500 text-xs max-w-[200px] truncate" title={desc}>
-                                {desc || "—"}
+                                {desc || "-"}
                               </td>
                               <td className="px-4 py-3">
                                 <button
@@ -449,7 +449,7 @@ export default function PaymentsPage() {
                 {filteredGateway.length === 0 && (
                   <div className="text-center py-12 text-slate-600 text-sm">
                     {gatewayLog.length === 0
-                      ? "No card gateway events yet. Complete a test payment with card — entries appear after /api/payments/iveri/start and /return run."
+                      ? "No card gateway events yet. Complete a test payment with card, entries appear after /api/payments/iveri/start and /return run."
                       : "No rows match your search."}
                   </div>
                 )}
@@ -478,7 +478,7 @@ export default function PaymentsPage() {
                             <p className="text-white text-sm font-semibold">{p.name}</p>
                             <p className="text-slate-500 text-xs">{p.email}</p>
                           </td>
-                          <td className="px-5 py-3.5 text-slate-400 text-sm">{p.organisation || "—"}</td>
+                          <td className="px-5 py-3.5 text-slate-400 text-sm">{p.organisation || "-"}</td>
                           <td className="px-5 py-3.5 text-white font-bold text-sm">{fmtFee(p.feeAmount)}</td>
                           <td className="px-5 py-3.5">
                             <span className="text-xs font-bold px-2.5 py-1 rounded-full"
@@ -486,7 +486,7 @@ export default function PaymentsPage() {
                               {cfg.label}
                             </span>
                           </td>
-                          <td className="px-5 py-3.5 text-slate-400 text-xs">{p.paymentMethod || "—"}</td>
+                          <td className="px-5 py-3.5 text-slate-400 text-xs">{p.paymentMethod || "-"}</td>
                           <td className="px-5 py-3.5 text-slate-500 text-xs">{new Date(p.createdAt).toLocaleDateString()}</td>
                           <td className="px-5 py-3.5">
                             <button onClick={() => setEditPayment(p)} className="p-1.5 text-slate-400 hover:text-[#C9921A]"><Edit3 className="w-3.5 h-3.5" /></button>
@@ -508,7 +508,7 @@ export default function PaymentsPage() {
             <div className="glass rounded-2xl border border-white/5 overflow-hidden">
               <div className="p-4 border-b border-white/5 flex justify-end">
                 <div className="text-slate-500 text-xs">
-                  Invoice generation: select a registration and click "Generate Invoice" — coming with PDF export.
+                  Invoice generation: select a registration and click "Generate Invoice", coming with PDF export.
                 </div>
               </div>
               {invoices.length === 0 ? (
@@ -542,7 +542,7 @@ export default function PaymentsPage() {
                                 style={{ background: `${cfg.color}20`, color: cfg.color }}>{cfg.label}</span>
                             </td>
                             <td className="px-5 py-3.5 text-slate-500 text-xs">
-                              {inv.dueDate ? new Date(inv.dueDate).toLocaleDateString() : "—"}
+                              {inv.dueDate ? new Date(inv.dueDate).toLocaleDateString() : "-"}
                             </td>
                             <td className="px-5 py-3.5">
                               <div className="flex gap-1">

@@ -156,7 +156,7 @@ async function resolveAndBuildStart(body: Body): Promise<
       }
       const catKey = String(row.category_key ?? "general");
       const catLabel = getDonationCategoryLabel(catKey);
-      const lineItemDescription = `Zimbabwe TNF Global Summit 2026 — Donation (${catLabel})`.slice(0, 255);
+      const lineItemDescription = `Zimbabwe TNF Global Summit 2026, Donation (${catLabel})`.slice(0, 255);
 
       if (provider === "zikimall") {
         const redirectUrl = buildZikiMallRedirect({
@@ -254,7 +254,7 @@ async function resolveAndBuildStart(body: Body): Promise<
       email: resolvedEmail,
       merchantReference: merchantReferenceForAttempt(trackId),
       merchantTrace: trackId.slice(0, 64),
-      lineItemDescription: "Zimbabwe TNF Global Summit 2026 — Delegate registration",
+      lineItemDescription: "Zimbabwe TNF Global Summit 2026, Delegate registration",
       baseUrl,
       returnNext: "registration",
     });

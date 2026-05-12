@@ -10,7 +10,7 @@ const SLIDES = [
   {
     src: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1600&q=80",
     alt: "Victoria Falls mist and rainbow at the gorge",
-    title: "Victoria Falls — Summit Venue",
+    title: "Victoria Falls, Summit Venue",
     subtitle:
       "Victoria Falls, one of the Seven Natural Wonders of the World and host venue of the TNF Global Summit 2026",
   },
@@ -19,13 +19,13 @@ const SLIDES = [
     alt: "Aerial view of Victoria Falls cascading into the gorge",
     title: "Victoria Falls UNESCO World Heritage Site",
     subtitle:
-      "Victoria Falls — a UNESCO World Heritage Site and one of Africa's most spectacular natural attractions",
+      "Victoria Falls, a UNESCO World Heritage Site and one of Africa's most spectacular natural attractions",
   },
   {
     src: "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=1600&q=80",
     alt: "Zambezi River and falls landscape",
     title: "Elephant Hills Resort, Zimbabwe",
-    subtitle: "Summit headquarters at Elephant Hills Resort — Victoria Falls, on the banks of the Zambezi",
+    subtitle: "Summit headquarters at Elephant Hills Resort, Victoria Falls, on the banks of the Zambezi",
   },
 ] as const;
 

@@ -42,7 +42,7 @@ export default function HomePage() {
     <div className="min-h-screen">
       {/* ─── HERO ─── */}
       <section className="relative min-h-screen hero-bg pattern-overlay flex flex-col items-center justify-center overflow-hidden">
-        {/* Animated orbs — TNF logo colors (green, yellow, red) */}
+        {/* Animated orbs, TNF logo colors (green, yellow, red) */}
         <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl animate-pulse" style={{ background: "rgba(51, 168, 82, 0.2)" }} />
         <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full blur-3xl animate-pulse" style={{ background: "rgba(251, 188, 5, 0.16)", animationDelay: "1s" }} />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-3xl" style={{ background: "rgba(234, 67, 53, 0.06)" }} />

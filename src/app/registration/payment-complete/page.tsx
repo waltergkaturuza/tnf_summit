@@ -32,7 +32,7 @@ function PaymentCompleteInner() {
   } else if (kind === "fail") {
     title = "Payment declined";
     message =
-      "The bank or card issuer did not authorise this payment. You can try again with another card or complete payment via bank transfer — we will invoice you by email.";
+      "The bank or card issuer did not authorise this payment. You can try again with another card or complete payment via bank transfer, we will invoice you by email.";
     icon = <XCircle className="w-12 h-12 text-red-400" />;
   } else if (kind === "trylater") {
     title = "Please try again";
@@ -43,7 +43,7 @@ function PaymentCompleteInner() {
     title = "Payment could not be completed";
     if (!status && !desc.trim()) {
       message =
-        "The secure payment page may not have opened (e.g. blocked popup or network issue), or the session ended before payment. Try again from Registration, use another browser, or pay by bank transfer — we will invoice you by email. If this keeps happening, contact info@tnfzim.com with your registration reference below.";
+        "The secure payment page may not have opened (e.g. blocked popup or network issue), or the session ended before payment. Try again from Registration, use another browser, or pay by bank transfer, we will invoice you by email. If this keeps happening, contact info@tnfzim.com with your registration reference below.";
     } else {
       message =
         "Something went wrong while starting or completing the payment. Please contact info@tnfzim.com with your registration reference, or try again.";

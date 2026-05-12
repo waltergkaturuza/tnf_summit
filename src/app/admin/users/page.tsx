@@ -218,13 +218,13 @@ export default function UsersPage() {
                         {u.fullName.charAt(0) || u.email.charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <p className="text-white text-sm font-semibold">{u.fullName || "—"}</p>
+                        <p className="text-white text-sm font-semibold">{u.fullName || "-"}</p>
                         <p className="text-slate-500 text-xs">{u.email}</p>
                       </div>
                     </div>
                   </td>
                   <td className="px-5 py-4 hidden md:table-cell"><RoleBadge role={u.role} /></td>
-                  <td className="px-5 py-4 text-slate-400 text-sm hidden lg:table-cell">{u.department || "—"}</td>
+                  <td className="px-5 py-4 text-slate-400 text-sm hidden lg:table-cell">{u.department || "-"}</td>
                   <td className="px-5 py-4 text-slate-500 text-xs hidden lg:table-cell">
                     {u.lastSeenAt ? new Date(u.lastSeenAt).toLocaleDateString() : "Never"}
                   </td>
@@ -257,7 +257,7 @@ export default function UsersPage() {
 
       {/* Setup note */}
       <div className="glass rounded-xl p-4 border border-[#C9921A]/20">
-        <p className="text-[#C9921A] text-xs font-bold mb-1 flex items-center gap-2"><Shield className="w-3.5 h-3.5" />Important — Creating Login Access</p>
+        <p className="text-[#C9921A] text-xs font-bold mb-1 flex items-center gap-2"><Shield className="w-3.5 h-3.5" />Important. Creating login access</p>
         <p className="text-slate-400 text-xs leading-relaxed">
           Adding a user here grants them a role in the system. To give them login access, also create their account in{" "}
           <strong className="text-white">Supabase Dashboard → Authentication → Users → Add User</strong>.

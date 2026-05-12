@@ -9,7 +9,7 @@
   --font-geist-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   --font-geist-mono: ui-monospace, monospace;
 
-  /* Brand — TNF logo colors */
+  /* Brand, TNF logo colors */
   --tnf-red: #EA4335;
   --tnf-green: #33A852;
   --tnf-yellow: #FBBC05;
@@ -22,7 +22,7 @@
   --emerald: #065F46;
   --sky: #0EA5E9;
 
-  /* Dark theme surfaces — TNF logo background + blended accents */
+  /* Dark theme surfaces, TNF logo background + blended accents */
   --bg-primary: #152D4B;
   --bg-surface: #1a3558;
   --bg-alt: #1e3a5f;
@@ -81,7 +81,7 @@ body {
 ::-webkit-scrollbar-track { background: var(--scrollbar-track); }
 ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #33A852, #C9921A); border-radius: 3px; }
 
-/* Glass morphism — theme-aware */
+/* Glass morphism, theme-aware */
 .glass {
   background: var(--bg-card);
   backdrop-filter: blur(12px);
@@ -110,7 +110,7 @@ html.light .pattern-overlay {
   background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2333A852' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 
-/* Light mode: dark text on light backgrounds — maximum contrast */
+/* Light mode: dark text on light backgrounds, maximum contrast */
 html.light .text-white,
 html.light .text-slate-100,
 html.light .text-slate-200,
@@ -122,7 +122,7 @@ html.light .text-slate-700 { color: #0F172A !important; }
 /* Keep gold/amber accents visible in light mode */
 html.light .text-amber-400,
 html.light .text-amber-500 { color: #B45309 !important; }
-/* Hover states — dark text in light mode */
+/* Hover states, dark text in light mode */
 html.light .hover\:text-white:hover { color: #0F172A !important; }
 html.light .hover\:text-slate-400:hover { color: #0F172A !important; }
 /* Border visibility on light backgrounds */
@@ -130,14 +130,14 @@ html.light .border-white\/5 { border-color: rgba(15, 23, 42, 0.12) !important; }
 html.light .border-white\/10 { border-color: rgba(15, 23, 42, 0.18) !important; }
 html.light .border-white\/15 { border-color: rgba(15, 23, 42, 0.22) !important; }
 html.light .border-white\/20 { border-color: rgba(15, 23, 42, 0.25) !important; }
-/* Placeholder text — dark in light mode */
+/* Placeholder text, dark in light mode */
 html.light input::placeholder,
 html.light textarea::placeholder { color: #475569 !important; }
 
-/* Light mode: secondary text — dark for visibility */
+/* Light mode: secondary text, dark for visibility */
 html.light .text-forest-light { color: #0F172A !important; }
 
-/* Theme-aware text: always matches background (dark on light, light on dark) — use on countdown, explore, etc. */
+/* Theme-aware text: always matches background (dark on light, light on dark), use on countdown, explore, etc. */
 .text-theme-primary { color: var(--text-primary) !important; }
 
 /* Dark mode: brighter text on dark backgrounds site-wide */
@@ -192,7 +192,7 @@ html.light .gradient-text {
   animation: pulse-gold 2s ease-in-out infinite;
 }
 
-/* Hero gradient background — TNF logo colors (red, green, yellow) — more visible */
+/* Hero gradient background, TNF logo colors (red, green, yellow), more visible */
 .hero-bg {
   background: 
     radial-gradient(ellipse at 15% 40%, rgba(51, 168, 82, 0.22) 0%, transparent 55%),
@@ -202,7 +202,7 @@ html.light .gradient-text {
     linear-gradient(180deg, #152D4B 0%, #1a3558 50%, #1e3a5f 100%);
 }
 
-/* Section gradients — TNF navy with visible green tint */
+/* Section gradients, TNF navy with visible green tint */
 .section-gradient {
   background: linear-gradient(180deg, #152D4B 0%, #1a3558 40%, rgba(51, 168, 82, 0.08) 100%);
 }
@@ -255,12 +255,12 @@ html.light .btn-outline-gold:hover {
   background: linear-gradient(90deg, transparent, #C9921A, transparent);
 }
 
-/* Pattern overlay — TNF green + gold accents — more visible */
+/* Pattern overlay, TNF green + gold accents, more visible */
 .pattern-overlay {
   background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2333A852' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3Cg fill='%23FBBC05' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3Ccircle cx='10' cy='10' r='1'/%3E%3Ccircle cx='50' cy='50' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 
-/* Animated border — TNF red, green, yellow */
+/* Animated border, TNF red, green, yellow */
 @keyframes border-flow {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -273,7 +273,7 @@ html.light .btn-outline-gold:hover {
   animation: border-flow 5s ease infinite;
 }
 
-/* Timeline connector — TNF green to gold */
+/* Timeline connector, TNF green to gold */
 .timeline-line::before {
   content: '';
   position: absolute;
@@ -294,7 +294,7 @@ html.light .btn-outline-gold:hover {
 .theme-f { background: rgba(139, 92, 246, 0.15); border-color: rgba(139, 92, 246, 0.4); }
 
 /*
- * Google Website Translator — hide only the top banner iframe so it does not cover
+ * Google Website Translator, hide only the top banner iframe so it does not cover
  * the fixed navbar. Avoid broad html/body rules that can interfere with translation.
  */
 iframe.goog-te-banner-frame {

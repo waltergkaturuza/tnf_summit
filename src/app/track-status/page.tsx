@@ -80,7 +80,7 @@ export default function TrackStatusPage() {
                 )}
                 <div>
                   <p className="text-slate-500 text-xs uppercase font-semibold">{result.trackType === "abstract" ? t.trackStatus.abstractLabel : t.trackStatus.registrationLabel}</p>
-                  <p className="text-white font-bold">{result.titleOrName || "—"}</p>
+                  <p className="text-white font-bold">{result.titleOrName || "-"}</p>
                 </div>
               </div>
               <div className="flex items-center justify-between py-3 border-t border-white/5">

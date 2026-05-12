@@ -36,9 +36,9 @@ const contactEntries: {
 }[] = [
   { icon: Mail, value: summitInfo.email, href: `mailto:${summitInfo.email}`, color: "#3B82F6" },
   { icon: Mail, value: summitInfo.emailAlt, href: `mailto:${summitInfo.emailAlt}`, color: "#06B6D4" },
-  { icon: Phone, value: "Racheal — 0779560229", href: "tel:+263779560229", color: "#10B981" },
-  { icon: Phone, value: "Llyod — 0773402440", href: "tel:+263773402440", color: "#22C55E" },
-  { icon: Phone, value: "Emanuel — 0719879890", href: "tel:+263719879890", color: "#84CC16" },
+  { icon: Phone, value: "Racheal, 0779560229", href: "tel:+263779560229", color: "#10B981" },
+  { icon: Phone, value: "Llyod, 0773402440", href: "tel:+263773402440", color: "#22C55E" },
+  { icon: Phone, value: "Emanuel, 0719879890", href: "tel:+263719879890", color: "#84CC16" },
   { icon: MapPin, value: summitInfo.address, color: "#C9921A" },
   { icon: Globe, value: "tnfzim.com", href: summitInfo.mainWebsite, color: "#8B5CF6" },
   { icon: Clock, value: "Mon–Fri, 08:00–17:00 CAT (UTC+2)", color: "#F59E0B" },

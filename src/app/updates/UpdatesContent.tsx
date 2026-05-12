@@ -108,7 +108,7 @@ export default function UpdatesContent({ initialUpdates }: { initialUpdates: Upd
                           <span className="flex items-center gap-1"><FolderOpen className="w-4 h-4" />{featured.category}</span>
                         </div>
                         <h2 className="text-2xl sm:text-3xl font-black text-white mb-3 group-hover:text-[#F5B730] transition-colors">{featured.title}</h2>
-                        <p className="text-slate-400 text-lg line-clamp-3 mb-4">{featured.description || "—"}</p>
+                        <p className="text-slate-400 text-lg line-clamp-3 mb-4">{featured.description || "-"}</p>
                         <span className="inline-flex items-center gap-2 text-[#C9921A] font-bold">Read more →</span>
                       </div>
                     </Link>
@@ -134,7 +134,7 @@ export default function UpdatesContent({ initialUpdates }: { initialUpdates: Upd
                           <div className="min-w-0 flex-1">
                             <p className="text-slate-500 text-xs mb-0.5">{u.category}{u.type === "event" && u.eventCity ? ` · ${u.eventCity}` : ""} · {(u.eventStartAt || u.eventDate) ? new Date(u.eventStartAt || u.eventDate!).toLocaleDateString() : u.publishedAt ? new Date(u.publishedAt).toLocaleDateString() : ""}</p>
                             <h4 className="text-white font-bold group-hover:text-[#F5B730] transition-colors line-clamp-2">{u.title}</h4>
-                            <p className="text-slate-400 text-sm line-clamp-1 mt-0.5">{u.description || "—"}</p>
+                            <p className="text-slate-400 text-sm line-clamp-1 mt-0.5">{u.description || "-"}</p>
                           </div>
                           <span className="text-[#C9921A] self-center font-semibold">→</span>
                         </Link>

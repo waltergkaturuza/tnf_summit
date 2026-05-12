@@ -112,7 +112,7 @@ export default function Navbar() {
               </div>
             </Link>
 
-            {/* Desktop Nav — with dropdowns for Participate & Program */}
+            {/* Desktop Nav, with dropdowns for Participate & Program */}
             <nav className="hidden xl:flex items-center gap-0.5">
               {navLinks.slice(0, 2).map((link) => (
                 <Link key={link.href} href={link.href}
@@ -246,7 +246,7 @@ export default function Navbar() {
                 </AnimatePresence>
               </div>
 
-              {/* External link — desktop only */}
+              {/* External link, desktop only */}
               <a
                 href="https://tnfzim.com"
                 target="_blank"
@@ -257,7 +257,7 @@ export default function Navbar() {
                 <span className="hidden xl:inline">tnfzim.com</span>
               </a>
 
-              {/* Register CTA — desktop */}
+              {/* Register CTA, desktop */}
               <Link
                 href="/registration"
                 className="hidden lg:flex btn-gold px-4 py-2 rounded-lg text-xs font-bold"

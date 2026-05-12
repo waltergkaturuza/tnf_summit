@@ -148,7 +148,7 @@ const dayColors: Record<string, string> = {
   "ARRIVAL DAY": "#64748B",
   "DAY 1": "#3B82F6",
   "DAY 2": "#8B5CF6",
-  "DAY 3 — OFFICIAL OPENING": "#10B981",
+  "DAY 3, OFFICIAL OPENING": "#10B981",
   "DAY 4": "#EC4899",
   "EXCURSIONS DAY": "#F59E0B",
   "DEPARTURE DAY": "#94A3B8",

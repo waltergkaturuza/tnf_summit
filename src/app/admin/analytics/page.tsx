@@ -105,7 +105,7 @@ export default function AnalyticsPage() {
         .select("session_id").gte("created_at", cutoff).neq("session_id", "");
       setUnique(new Set((sessionRows ?? []).map((r: { session_id: string }) => r.session_id)).size);
 
-      // Views per day — manual aggregation (views don't use the fixed 30-day view)
+      // Views per day, manual aggregation (views don't use the fixed 30-day view)
       const { data: rawViews } = await supabase.schema("tnf_summit").from("page_views")
         .select("created_at, session_id").gte("created_at", cutoff).order("created_at");
 
@@ -237,7 +237,7 @@ export default function AnalyticsPage() {
         <StatCard icon={Download}      label="Resource Downloads"  value={downloadStats?.total ?? 0} sub="Last 90 days" color="#8B5CF6" />
       </div>
 
-      {/* Events by Type (Area Chart — matching screenshot) */}
+      {/* Events by Type (Area Chart, matching screenshot) */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
         className="glass rounded-2xl p-6 border border-white/5">
         <div className="flex items-center justify-between mb-1">
@@ -248,7 +248,7 @@ export default function AnalyticsPage() {
         {eventsByType.length === 0 ? (
           <div className="h-48 flex flex-col items-center justify-center text-slate-600">
             <Calendar className="w-8 h-8 mb-2 opacity-50" />
-            <p className="text-sm">No events tracked yet — tracking starts as visitors browse.</p>
+            <p className="text-sm">No events tracked yet. Tracking starts as visitors browse.</p>
           </div>
         ) : (
           <>
@@ -312,7 +312,7 @@ export default function AnalyticsPage() {
             )}
         </motion.div>
 
-        {/* Top Pages — numbered list matching screenshot */}
+        {/* Top Pages, numbered list matching screenshot */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
           className="glass rounded-2xl p-6 border border-white/5">
           <div className="flex items-center justify-between mb-1">

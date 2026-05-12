@@ -31,7 +31,7 @@ function FadeIn({ children, delay = 0, className = "" }: { children: React.React
 }
 
 const previewImages = [
-  { label: "Victoria Falls — Summit Venue", emoji: "🌊", aspectRatio: "aspect-[4/3]", color: "#0EA5E9" },
+  { label: "Victoria Falls, Summit Venue", emoji: "🌊", aspectRatio: "aspect-[4/3]", color: "#0EA5E9" },
   { label: "Elephant Hills Resort", emoji: "🏨", aspectRatio: "aspect-square", color: "#10B981" },
   { label: "Zambezi River Views", emoji: "🌅", aspectRatio: "aspect-[3/2]", color: "#F59E0B" },
   { label: "Victoria Falls UNESCO Site", emoji: "🌍", aspectRatio: "aspect-[4/3]", color: "#8B5CF6" },
@@ -213,7 +213,7 @@ export default function GalleryPage() {
         )}
       </AnimatePresence>
 
-      {/* Coming Soon Banner — only when no gallery content yet */}
+      {/* Coming Soon Banner, only when no gallery content yet */}
       {!galleryLoading && liveFiles.length === 0 && (
         <div className="bg-[#C9921A]/10 border-y border-[#C9921A]/20 py-4">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center gap-3 flex-wrap">
@@ -228,7 +228,7 @@ export default function GalleryPage() {
         </div>
       )}
 
-      {/* Venue Preview — only when no live gallery content */}
+      {/* Venue Preview, only when no live gallery content */}
       {!galleryLoading && liveFiles.length === 0 && (
         <section className="py-20 section-gradient">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -236,7 +236,7 @@ export default function GalleryPage() {
               <div className="text-center mb-10">
                 <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">The Venue</span>
                 <h2 className="text-3xl font-black text-white mt-3">Victoria Falls & Elephant Hills Resort</h2>
-                <p className="mt-3 text-theme-primary">A world-class summit destination — one of the Seven Natural Wonders of the World</p>
+                <p className="mt-3 text-theme-primary">A world-class summit destination, one of the Seven Natural Wonders of the World</p>
               </div>
             </FadeIn>
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">

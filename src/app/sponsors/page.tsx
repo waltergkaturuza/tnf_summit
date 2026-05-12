@@ -37,7 +37,7 @@ const tiers = [
     description: "Premier event partners with maximum visibility across all summit touchpoints.",
     benefits: [
       "Prime logo placement on all summit materials & stage backdrops",
-      "Dedicated exhibition booth — premium location",
+      "Dedicated exhibition booth, premium location",
       "Speaking opportunity at a plenary session",
       "VIP delegate seats (10 delegates)",
       "Bilateral meeting priority booking",
@@ -57,7 +57,7 @@ const tiers = [
     description: "High-profile partners with prominent brand exposure and delegate access.",
     benefits: [
       "Logo on summit website, programme & signage",
-      "Exhibitor booth — standard location",
+      "Exhibitor booth, standard location",
       "Plenary mention at opening session",
       "VIP delegate seats (6 delegates)",
       "Bilateral meeting scheduling access",
@@ -165,7 +165,7 @@ export default function SponsorsPage() {
         </div>
       </section>
 
-      {/* Partner Logos — from Supabase Storage */}
+      {/* Partner Logos, from Supabase Storage */}
       {logos.length > 0 && (
         <section className="py-16 section-gradient">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -244,7 +244,7 @@ export default function SponsorsPage() {
         </div>
       </section>
 
-      {/* Summit-wide partnership — full-duration exhibition + visibility */}
+      {/* Summit-wide partnership, full-duration exhibition + visibility */}
       <section className="py-20 section-gradient border-t border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn>
@@ -322,7 +322,7 @@ export default function SponsorsPage() {
                   >
                     {themeSponsorshipOffers.map((o) => (
                       <option key={o.themeId} value={o.themeId}>
-                        {o.themeId} — {o.themeLabel}
+                        {o.themeId}, {o.themeLabel}
                       </option>
                     ))}
                   </select>
@@ -354,7 +354,7 @@ export default function SponsorsPage() {
               <div className="mb-10">
                 <div className="text-center mb-6 max-w-3xl mx-auto">
                   <h3 className="text-xl sm:text-2xl font-black text-white">
-                    Sponsorship by theme — own a theme. Own the conversation.
+                    Sponsorship by theme. Own a theme. Own the conversation.
                   </h3>
                   {spotlightDeck && (
                     <>
@@ -420,7 +420,7 @@ export default function SponsorsPage() {
                             className="mt-5 inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-xs font-bold text-white transition-opacity hover:opacity-90"
                             style={{ backgroundColor: style.headerBg }}
                           >
-                            Enquire — {tierOffer.packageLabel}
+                            Enquire ({tierOffer.packageLabel})
                             <ArrowRight className="w-3.5 h-3.5" />
                           </Link>
                         </div>

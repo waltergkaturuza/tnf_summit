@@ -29,7 +29,7 @@ const pageResults: Result[] = [
   { id: "volunteer", title: "Volunteer", subtitle: "Apply to volunteer at the Summit", href: "/volunteer", category: "Pages", icon: UserPlus },
   { id: "track-status", title: "Track Status", subtitle: "Check registration or abstract status", href: "/track-status", category: "Pages", icon: Download },
   { id: "contact", title: "Contact & FAQ", subtitle: "Secretariat contact, enquiry form", href: "/contact", category: "Pages", icon: Phone },
-  { id: "donate", title: "Donate", subtitle: "Support the Summit — bank transfer details", href: "/donate", category: "Pages", icon: Heart },
+  { id: "donate", title: "Donate", subtitle: "Support the Summit, bank transfer details", href: "/donate", category: "Pages", icon: Heart },
   { id: "privacy", title: "Privacy Policy", subtitle: "Data protection, cookies, user rights", href: "/privacy", category: "Legal", icon: Shield },
   { id: "terms", title: "Terms of Use", subtitle: "Registration policies, code of conduct", href: "/terms", category: "Legal", icon: Shield },
 ];

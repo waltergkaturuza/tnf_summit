@@ -760,7 +760,7 @@ export default function UpdatesPage() {
                   )}
                 </div>
                 <h3 className="text-white font-bold text-sm leading-snug line-clamp-2 mb-1">{u.title}</h3>
-                <p className="text-slate-400 text-xs line-clamp-2 mb-2">{u.description || "—"}</p>
+                <p className="text-slate-400 text-xs line-clamp-2 mb-2">{u.description || "-"}</p>
                 {u.eventDate && (
                   <p className="text-[#C9921A] text-xs mb-2 flex items-center gap-1">
                     <Calendar className="w-3 h-3" />

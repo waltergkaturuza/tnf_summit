@@ -35,8 +35,8 @@ export function getSessionTypeBadge(type: string): string {
 
 export function getRoomLabel(room: string): string {
   const rooms: Record<string, string> = {
-    A: "Room A — Main Plenary Hall",
-    B: "Room B — Syndicate Hall",
+    A: "Room A, Main Plenary Hall",
+    B: "Room B, Syndicate Hall",
     BOTH: "All Venues",
     ALL: "All Venues",
   };

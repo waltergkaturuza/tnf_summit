@@ -72,7 +72,7 @@ const sessionOptionsByDay = [
   },
 ];
 const ALL_DAY_KEYS = sessionOptionsByDay.map((x) => x.day);
-const excursions = ["Victoria Falls Rainforest Walk (UNESCO)", "Zambezi River Morning Boat Cruise", "Morning Game Drive — Zambezi National Park", "No excursion"];
+const excursions = ["Victoria Falls Rainforest Walk (UNESCO)", "Zambezi River Morning Boat Cruise", "Morning Game Drive, Zambezi National Park", "No excursion"];
 const investmentAreas = ["Agriculture / Agro-processing", "Renewable Energy / Clean Tech", "Mining & Mineral Processing", "Manufacturing & Industrialisation", "FinTech / Digital Finance", "Infrastructure", "Tourism / Eco-tourism", "Healthcare", "Education / TVET", "Other"];
 const countries = getCountryNames();
 
@@ -294,12 +294,12 @@ export default function RegistrationPage() {
           }
           setCardPaymentNotice(
             data.error
-              ? `Card checkout could not start (${data.error}). Use bank transfer or another method — we will invoice you by email.`
-              : "Card checkout is unavailable. Use bank transfer or another method — we will invoice you by email."
+              ? `Card checkout could not start (${data.error}). Use bank transfer or another method, we will invoice you by email.`
+              : "Card checkout is unavailable. Use bank transfer or another method, we will invoice you by email."
           );
         } catch {
           setCardPaymentNotice(
-            "Card checkout could not be reached. Use bank transfer or another method — we will invoice you by email."
+            "Card checkout could not be reached. Use bank transfer or another method, we will invoice you by email."
           );
         } finally {
           setIveriRedirecting(false);
@@ -406,7 +406,7 @@ export default function RegistrationPage() {
           </motion.div>
         )}
 
-        {/* Step indicators — full width, no scroll */}
+        {/* Step indicators, full width, no scroll */}
         <div className="mb-8">
           <div className="flex items-center w-full">
             {STEPS.map((s, i) => {
@@ -508,7 +508,7 @@ export default function RegistrationPage() {
                         </div>
                       </Field>
                       <Field label="Passport / ID Number">
-                        <input type="text" placeholder="Optional — for accreditation" value={form.passportNumber} onChange={e => set("passportNumber", e.target.value)} className={inputClass} />
+                        <input type="text" placeholder="Optional, for accreditation" value={form.passportNumber} onChange={e => set("passportNumber", e.target.value)} className={inputClass} />
                       </Field>
                     </div>
                     <div className="divider-gold" />
@@ -790,7 +790,7 @@ export default function RegistrationPage() {
                       </div>
                       <Field label="Apply for the TNF Innovation Challenge?">
                         <div className="flex gap-3">
-                          <ToggleButton value="yes" current={form.applyInnovation} onChange={v => set("applyInnovation", v)}>Yes — apply</ToggleButton>
+                          <ToggleButton value="yes" current={form.applyInnovation} onChange={v => set("applyInnovation", v)}>Yes, apply</ToggleButton>
                           <ToggleButton value="no" current={form.applyInnovation} onChange={v => set("applyInnovation", v)}>No</ToggleButton>
                         </div>
                       </Field>

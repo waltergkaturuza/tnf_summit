@@ -20,7 +20,7 @@ function Inner() {
   if (kind === "success" || status === "0" || status === "00") {
     title = "Thank you for your support";
     message =
-      "Your card donation was received successfully. We are grateful for your contribution to the Zimbabwe TNF Global Summit. You may receive confirmation by email — please keep your donation reference.";
+      "Your card donation was received successfully. We are grateful for your contribution to the Zimbabwe TNF Global Summit. You may receive confirmation by email, please keep your donation reference.";
     icon = <CheckCircle className="w-12 h-12 text-emerald-400" />;
   } else if (kind === "fail") {
     title = "Payment declined";
