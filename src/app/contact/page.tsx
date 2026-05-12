@@ -86,7 +86,9 @@ function ContactPageContent() {
       if (prev.message.trim()) return prev;
       const pct = Math.round(SPONSORSHIP_DISCOUNT_RATE * 100);
       const msg = offer
-        ? `I would like to enquire about sponsoring Spotlight Theme ${offer.themeId}: ${offer.themeLabel}. Package: ${offer.packageLabel}. List investment USD ${offer.listPriceUsd.toLocaleString()}; after ${pct}% reduction: USD ${offer.priceUsd.toLocaleString()}.`
+        ? offer.listPriceUsd === offer.priceUsd
+          ? `I would like to enquire about sponsoring Spotlight Theme ${offer.themeId}: ${offer.themeLabel}. Package: ${offer.packageLabel}. Investment: USD ${offer.priceUsd.toLocaleString()}.`
+          : `I would like to enquire about sponsoring Spotlight Theme ${offer.themeId}: ${offer.themeLabel}. Package: ${offer.packageLabel}. List investment USD ${offer.listPriceUsd.toLocaleString()}; after ${pct}% reduction: USD ${offer.priceUsd.toLocaleString()}.`
         : `I would like to enquire about sponsoring spotlight theme ${theme}.`;
       return { ...prev, enquiryType: "Sponsorship / Partnership", message: msg };
     });

@@ -764,54 +764,68 @@ export type ThemeSponsorshipOffer = {
   benefitsLine?: string;
   /** Full bullet list for sponsors page (optional; e.g. Theme A deck) */
   benefitsBullets?: string[];
+  /** Optional line above bullets (e.g. “Includes all Gold … plus”) */
+  benefitsIntro?: string;
 };
 
-/** Theme A — Africa's $3.4 Trillion Investment Frontier: three tiers (list USD → 25% off), per official slide. */
+/** Theme A — Africa's $3.4 Trillion Investment Frontier: three tiers (published USD), per official theme deck. */
 const THEME_A_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | "offerKey">[] = [
   {
     packageTier: "platinum",
     packageLabel: "Platinum",
-    listPriceUsd: 75_000,
-    priceUsd: 56_250,
-    benefitsLine: "Prime branding + 5-minute slot + participant list + 2 delegates + site banner",
+    listPriceUsd: 30_000,
+    priceUsd: 30_000,
+    benefitsLine: "All Gold benefits plus: prime branding, 5-minute slot, 2 delegates, 2 VIP openings, banners",
+    benefitsIntro: "Includes all Gold Sponsorship benefits plus:",
     benefitsBullets: [
-      "Prime branding of the event and recognition as the main event partner",
+      "Prime branding of the event and acknowledgement during the event",
       "5-minute in-person marketing/speaking slot",
-      "Access to the participants list",
+      "Access to participants list",
       "Complimentary registration of 2 delegates",
+      "2 VIP invitations to the Official Opening",
       "Hyperlinked banner on the Global Summit website",
+      "In-and-out conference venue advertising with 2 pull-up banners",
+      "Outside wall banner",
     ],
   },
   {
     packageTier: "gold",
     packageLabel: "Gold",
-    listPriceUsd: 40_000,
-    priceUsd: 30_000,
-    benefitsLine: "Tech demo zone + speaking slot + 5 passes + digital branding package",
+    listPriceUsd: 25_000,
+    priceUsd: 25_000,
+    benefitsLine: "All Silver benefits plus: 2 delegates, 2-minute slot, 2 venue banners, site banner, logo & verbal recognition",
+    benefitsIntro: "Includes all Silver Sponsorship benefits plus:",
     benefitsBullets: [
-      "Tech demo zone + speaking slot + 5 passes + digital branding package",
-      "1-minute electronic advert played during the Event Breaks",
-      "VIP invitation to the Official Opening",
-      "Complimentary registration for 1 delegate",
-      "Hyperlinked banner on the Global Summit website",
-      "2 prominent banner displays at the event venue",
+      "Complimentary entry for 2 delegates",
+      "2-minute marketing slot during the conference",
+      "Venue advertising with 2 banners",
+      "Hyperlinked banner on the website",
+      "Logo on the projection screen, conference program and verbal recognition (at intervals) throughout the conference",
     ],
   },
   {
     packageTier: "silver",
     packageLabel: "Silver",
     listPriceUsd: 20_000,
-    priceUsd: 15_000,
-    benefitsLine: "Collateral distribution + VIP opening + 1 delegate + venue banner",
+    priceUsd: 20_000,
+    benefitsLine: "Logo & verbal recognition, venue banners, program & electronic banner, 1 delegate, collateral distribution",
     benefitsBullets: [
-      "Distribution of promotional collateral to delegates",
-      "VIP invitation to the Official Opening",
-      "Complimentary registration for 1 delegate",
-      "Hyperlinked banner on the Global Summit website",
-      "1 prominent banner display at the event venue",
+      "Logo on the projection screen, conference program and verbal recognition (at intervals) throughout the sessions",
+      "In-and-out conference venue advertising with banners",
+      "Logo inclusion on the program and revolving electronic banner",
+      "Complimentary registration of 1 delegate",
+      "Distribution of promotional material to delegates",
     ],
   },
 ];
+
+/** Short copy from the official Theme A sponsorship deck (matches programme slide). */
+export const themeASponsorshipDeck = {
+  tagline:
+    "Unlocking Africa's largest investment opportunity through policy coherence, AfCFTA and bankable project pipelines.",
+  keySessions:
+    "High-Level Ministerial Plenary | ZIDA Investment Showcase | Smart Investment & Value Chains | MSME Access to Finance",
+} as const;
 
 /** Theme B — AI, Automation & the Jobs of Tomorrow: three tiers (list USD → 25% off), per official slide. */
 const THEME_B_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | "offerKey">[] = [

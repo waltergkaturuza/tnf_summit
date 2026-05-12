@@ -12,6 +12,7 @@ import {
   type ThemeSponsorshipPackageTier,
   summitWidePartnershipTiers,
   summitWidePartnershipIntro,
+  themeASponsorshipDeck,
 } from "@/lib/data";
 import { fetchPublicSponsorLogos, type MediaFile } from "@/lib/storage";
 
@@ -354,8 +355,20 @@ export default function SponsorsPage() {
                   <h3 className="text-xl sm:text-2xl font-black text-white">
                     Sponsorship by theme — own a theme. Own the conversation.
                   </h3>
+                  {sponsorThemeId === "A" && (
+                    <>
+                      <p className="mt-3 text-sm text-theme-primary leading-relaxed">
+                        {themeASponsorshipDeck.tagline}
+                      </p>
+                      <p className="mt-2 text-xs font-semibold text-white/90">
+                        Key sessions: {themeASponsorshipDeck.keySessions}
+                      </p>
+                    </>
+                  )}
                   <p className="mt-2 text-sm text-theme-primary">
-                    List and discounted USD amounts match each row for Theme {sponsorThemeId} in the table below.
+                    {selectedThemeTiers.every((t) => t.listPriceUsd === t.priceUsd)
+                      ? `USD investment per package matches Theme ${sponsorThemeId} in the table below.`
+                      : `List and discounted USD amounts match each row for Theme ${sponsorThemeId} in the table below.`}
                   </p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -375,12 +388,23 @@ export default function SponsorsPage() {
                           </div>
                           <h4 className="text-lg font-black text-white mt-1">{tierOffer.packageLabel}</h4>
                           <div className="text-xs text-white/90 mt-1 font-semibold">
-                            List USD {tierOffer.listPriceUsd.toLocaleString()} · You pay USD{" "}
-                            {tierOffer.priceUsd.toLocaleString()}
+                            {tierOffer.listPriceUsd === tierOffer.priceUsd ? (
+                              <>Investment USD {tierOffer.priceUsd.toLocaleString()}</>
+                            ) : (
+                              <>
+                                List USD {tierOffer.listPriceUsd.toLocaleString()} · You pay USD{" "}
+                                {tierOffer.priceUsd.toLocaleString()}
+                              </>
+                            )}
                           </div>
                         </div>
                         <div className="p-4 flex-1 flex flex-col">
                           <p className="text-xs font-bold uppercase text-theme-primary mb-2">Package includes</p>
+                          {tierOffer.benefitsIntro && (
+                            <p className="text-sm font-semibold text-white/95 mb-3 leading-snug">
+                              {tierOffer.benefitsIntro}
+                            </p>
+                          )}
                           <ul className="space-y-2.5 text-sm text-theme-primary flex-1 list-disc pl-4 marker:text-white/35">
                             {bullets.map((b) => (
                               <li key={b} className="leading-snug">
