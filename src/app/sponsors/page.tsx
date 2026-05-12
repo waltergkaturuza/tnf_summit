@@ -234,7 +234,7 @@ export default function SponsorsPage() {
                     className="px-4 py-3 text-center"
                     style={{ backgroundColor: sw.headerColor }}
                   >
-                    <div className="text-[10px] font-bold uppercase tracking-widest text-white/90">Full summit</div>
+                    <div className="text-[10px] font-bold uppercase tracking-widest text-white/90">FULL SUMMIT</div>
                     <h3 className="text-base font-black text-white leading-tight mt-1">{sw.title}</h3>
                     <div className="text-sm font-bold text-white/95 mt-2">{sw.priceBand}</div>
                   </div>
