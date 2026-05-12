@@ -1165,6 +1165,60 @@ const THEME_LIST_USD: Record<string, { tier: ThemeSponsorshipPackageTier; listUs
   N: { tier: "gold", listUsd: 90_000 },
 };
 
+/**
+ * Build Platinum / Gold / Silver **list** USD amounts from the legacy single-row anchor
+ * (published list price + tier). Uses the same shape as Theme G (30k : 25k : 20k list ratios).
+ * `official_partner` anchors are treated as the entry (silver) list so all themes share P/G/S categories.
+ */
+function listUsdTripleFromAnchor(anchor: { tier: ThemeSponsorshipPackageTier; listUsd: number }): {
+  platinum: number;
+  gold: number;
+  silver: number;
+} {
+  const rG = 25_000 / 20_000;
+  const rP = 30_000 / 20_000;
+  const { tier, listUsd } = anchor;
+  if (tier === "silver" || tier === "official_partner") {
+    const silver = listUsd;
+    return { silver, gold: Math.round(silver * rG), platinum: Math.round(silver * rP) };
+  }
+  if (tier === "gold") {
+    const gold = listUsd;
+    return { silver: Math.round(gold / rG), gold, platinum: Math.round(gold * (30_000 / 25_000)) };
+  }
+  const platinum = listUsd;
+  return {
+    platinum,
+    gold: Math.round(platinum * (25_000 / 30_000)),
+    silver: Math.round(platinum / rP),
+  };
+}
+
+/** Three-tier packages for Themes D, F, H, J, K, L, M, N: Theme G benefit copy + list/pay from anchor scaling. */
+function themeTiersFromStandardIndustrialTemplate(
+  themeId: string,
+  themeLabel: string,
+  anchor: { tier: ThemeSponsorshipPackageTier; listUsd: number }
+): ThemeSponsorshipOffer[] {
+  const lists = listUsdTripleFromAnchor(anchor);
+  return THEME_G_TIER_DEFS.map((t) => {
+    const listPriceUsd = lists[t.packageTier as keyof typeof lists];
+    const priceUsd = Math.round(listPriceUsd * (1 - SPONSORSHIP_DISCOUNT_RATE));
+    return {
+      offerKey: `${themeId}-${t.packageTier}`,
+      themeId,
+      themeLabel,
+      packageTier: t.packageTier,
+      packageLabel: t.packageLabel,
+      listPriceUsd,
+      priceUsd,
+      benefitsLine: t.benefitsLine,
+      benefitsIntro: t.benefitsIntro,
+      benefitsBullets: t.benefitsBullets,
+    };
+  });
+}
+
 const tierLabels: Record<ThemeSponsorshipPackageTier, string> = {
   platinum: "Platinum",
   gold: "Gold",
@@ -1186,7 +1240,7 @@ function themeOfferFromId(theme: (typeof themes)[0]): ThemeSponsorshipOffer {
   };
 }
 
-/** All package rows for a theme (Themes A–C, E, G & I have Platinum, Gold, Silver; others have one row). */
+/** All package rows for a theme (Platinum, Gold, Silver for every spotlight theme). */
 export function getThemeSponsorshipTiers(themeId: string): ThemeSponsorshipOffer[] {
   if (themeId === "A") {
     const themeA = themes.find((th) => th.id === "A");
@@ -1250,13 +1304,17 @@ export function getThemeSponsorshipTiers(themeId: string): ThemeSponsorshipOffer
   }
   const theme = themes.find((th) => th.id === themeId);
   if (!theme) return [];
+  const anchor = THEME_LIST_USD[themeId];
+  if (anchor) {
+    return themeTiersFromStandardIndustrialTemplate(themeId, theme.label, anchor);
+  }
   return [themeOfferFromId(theme)];
 }
 
 /** One “primary” row per theme (for the theme dropdown), first tier. */
 export const themeSponsorshipOffers: ThemeSponsorshipOffer[] = themes.map((th) => getThemeSponsorshipTiers(th.id)[0]);
 
-/** Full table: every theme–tier line (Themes A–C, E, G & I = 3 rows each). */
+/** Full table: every theme–tier line (Platinum, Gold, Silver per theme). */
 export const themeSponsorshipTiersFlat: ThemeSponsorshipOffer[] = themes.flatMap((th) => getThemeSponsorshipTiers(th.id));
 
 export function getThemeSponsorshipOffer(themeId: string): ThemeSponsorshipOffer | undefined {
