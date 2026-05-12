@@ -1,5 +1,14 @@
 import { NextResponse } from "next/server";
-import { donationCategories, getDonationCategoryLabel, themes } from "@/lib/data";
+import {
+  donationCategories,
+  getDonationCategoryLabel,
+  themes,
+  getThemeSponsorshipOfferTier,
+  getThemeSponsorshipTiers,
+  getSummitWidePartnershipTier,
+  parseUsdFromPriceBand,
+  type ThemeSponsorshipPackageTier,
+} from "@/lib/data";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { generateDonationTrackId } from "@/lib/trackId";
 
@@ -21,7 +30,33 @@ type Body = {
   categoryOther?: string;
   amountUsd?: number;
   message?: string;
+  /** When set to sponsorship, amount must match the selected package (validated server-side). */
+  contributionType?: "donation" | "sponsorship";
+  sponsorshipScope?: "theme" | "summit_wide";
+  packageTier?: ThemeSponsorshipPackageTier;
+  summitWideTierId?: string;
 };
+
+const TIER_KEYS = new Set<string>(["platinum", "gold", "silver", "official_partner"]);
+
+function expectedSponsorshipUsd(b: Body): number | null {
+  if (b.sponsorshipScope === "summit_wide") {
+    const id = (b.summitWideTierId ?? "").trim().toLowerCase();
+    const sw = getSummitWidePartnershipTier(id);
+    if (!sw) return null;
+    return parseUsdFromPriceBand(sw.priceBand);
+  }
+  if (b.sponsorshipScope !== "theme") return null;
+  const tid = (b.themeId ?? "").trim().toUpperCase();
+  if (!tid) return null;
+  const pt = (b.packageTier ?? "").trim().toLowerCase();
+  if (pt && TIER_KEYS.has(pt)) {
+    const o = getThemeSponsorshipOfferTier(tid, pt as ThemeSponsorshipPackageTier);
+    return o?.priceUsd ?? null;
+  }
+  const tiers = getThemeSponsorshipTiers(tid);
+  return tiers[0]?.priceUsd ?? null;
+}
 
 export async function POST(req: Request) {
   if (!supabaseAdmin) {
@@ -52,20 +87,8 @@ export async function POST(req: Request) {
   if (!ALLOWED.has(categoryKey)) {
     return NextResponse.json({ error: "Invalid donation category." }, { status: 400 });
   }
+  const contributionType = body.contributionType === "sponsorship" ? "sponsorship" : "donation";
   const theme = themes.find((t) => t.id === themeId);
-  if (categoryKey === "global_themes_fund" && !theme) {
-    return NextResponse.json({ error: "Please select a valid Summit theme." }, { status: 400 });
-  }
-  if (categoryKey === "other" && !categoryOther) {
-    return NextResponse.json({ error: "Please provide your donation category." }, { status: 400 });
-  }
-
-  if (!firstName || !lastName) {
-    return NextResponse.json({ error: "First and last name are required." }, { status: 400 });
-  }
-  if (donorType === "organisation" && !organisation) {
-    return NextResponse.json({ error: "Organisation name is required for organisational gifts." }, { status: 400 });
-  }
 
   const amountUsd = Number(body.amountUsd);
   if (!Number.isFinite(amountUsd) || amountUsd < MIN_USD || amountUsd > MAX_USD) {
@@ -75,13 +98,93 @@ export async function POST(req: Request) {
     );
   }
 
+  if (contributionType === "sponsorship") {
+    if (body.sponsorshipScope === "theme") {
+      if (categoryKey !== "theme_sponsorship") {
+        return NextResponse.json(
+          { error: "Use the Theme spotlight sponsorship category for theme packages." },
+          { status: 400 }
+        );
+      }
+      if (!theme) {
+        return NextResponse.json({ error: "Please select a valid Summit theme." }, { status: 400 });
+      }
+      const exp = expectedSponsorshipUsd({ ...body, themeId, sponsorshipScope: "theme" });
+      if (exp == null || Math.abs(amountUsd - exp) > 0.02) {
+        return NextResponse.json(
+          { error: "Amount must match the selected theme sponsorship package." },
+          { status: 400 }
+        );
+      }
+    } else if (body.sponsorshipScope === "summit_wide") {
+      if (categoryKey !== "summit_wide_sponsorship") {
+        return NextResponse.json(
+          { error: "Use the Summit-wide partnership category for full-summit tiers." },
+          { status: 400 }
+        );
+      }
+      const exp = expectedSponsorshipUsd({ ...body, sponsorshipScope: "summit_wide" });
+      if (exp == null || Math.abs(amountUsd - exp) > 0.02) {
+        return NextResponse.json(
+          { error: "Amount must match the selected summit-wide tier." },
+          { status: 400 }
+        );
+      }
+    } else {
+      return NextResponse.json(
+        { error: "Select theme spotlight or summit-wide sponsorship." },
+        { status: 400 }
+      );
+    }
+  } else {
+    if (categoryKey === "theme_sponsorship" || categoryKey === "summit_wide_sponsorship") {
+      return NextResponse.json(
+        { error: "Use Sponsorship on the donate form for fixed packages, or choose another category." },
+        { status: 400 }
+      );
+    }
+    if (categoryKey === "global_themes_fund" && !theme) {
+      return NextResponse.json({ error: "Please select a valid Summit theme." }, { status: 400 });
+    }
+    if (categoryKey === "other" && !categoryOther) {
+      return NextResponse.json({ error: "Please provide your donation category." }, { status: 400 });
+    }
+  }
+
+  if (!firstName || !lastName) {
+    return NextResponse.json({ error: "First and last name are required." }, { status: 400 });
+  }
+  if (donorType === "organisation" && !organisation) {
+    return NextResponse.json({ error: "Organisation name is required for organisational gifts." }, { status: 400 });
+  }
+
   const trackId = generateDonationTrackId();
-  const categoryLabel =
-    categoryKey === "other"
-      ? categoryOther
-      : categoryKey === "global_themes_fund" && theme
-        ? `${getDonationCategoryLabel(categoryKey)}, Theme ${theme.id}: ${theme.label}`
+
+  let categoryLabel: string;
+  if (categoryKey === "other") {
+    categoryLabel = categoryOther;
+  } else if (categoryKey === "global_themes_fund" && theme) {
+    categoryLabel = `${getDonationCategoryLabel(categoryKey)}, Theme ${theme.id}: ${theme.label}`;
+  } else if (categoryKey === "theme_sponsorship" && contributionType === "sponsorship" && body.sponsorshipScope === "theme" && theme) {
+    const ptRaw = (body.packageTier ?? "").trim().toLowerCase();
+    const pt = (TIER_KEYS.has(ptRaw) ? ptRaw : getThemeSponsorshipTiers(themeId)[0]?.packageTier) as
+      | ThemeSponsorshipPackageTier
+      | undefined;
+    const offer = pt ? getThemeSponsorshipOfferTier(themeId, pt) : undefined;
+    categoryLabel =
+      offer && theme
+        ? `Sponsorship: Theme ${theme.id} · ${theme.label} · ${offer.packageLabel} · USD ${offer.priceUsd.toLocaleString("en-US")}`
         : getDonationCategoryLabel(categoryKey);
+  } else if (
+    categoryKey === "summit_wide_sponsorship" &&
+    contributionType === "sponsorship" &&
+    body.sponsorshipScope === "summit_wide"
+  ) {
+    const sw = getSummitWidePartnershipTier((body.summitWideTierId ?? "").trim().toLowerCase());
+    categoryLabel = sw ? `Sponsorship: Summit-wide · ${sw.title} · ${sw.priceBand}` : getDonationCategoryLabel(categoryKey);
+  } else {
+    categoryLabel = getDonationCategoryLabel(categoryKey);
+  }
 
   const { data, error } = await supabaseAdmin
     .schema("tnf_summit")

@@ -5,7 +5,20 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowLeft, Heart, CreditCard, Copy, Check, Building2, Hash, Globe, Loader2 } from "lucide-react";
 import { getSetting } from "@/lib/db";
-import { donationCategories, themes } from "@/lib/data";
+import {
+  donationCategories,
+  themes,
+  getThemeSponsorshipTiers,
+  getThemeSponsorshipOfferTier,
+  summitWidePartnershipTiers,
+  parseUsdFromPriceBand,
+  type ThemeSponsorshipPackageTier,
+  type SummitWidePartnershipTierId,
+} from "@/lib/data";
+
+const SPONSORSHIP_CATEGORY_KEYS = new Set(["theme_sponsorship", "summit_wide_sponsorship"]);
+
+const donationCategoryOptions = donationCategories.filter((c) => !SPONSORSHIP_CATEGORY_KEYS.has(c.key));
 
 const PAYMENT_KEYS = [
   "payment_bank_name",
@@ -42,6 +55,8 @@ function CopyField({ label, value, icon: Icon }: { label: string; value: string;
 }
 
 type DonorType = "individual" | "organisation";
+type ContributionMode = "donation" | "sponsorship";
+type SponsorshipScope = "theme" | "summit_wide";
 
 export default function DonatePage() {
   const [settings, setSettings] = useState<Record<string, string>>({});
@@ -53,11 +68,16 @@ export default function DonatePage() {
   const [organisation, setOrganisation] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [categoryKey, setCategoryKey] = useState(donationCategories[0]?.key ?? "general");
+  const [categoryKey, setCategoryKey] = useState(donationCategoryOptions[0]?.key ?? "general");
   const [themeId, setThemeId] = useState("");
   const [categoryOther, setCategoryOther] = useState("");
   const [amountUsd, setAmountUsd] = useState<string>("");
   const [message, setMessage] = useState("");
+
+  const [contributionMode, setContributionMode] = useState<ContributionMode>("donation");
+  const [sponsorshipScope, setSponsorshipScope] = useState<SponsorshipScope>("theme");
+  const [packageTier, setPackageTier] = useState<ThemeSponsorshipPackageTier>("platinum");
+  const [summitWideTierId, setSummitWideTierId] = useState<SummitWidePartnershipTierId>("platinum");
 
   const [cardSubmitting, setCardSubmitting] = useState(false);
   const [iveriRedirecting, setIveriRedirecting] = useState(false);
@@ -73,6 +93,28 @@ export default function DonatePage() {
       setLoadingSettings(false);
     });
   }, []);
+
+  useEffect(() => {
+    if (contributionMode !== "sponsorship" || sponsorshipScope !== "theme" || !themeId) return;
+    const tiers = getThemeSponsorshipTiers(themeId);
+    if (tiers.length === 0) return;
+    if (!tiers.some((t) => t.packageTier === packageTier)) {
+      setPackageTier(tiers[0].packageTier);
+    }
+  }, [contributionMode, sponsorshipScope, themeId, packageTier]);
+
+  useEffect(() => {
+    if (contributionMode !== "sponsorship") return;
+    let usd: number | null = null;
+    if (sponsorshipScope === "summit_wide") {
+      const sw = summitWidePartnershipTiers.find((t) => t.id === summitWideTierId);
+      if (sw) usd = parseUsdFromPriceBand(sw.priceBand);
+    } else if (themeId) {
+      const o = getThemeSponsorshipOfferTier(themeId, packageTier);
+      usd = o?.priceUsd ?? null;
+    }
+    setAmountUsd(usd != null ? String(usd) : "");
+  }, [contributionMode, sponsorshipScope, themeId, packageTier, summitWideTierId]);
 
   const bankName = settings.payment_bank_name || "";
   const accountName = settings.payment_account_name || "";
@@ -94,33 +136,70 @@ export default function DonatePage() {
         setCardSubmitting(false);
         return;
       }
-      if (categoryKey === "global_themes_fund" && !themeId) {
-        setCardError("Please select a Summit theme.");
-        setCardSubmitting(false);
-        return;
+      if (contributionMode === "donation") {
+        if (categoryKey === "global_themes_fund" && !themeId) {
+          setCardError("Please select a Summit theme.");
+          setCardSubmitting(false);
+          return;
+        }
+        if (categoryKey === "other" && !categoryOther.trim()) {
+          setCardError("Please provide your donation category under Other.");
+          setCardSubmitting(false);
+          return;
+        }
+      } else {
+        if (sponsorshipScope === "theme") {
+          if (!themeId) {
+            setCardError("Please select a Summit theme for sponsorship.");
+            setCardSubmitting(false);
+            return;
+          }
+          const offer = getThemeSponsorshipOfferTier(themeId, packageTier);
+          if (!offer) {
+            setCardError("This theme has no published sponsorship package. Choose another theme or tier.");
+            setCardSubmitting(false);
+            return;
+          }
+        } else {
+          const sw = summitWidePartnershipTiers.find((t) => t.id === summitWideTierId);
+          const parsed = sw ? parseUsdFromPriceBand(sw.priceBand) : null;
+          if (parsed == null || !Number.isFinite(parsed)) {
+            setCardError("Could not read the selected summit-wide tier amount. Try again or contact us.");
+            setCardSubmitting(false);
+            return;
+          }
+        }
       }
-      if (categoryKey === "other" && !categoryOther.trim()) {
-        setCardError("Please provide your donation category under Other.");
-        setCardSubmitting(false);
-        return;
+
+      const payload: Record<string, unknown> = {
+        donorType,
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        organisation: organisation.trim(),
+        email: email.trim(),
+        phone: phone.trim(),
+        categoryKey,
+        categoryOther: categoryOther.trim(),
+        amountUsd: amt,
+        message: message.trim(),
+        contributionType: contributionMode,
+      };
+      if (contributionMode === "donation") {
+        if (themeId) payload.themeId = themeId;
+      } else {
+        payload.sponsorshipScope = sponsorshipScope;
+        if (sponsorshipScope === "theme") {
+          payload.themeId = themeId;
+          payload.packageTier = packageTier;
+        } else {
+          payload.summitWideTierId = summitWideTierId;
+        }
       }
 
       const createRes = await fetch("/api/donate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          donorType,
-          firstName: firstName.trim(),
-          lastName: lastName.trim(),
-          organisation: organisation.trim(),
-          email: email.trim(),
-          phone: phone.trim(),
-          categoryKey,
-          themeId: themeId || undefined,
-          categoryOther: categoryOther.trim(),
-          amountUsd: amt,
-          message: message.trim(),
-        }),
+        body: JSON.stringify(payload),
       });
       const createJson = (await createRes.json().catch(() => ({}))) as { error?: string; trackId?: string };
       if (!createRes.ok) {
@@ -192,7 +271,7 @@ export default function DonatePage() {
             </div>
             <h1 className="text-3xl sm:text-4xl font-black text-white mb-4">Support the Zimbabwe TNF Global Summit</h1>
             <p className="text-theme-primary max-w-2xl mx-auto">
-              Your donation helps us deliver inclusive growth, decent work, and investment promotion. Choose an amount and category below to pay by card, or use bank transfer.
+              Support the summit with a flexible donation or a fixed sponsorship package. Use the card form below (choose Donating or Sponsoring), or pay by bank transfer in the panel on the right.
             </p>
           </div>
 
@@ -200,13 +279,51 @@ export default function DonatePage() {
             {/* Card donation, short form */}
             <div className="glass rounded-2xl p-6 border border-white/10 xl:col-span-2">
             <h2 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
-              <CreditCard className="w-5 h-5 text-[#d49a26]" /> Donate by card
+              <CreditCard className="w-5 h-5 text-[#d49a26]" /> Sponsor / Donate by card
             </h2>
             <p className="text-sm text-slate-400 mb-6">
-              Choose your USD amount, there is no fixed fee. The charge matches what you enter (subject to our payment partner&apos;s limits).
+              {contributionMode === "donation"
+                ? "Donating: enter any USD amount you wish (minimum 1). The charge matches what you enter, subject to our payment partner&apos;s limits."
+                : "Sponsoring: pick theme spotlight or summit-wide, then tier. The USD amount is fixed by that package, filled in for you, and verified on our server before checkout."}
             </p>
 
             <form onSubmit={(e) => void submitCardDonation(e)} className="space-y-4">
+              <div className="flex flex-wrap gap-4">
+                <label className="flex items-center gap-2 cursor-pointer text-sm text-slate-300">
+                  <input
+                    type="radio"
+                    name="contributionMode"
+                    checked={contributionMode === "donation"}
+                    onChange={() => {
+                      setContributionMode("donation");
+                      if (SPONSORSHIP_CATEGORY_KEYS.has(categoryKey)) {
+                        setCategoryKey(donationCategoryOptions[0]?.key ?? "general");
+                      }
+                      setAmountUsd("");
+                    }}
+                    className="accent-[#d49a26]"
+                  />
+                  Donating
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer text-sm text-slate-300">
+                  <input
+                    type="radio"
+                    name="contributionMode"
+                    checked={contributionMode === "sponsorship"}
+                    onChange={() => {
+                      setContributionMode("sponsorship");
+                      setCategoryKey("theme_sponsorship");
+                      setSponsorshipScope("theme");
+                      const first =
+                        themes.find((th) => getThemeSponsorshipTiers(th.id).length > 0)?.id ?? themes[0]?.id ?? "";
+                      setThemeId(first);
+                    }}
+                    className="accent-[#d49a26]"
+                  />
+                  Sponsoring
+                </label>
+              </div>
+
               <div className="flex flex-wrap gap-4">
                 <label className="flex items-center gap-2 cursor-pointer text-sm text-slate-300">
                   <input
@@ -284,69 +401,181 @@ export default function DonatePage() {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Category</label>
-                <select
-                  value={categoryKey}
-                  onChange={(e) => {
-                    const next = e.target.value;
-                    setCategoryKey(next);
-                    if (next !== "global_themes_fund") setThemeId("");
-                    if (next !== "other") setCategoryOther("");
-                  }}
-                  className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-primary)] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#d49a26]/40"
-                >
-                  {donationCategories.map((c) => (
-                    <option key={c.key} value={c.key}>
-                      {c.label}
-                    </option>
-                  ))}
-                </select>
-                <p className="text-[11px] text-slate-500 mt-1.5">
-                  {donationCategories.find((c) => c.key === categoryKey)?.description}
-                </p>
-              </div>
-              {categoryKey === "global_themes_fund" && (
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Select theme</label>
-                  <select
-                    required
-                    value={themeId}
-                    onChange={(e) => setThemeId(e.target.value)}
-                    className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-primary)] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#d49a26]/40"
-                  >
-                    <option value="">Choose a theme</option>
-                    {themes.map((th) => (
-                      <option key={th.id} value={th.id}>
-                        Theme {th.id}: {th.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
-              {categoryKey === "other" && (
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Other category</label>
-                  <input
-                    required
-                    value={categoryOther}
-                    onChange={(e) => setCategoryOther(e.target.value)}
-                    placeholder="Enter donation category"
-                    className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-primary)] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#d49a26]/40"
-                  />
-                </div>
+              {contributionMode === "donation" ? (
+                <>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Category</label>
+                    <select
+                      value={categoryKey}
+                      onChange={(e) => {
+                        const next = e.target.value;
+                        setCategoryKey(next);
+                        if (next !== "global_themes_fund") setThemeId("");
+                        if (next !== "other") setCategoryOther("");
+                      }}
+                      className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-primary)] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#d49a26]/40"
+                    >
+                      {donationCategoryOptions.map((c) => (
+                        <option key={c.key} value={c.key}>
+                          {c.label}
+                        </option>
+                      ))}
+                    </select>
+                    <p className="text-[11px] text-slate-500 mt-1.5">
+                      {donationCategories.find((c) => c.key === categoryKey)?.description}
+                    </p>
+                  </div>
+                  {categoryKey === "global_themes_fund" && (
+                    <div>
+                      <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Select theme</label>
+                      <select
+                        required
+                        value={themeId}
+                        onChange={(e) => setThemeId(e.target.value)}
+                        className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-primary)] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#d49a26]/40"
+                      >
+                        <option value="">Choose a theme</option>
+                        {themes.map((th) => (
+                          <option key={th.id} value={th.id}>
+                            Theme {th.id}: {th.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                  {categoryKey === "other" && (
+                    <div>
+                      <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Other category</label>
+                      <input
+                        required
+                        value={categoryOther}
+                        onChange={(e) => setCategoryOther(e.target.value)}
+                        placeholder="Enter donation category"
+                        className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-primary)] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#d49a26]/40"
+                      />
+                    </div>
+                  )}
+                </>
+              ) : (
+                <>
+                  <div className="flex flex-wrap gap-4">
+                    <label className="flex items-center gap-2 cursor-pointer text-sm text-slate-300">
+                      <input
+                        type="radio"
+                        name="sponsorshipScope"
+                        checked={sponsorshipScope === "theme"}
+                        onChange={() => {
+                          setSponsorshipScope("theme");
+                          setCategoryKey("theme_sponsorship");
+                          const first =
+                            themes.find((th) => getThemeSponsorshipTiers(th.id).length > 0)?.id ?? themes[0]?.id ?? "";
+                          if (!themeId || getThemeSponsorshipTiers(themeId).length === 0) setThemeId(first);
+                        }}
+                        className="accent-[#d49a26]"
+                      />
+                      Theme spotlight
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer text-sm text-slate-300">
+                      <input
+                        type="radio"
+                        name="sponsorshipScope"
+                        checked={sponsorshipScope === "summit_wide"}
+                        onChange={() => {
+                          setSponsorshipScope("summit_wide");
+                          setCategoryKey("summit_wide_sponsorship");
+                        }}
+                        className="accent-[#d49a26]"
+                      />
+                      Summit-wide
+                    </label>
+                  </div>
+
+                  <div className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">
+                    <p className="text-[11px] font-bold text-slate-500 uppercase mb-1">Package category</p>
+                    <p className="text-sm text-white font-semibold">
+                      {donationCategories.find((c) => c.key === categoryKey)?.label}
+                    </p>
+                    <p className="text-[11px] text-slate-500 mt-1">
+                      {donationCategories.find((c) => c.key === categoryKey)?.description}
+                    </p>
+                  </div>
+
+                  {sponsorshipScope === "theme" ? (
+                    <>
+                      <div>
+                        <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Select theme</label>
+                        <select
+                          required
+                          value={themeId}
+                          onChange={(e) => setThemeId(e.target.value)}
+                          className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-primary)] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#d49a26]/40"
+                        >
+                          <option value="">Choose a theme</option>
+                          {themes
+                            .filter((th) => getThemeSponsorshipTiers(th.id).length > 0)
+                            .map((th) => (
+                              <option key={th.id} value={th.id}>
+                                Theme {th.id}: {th.label}
+                              </option>
+                            ))}
+                        </select>
+                      </div>
+                      {themeId && getThemeSponsorshipTiers(themeId).length > 0 && (
+                        <div>
+                          <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Package tier</label>
+                          <select
+                            required
+                            value={packageTier}
+                            onChange={(e) => setPackageTier(e.target.value as ThemeSponsorshipPackageTier)}
+                            className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-primary)] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#d49a26]/40"
+                          >
+                            {getThemeSponsorshipTiers(themeId).map((t) => (
+                              <option key={t.packageTier} value={t.packageTier}>
+                                {t.packageLabel} — USD {t.priceUsd.toLocaleString("en-US")}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <div>
+                      <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Summit-wide tier</label>
+                      <select
+                        required
+                        value={summitWideTierId}
+                        onChange={(e) => setSummitWideTierId(e.target.value as SummitWidePartnershipTierId)}
+                        className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-primary)] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#d49a26]/40"
+                      >
+                        {summitWidePartnershipTiers.map((t) => (
+                          <option key={t.id} value={t.id}>
+                            {t.title} — {t.priceBand}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                </>
               )}
 
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Amount (USD)</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">
+                  Amount (USD)
+                  {contributionMode === "sponsorship" && (
+                    <span className="text-slate-500 font-normal normal-case ml-2">(set by package)</span>
+                  )}
+                </label>
                 <input
                   required
                   type="number"
                   min={1}
                   step="0.01"
+                  readOnly={contributionMode === "sponsorship"}
                   value={amountUsd}
                   onChange={(e) => setAmountUsd(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-primary)] border border-white/10 text-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#d49a26]/40"
+                  className={`w-full px-3 py-2.5 rounded-xl bg-[var(--bg-primary)] border border-white/10 text-white text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#d49a26]/40 ${
+                    contributionMode === "sponsorship" ? "opacity-90 cursor-not-allowed" : ""
+                  }`}
                 />
               </div>
 
@@ -375,7 +604,7 @@ export default function DonatePage() {
                   </>
                 ) : (
                   <>
-                    <Heart className="w-4 h-4 fill-current" /> Donate with card
+                    <Heart className="w-4 h-4 fill-current" /> Sponsor/ Donate
                   </>
                 )}
               </button>

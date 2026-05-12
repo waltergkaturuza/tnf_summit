@@ -13,11 +13,11 @@ export default function DonateFloatingButton() {
         transition={{ delay: 0.5, type: "spring", stiffness: 300 }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.98 }}
-        className="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-5 py-3 rounded-full shadow-xl bg-[#C9921A] hover:bg-[#F5B730] text-[#0A1628] font-bold text-sm transition-colors border-2 border-[#F5B730]/50"
-        aria-label="Donate"
+        className="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-4 py-2.5 sm:px-5 sm:py-3 rounded-full shadow-xl bg-[#C9921A] hover:bg-[#F5B730] text-[#0A1628] font-bold text-xs sm:text-sm transition-colors border-2 border-[#F5B730]/50 max-w-[calc(100vw-3rem)]"
+        aria-label="Sponsor or donate"
       >
-        <Heart className="w-4 h-4" fill="currentColor" />
-        <span>Donate</span>
+        <Heart className="w-4 h-4 shrink-0" fill="currentColor" />
+        <span>Sponsor/ Donate</span>
       </motion.button>
     </Link>
   );

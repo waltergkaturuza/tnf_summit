@@ -66,6 +66,16 @@ export const donationCategories: DonationCategoryDef[] = [
     description: "Corporate or institutional contribution without a full sponsorship package",
   },
   {
+    key: "theme_sponsorship",
+    label: "Theme spotlight sponsorship",
+    description: "Published USD package for a chosen spotlight theme (amount is set by tier)",
+  },
+  {
+    key: "summit_wide_sponsorship",
+    label: "Summit-wide partnership",
+    description: "Full-summit exhibition and visibility tier (amount is set by tier)",
+  },
+  {
     key: "other",
     label: "Other",
     description: "Choose this if your preferred donation category is not listed",
@@ -819,7 +829,7 @@ const THEME_A_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | 
   },
 ];
 
-/** Tagline + key sessions per theme. Keys A/B/C/E are independent; C and E are not interchangeable. */
+/** Tagline + key sessions per theme. Keys A/B/C/E/G/I are independent; similar tier layouts do not share the same copy. */
 export const themeSpotlightSponsorshipDeck = {
   A: {
     tagline:
@@ -845,6 +855,18 @@ export const themeSpotlightSponsorshipDeck = {
     keySessions:
       "RBZ Governor Address | Live FinTech Innovator Pitch | Digital Finance Plenary | Blockchain & DLT Workshop | Digital Currencies & CBDC",
   },
+  G: {
+    tagline:
+      "Made in Africa, smart manufacturing, mineral beneficiation, SEZs, value-added exports and industrial policy. (CORE BENEFICIATION THEME)",
+    keySessions:
+      "Smart Investment & Value Chains Plenary | Made in Africa: Reindustrialization | SEZ Models Workshop | Mining & Mineral Value Addition",
+  },
+  I: {
+    tagline:
+      "The TNF Innovation Challenge, youth venture pitches, access to capital, mentorship ecosystems and Africa's next generation of leaders.",
+    keySessions:
+      "Innovation Challenge Finals (Gala Dinner) | Youth Innovation Showcase | Africa's Next Tech Giants Plenary | Investor-Youth Dialogue | Mentorship Speed-Matching",
+  },
 } as const;
 
 export type ThemeSpotlightDeckId = keyof typeof themeSpotlightSponsorshipDeck;
@@ -856,6 +878,8 @@ export function getThemeSpotlightSponsorshipDeck(
   if (themeId === "B") return themeSpotlightSponsorshipDeck.B;
   if (themeId === "C") return themeSpotlightSponsorshipDeck.C;
   if (themeId === "E") return themeSpotlightSponsorshipDeck.E;
+  if (themeId === "G") return themeSpotlightSponsorshipDeck.G;
+  if (themeId === "I") return themeSpotlightSponsorshipDeck.I;
   return undefined;
 }
 
@@ -973,29 +997,57 @@ const THEME_C_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | 
   },
 ];
 
-/** Theme G, Industrialisation & Value Chain Integration (core beneficiation / beneficiation priority tier), per official slide. */
+/** Theme G (Industrialisation & value chains): independent from other themes; published USD deck. */
 const THEME_G_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | "offerKey">[] = [
   {
     packageTier: "platinum",
     packageLabel: "Platinum",
-    listPriceUsd: 90_000,
-    priceUsd: 67_500,
+    listPriceUsd: 30_000,
+    priceUsd: 30_000,
     benefitsLine:
-      "Beneficiation summit naming + ministerial panel seat + investment brief + 10 passes",
+      "All Gold plus: prime branding, 5-minute slot, 2 delegates, VIP openings, site banner, 5 pull-ups, 5 business invites, outside wall banner",
+    benefitsIntro: "Includes all Gold Sponsorship benefits plus:",
+    benefitsBullets: [
+      "Prime branding of the event and acknowledgement during the event",
+      "5-minute in-person marketing/speaking slot",
+      "Access to the participants list",
+      "Complimentary registration of 2 delegates",
+      "VIP invitations to the Official Opening",
+      "Hyperlinked banner on the Global Summit website",
+      "In-and-out conference venue advertising with 5 pull-up banners",
+      "5 complimentary business invites",
+      "Outside wall banner",
+    ],
   },
   {
     packageTier: "gold",
     packageLabel: "Gold",
-    listPriceUsd: 50_000,
-    priceUsd: 37_500,
-    benefitsLine: "SEZ/manufacturing session sponsor + deal facilitation access + 6 passes",
+    listPriceUsd: 25_000,
+    priceUsd: 25_000,
+    benefitsLine:
+      "All Silver plus: value-chain / SEZ branding + speaking slot + showcase + 5 passes, Official Opening breaks advert, delegate, banners",
+    benefitsIntro: "Includes all Silver Sponsorship benefits plus:",
+    benefitsBullets: [
+      "Smart investment & value-chain session branding + speaking slot + industrial showcase + 5 passes",
+      "1-minute advert during the Event Breaks on the Official Opening",
+      "Complimentary registration for 1 delegate",
+      "Hyperlinked banner on the Global Summit website",
+      "3 prominent banner displays at the event venue",
+    ],
   },
   {
     packageTier: "silver",
     packageLabel: "Silver",
-    listPriceUsd: 25_000,
-    priceUsd: 18_750,
-    benefitsLine: "Workshop sponsor + value chain exhibition stand + 4 passes + report feature",
+    listPriceUsd: 20_000,
+    priceUsd: 20_000,
+    benefitsLine: "Venue pull-ups, acknowledgement, programme & e-banner, 2 delegates, promotional material distribution",
+    benefitsBullets: [
+      "In-and-out conference venue advertising with 2 pull-up banners",
+      "Acknowledgement during conference intervals",
+      "Logo inclusion on the programme and revolving electronic banner",
+      "Complimentary registration of 2 delegates",
+      "Distribution of promotional material to delegates",
+    ],
   },
 ];
 
@@ -1052,30 +1104,53 @@ const THEME_E_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | 
   },
 ];
 
-/** Theme I, Youth Entrepreneurship & Africa's Demographic Dividend (TNF Innovation Challenge), per official slide. */
+/** Theme I (Youth entrepreneurship / Innovation Challenge): published USD deck; Gold first bullet uses youth/innovation copy where the source slide repeated climate wording. */
 const THEME_I_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | "offerKey">[] = [
   {
     packageTier: "platinum",
     packageLabel: "Platinum",
-    listPriceUsd: 60_000,
-    priceUsd: 45_000,
+    listPriceUsd: 30_000,
+    priceUsd: 30_000,
     benefitsLine:
-      "Innovation Challenge title sponsor + prize fund branding + Gala Dinner recognition + 8 passes",
+      "All Gold benefits plus: prime branding, 5-minute slot, participant list, 2 delegates, site banner",
+    benefitsIntro: "Includes all Gold Sponsorship benefits plus:",
+    benefitsBullets: [
+      "Prime branding of the event and recognition as the main event partner",
+      "5-minute in-person marketing/speaking slot",
+      "Access to the participants list",
+      "Complimentary registration of 2 delegates",
+      "Hyperlinked banner on the Global Summit website",
+    ],
   },
   {
     packageTier: "gold",
     packageLabel: "Gold",
-    listPriceUsd: 32_000,
-    priceUsd: 24_000,
+    listPriceUsd: 25_000,
+    priceUsd: 25_000,
     benefitsLine:
-      "Innovation stage sponsor + pitch showcase branding + investor panel seat + 5 passes",
+      "All Silver plus: youth innovation branding + showcase + speaking slot + 5 passes, 2-minute Official Opening breaks advert, delegate, banners",
+    benefitsIntro: "Includes all Silver Sponsorship benefits plus:",
+    benefitsBullets: [
+      "Youth innovation showcase branding + pitch session + speaking slot + 5 passes",
+      "2-minute advert during the Event Breaks on the Official Opening",
+      "Complimentary registration for 1 delegate",
+      "Hyperlinked banner on the Global Summit website",
+      "3 prominent banner displays at the event venue",
+    ],
   },
   {
     packageTier: "silver",
     packageLabel: "Silver",
-    listPriceUsd: 16_000,
-    priceUsd: 12_000,
-    benefitsLine: "Youth forum co-sponsor + mentorship programme branding + 3 passes",
+    listPriceUsd: 20_000,
+    priceUsd: 20_000,
+    benefitsLine: "Venue pull-ups, acknowledgement, programme & e-banner, 2 delegates, promotional material distribution",
+    benefitsBullets: [
+      "In-and-out conference venue advertising with 2 pull-up banners",
+      "Acknowledgement during conference intervals",
+      "Logo inclusion on the programme and revolving electronic banner",
+      "Complimentary registration of 2 delegates",
+      "Distribution of promotional material to delegates",
+    ],
   },
 ];
 
@@ -1289,6 +1364,14 @@ export function getSummitWidePartnershipTier(
   id: string
 ): SummitWidePartnershipTier | undefined {
   return SUMMIT_WIDE_TIERS.find((t) => t.id === id);
+}
+
+/** Parse display strings like "USD 75,000" from `SummitWidePartnershipTier.priceBand` to a number for checkout. */
+export function parseUsdFromPriceBand(priceBand: string): number | null {
+  const m = priceBand.replace(/,/g, "").match(/USD\s*([\d.]+)/i);
+  if (!m) return null;
+  const n = Number(m[1]);
+  return Number.isFinite(n) ? n : null;
 }
 
 export const sponsors = {
