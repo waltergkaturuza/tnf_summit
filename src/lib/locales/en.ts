@@ -356,10 +356,9 @@ const en: FullTranslations = {
     ],
     contactItems: [
       { label: "Official Email", value: "" },
-      { label: "Alternative Email", value: "" },
-      { label: "Contact Racheal", value: "" },
-      { label: "Contact Llyod", value: "" },
-      { label: "Contact Emanuel", value: "" },
+      { label: "Racheal", value: "" },
+      { label: "Lloyd", value: "" },
+      { label: "Emanuel", value: "" },
       { label: "Secretariat Address", value: "" },
       { label: "TNF Website", value: "" },
       { label: "Office Hours", value: "" },

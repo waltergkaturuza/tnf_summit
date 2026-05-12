@@ -15,7 +15,6 @@ export const summitInfo = {
   website: "tnfzim.com/summit2026",
   mainWebsite: "https://tnfzim.com",
   email: "info@tnfzim.com",
-  emailAlt: "tnfsecretariat@gmail.com",
   /** Gateway / iVeri technical contact (also set in iVeri Back Office → Application). */
   merchantTechnicalEmail: "waltergkaturuza@gmail.com",
   /** Trading / legal display name for payment profile and partnerships. */
@@ -36,6 +35,13 @@ export const summitInfo = {
   logo: "/tnf-logo.png",
   icon: "/tnf-icon.png",
 };
+
+/** Direct summit team phone contacts (same as Contact page). */
+export const summitDirectContacts: { name: string; phoneDisplay: string; telHref: string }[] = [
+  { name: "Racheal", phoneDisplay: "077 956 0229", telHref: "tel:+263779560229" },
+  { name: "Lloyd", phoneDisplay: "077 340 2440", telHref: "tel:+263773402440" },
+  { name: "Emanuel", phoneDisplay: "071 987 9890", telHref: "tel:+263719879890" },
+];
 
 /** Donation “themes” / categories for the short donate form (amount is free-text USD). */
 export type DonationCategoryDef = {

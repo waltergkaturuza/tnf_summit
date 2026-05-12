@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Mail, Phone, MapPin, Globe, Send, CheckCircle, ExternalLink } from "lucide-react";
-import { summitInfo } from "@/lib/data";
+import { summitInfo, summitDirectContacts } from "@/lib/data";
 import { useLanguage } from "@/context/LanguageContext";
 
 /* Twitter / X SVG icon */
@@ -148,10 +148,16 @@ export default function Footer() {
                 <Mail className="w-4 h-4 text-[#C9921A] flex-shrink-0" />
                 {summitInfo.email}
               </a>
-              <a href={`mailto:${summitInfo.emailAlt}`} className="flex items-center gap-2.5 text-theme-primary hover:text-[#F5B730] text-sm transition-colors">
-                <Mail className="w-4 h-4 text-[#C9921A] flex-shrink-0" />
-                {summitInfo.emailAlt}
-              </a>
+              {summitDirectContacts.map((c) => (
+                <a
+                  key={c.telHref}
+                  href={c.telHref}
+                  className="flex items-center gap-2.5 text-theme-primary hover:text-[#F5B730] text-sm transition-colors"
+                >
+                  <Phone className="w-4 h-4 text-[#C9921A] flex-shrink-0" />
+                  {c.name}, {c.phoneDisplay}
+                </a>
+              ))}
               <a href="tel:+2632427830" className="flex items-center gap-2.5 text-theme-primary hover:text-[#F5B730] text-sm transition-colors">
                 <Phone className="w-4 h-4 text-[#C9921A] flex-shrink-0" />
                 {summitInfo.phone}
