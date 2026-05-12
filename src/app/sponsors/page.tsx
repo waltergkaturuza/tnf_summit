@@ -7,6 +7,7 @@ import { ArrowRight, Star, Globe, CheckCircle, Mail, TrendingUp } from "lucide-r
 import { useLanguage } from "@/context/LanguageContext";
 import {
   sponsors,
+  themes,
   themeSponsorshipOffers,
   getThemeSponsorshipTiers,
   type ThemeSponsorshipPackageTier,
@@ -145,6 +146,23 @@ export default function SponsorsPage() {
 
   useEffect(() => {
     fetchPublicSponsorLogos().then(setLogos).catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    const applyHash = () => {
+      const raw = window.location.hash.replace(/^#/, "").trim().toLowerCase();
+      const m = raw.match(/^theme-([a-z])$/i) ?? raw.match(/^spotlight-([a-z])$/i);
+      if (!m) return;
+      const letter = m[1].toUpperCase();
+      if (!themes.some((th) => th.id === letter)) return;
+      setSponsorThemeId(letter);
+      requestAnimationFrame(() => {
+        document.getElementById("spotlight-themes")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    };
+    applyHash();
+    window.addEventListener("hashchange", applyHash);
+    return () => window.removeEventListener("hashchange", applyHash);
   }, []);
 
   return (
@@ -297,8 +315,8 @@ export default function SponsorsPage() {
         </div>
       </section>
 
-      {/* Theme-linked sponsorship (25% off list) */}
-      <section className="py-20 section-gradient">
+      {/* Theme-linked sponsorship (25% off list); deep link e.g. /sponsors#theme-a */}
+      <section id="spotlight-themes" className="py-20 section-gradient scroll-mt-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn>
             <div className="text-center mb-10">

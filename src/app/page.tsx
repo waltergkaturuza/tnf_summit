@@ -289,35 +289,27 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {themes.map((theme, i) => {
-              const Icon = iconMap[theme.icon] || Star;
               return (
                 <FadeIn key={theme.id} delay={i * 0.04}>
-                  <div className="glass rounded-xl p-4 card-hover border border-white/5 hover:border-white/15 transition-colors">
-                    <div className="flex items-start gap-3">
-                      <div
-                        className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5"
-                        style={{ background: `${theme.color}20`, border: `1px solid ${theme.color}30` }}
-                      >
-                        <Icon className="w-4 h-4" style={{ color: theme.color }} />
+                  <Link
+                    href={`/sponsors#theme-${theme.id.toLowerCase()}`}
+                    className="block glass rounded-xl p-4 card-hover border border-white/5 hover:border-[#C9921A]/40 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C9921A]/50"
+                  >
+                    <div>
+                      <div className="text-xs font-black mb-1" style={{ color: theme.color }}>
+                        THEME {theme.id}
+                        {theme.isNew ? " ★" : ""}
                       </div>
-                      <div>
-                        <div
-                          className="text-xs font-black mb-1"
-                          style={{ color: theme.color }}
-                        >
-                          THEME {theme.id}{theme.isNew ? " ★" : ""}
-                        </div>
-                        <p className="text-white text-xs leading-relaxed font-medium">
-                          {theme.label.replace(" ★ NEW", "")}
-                        </p>
-                        {theme.isNew && (
-                          <span className="inline-block mt-1 text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold">
-                            NEW
-                          </span>
-                        )}
-                      </div>
+                      <p className="text-white text-xs leading-relaxed font-medium">
+                        {theme.label.replace(" ★ NEW", "")}
+                      </p>
+                      {theme.isNew && (
+                        <span className="inline-block mt-1 text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold">
+                          NEW
+                        </span>
+                      )}
                     </div>
-                  </div>
+                  </Link>
                 </FadeIn>
               );
             })}
