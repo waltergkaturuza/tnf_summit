@@ -12,7 +12,7 @@ import {
   type ThemeSponsorshipPackageTier,
   summitWidePartnershipTiers,
   summitWidePartnershipIntro,
-  themeASponsorshipDeck,
+  getThemeSpotlightSponsorshipDeck,
 } from "@/lib/data";
 import { fetchPublicSponsorLogos, type MediaFile } from "@/lib/storage";
 
@@ -115,6 +115,7 @@ export default function SponsorsPage() {
   const selectedOffer = themeSponsorshipOffers.find((o) => o.themeId === sponsorThemeId) ?? themeSponsorshipOffers[0];
   const selectedThemeTiers = getThemeSponsorshipTiers(sponsorThemeId);
   const showThemePackageBullets = selectedThemeTiers.some((o) => (o.benefitsBullets?.length ?? 0) > 0);
+  const spotlightDeck = getThemeSpotlightSponsorshipDeck(sponsorThemeId);
 
   const themeTierCardStyle: Record<
     ThemeSponsorshipPackageTier,
@@ -355,13 +356,13 @@ export default function SponsorsPage() {
                   <h3 className="text-xl sm:text-2xl font-black text-white">
                     Sponsorship by theme — own a theme. Own the conversation.
                   </h3>
-                  {sponsorThemeId === "A" && (
+                  {spotlightDeck && (
                     <>
                       <p className="mt-3 text-sm text-theme-primary leading-relaxed">
-                        {themeASponsorshipDeck.tagline}
+                        {spotlightDeck.tagline}
                       </p>
                       <p className="mt-2 text-xs font-semibold text-white/90">
-                        Key sessions: {themeASponsorshipDeck.keySessions}
+                        Key sessions: {spotlightDeck.keySessions}
                       </p>
                     </>
                   )}

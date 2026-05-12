@@ -819,37 +819,84 @@ const THEME_A_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | 
   },
 ];
 
-/** Short copy from the official Theme A sponsorship deck (matches programme slide). */
-export const themeASponsorshipDeck = {
-  tagline:
-    "Unlocking Africa's largest investment opportunity through policy coherence, AfCFTA and bankable project pipelines.",
-  keySessions:
-    "High-Level Ministerial Plenary | ZIDA Investment Showcase | Smart Investment & Value Chains | MSME Access to Finance",
+/** Tagline + key sessions for spotlight themes that publish a sponsorship deck on the site. */
+export const themeSpotlightSponsorshipDeck = {
+  A: {
+    tagline:
+      "Unlocking Africa's largest investment opportunity through policy coherence, AfCFTA and bankable project pipelines.",
+    keySessions:
+      "High-Level Ministerial Plenary | ZIDA Investment Showcase | Smart Investment & Value Chains | MSME Access to Finance",
+  },
+  B: {
+    tagline:
+      "Governing the platform economy, reskilling Africa's workforce and leading the digital-industrial revolution.",
+    keySessions:
+      "Harnessing Digitalisation Plenary | Platform Economy & Gig Work | Smart Cities & Digital Infrastructure",
+  },
 } as const;
 
-/** Theme B — AI, Automation & the Jobs of Tomorrow: three tiers (list USD → 25% off), per official slide. */
+export type ThemeSpotlightDeckId = keyof typeof themeSpotlightSponsorshipDeck;
+
+export function getThemeSpotlightSponsorshipDeck(
+  themeId: string
+): (typeof themeSpotlightSponsorshipDeck)[ThemeSpotlightDeckId] | undefined {
+  if (themeId === "A") return themeSpotlightSponsorshipDeck.A;
+  if (themeId === "B") return themeSpotlightSponsorshipDeck.B;
+  return undefined;
+}
+
+/** @deprecated Use {@link getThemeSpotlightSponsorshipDeck}("A") or {@link themeSpotlightSponsorshipDeck}.A */
+export const themeASponsorshipDeck = themeSpotlightSponsorshipDeck.A;
+
+/** Theme B — AI, Automation & the Jobs of Tomorrow: three tiers (published USD), per official theme deck. */
 const THEME_B_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | "offerKey">[] = [
   {
     packageTier: "platinum",
     packageLabel: "Platinum",
-    listPriceUsd: 75_000,
-    priceUsd: 56_250,
+    listPriceUsd: 30_000,
+    priceUsd: 30_000,
     benefitsLine:
-      "Session naming + ILO Monitor co-branding + AI showcase stage + 8 passes",
+      "All Gold benefits plus: prime branding, 5-minute slot, participant list, 2 delegates, site banner",
+    benefitsIntro: "Includes all Gold Sponsorship benefits plus:",
+    benefitsBullets: [
+      "Prime branding of the event and recognition as the main event partner",
+      "5-minute in-person marketing/speaking slot",
+      "Access to the participants list",
+      "Complimentary registration of 2 delegates",
+      "Hyperlinked banner on the Global Summit website",
+    ],
   },
   {
     packageTier: "gold",
     packageLabel: "Gold",
-    listPriceUsd: 40_000,
-    priceUsd: 30_000,
-    benefitsLine: "Tech demo zone + speaking slot + 5 passes + digital branding package",
+    listPriceUsd: 25_000,
+    priceUsd: 25_000,
+    benefitsLine:
+      "All Silver benefits plus: tech demo, speaking slot, 5 passes, digital branding, breaks advert, VIP opening, banners",
+    benefitsIntro: "Includes all Silver Sponsorship benefits plus:",
+    benefitsBullets: [
+      "Tech demo zone + speaking slot + 5 passes + digital branding package",
+      "1-minute electronic advert played during the Event Breaks",
+      "VIP invitation to the Official Opening",
+      "Complimentary registration for 1 delegate",
+      "Hyperlinked banner on the Global Summit website",
+      "2 prominent banner displays at the event venue",
+    ],
   },
   {
     packageTier: "silver",
     packageLabel: "Silver",
     listPriceUsd: 20_000,
-    priceUsd: 15_000,
-    benefitsLine: "Workshop branding + 3 passes + logo on all digital assets & app",
+    priceUsd: 20_000,
+    benefitsLine: "Workshop branding + 3 passes + collateral, VIP opening, delegate, site & venue banners",
+    benefitsBullets: [
+      "Workshop branding + 3 passes",
+      "Distribution of promotional collateral to delegates",
+      "VIP invitation to the Official Opening",
+      "Complimentary registration for 1 delegate",
+      "Hyperlinked banner on the Global Summit website",
+      "1 prominent banner display at the event venue",
+    ],
   },
 ];
 
