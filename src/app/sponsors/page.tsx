@@ -8,6 +8,8 @@ import { useLanguage } from "@/context/LanguageContext";
 import {
   sponsors,
   themeSponsorshipOffers,
+  getThemeSponsorshipTiers,
+  type ThemeSponsorshipPackageTier,
   summitWidePartnershipTiers,
   summitWidePartnershipIntro,
 } from "@/lib/data";
@@ -110,6 +112,34 @@ export default function SponsorsPage() {
   const [sponsorThemeId, setSponsorThemeId] = useState(themeSponsorshipOffers[0]?.themeId ?? "A");
 
   const selectedOffer = themeSponsorshipOffers.find((o) => o.themeId === sponsorThemeId) ?? themeSponsorshipOffers[0];
+  const selectedThemeTiers = getThemeSponsorshipTiers(sponsorThemeId);
+  const showThemePackageBullets = selectedThemeTiers.some((o) => (o.benefitsBullets?.length ?? 0) > 0);
+
+  const themeTierCardStyle: Record<
+    ThemeSponsorshipPackageTier,
+    { border: string; headerBg: string; panelBg: string }
+  > = {
+    platinum: {
+      border: "rgba(148, 163, 184, 0.35)",
+      headerBg: "#475569",
+      panelBg: "rgba(59, 130, 246, 0.1)",
+    },
+    gold: {
+      border: "rgba(201, 146, 26, 0.35)",
+      headerBg: "#a16207",
+      panelBg: "rgba(234, 179, 8, 0.12)",
+    },
+    silver: {
+      border: "rgba(59, 130, 246, 0.35)",
+      headerBg: "#1d4ed8",
+      panelBg: "rgba(59, 130, 246, 0.08)",
+    },
+    official_partner: {
+      border: "rgba(16, 185, 129, 0.35)",
+      headerBg: "#047857",
+      panelBg: "rgba(16, 185, 129, 0.1)",
+    },
+  };
 
   useEffect(() => {
     fetchPublicSponsorLogos().then(setLogos).catch(() => {});
@@ -316,6 +346,66 @@ export default function SponsorsPage() {
               </div>
             </div>
           </FadeIn>
+
+          {showThemePackageBullets && (
+            <FadeIn delay={0.08}>
+              <div className="mb-10">
+                <div className="text-center mb-6 max-w-3xl mx-auto">
+                  <h3 className="text-xl sm:text-2xl font-black text-white">
+                    Sponsorship by theme — own a theme. Own the conversation.
+                  </h3>
+                  <p className="mt-2 text-sm text-theme-primary">
+                    List and discounted USD amounts match each row for Theme {sponsorThemeId} in the table below.
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                  {selectedThemeTiers.map((tierOffer) => {
+                    const bullets = tierOffer.benefitsBullets ?? [];
+                    if (bullets.length === 0) return null;
+                    const style = themeTierCardStyle[tierOffer.packageTier];
+                    return (
+                      <div
+                        key={tierOffer.offerKey}
+                        className="flex flex-col h-full rounded-2xl overflow-hidden border card-hover"
+                        style={{ borderColor: style.border, background: style.panelBg }}
+                      >
+                        <div className="px-4 py-3 text-center" style={{ backgroundColor: style.headerBg }}>
+                          <div className="text-[10px] font-bold uppercase tracking-widest text-white/90">
+                            Theme {tierOffer.themeId}
+                          </div>
+                          <h4 className="text-lg font-black text-white mt-1">{tierOffer.packageLabel}</h4>
+                          <div className="text-xs text-white/90 mt-1 font-semibold">
+                            List USD {tierOffer.listPriceUsd.toLocaleString()} · You pay USD{" "}
+                            {tierOffer.priceUsd.toLocaleString()}
+                          </div>
+                        </div>
+                        <div className="p-4 flex-1 flex flex-col">
+                          <p className="text-xs font-bold uppercase text-theme-primary mb-2">Package includes</p>
+                          <ul className="space-y-2.5 text-sm text-theme-primary flex-1 list-disc pl-4 marker:text-white/35">
+                            {bullets.map((b) => (
+                              <li key={b} className="leading-snug">
+                                {b}
+                              </li>
+                            ))}
+                          </ul>
+                          <Link
+                            href={`/contact?theme=${encodeURIComponent(tierOffer.themeId)}&tier=${encodeURIComponent(
+                              tierOffer.packageTier
+                            )}`}
+                            className="mt-5 inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-xs font-bold text-white transition-opacity hover:opacity-90"
+                            style={{ backgroundColor: style.headerBg }}
+                          >
+                            Enquire — {tierOffer.packageLabel}
+                            <ArrowRight className="w-3.5 h-3.5" />
+                          </Link>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </FadeIn>
+          )}
 
           <div className="grid grid-cols-1 gap-2 max-h-[420px] overflow-y-auto pr-1">
             {themeSponsorshipOffers.map((o) => (

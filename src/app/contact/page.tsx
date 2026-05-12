@@ -11,9 +11,11 @@ import {
 import { useLanguage } from "@/context/LanguageContext";
 import {
   getThemeSponsorshipOffer,
+  getThemeSponsorshipOfferTier,
   getSummitWidePartnershipTier,
   SPONSORSHIP_DISCOUNT_RATE,
   summitInfo,
+  type ThemeSponsorshipPackageTier,
 } from "@/lib/data";
 
 function FadeIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
@@ -69,7 +71,17 @@ function ContactPageContent() {
     }
     const theme = searchParams.get("theme");
     if (!theme) return;
-    const offer = getThemeSponsorshipOffer(theme);
+    const tierParam = searchParams.get("tier");
+    const tier =
+      tierParam === "platinum" ||
+      tierParam === "gold" ||
+      tierParam === "silver" ||
+      tierParam === "official_partner"
+        ? (tierParam as ThemeSponsorshipPackageTier)
+        : undefined;
+    const offer = tier
+      ? getThemeSponsorshipOfferTier(theme, tier)
+      : getThemeSponsorshipOffer(theme);
     setForm((prev) => {
       if (prev.message.trim()) return prev;
       const pct = Math.round(SPONSORSHIP_DISCOUNT_RATE * 100);

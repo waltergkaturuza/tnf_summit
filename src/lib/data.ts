@@ -762,6 +762,8 @@ export type ThemeSponsorshipOffer = {
   priceUsd: number;
   /** One-line package benefits (from official theme deck) */
   benefitsLine?: string;
+  /** Full bullet list for sponsors page (optional; e.g. Theme A deck) */
+  benefitsBullets?: string[];
 };
 
 /** Theme A — Africa's $3.4 Trillion Investment Frontier: three tiers (list USD → 25% off), per official slide. */
@@ -771,22 +773,43 @@ const THEME_A_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | 
     packageLabel: "Platinum",
     listPriceUsd: 75_000,
     priceUsd: 56_250,
-    benefitsLine:
-      "Session naming rights + keynote address + 8 passes + VIP bilateral matchmaking",
+    benefitsLine: "Prime branding + 5-minute slot + participant list + 2 delegates + site banner",
+    benefitsBullets: [
+      "Prime branding of the event and recognition as the main event partner",
+      "5-minute in-person marketing/speaking slot",
+      "Access to the participants list",
+      "Complimentary registration of 2 delegates",
+      "Hyperlinked banner on the Global Summit website",
+    ],
   },
   {
     packageTier: "gold",
     packageLabel: "Gold",
     listPriceUsd: 40_000,
     priceUsd: 30_000,
-    benefitsLine: "Co-sponsor branding + 5-minute address + 5 passes + deal-room access",
+    benefitsLine: "Tech demo zone + speaking slot + 5 passes + digital branding package",
+    benefitsBullets: [
+      "Tech demo zone + speaking slot + 5 passes + digital branding package",
+      "1-minute electronic advert played during the Event Breaks",
+      "VIP invitation to the Official Opening",
+      "Complimentary registration for 1 delegate",
+      "Hyperlinked banner on the Global Summit website",
+      "2 prominent banner displays at the event venue",
+    ],
   },
   {
     packageTier: "silver",
     packageLabel: "Silver",
     listPriceUsd: 20_000,
     priceUsd: 15_000,
-    benefitsLine: "Session branding + exhibition stand + 3 passes + investor matchmaking",
+    benefitsLine: "Collateral distribution + VIP opening + 1 delegate + venue banner",
+    benefitsBullets: [
+      "Distribution of promotional collateral to delegates",
+      "VIP invitation to the Official Opening",
+      "Complimentary registration for 1 delegate",
+      "Hyperlinked banner on the Global Summit website",
+      "1 prominent banner display at the event venue",
+    ],
   },
 ];
 
