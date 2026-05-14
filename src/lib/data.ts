@@ -763,7 +763,18 @@ export const registrationFees = [
 /** 25% off list sponsorship investment (e.g. 100,000 → 75,000 USD). */
 export const SPONSORSHIP_DISCOUNT_RATE = 0.25;
 
-export type ThemeSponsorshipPackageTier = "platinum" | "gold" | "silver" | "official_partner";
+export type ThemeSponsorshipPackageTier =
+  | "platinum"
+  | "gold"
+  | "silver"
+  | "official_partner"
+  | "magazine_outside_back"
+  | "magazine_inside_front"
+  | "magazine_inside_back"
+  | "magazine_prominent_page"
+  | "magazine_book_marker"
+  | "magazine_full_page"
+  | "magazine_half_page";
 
 export type ThemeSponsorshipOffer = {
   /** Unique row id for UI (e.g. `A`, `B-platinum`, `B-gold`) */
@@ -1160,6 +1171,215 @@ const THEME_I_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | 
   },
 ];
 
+/** Non-theme event package: Welcome Cocktail (published USD; list price equals investment). */
+export const WELCOME_COCKTAIL_SPONSORSHIP_ID = "welcome_cocktail";
+
+export const welcomeCocktailSponsorshipOverview =
+  "A high-visibility opportunity with a captive audience of 1500 people as well as national/regional coverage through local and foreign Press, TV and radio. Includes provision of snacks, drinks, venue and equipment hire, gift bags and any other areas deemed suitable.";
+
+const WELCOME_COCKTAIL_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | "offerKey">[] = [
+  {
+    packageTier: "platinum",
+    packageLabel: "Platinum",
+    listPriceUsd: 20_000,
+    priceUsd: 20_000,
+    benefitsLine: "Exclusive branding of the event; 10-minute speaking slot",
+    benefitsIntro: "Welcome Cocktail — Platinum sponsor:",
+    benefitsBullets: ["Exclusive branding of the event", "10-minute speaking slot"],
+  },
+  {
+    packageTier: "gold",
+    packageLabel: "Gold",
+    listPriceUsd: 15_000,
+    priceUsd: 15_000,
+    benefitsLine: "Branding of one item/activity; catalogue advert and editorial",
+    benefitsIntro: "Welcome Cocktail — Gold sponsor:",
+    benefitsBullets: [
+      "Branding of ONE item/activity from the following: menu, beverages, gift bag, venue",
+      "Free one-page advert and one-page editorial in the Global Summit catalogue",
+    ],
+  },
+  {
+    packageTier: "silver",
+    packageLabel: "Silver",
+    listPriceUsd: 10_000,
+    priceUsd: 10_000,
+    benefitsLine: "Banners, promotional material, logo recognition, two guests",
+    benefitsIntro: "Welcome Cocktail — Silver sponsor:",
+    benefitsBullets: [
+      "Up to TWO banners at the party venue",
+      "Distribution of promotional material to guests",
+      "Logo will feature on the projection screen, program as well as verbal recognition (at intervals) throughout the event",
+      "Up to two guests at the welcome party",
+    ],
+  },
+];
+
+export function getWelcomeCocktailSponsorshipTiers(): ThemeSponsorshipOffer[] {
+  const themeLabel = "Welcome Cocktail";
+  return WELCOME_COCKTAIL_TIER_DEFS.map((t) => ({
+    offerKey: `welcome_cocktail-${t.packageTier}`,
+    themeId: WELCOME_COCKTAIL_SPONSORSHIP_ID,
+    themeLabel,
+    ...t,
+  }));
+}
+
+/** Non-theme event package: Ministerial Dinner (published USD; list price equals investment). */
+export const MINISTERIAL_DINNER_SPONSORSHIP_ID = "ministerial_dinner";
+
+export const ministerialDinnerSponsorshipOverview =
+  "A high-visibility opportunity with a captive audience of 100 VVIP people as well as national/regional coverage through local and foreign Press, TV and radio. Includes provision of snacks, drinks, venue and equipment hire, gift bags and any other areas deemed suitable.";
+
+const MINISTERIAL_DINNER_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | "offerKey">[] = [
+  {
+    packageTier: "platinum",
+    packageLabel: "Platinum",
+    listPriceUsd: 30_000,
+    priceUsd: 30_000,
+    benefitsLine: "Exclusive branding; 5-minute speaking slot",
+    benefitsIntro: "Ministerial Dinner — Platinum sponsor:",
+    benefitsBullets: ["Exclusive branding of the event", "5-minute speaking slot"],
+  },
+  {
+    packageTier: "gold",
+    packageLabel: "Gold",
+    listPriceUsd: 25_000,
+    priceUsd: 25_000,
+    benefitsLine: "Branding of one item/activity; catalogue advert and editorial",
+    benefitsIntro: "Ministerial Dinner — Gold sponsor:",
+    benefitsBullets: [
+      "Branding of ONE item/activity from the following: menu, beverages, gift bag, venue",
+      "Free one-page advert and one-page editorial in the Global Summit catalogue (print run of 2,000, distributed during and after the event)",
+    ],
+  },
+  {
+    packageTier: "silver",
+    packageLabel: "Silver",
+    listPriceUsd: 10_000,
+    priceUsd: 10_000,
+    benefitsLine: "Banners, promotional material, logo recognition, two guests",
+    benefitsIntro: "Ministerial Dinner — Silver sponsor:",
+    benefitsBullets: [
+      "Up to TWO banners at the party venue",
+      "Distribution of promotional material to guests",
+      "Your logo will feature on the projection screen, program as well as verbal recognition (at intervals) throughout the event",
+      "Up to two guests at the welcome party",
+    ],
+  },
+];
+
+export function getMinisterialDinnerSponsorshipTiers(): ThemeSponsorshipOffer[] {
+  const themeLabel = "Ministerial Dinner";
+  return MINISTERIAL_DINNER_TIER_DEFS.map((t) => ({
+    offerKey: `ministerial_dinner-${t.packageTier}`,
+    themeId: MINISTERIAL_DINNER_SPONSORSHIP_ID,
+    themeLabel,
+    ...t,
+  }));
+}
+
+/** Magazine & programme placements (USD per placement; list price equals investment). */
+export const MAGAZINE_SPONSORSHIP_ID = "magazine_sponsorship";
+
+export const magazineSponsorshipOverview =
+  "Sponsor a placement in the Global Summit magazine and delegate programme. Rates below are in USD per placement (published rate card).";
+
+const MAGAZINE_PLACEMENT_DEFS: { tier: ThemeSponsorshipPackageTier; label: string; usd: number }[] = [
+  { tier: "magazine_outside_back", label: "Outside Back Cover", usd: 1_500 },
+  { tier: "magazine_inside_front", label: "Inside Front Cover", usd: 1_300 },
+  { tier: "magazine_inside_back", label: "Inside Back Cover", usd: 1_200 },
+  { tier: "magazine_prominent_page", label: "Prominent Page", usd: 850 },
+  { tier: "magazine_book_marker", label: "Book Marker", usd: 800 },
+  { tier: "magazine_full_page", label: "Full Page", usd: 700 },
+  { tier: "magazine_half_page", label: "Half Page", usd: 460 },
+];
+
+const MAGAZINE_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | "offerKey">[] =
+  MAGAZINE_PLACEMENT_DEFS.map((p) => ({
+    packageTier: p.tier,
+    packageLabel: p.label,
+    listPriceUsd: p.usd,
+    priceUsd: p.usd,
+    benefitsLine: `${p.label} — Global Summit magazine & programme`,
+    benefitsIntro: "Magazine sponsorship package:",
+    benefitsBullets: [`Published placement: ${p.label} in the Global Summit magazine and delegate programme.`],
+  }));
+
+export function getMagazineSponsorshipTiers(): ThemeSponsorshipOffer[] {
+  const themeLabel = "Magazine Sponsorship";
+  return MAGAZINE_TIER_DEFS.map((t) => ({
+    offerKey: `magazine_sponsorship-${t.packageTier}`,
+    themeId: MAGAZINE_SPONSORSHIP_ID,
+    themeLabel,
+    ...t,
+  }));
+}
+
+export function isMagazineSponsorshipId(id: string): boolean {
+  return id.trim().toLowerCase() === MAGAZINE_SPONSORSHIP_ID;
+}
+
+export function getMagazineOfferTier(tier: ThemeSponsorshipPackageTier): ThemeSponsorshipOffer | undefined {
+  return getMagazineSponsorshipTiers().find((o) => o.packageTier === tier);
+}
+
+/** Contact / query helper: optional `tier` query; invalid values fall back to the first placement. */
+export function resolveMagazineSponsorshipOffer(tierParam: string | null | undefined): ThemeSponsorshipOffer {
+  const p = (tierParam ?? "").trim().toLowerCase();
+  if (!p) return getMagazineSponsorshipTiers()[0];
+  return getMagazineOfferTier(p as ThemeSponsorshipPackageTier) ?? getMagazineSponsorshipTiers()[0];
+}
+
+/** Exclusive lanyards, tickets & badges package (single Platinum tier; USD published rate card). */
+export const LANYARDS_SPONSORSHIP_ID = "lanyards_sponsorship";
+
+export const lanyardsSponsorshipOverview =
+  "Exclusive sponsorship covering printing and supply of lanyards, advance tickets, badges, and plastic pockets — worn by exhibitors, guests, VIPs, service providers, and international visitors across the summit.";
+
+const LANYARDS_TIER_DEFS: Omit<ThemeSponsorshipOffer, "themeId" | "themeLabel" | "offerKey">[] = [
+  {
+    packageTier: "platinum",
+    packageLabel: "Platinum Sponsorship",
+    listPriceUsd: 30_000,
+    priceUsd: 30_000,
+    benefitsLine: "Exclusive branding on lanyards, tickets, badges, and pockets for the full delegate base",
+    benefitsIntro: "Lanyards Sponsorship — Platinum:",
+    benefitsBullets: [
+      "Covers printing and purchasing of lanyards, advance tickets, badges, and plastic pockets",
+      "Lanyards and badges worn by exhibitors, guests, VIPs, service providers, and foreign visitors",
+      "High-volume distribution — more than 1,000 sets across the event",
+      "Exclusive sponsorship of the lanyards, tickets, and badges",
+    ],
+  },
+];
+
+export function getLanyardsSponsorshipTiers(): ThemeSponsorshipOffer[] {
+  const themeLabel = "Lanyards Sponsorship";
+  return LANYARDS_TIER_DEFS.map((t) => ({
+    offerKey: `lanyards_sponsorship-${t.packageTier}`,
+    themeId: LANYARDS_SPONSORSHIP_ID,
+    themeLabel,
+    ...t,
+  }));
+}
+
+export function isLanyardsSponsorshipId(id: string): boolean {
+  return id.trim().toLowerCase() === LANYARDS_SPONSORSHIP_ID;
+}
+
+export function getLanyardsOfferTier(tier: ThemeSponsorshipPackageTier): ThemeSponsorshipOffer | undefined {
+  return getLanyardsSponsorshipTiers().find((o) => o.packageTier === tier);
+}
+
+/** Contact helper: optional `tier` (platinum); invalid values fall back to the single package row. */
+export function resolveLanyardsSponsorshipOffer(tierParam: string | null | undefined): ThemeSponsorshipOffer {
+  const p = (tierParam ?? "").trim().toLowerCase();
+  const rows = getLanyardsSponsorshipTiers();
+  if (p === "platinum") return getLanyardsOfferTier("platinum") ?? rows[0];
+  return rows[0];
+}
+
 const THEME_LIST_USD: Record<string, { tier: ThemeSponsorshipPackageTier; listUsd: number }> = {
   D: { tier: "gold", listUsd: 85_000 },
   F: { tier: "gold", listUsd: 80_000 },
@@ -1230,6 +1450,13 @@ const tierLabels: Record<ThemeSponsorshipPackageTier, string> = {
   gold: "Gold",
   silver: "Silver",
   official_partner: "Official Partner",
+  magazine_outside_back: "Outside Back Cover",
+  magazine_inside_front: "Inside Front Cover",
+  magazine_inside_back: "Inside Back Cover",
+  magazine_prominent_page: "Prominent Page",
+  magazine_book_marker: "Book Marker",
+  magazine_full_page: "Full Page",
+  magazine_half_page: "Half Page",
 };
 
 function themeOfferFromId(theme: (typeof themes)[0]): ThemeSponsorshipOffer {
@@ -1320,8 +1547,14 @@ export function getThemeSponsorshipTiers(themeId: string): ThemeSponsorshipOffer
 /** One “primary” row per theme (for the theme dropdown), first tier. */
 export const themeSponsorshipOffers: ThemeSponsorshipOffer[] = themes.map((th) => getThemeSponsorshipTiers(th.id)[0]);
 
-/** Full table: every theme–tier line (Platinum, Gold, Silver per theme). */
-export const themeSponsorshipTiersFlat: ThemeSponsorshipOffer[] = themes.flatMap((th) => getThemeSponsorshipTiers(th.id));
+/** Full table: event packages then every theme–tier line. */
+export const themeSponsorshipTiersFlat: ThemeSponsorshipOffer[] = [
+  ...getWelcomeCocktailSponsorshipTiers(),
+  ...getMinisterialDinnerSponsorshipTiers(),
+  ...getMagazineSponsorshipTiers(),
+  ...getLanyardsSponsorshipTiers(),
+  ...themes.flatMap((th) => getThemeSponsorshipTiers(th.id)),
+];
 
 export function getThemeSponsorshipOffer(themeId: string): ThemeSponsorshipOffer | undefined {
   return getThemeSponsorshipTiers(themeId)[0];
@@ -1333,6 +1566,59 @@ export function getThemeSponsorshipOfferTier(
   tier: ThemeSponsorshipPackageTier
 ): ThemeSponsorshipOffer | undefined {
   return getThemeSponsorshipTiers(themeId).find((o) => o.packageTier === tier);
+}
+
+export function isWelcomeCocktailSponsorshipId(id: string): boolean {
+  return id.trim().toLowerCase() === WELCOME_COCKTAIL_SPONSORSHIP_ID;
+}
+
+export function getWelcomeCocktailOfferTier(tier: ThemeSponsorshipPackageTier): ThemeSponsorshipOffer | undefined {
+  return getWelcomeCocktailSponsorshipTiers().find((o) => o.packageTier === tier);
+}
+
+export function isMinisterialDinnerSponsorshipId(id: string): boolean {
+  return id.trim().toLowerCase() === MINISTERIAL_DINNER_SPONSORSHIP_ID;
+}
+
+/** True for Welcome Cocktail, Ministerial Dinner, Magazine, Lanyards (not a spotlight theme letter). */
+export function isEventSponsorshipPackageId(id: string): boolean {
+  return (
+    isWelcomeCocktailSponsorshipId(id) ||
+    isMinisterialDinnerSponsorshipId(id) ||
+    isMagazineSponsorshipId(id) ||
+    isLanyardsSponsorshipId(id)
+  );
+}
+
+export function getMinisterialDinnerOfferTier(tier: ThemeSponsorshipPackageTier): ThemeSponsorshipOffer | undefined {
+  return getMinisterialDinnerSponsorshipTiers().find((o) => o.packageTier === tier);
+}
+
+/** Tiers for the sponsors page dropdown (theme letter or event package ids). */
+export function getSponsorshipTiersForSelectValue(selectId: string): ThemeSponsorshipOffer[] {
+  if (isWelcomeCocktailSponsorshipId(selectId)) return getWelcomeCocktailSponsorshipTiers();
+  if (isMinisterialDinnerSponsorshipId(selectId)) return getMinisterialDinnerSponsorshipTiers();
+  if (isMagazineSponsorshipId(selectId)) return getMagazineSponsorshipTiers();
+  if (isLanyardsSponsorshipId(selectId)) return getLanyardsSponsorshipTiers();
+  return getThemeSponsorshipTiers(selectId);
+}
+
+export function getSponsorshipPrimaryOfferForSelect(selectId: string): ThemeSponsorshipOffer | undefined {
+  return getSponsorshipTiersForSelectValue(selectId)[0];
+}
+
+/** Options for “Select spotlight theme” including non-theme event packages. */
+export function getSponsorSpotlightDropdownOptions(): { id: string; optionLabel: string }[] {
+  return [
+    { id: WELCOME_COCKTAIL_SPONSORSHIP_ID, optionLabel: "Welcome Cocktail (event package)" },
+    { id: MINISTERIAL_DINNER_SPONSORSHIP_ID, optionLabel: "Ministerial Dinner (event package)" },
+    { id: MAGAZINE_SPONSORSHIP_ID, optionLabel: "Magazine Sponsorship package" },
+    { id: LANYARDS_SPONSORSHIP_ID, optionLabel: "Lanyards Sponsorship (event package)" },
+    ...themes.map((th) => ({
+      id: th.id,
+      optionLabel: `${th.id}: ${th.label.replace(" ★ NEW", "")}`,
+    })),
+  ];
 }
 
 /** Summit-wide partnership: exhibition + visibility for the full duration of the summit (separate from theme packages). */

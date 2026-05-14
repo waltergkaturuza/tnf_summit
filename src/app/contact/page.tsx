@@ -16,6 +16,16 @@ import {
   SPONSORSHIP_DISCOUNT_RATE,
   summitInfo,
   summitDirectContacts,
+  WELCOME_COCKTAIL_SPONSORSHIP_ID,
+  MINISTERIAL_DINNER_SPONSORSHIP_ID,
+  MAGAZINE_SPONSORSHIP_ID,
+  LANYARDS_SPONSORSHIP_ID,
+  getWelcomeCocktailOfferTier,
+  getWelcomeCocktailSponsorshipTiers,
+  getMinisterialDinnerOfferTier,
+  getMinisterialDinnerSponsorshipTiers,
+  resolveMagazineSponsorshipOffer,
+  resolveLanyardsSponsorshipOffer,
   type ThemeSponsorshipPackageTier,
 } from "@/lib/data";
 
@@ -70,6 +80,57 @@ function ContactPageContent() {
         const msg = sw
           ? `I would like to enquire about a Summit-Wide Full Partnership: ${sw.title}. Investment band: ${sw.priceBand}. Passes & access: ${sw.passesAndAccess}.`
           : `I would like to enquire about a Summit-Wide Full Partnership (tier: ${wide}).`;
+        return { ...prev, enquiryType: "Sponsorship / Partnership", message: msg };
+      });
+      return;
+    }
+    const eventSponsor = searchParams.get("eventSponsor");
+    if (eventSponsor?.trim().toLowerCase() === WELCOME_COCKTAIL_SPONSORSHIP_ID) {
+      const tierParam = searchParams.get("tier");
+      const tier =
+        tierParam === "platinum" || tierParam === "gold" || tierParam === "silver"
+          ? (tierParam as ThemeSponsorshipPackageTier)
+          : undefined;
+      const offer = tier ? getWelcomeCocktailOfferTier(tier) : getWelcomeCocktailSponsorshipTiers()[0];
+      setForm((prev) => {
+        if (prev.message.trim()) return prev;
+        const msg = offer
+          ? `I would like to enquire about the Welcome Cocktail event package (${offer.packageLabel}). Investment: USD ${offer.priceUsd.toLocaleString()}.`
+          : "I would like to enquire about the Welcome Cocktail event package.";
+        return { ...prev, enquiryType: "Sponsorship / Partnership", message: msg };
+      });
+      return;
+    }
+    if (eventSponsor?.trim().toLowerCase() === MINISTERIAL_DINNER_SPONSORSHIP_ID) {
+      const tierParam = searchParams.get("tier");
+      const tier =
+        tierParam === "platinum" || tierParam === "gold" || tierParam === "silver"
+          ? (tierParam as ThemeSponsorshipPackageTier)
+          : undefined;
+      const offer = tier ? getMinisterialDinnerOfferTier(tier) : getMinisterialDinnerSponsorshipTiers()[0];
+      setForm((prev) => {
+        if (prev.message.trim()) return prev;
+        const msg = offer
+          ? `I would like to enquire about the Ministerial Dinner event package (${offer.packageLabel}). Investment: USD ${offer.priceUsd.toLocaleString()}.`
+          : "I would like to enquire about the Ministerial Dinner event package.";
+        return { ...prev, enquiryType: "Sponsorship / Partnership", message: msg };
+      });
+      return;
+    }
+    if (eventSponsor?.trim().toLowerCase() === MAGAZINE_SPONSORSHIP_ID) {
+      const offer = resolveMagazineSponsorshipOffer(searchParams.get("tier"));
+      setForm((prev) => {
+        if (prev.message.trim()) return prev;
+        const msg = `I would like to enquire about the Magazine Sponsorship package (${offer.packageLabel}). Investment: USD ${offer.priceUsd.toLocaleString()}.`;
+        return { ...prev, enquiryType: "Sponsorship / Partnership", message: msg };
+      });
+      return;
+    }
+    if (eventSponsor?.trim().toLowerCase() === LANYARDS_SPONSORSHIP_ID) {
+      const offer = resolveLanyardsSponsorshipOffer(searchParams.get("tier"));
+      setForm((prev) => {
+        if (prev.message.trim()) return prev;
+        const msg = `I would like to enquire about Lanyards Sponsorship (${offer.packageLabel}). Investment: USD ${offer.priceUsd.toLocaleString()}.`;
         return { ...prev, enquiryType: "Sponsorship / Partnership", message: msg };
       });
       return;

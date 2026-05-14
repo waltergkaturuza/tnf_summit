@@ -9,7 +9,22 @@ import {
   sponsors,
   themes,
   themeSponsorshipOffers,
-  getThemeSponsorshipTiers,
+  welcomeCocktailSponsorshipOverview,
+  ministerialDinnerSponsorshipOverview,
+  magazineSponsorshipOverview,
+  lanyardsSponsorshipOverview,
+  isWelcomeCocktailSponsorshipId,
+  isMinisterialDinnerSponsorshipId,
+  isMagazineSponsorshipId,
+  isLanyardsSponsorshipId,
+  isEventSponsorshipPackageId,
+  getSponsorshipTiersForSelectValue,
+  getSponsorshipPrimaryOfferForSelect,
+  getSponsorSpotlightDropdownOptions,
+  getWelcomeCocktailSponsorshipTiers,
+  getMinisterialDinnerSponsorshipTiers,
+  getMagazineSponsorshipTiers,
+  getLanyardsSponsorshipTiers,
   type ThemeSponsorshipPackageTier,
   summitWidePartnershipTiers,
   summitWidePartnershipIntro,
@@ -111,12 +126,17 @@ const whySponsor = [
 export default function SponsorsPage() {
   const { t } = useLanguage();
   const [logos, setLogos] = useState<MediaFile[]>([]);
-  const [sponsorThemeId, setSponsorThemeId] = useState(themeSponsorshipOffers[0]?.themeId ?? "A");
+  const [sponsorSelectId, setSponsorSelectId] = useState(themeSponsorshipOffers[0]?.themeId ?? "A");
 
-  const selectedOffer = themeSponsorshipOffers.find((o) => o.themeId === sponsorThemeId) ?? themeSponsorshipOffers[0];
-  const selectedThemeTiers = getThemeSponsorshipTiers(sponsorThemeId);
+  const welcomeSelected = isWelcomeCocktailSponsorshipId(sponsorSelectId);
+  const ministerialSelected = isMinisterialDinnerSponsorshipId(sponsorSelectId);
+  const magazineSelected = isMagazineSponsorshipId(sponsorSelectId);
+  const lanyardsSelected = isLanyardsSponsorshipId(sponsorSelectId);
+  const eventPackageSelected = isEventSponsorshipPackageId(sponsorSelectId);
+  const selectedOffer = getSponsorshipPrimaryOfferForSelect(sponsorSelectId);
+  const selectedThemeTiers = getSponsorshipTiersForSelectValue(sponsorSelectId);
   const showThemePackageBullets = selectedThemeTiers.some((o) => (o.benefitsBullets?.length ?? 0) > 0);
-  const spotlightDeck = getThemeSpotlightSponsorshipDeck(sponsorThemeId);
+  const spotlightDeck = !eventPackageSelected ? getThemeSpotlightSponsorshipDeck(sponsorSelectId) : undefined;
 
   const themeTierCardStyle: Record<
     ThemeSponsorshipPackageTier,
@@ -142,6 +162,41 @@ export default function SponsorsPage() {
       headerBg: "#047857",
       panelBg: "rgba(16, 185, 129, 0.1)",
     },
+    magazine_outside_back: {
+      border: "rgba(201, 146, 26, 0.3)",
+      headerBg: "#7c2d12",
+      panelBg: "rgba(251, 191, 36, 0.08)",
+    },
+    magazine_inside_front: {
+      border: "rgba(201, 146, 26, 0.3)",
+      headerBg: "#7c2d12",
+      panelBg: "rgba(251, 191, 36, 0.08)",
+    },
+    magazine_inside_back: {
+      border: "rgba(201, 146, 26, 0.3)",
+      headerBg: "#7c2d12",
+      panelBg: "rgba(251, 191, 36, 0.08)",
+    },
+    magazine_prominent_page: {
+      border: "rgba(201, 146, 26, 0.3)",
+      headerBg: "#7c2d12",
+      panelBg: "rgba(251, 191, 36, 0.08)",
+    },
+    magazine_book_marker: {
+      border: "rgba(201, 146, 26, 0.3)",
+      headerBg: "#7c2d12",
+      panelBg: "rgba(251, 191, 36, 0.08)",
+    },
+    magazine_full_page: {
+      border: "rgba(201, 146, 26, 0.3)",
+      headerBg: "#7c2d12",
+      panelBg: "rgba(251, 191, 36, 0.08)",
+    },
+    magazine_half_page: {
+      border: "rgba(201, 146, 26, 0.3)",
+      headerBg: "#7c2d12",
+      panelBg: "rgba(251, 191, 36, 0.08)",
+    },
   };
 
   useEffect(() => {
@@ -155,7 +210,7 @@ export default function SponsorsPage() {
       if (!m) return;
       const letter = m[1].toUpperCase();
       if (!themes.some((th) => th.id === letter)) return;
-      setSponsorThemeId(letter);
+      setSponsorSelectId(letter);
       requestAnimationFrame(() => {
         document.getElementById("spotlight-themes")?.scrollIntoView({ behavior: "smooth", block: "start" });
       });
@@ -323,24 +378,26 @@ export default function SponsorsPage() {
               <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Spotlight themes</span>
               <h2 className="text-3xl sm:text-4xl font-black text-white mt-3">Sponsor a theme category</h2>
               <p className="mt-3 max-w-2xl mx-auto text-theme-primary text-sm">
-                Each of the 14 spotlight themes is tied to a sponsorship package tier. Investment amounts below are in USD (including the current promotional rate from published list prices). Choose your theme, review the package and investment, then contact the partnerships team.
+                Each spotlight theme has Platinum, Gold and Silver packages (USD below include the current promotional rate where applicable). You can also choose event packages: Welcome Cocktail, Ministerial Dinner, Magazine placements, or Lanyards Sponsorship. Pick an option, review tiers, then contact the partnerships team.
               </p>
             </div>
           </FadeIn>
 
           <FadeIn delay={0.05}>
             <div className="glass rounded-2xl p-6 sm:p-8 border border-[#C9921A]/20 mb-10">
-              <label className="block text-xs font-bold uppercase tracking-wide text-theme-primary mb-2">Select spotlight theme</label>
+              <label className="block text-xs font-bold uppercase tracking-wide text-theme-primary mb-2">
+                Select theme or event package
+              </label>
               <div className="flex flex-col sm:flex-row gap-4 sm:items-end">
                 <div className="flex-1">
                   <select
-                    value={sponsorThemeId}
-                    onChange={(e) => setSponsorThemeId(e.target.value)}
+                    value={sponsorSelectId}
+                    onChange={(e) => setSponsorSelectId(e.target.value)}
                     className="w-full bg-[var(--bg-surface)] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#C9921A]/60"
                   >
-                    {themeSponsorshipOffers.map((o) => (
-                      <option key={o.themeId} value={o.themeId}>
-                        {o.themeId}, {o.themeLabel}
+                    {getSponsorSpotlightDropdownOptions().map((opt) => (
+                      <option key={opt.id} value={opt.id}>
+                        {opt.optionLabel}
                       </option>
                     ))}
                   </select>
@@ -356,10 +413,16 @@ export default function SponsorsPage() {
                 )}
                 {selectedOffer && (
                   <Link
-                    href={`/contact?theme=${encodeURIComponent(selectedOffer.themeId)}`}
+                    href={
+                      eventPackageSelected
+                        ? `/contact?eventSponsor=${encodeURIComponent(sponsorSelectId)}`
+                        : `/contact?theme=${encodeURIComponent(selectedOffer.themeId)}`
+                    }
                     className="inline-flex items-center justify-center gap-2 btn-gold px-6 py-3 rounded-xl text-sm font-bold shrink-0"
                   >
-                    Enquire about this theme
+                    {eventPackageSelected
+                      ? `Enquire about ${selectedOffer.themeLabel}`
+                      : "Enquire about this theme"}
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 )}
@@ -372,25 +435,51 @@ export default function SponsorsPage() {
               <div className="mb-10">
                 <div className="text-center mb-6 max-w-3xl mx-auto">
                   <h3 className="text-xl sm:text-2xl font-black text-white">
-                    Sponsorship by theme. Own a theme. Own the conversation.
+                    {magazineSelected
+                      ? "Magazine sponsorship"
+                      : lanyardsSelected
+                        ? "Lanyards sponsorship"
+                        : ministerialSelected
+                          ? "Ministerial Dinner partnership"
+                          : welcomeSelected
+                            ? "Welcome Cocktail partnership"
+                            : "Sponsorship by theme. Own a theme. Own the conversation."}
                   </h3>
-                  {spotlightDeck && (
+                  {eventPackageSelected ? (
+                    <p className="mt-3 text-sm text-theme-primary leading-relaxed">
+                      {magazineSelected
+                        ? magazineSponsorshipOverview
+                        : lanyardsSelected
+                          ? lanyardsSponsorshipOverview
+                          : ministerialSelected
+                            ? ministerialDinnerSponsorshipOverview
+                            : welcomeCocktailSponsorshipOverview}
+                    </p>
+                  ) : (
                     <>
-                      <p className="mt-3 text-sm text-theme-primary leading-relaxed">
-                        {spotlightDeck.tagline}
-                      </p>
-                      <p className="mt-2 text-xs font-semibold text-white/90">
-                        Key sessions: {spotlightDeck.keySessions}
+                      {spotlightDeck && (
+                        <>
+                          <p className="mt-3 text-sm text-theme-primary leading-relaxed">
+                            {spotlightDeck.tagline}
+                          </p>
+                          <p className="mt-2 text-xs font-semibold text-white/90">
+                            Key sessions: {spotlightDeck.keySessions}
+                          </p>
+                        </>
+                      )}
+                      <p className="mt-2 text-sm text-theme-primary">
+                        {selectedThemeTiers.every((t) => t.listPriceUsd === t.priceUsd)
+                          ? `USD investment per package matches Theme ${sponsorSelectId} in the table below.`
+                          : `List and discounted USD amounts match each row for Theme ${sponsorSelectId} in the table below.`}
                       </p>
                     </>
                   )}
-                  <p className="mt-2 text-sm text-theme-primary">
-                    {selectedThemeTiers.every((t) => t.listPriceUsd === t.priceUsd)
-                      ? `USD investment per package matches Theme ${sponsorThemeId} in the table below.`
-                      : `List and discounted USD amounts match each row for Theme ${sponsorThemeId} in the table below.`}
-                  </p>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div
+                  className={`grid grid-cols-1 gap-5 ${
+                    magazineSelected ? "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" : "md:grid-cols-3"
+                  }`}
+                >
                   {selectedThemeTiers.map((tierOffer) => {
                     const bullets = tierOffer.benefitsBullets ?? [];
                     if (bullets.length === 0) return null;
@@ -403,7 +492,7 @@ export default function SponsorsPage() {
                       >
                         <div className="px-4 py-3 text-center" style={{ backgroundColor: style.headerBg }}>
                           <div className="text-[10px] font-bold uppercase tracking-widest text-white/90">
-                            Theme {tierOffer.themeId}
+                            {eventPackageSelected ? tierOffer.themeLabel : `Theme ${tierOffer.themeId}`}
                           </div>
                           <h4 className="text-lg font-black text-white mt-1">{tierOffer.packageLabel}</h4>
                           <div className="text-xs text-white/90 mt-1 font-semibold">
@@ -432,9 +521,15 @@ export default function SponsorsPage() {
                             ))}
                           </ul>
                           <Link
-                            href={`/contact?theme=${encodeURIComponent(tierOffer.themeId)}&tier=${encodeURIComponent(
-                              tierOffer.packageTier
-                            )}`}
+                            href={
+                              eventPackageSelected
+                                ? `/contact?eventSponsor=${encodeURIComponent(
+                                    tierOffer.themeId
+                                  )}&tier=${encodeURIComponent(tierOffer.packageTier)}`
+                                : `/contact?theme=${encodeURIComponent(tierOffer.themeId)}&tier=${encodeURIComponent(
+                                    tierOffer.packageTier
+                                  )}`
+                            }
                             className="mt-5 inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-xs font-bold text-white transition-opacity hover:opacity-90"
                             style={{ backgroundColor: style.headerBg }}
                           >
@@ -451,11 +546,32 @@ export default function SponsorsPage() {
           )}
 
           <div className="grid grid-cols-1 gap-2 max-h-[420px] overflow-y-auto pr-1">
+            {[
+              getWelcomeCocktailSponsorshipTiers()[0],
+              getMinisterialDinnerSponsorshipTiers()[0],
+              getMagazineSponsorshipTiers()[0],
+              getLanyardsSponsorshipTiers()[0],
+            ].map((o) => (
+              <FadeIn key={o.themeId}>
+                <div
+                  className={`glass rounded-xl px-4 py-3 flex flex-wrap items-center justify-between gap-2 text-sm border ${
+                    sponsorSelectId === o.themeId ? "border-[#C9921A]/50 bg-[#C9921A]/5" : "border-white/5"
+                  }`}
+                >
+                  <div className="font-bold text-white w-14 shrink-0 text-xs uppercase tracking-wide">Event</div>
+                  <div className="flex-1 min-w-[200px] text-theme-primary">{o.themeLabel}</div>
+                  <div className="text-xs uppercase text-theme-primary w-24">{o.packageLabel}</div>
+                  <div className="text-right">
+                    <span className="text-[#F5B730] font-black">USD {o.priceUsd.toLocaleString()}</span>
+                  </div>
+                </div>
+              </FadeIn>
+            ))}
             {themeSponsorshipOffers.map((o) => (
               <FadeIn key={o.themeId}>
                 <div
                   className={`glass rounded-xl px-4 py-3 flex flex-wrap items-center justify-between gap-2 text-sm border ${
-                    o.themeId === sponsorThemeId ? "border-[#C9921A]/50 bg-[#C9921A]/5" : "border-white/5"
+                    o.themeId === sponsorSelectId ? "border-[#C9921A]/50 bg-[#C9921A]/5" : "border-white/5"
                   }`}
                 >
                   <div className="font-bold text-white w-8 shrink-0">{o.themeId}</div>
