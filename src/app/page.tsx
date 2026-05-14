@@ -11,7 +11,7 @@ import {
   Landmark, Handshake,
 } from "lucide-react";
 import CountdownTimer from "@/components/CountdownTimer";
-import VictoriaFallsCarousel from "@/components/VictoriaFallsCarousel";
+import HelloPageGallerySlider from "@/components/HelloPageGallerySlider";
 import { useLanguage } from "@/context/LanguageContext";
 import { summitInfo, themes, keyFacts, registrationFees } from "@/lib/data";
 
@@ -189,7 +189,7 @@ export default function HomePage() {
       {/* ─── ABOUT ─── */}
       <section className="py-20 section-gradient">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
             <FadeIn>
               <div>
                 <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">{t.home.aboutHeading}</span>
@@ -213,28 +213,26 @@ export default function HomePage() {
             </FadeIn>
 
             <FadeIn delay={0.2}>
-              <div className="flex flex-col gap-4">
-                <VictoriaFallsCarousel />
-                <div className="grid grid-cols-2 gap-4">
-                  {[
-                    { icon: "📅", title: t.home.aboutCard2Title, sub: t.home.aboutCard2Sub },
-                    { icon: "🌍", title: t.home.aboutCard3Title, sub: t.home.aboutCard3Sub },
-                  ].map((item, i) => (
-                    <div key={i} className="glass rounded-2xl p-5 card-hover">
-                      <div className="text-3xl mb-3">{item.icon}</div>
-                      <div className="text-white font-bold text-sm">{item.title}</div>
-                      <div className="text-xs mt-1 text-theme-primary">{item.sub}</div>
-                    </div>
-                  ))}
-                  <div className="col-span-2 glass rounded-2xl p-5 card-hover">
-                    <div className="text-3xl mb-3">🏆</div>
-                    <div className="text-white font-bold text-sm">{t.home.aboutCard4Title}</div>
-                    <div className="text-xs mt-1 text-theme-primary">{t.home.aboutCard4Sub}</div>
-                  </div>
-                </div>
-              </div>
+              <HelloPageGallerySlider />
             </FadeIn>
           </div>
+
+          <FadeIn delay={0.25}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-12 lg:mt-14">
+              {[
+                { icon: "🦁", title: t.home.aboutCard1Title, sub: t.home.aboutCard1Sub },
+                { icon: "📅", title: t.home.aboutCard2Title, sub: t.home.aboutCard2Sub },
+                { icon: "🌍", title: t.home.aboutCard3Title, sub: t.home.aboutCard3Sub },
+                { icon: "🏆", title: t.home.aboutCard4Title, sub: t.home.aboutCard4Sub },
+              ].map((item) => (
+                <div key={item.title} className="glass rounded-2xl p-5 card-hover">
+                  <div className="text-3xl mb-3">{item.icon}</div>
+                  <div className="text-white font-bold text-sm">{item.title}</div>
+                  <div className="text-xs mt-1 text-theme-primary">{item.sub}</div>
+                </div>
+              ))}
+            </div>
+          </FadeIn>
         </div>
       </section>
 
