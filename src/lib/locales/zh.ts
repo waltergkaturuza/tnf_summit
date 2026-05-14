@@ -134,6 +134,7 @@ export const zh: LocaleOverride = {
     programmeCol: "日程",
     participateCol: "参与",
     mediaCol: "媒体",
+    contactCol: "联系方式",
     summitLinks: [{ label: "关于峰会", href: "/about" }, { label: "为何参加", href: "/about#why-attend" }, { label: "重点主题", href: "/about#themes" }, { label: "场地", href: "/about#venue" }],
     programmeLinks: [{ label: "完整日程", href: "/program" }, { label: "演讲嘉宾", href: "/speakers" }, { label: "并行会议", href: "/program#concurrent" }, { label: "考察日", href: "/program#excursions" }],
     participateLinks: [{ label: "报名", href: "/registration" }, { label: "费用与类别", href: "/registration#fees" }, { label: "赞助商与伙伴", href: "/sponsors" }, { label: "联系我们", href: "/contact" }],

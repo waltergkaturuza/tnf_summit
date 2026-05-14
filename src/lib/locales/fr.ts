@@ -134,6 +134,7 @@ export const fr: LocaleOverride = {
     programmeCol: "Programme",
     participateCol: "Participer",
     mediaCol: "Médias",
+    contactCol: "Coordonnées",
     summitLinks: [
       { label: "À propos du Sommet", href: "/about" },
       { label: "Pourquoi participer", href: "/about#why-attend" },

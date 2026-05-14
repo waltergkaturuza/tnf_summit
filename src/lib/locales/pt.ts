@@ -134,6 +134,7 @@ export const pt: LocaleOverride = {
     programmeCol: "Programa",
     participateCol: "Participar",
     mediaCol: "Media",
+    contactCol: "Contacto",
     summitLinks: [{ label: "Sobre o Summit", href: "/about" }, { label: "Porquê participar", href: "/about#why-attend" }, { label: "Temas em destaque", href: "/about#themes" }, { label: "Local", href: "/about#venue" }],
     programmeLinks: [{ label: "Programa completo", href: "/program" }, { label: "Oradores", href: "/speakers" }, { label: "Sessões paralelas", href: "/program#concurrent" }, { label: "Dia de excursões", href: "/program#excursions" }],
     participateLinks: [{ label: "Registar", href: "/registration" }, { label: "Taxas e categorias", href: "/registration#fees" }, { label: "Patrocinadores", href: "/sponsors" }, { label: "Contacto", href: "/contact" }],

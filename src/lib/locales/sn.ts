@@ -134,6 +134,7 @@ export const sn: LocaleOverride = {
     programmeCol: "Chirongwa",
     participateCol: "Tora Chikamu",
     mediaCol: "Media",
+    contactCol: "Contact",
     summitLinks: [{ label: "Nezve Summit", href: "/about" }, { label: "Sei Muchienda", href: "/about#why-attend" }, { label: "Madingindira", href: "/about#themes" }, { label: "Nzvimbo", href: "/about#venue" }],
     programmeLinks: [{ label: "Chirongwa Chizere", href: "/program" }, { label: "Vatauriri", href: "/speakers" }, { label: "Sessions", href: "/program#concurrent" }, { label: "Excursions", href: "/program#excursions" }],
     participateLinks: [{ label: "Nyoresa", href: "/registration" }, { label: "Mitengo", href: "/registration#fees" }, { label: "Vatsigiri", href: "/sponsors" }, { label: "Taura", href: "/contact" }],

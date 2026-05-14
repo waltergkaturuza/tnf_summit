@@ -166,6 +166,7 @@ const en: FullTranslations = {
     programmeCol: "Programme",
     participateCol: "Participate",
     mediaCol: "Media",
+    contactCol: "Contact",
     summitLinks: [
       { label: "About the Summit", href: "/about" },
       { label: "Why Attend", href: "/about#why-attend" },

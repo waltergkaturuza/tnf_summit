@@ -134,6 +134,7 @@ export const el: LocaleOverride = {
     programmeCol: "Πρόγραμμα",
     participateCol: "Συμμετοχή",
     mediaCol: "Μέσα",
+    contactCol: "Επικοινωνία",
     summitLinks: [{ label: "Σχετικά με το Σύνοδο", href: "/about" }, { label: "Γιατί να συμμετάσχετε", href: "/about#why-attend" }, { label: "Θεματικές", href: "/about#themes" }, { label: "Τόπος", href: "/about#venue" }],
     programmeLinks: [{ label: "Πλήρες πρόγραμμα", href: "/program" }, { label: "Ομιλητές", href: "/speakers" }, { label: "Συνεδρίες", href: "/program#concurrent" }, { label: "Εκδρομές", href: "/program#excursions" }],
     participateLinks: [{ label: "Εγγραφή", href: "/registration" }, { label: "Τέλη και κατηγορίες", href: "/registration#fees" }, { label: "Χορηγοί", href: "/sponsors" }, { label: "Επικοινωνία", href: "/contact" }],

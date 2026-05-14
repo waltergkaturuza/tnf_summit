@@ -87,6 +87,8 @@ export type FooterTranslations = {
   programmeCol: string;
   participateCol: string;
   mediaCol: string;
+  /** Heading above email / phone / address in footer */
+  contactCol: string;
   summitLinks: { label: string; href: string }[];
   programmeLinks: { label: string; href: string }[];
   participateLinks: { label: string; href: string }[];

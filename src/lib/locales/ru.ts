@@ -134,6 +134,7 @@ export const ru: LocaleOverride = {
     programmeCol: "Программа",
     participateCol: "Участие",
     mediaCol: "Медиа",
+    contactCol: "Контакты",
     summitLinks: [{ label: "О саммите", href: "/about" }, { label: "Зачем участвовать", href: "/about#why-attend" }, { label: "Темы", href: "/about#themes" }, { label: "Место", href: "/about#venue" }],
     programmeLinks: [{ label: "Программа", href: "/program" }, { label: "Спикеры", href: "/speakers" }, { label: "Сессии", href: "/program#concurrent" }, { label: "Экскурсии", href: "/program#excursions" }],
     participateLinks: [{ label: "Регистрация", href: "/registration" }, { label: "Тарифы", href: "/registration#fees" }, { label: "Спонсоры", href: "/sponsors" }, { label: "Контакты", href: "/contact" }],

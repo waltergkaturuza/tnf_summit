@@ -134,6 +134,7 @@ export const ja: LocaleOverride = {
     programmeCol: "プログラム",
     participateCol: "参加",
     mediaCol: "メディア",
+    contactCol: "お問い合わせ",
     summitLinks: [{ label: "サミットについて", href: "/about" }, { label: "参加の理由", href: "/about#why-attend" }, { label: "重点テーマ", href: "/about#themes" }, { label: "会場", href: "/about#venue" }],
     programmeLinks: [{ label: "プログラム全体", href: "/program" }, { label: "スピーカー", href: "/speakers" }, { label: "並行セッション", href: "/program#concurrent" }, { label: "エクスカーション", href: "/program#excursions" }],
     participateLinks: [{ label: "登録", href: "/registration" }, { label: "料金・カテゴリ", href: "/registration#fees" }, { label: "スポンサー", href: "/sponsors" }, { label: "お問い合わせ", href: "/contact" }],

@@ -125,108 +125,112 @@ export default function Footer() {
       {/* Main Footer */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
-          {/* Brand, real TNF logo */}
-          <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-3 mb-2 group w-fit">
-              <div className="relative h-12 w-40">
-                <Image
-                  src="/tnf-logo.png"
-                  alt="Tripartite Negotiating Forum"
-                  fill
-                  className="object-contain object-left"
-                />
-              </div>
-            </Link>
-            <p className="text-[#C9921A] text-xs font-semibold mb-4">Global Summit 2026. Inaugural Edition</p>
-            <p className="text-sm leading-relaxed mb-6 text-theme-primary">
-              Africa&apos;s premier tripartite-led global convening platform on Inclusive Growth, Decent Work and Investment Promotion. Anchored in UN SDG 8, AU Agenda 2063, AfCFTA, and Zimbabwe&apos;s NDS2.
-            </p>
+          {/* Brand + Contact (two columns inside former single brand cell) */}
+          <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-10">
+            <div className="min-w-0">
+              <Link href="/" className="flex items-center gap-3 mb-2 group w-fit">
+                <div className="relative h-12 w-40">
+                  <Image
+                    src="/tnf-logo.png"
+                    alt="Tripartite Negotiating Forum"
+                    fill
+                    className="object-contain object-left"
+                  />
+                </div>
+              </Link>
+              <p className="text-[#C9921A] text-xs font-semibold mb-4">Global Summit 2026. Inaugural Edition</p>
+              <p className="text-sm leading-relaxed text-theme-primary">
+                Africa&apos;s premier tripartite-led global convening platform on Inclusive Growth, Decent Work and Investment Promotion. Anchored in UN SDG 8, AU Agenda 2063, AfCFTA, and Zimbabwe&apos;s NDS2.
+              </p>
 
-            {/* Contact details */}
-            <div className="space-y-3">
-              <a href={`mailto:${summitInfo.email}`} className="flex items-center gap-2.5 text-theme-primary hover:text-[#F5B730] text-sm transition-colors">
-                <Mail className="w-4 h-4 text-[#C9921A] flex-shrink-0" />
-                {summitInfo.email}
-              </a>
-              {summitDirectContacts.map((c) => (
+              {/* Social icons, real TNF accounts */}
+              <div className="flex items-center gap-3 mt-6">
                 <a
-                  key={c.telHref}
-                  href={c.telHref}
-                  className="flex items-center gap-2.5 text-theme-primary hover:text-[#F5B730] text-sm transition-colors"
+                  href={summitInfo.social.twitter}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Follow TNF on X / Twitter"
+                  className="w-9 h-9 rounded-lg glass flex items-center justify-center text-theme-primary hover:text-white hover:border-[#C9921A]/40 transition-all"
                 >
-                  <Phone className="w-4 h-4 text-[#C9921A] flex-shrink-0" />
-                  {c.name}, {c.phoneDisplay}
+                  <XIcon className="w-3.5 h-3.5" />
                 </a>
-              ))}
-              <a href="tel:+2632427830" className="flex items-center gap-2.5 text-theme-primary hover:text-[#F5B730] text-sm transition-colors">
-                <Phone className="w-4 h-4 text-[#C9921A] flex-shrink-0" />
-                {summitInfo.phone}
-              </a>
-              <div className="flex items-start gap-2.5 text-sm text-theme-primary">
-                <MapPin className="w-4 h-4 text-[#C9921A] mt-0.5 flex-shrink-0" />
-                {summitInfo.address}
+                <a
+                  href={summitInfo.social.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Follow TNF on Facebook"
+                  className="w-9 h-9 rounded-lg glass flex items-center justify-center text-theme-primary hover:text-white hover:border-[#C9921A]/40 transition-all"
+                >
+                  <FacebookIcon className="w-4 h-4" />
+                </a>
+                <a
+                  href={summitInfo.social.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="TNF on LinkedIn"
+                  className="w-9 h-9 rounded-lg glass flex items-center justify-center text-theme-primary hover:text-white hover:border-[#C9921A]/40 transition-all"
+                >
+                  <LinkedInIcon className="w-3.5 h-3.5" />
+                </a>
+                <a
+                  href={summitInfo.social.youtube}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="TNF on YouTube"
+                  className="w-9 h-9 rounded-lg glass flex items-center justify-center text-theme-primary hover:text-white hover:border-[#C9921A]/40 transition-all"
+                >
+                  <YouTubeIcon className="w-3.5 h-3.5" />
+                </a>
               </div>
+
+              {/* Back to main TNF site */}
               <a
                 href={summitInfo.mainWebsite}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2.5 text-theme-primary hover:text-[#F5B730] text-sm transition-colors"
+                className="inline-flex items-center gap-1.5 mt-5 text-theme-primary hover:text-[#C9921A] text-xs transition-colors"
               >
-                <Globe className="w-4 h-4 text-[#C9921A] flex-shrink-0" />
-                tnfzim.com
+                <ExternalLink className="w-3 h-3" />
+                {t.footer.visitSecretariat}
               </a>
             </div>
 
-            {/* Social icons, real TNF accounts */}
-            <div className="flex items-center gap-3 mt-6">
-              <a
-                href={summitInfo.social.twitter}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Follow TNF on X / Twitter"
-                className="w-9 h-9 rounded-lg glass flex items-center justify-center text-theme-primary hover:text-white hover:border-[#C9921A]/40 transition-all"
-              >
-                <XIcon className="w-3.5 h-3.5" />
-              </a>
-              <a
-                href={summitInfo.social.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Follow TNF on Facebook"
-                className="w-9 h-9 rounded-lg glass flex items-center justify-center text-theme-primary hover:text-white hover:border-[#C9921A]/40 transition-all"
-              >
-                <FacebookIcon className="w-4 h-4" />
-              </a>
-              <a
-                href={summitInfo.social.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="TNF on LinkedIn"
-                className="w-9 h-9 rounded-lg glass flex items-center justify-center text-theme-primary hover:text-white hover:border-[#C9921A]/40 transition-all"
-              >
-                <LinkedInIcon className="w-3.5 h-3.5" />
-              </a>
-              <a
-                href={summitInfo.social.youtube}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="TNF on YouTube"
-                className="w-9 h-9 rounded-lg glass flex items-center justify-center text-theme-primary hover:text-white hover:border-[#C9921A]/40 transition-all"
-              >
-                <YouTubeIcon className="w-3.5 h-3.5" />
-              </a>
+            <div className="min-w-0">
+              <h4 className="text-white font-semibold text-sm mb-4">{t.footer.contactCol}</h4>
+              <div className="space-y-3">
+                <a href={`mailto:${summitInfo.email}`} className="flex items-center gap-2.5 text-theme-primary hover:text-[#F5B730] text-sm transition-colors">
+                  <Mail className="w-4 h-4 text-[#C9921A] flex-shrink-0" />
+                  {summitInfo.email}
+                </a>
+                {summitDirectContacts.map((c) => (
+                  <a
+                    key={c.telHref}
+                    href={c.telHref}
+                    className="flex items-center gap-2.5 text-theme-primary hover:text-[#F5B730] text-sm transition-colors"
+                  >
+                    <Phone className="w-4 h-4 text-[#C9921A] flex-shrink-0" />
+                    {c.name}, {c.phoneDisplay}
+                  </a>
+                ))}
+                <a href="tel:+263242783030" className="flex items-center gap-2.5 text-theme-primary hover:text-[#F5B730] text-sm transition-colors">
+                  <Phone className="w-4 h-4 text-[#C9921A] flex-shrink-0" />
+                  {summitInfo.phone}
+                </a>
+                <div className="flex items-start gap-2.5 text-sm text-theme-primary">
+                  <MapPin className="w-4 h-4 text-[#C9921A] mt-0.5 flex-shrink-0" />
+                  {summitInfo.address}
+                </div>
+                <a
+                  href={summitInfo.mainWebsite}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2.5 text-theme-primary hover:text-[#F5B730] text-sm transition-colors"
+                >
+                  <Globe className="w-4 h-4 text-[#C9921A] flex-shrink-0" />
+                  tnfzim.com
+                </a>
+              </div>
             </div>
-
-            {/* Back to main TNF site */}
-            <a
-              href={summitInfo.mainWebsite}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 mt-5 text-theme-primary hover:text-[#C9921A] text-xs transition-colors"
-            >
-              <ExternalLink className="w-3 h-3" />
-              {t.footer.visitSecretariat}
-            </a>
           </div>
 
           {/* Links */}
