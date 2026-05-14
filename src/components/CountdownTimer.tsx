@@ -11,22 +11,23 @@ type TimeUnit = {
 };
 
 function TimeBlock({ value, label }: TimeUnit) {
+  const display = label === "Days" ? String(value) : String(value).padStart(2, "0");
   return (
     <div className="flex flex-col items-center">
       <motion.div
-        key={value}
+        key={display}
         initial={{ scale: 1.2, opacity: 0.5 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.3 }}
-        className="relative w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 glass-gold rounded-2xl flex items-center justify-center mb-2"
+        className="relative w-[5.75rem] h-[5.75rem] sm:w-28 sm:h-28 lg:w-32 lg:h-32 glass-gold rounded-2xl flex items-center justify-center mb-2"
       >
         <div className="absolute inset-0 rounded-2xl animated-border p-[1px]">
-          <div className="w-full h-full rounded-2xl bg-[var(--bg-surface)] flex items-center justify-center">
+          <div className="w-full h-full rounded-2xl bg-[var(--bg-surface)] flex items-center justify-center px-1">
             <span
-              className="text-3xl sm:text-4xl lg:text-5xl font-black gradient-text tabular-nums"
+              className="text-4xl sm:text-5xl font-black leading-none gradient-text tabular-nums tracking-tight"
               suppressHydrationWarning
             >
-              {String(value).padStart(2, "0")}
+              {display}
             </span>
           </div>
         </div>
@@ -72,8 +73,8 @@ export default function CountdownTimer() {
           {["Days", "Hours", "Minutes", "Seconds"].map((label, i) => (
             <div key={label} className="flex items-center gap-4 sm:gap-6">
               <div className="flex flex-col items-center">
-                <div className="w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 glass-gold rounded-2xl flex items-center justify-center mb-2">
-                  <span className="text-3xl sm:text-4xl lg:text-5xl font-black gradient-text tabular-nums">
+                <div className="w-[5.75rem] h-[5.75rem] sm:w-28 sm:h-28 lg:w-32 lg:h-32 glass-gold rounded-2xl flex items-center justify-center mb-2">
+                  <span className="text-4xl sm:text-5xl font-black leading-none gradient-text tabular-nums tracking-tight">
                     --
                   </span>
                 </div>
