@@ -64,7 +64,7 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-5xl sm:text-6xl lg:text-7xl font-black leading-tight mb-4"
+            className="text-4xl sm:text-5xl font-black leading-tight mb-4"
           >
             <span className="text-white">{t.home.title} </span>
             <span className="shimmer">Global Summit</span>
