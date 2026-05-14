@@ -70,12 +70,12 @@ function NewsletterSignup() {
   };
 
   return (
-    <div className="border-b border-white/5 py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+    <div className="border-b border-white/5 py-7 sm:py-8">
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-5">
           <div>
-            <h3 className="text-white font-bold text-lg mb-1">{t.footer.stayUpdated}</h3>
-            <p className="text-sm text-theme-primary">
+            <h3 className="text-white font-bold text-base sm:text-lg mb-0.5">{t.footer.stayUpdated}</h3>
+            <p className="text-xs sm:text-sm text-theme-primary leading-snug">
               {t.footer.subscribeDesc}
             </p>
           </div>
@@ -123,13 +123,13 @@ export default function Footer() {
       <NewsletterSignup />
 
       {/* Main Footer */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-9 lg:py-10">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-10">
           {/* Brand + Contact (two columns inside former single brand cell) */}
-          <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-10">
+          <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-x-8 lg:gap-x-10 gap-y-6 sm:gap-y-7">
             <div className="min-w-0">
-              <Link href="/" className="flex items-center gap-3 mb-2 group w-fit">
-                <div className="relative h-12 w-40">
+              <Link href="/" className="flex items-center gap-3 mb-1.5 group w-fit">
+                <div className="relative h-11 sm:h-12 w-36 sm:w-40">
                   <Image
                     src="/tnf-logo.png"
                     alt="Tripartite Negotiating Forum"
@@ -138,19 +138,19 @@ export default function Footer() {
                   />
                 </div>
               </Link>
-              <p className="text-[#C9921A] text-xs font-semibold mb-4">Global Summit 2026. Inaugural Edition</p>
-              <p className="text-sm leading-relaxed text-theme-primary">
+              <p className="text-[#C9921A] text-xs font-semibold mb-2">Global Summit 2026. Inaugural Edition</p>
+              <p className="text-xs sm:text-sm leading-snug text-theme-primary">
                 Africa&apos;s premier tripartite-led global convening platform on Inclusive Growth, Decent Work and Investment Promotion. Anchored in UN SDG 8, AU Agenda 2063, AfCFTA, and Zimbabwe&apos;s NDS2.
               </p>
 
               {/* Social icons, real TNF accounts */}
-              <div className="flex items-center gap-3 mt-6">
+              <div className="flex items-center gap-2.5 mt-4">
                 <a
                   href={summitInfo.social.twitter}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Follow TNF on X / Twitter"
-                  className="w-9 h-9 rounded-lg glass flex items-center justify-center text-theme-primary hover:text-white hover:border-[#C9921A]/40 transition-all"
+                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg glass flex items-center justify-center text-theme-primary hover:text-white hover:border-[#C9921A]/40 transition-all"
                 >
                   <XIcon className="w-3.5 h-3.5" />
                 </a>
@@ -159,7 +159,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Follow TNF on Facebook"
-                  className="w-9 h-9 rounded-lg glass flex items-center justify-center text-theme-primary hover:text-white hover:border-[#C9921A]/40 transition-all"
+                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg glass flex items-center justify-center text-theme-primary hover:text-white hover:border-[#C9921A]/40 transition-all"
                 >
                   <FacebookIcon className="w-4 h-4" />
                 </a>
@@ -168,7 +168,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="TNF on LinkedIn"
-                  className="w-9 h-9 rounded-lg glass flex items-center justify-center text-theme-primary hover:text-white hover:border-[#C9921A]/40 transition-all"
+                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg glass flex items-center justify-center text-theme-primary hover:text-white hover:border-[#C9921A]/40 transition-all"
                 >
                   <LinkedInIcon className="w-3.5 h-3.5" />
                 </a>
@@ -177,7 +177,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="TNF on YouTube"
-                  className="w-9 h-9 rounded-lg glass flex items-center justify-center text-theme-primary hover:text-white hover:border-[#C9921A]/40 transition-all"
+                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg glass flex items-center justify-center text-theme-primary hover:text-white hover:border-[#C9921A]/40 transition-all"
                 >
                   <YouTubeIcon className="w-3.5 h-3.5" />
                 </a>
@@ -188,7 +188,7 @@ export default function Footer() {
                 href={summitInfo.mainWebsite}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 mt-5 text-theme-primary hover:text-[#C9921A] text-xs transition-colors"
+                className="inline-flex items-center gap-1.5 mt-3 text-theme-primary hover:text-[#C9921A] text-xs transition-colors"
               >
                 <ExternalLink className="w-3 h-3" />
                 {t.footer.visitSecretariat}
@@ -196,48 +196,58 @@ export default function Footer() {
             </div>
 
             <div className="min-w-0">
-              <h4 className="text-white font-semibold text-sm mb-4">{t.footer.contactCol}</h4>
-              <div className="space-y-3">
-                <a href={`mailto:${summitInfo.email}`} className="flex items-center gap-2.5 text-theme-primary hover:text-[#F5B730] text-sm transition-colors">
-                  <Mail className="w-4 h-4 text-[#C9921A] flex-shrink-0" />
-                  {summitInfo.email}
-                </a>
-                {summitDirectContacts.map((c) => (
+              <h4 className="text-white font-semibold text-sm mb-2.5">{t.footer.contactCol}</h4>
+              <div className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-x-6 gap-y-1 min-[400px]:gap-y-2">
+                <div className="space-y-2 text-sm">
                   <a
-                    key={c.telHref}
-                    href={c.telHref}
-                    className="flex items-center gap-2.5 text-theme-primary hover:text-[#F5B730] text-sm transition-colors"
+                    href={`mailto:${summitInfo.email}`}
+                    className="flex items-center gap-2 text-theme-primary hover:text-[#F5B730] transition-colors"
                   >
-                    <Phone className="w-4 h-4 text-[#C9921A] flex-shrink-0" />
-                    {c.name}, {c.phoneDisplay}
+                    <Mail className="w-3.5 h-3.5 text-[#C9921A] flex-shrink-0" />
+                    <span className="break-all">{summitInfo.email}</span>
                   </a>
-                ))}
-                <a href="tel:+263242783030" className="flex items-center gap-2.5 text-theme-primary hover:text-[#F5B730] text-sm transition-colors">
-                  <Phone className="w-4 h-4 text-[#C9921A] flex-shrink-0" />
-                  {summitInfo.phone}
-                </a>
-                <div className="flex items-start gap-2.5 text-sm text-theme-primary">
-                  <MapPin className="w-4 h-4 text-[#C9921A] mt-0.5 flex-shrink-0" />
-                  {summitInfo.address}
+                  {summitDirectContacts.map((c) => (
+                    <a
+                      key={c.telHref}
+                      href={c.telHref}
+                      className="flex items-center gap-2 text-theme-primary hover:text-[#F5B730] transition-colors"
+                    >
+                      <Phone className="w-3.5 h-3.5 text-[#C9921A] flex-shrink-0" />
+                      {c.name}, {c.phoneDisplay}
+                    </a>
+                  ))}
+                  <a
+                    href="tel:+263242783030"
+                    className="flex items-center gap-2 text-theme-primary hover:text-[#F5B730] transition-colors"
+                  >
+                    <Phone className="w-3.5 h-3.5 text-[#C9921A] flex-shrink-0" />
+                    {summitInfo.phone}
+                  </a>
                 </div>
-                <a
-                  href={summitInfo.mainWebsite}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2.5 text-theme-primary hover:text-[#F5B730] text-sm transition-colors"
-                >
-                  <Globe className="w-4 h-4 text-[#C9921A] flex-shrink-0" />
-                  tnfzim.com
-                </a>
+                <div className="space-y-2 text-sm">
+                  <div className="flex items-start gap-2 text-theme-primary leading-snug">
+                    <MapPin className="w-3.5 h-3.5 text-[#C9921A] mt-0.5 flex-shrink-0" />
+                    {summitInfo.address}
+                  </div>
+                  <a
+                    href={summitInfo.mainWebsite}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-theme-primary hover:text-[#F5B730] transition-colors"
+                  >
+                    <Globe className="w-3.5 h-3.5 text-[#C9921A] flex-shrink-0" />
+                    tnfzim.com
+                  </a>
+                </div>
               </div>
             </div>
           </div>
 
           {/* Links */}
-          <div className="lg:col-span-3 grid grid-cols-2 sm:grid-cols-4 gap-8">
+          <div className="lg:col-span-3 grid grid-cols-2 sm:grid-cols-4 gap-6 lg:gap-7">
             <div>
-              <h4 className="text-white font-semibold text-sm mb-4">{t.footer.summitCol}</h4>
-              <ul className="space-y-2.5">
+              <h4 className="text-white font-semibold text-sm mb-2.5">{t.footer.summitCol}</h4>
+              <ul className="space-y-2">
                 {t.footer.summitLinks.map((link) => (
                   <li key={link.href}>
                     <Link href={link.href} className="text-theme-primary hover:text-[#F5B730] text-sm transition-colors">
@@ -248,8 +258,8 @@ export default function Footer() {
               </ul>
             </div>
             <div>
-              <h4 className="text-white font-semibold text-sm mb-4">{t.footer.programmeCol}</h4>
-              <ul className="space-y-2.5">
+              <h4 className="text-white font-semibold text-sm mb-2.5">{t.footer.programmeCol}</h4>
+              <ul className="space-y-2">
                 {t.footer.programmeLinks.map((link) => (
                   <li key={link.href}>
                     <Link href={link.href} className="text-theme-primary hover:text-[#F5B730] text-sm transition-colors">
@@ -260,8 +270,8 @@ export default function Footer() {
               </ul>
             </div>
             <div>
-              <h4 className="text-white font-semibold text-sm mb-4">{t.footer.participateCol}</h4>
-              <ul className="space-y-2.5">
+              <h4 className="text-white font-semibold text-sm mb-2.5">{t.footer.participateCol}</h4>
+              <ul className="space-y-2">
                 {t.footer.participateLinks.map((link) => (
                   <li key={link.href}>
                     <Link href={link.href} className="text-theme-primary hover:text-[#F5B730] text-sm transition-colors">
@@ -272,8 +282,8 @@ export default function Footer() {
               </ul>
             </div>
             <div>
-              <h4 className="text-white font-semibold text-sm mb-4">{t.footer.mediaCol}</h4>
-              <ul className="space-y-2.5">
+              <h4 className="text-white font-semibold text-sm mb-2.5">{t.footer.mediaCol}</h4>
+              <ul className="space-y-2">
                 {t.footer.mediaLinks.map((link) => (
                   <li key={link.href}>
                     {link.href.startsWith("http") ? (
@@ -301,9 +311,9 @@ export default function Footer() {
 
       {/* Bottom bar */}
       <div className="border-t border-white/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 sm:py-4">
           {/* Top row: copyright left, legal links right */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mb-3">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-3 mb-2">
             <p className="text-xs text-center sm:text-left text-theme-primary">
               {t.footer.copyright}
             </p>
