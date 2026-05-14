@@ -10,13 +10,19 @@ import {
   themes,
   getThemeSponsorshipTiers,
   getThemeSponsorshipOfferTier,
+  getSponsorSpotlightDropdownOptions,
+  getSponsorshipTiersForSelectValue,
   summitWidePartnershipTiers,
   parseUsdFromPriceBand,
   type ThemeSponsorshipPackageTier,
   type SummitWidePartnershipTierId,
 } from "@/lib/data";
 
-const SPONSORSHIP_CATEGORY_KEYS = new Set(["theme_sponsorship", "summit_wide_sponsorship"]);
+const SPONSORSHIP_CATEGORY_KEYS = new Set([
+  "theme_sponsorship",
+  "summit_wide_sponsorship",
+  "event_package_sponsorship",
+]);
 
 const donationCategoryOptions = donationCategories.filter((c) => !SPONSORSHIP_CATEGORY_KEYS.has(c.key));
 
@@ -56,7 +62,7 @@ function CopyField({ label, value, icon: Icon }: { label: string; value: string;
 
 type DonorType = "individual" | "organisation";
 type ContributionMode = "donation" | "sponsorship";
-type SponsorshipScope = "theme" | "summit_wide";
+type SponsorshipScope = "theme" | "event_package" | "summit_wide";
 
 export default function DonatePage() {
   const [settings, setSettings] = useState<Record<string, string>>({});
@@ -76,6 +82,9 @@ export default function DonatePage() {
 
   const [contributionMode, setContributionMode] = useState<ContributionMode>("donation");
   const [sponsorshipScope, setSponsorshipScope] = useState<SponsorshipScope>("theme");
+  const [eventPackageId, setEventPackageId] = useState(
+    () => getSponsorSpotlightDropdownOptions()[0]?.id ?? ""
+  );
   const [packageTier, setPackageTier] = useState<ThemeSponsorshipPackageTier>("platinum");
   const [summitWideTierId, setSummitWideTierId] = useState<SummitWidePartnershipTierId>("platinum");
 
@@ -104,17 +113,37 @@ export default function DonatePage() {
   }, [contributionMode, sponsorshipScope, themeId, packageTier]);
 
   useEffect(() => {
+    if (contributionMode !== "sponsorship" || sponsorshipScope !== "event_package" || !eventPackageId) return;
+    const tiers = getSponsorshipTiersForSelectValue(eventPackageId);
+    if (tiers.length === 0) return;
+    if (!tiers.some((t) => t.packageTier === packageTier)) {
+      setPackageTier(tiers[0].packageTier);
+    }
+  }, [contributionMode, sponsorshipScope, eventPackageId, packageTier]);
+
+  useEffect(() => {
     if (contributionMode !== "sponsorship") return;
     let usd: number | null = null;
     if (sponsorshipScope === "summit_wide") {
       const sw = summitWidePartnershipTiers.find((t) => t.id === summitWideTierId);
       if (sw) usd = parseUsdFromPriceBand(sw.priceBand);
-    } else if (themeId) {
+    } else if (sponsorshipScope === "event_package" && eventPackageId) {
+      const tiers = getSponsorshipTiersForSelectValue(eventPackageId);
+      const o = tiers.find((t) => t.packageTier === packageTier) ?? tiers[0];
+      usd = o?.priceUsd ?? null;
+    } else if (sponsorshipScope === "theme" && themeId) {
       const o = getThemeSponsorshipOfferTier(themeId, packageTier);
       usd = o?.priceUsd ?? null;
     }
     setAmountUsd(usd != null ? String(usd) : "");
-  }, [contributionMode, sponsorshipScope, themeId, packageTier, summitWideTierId]);
+  }, [
+    contributionMode,
+    sponsorshipScope,
+    themeId,
+    eventPackageId,
+    packageTier,
+    summitWideTierId,
+  ]);
 
   const bankName = settings.payment_bank_name || "";
   const accountName = settings.payment_account_name || "";
@@ -160,6 +189,19 @@ export default function DonatePage() {
             setCardSubmitting(false);
             return;
           }
+        } else if (sponsorshipScope === "event_package") {
+          if (!eventPackageId.trim()) {
+            setCardError("Please select an event package.");
+            setCardSubmitting(false);
+            return;
+          }
+          const tiers = getSponsorshipTiersForSelectValue(eventPackageId);
+          const offer = tiers.find((t) => t.packageTier === packageTier) ?? tiers[0];
+          if (!offer) {
+            setCardError("This event package has no published tier. Choose another package.");
+            setCardSubmitting(false);
+            return;
+          }
         } else {
           const sw = summitWidePartnershipTiers.find((t) => t.id === summitWideTierId);
           const parsed = sw ? parseUsdFromPriceBand(sw.priceBand) : null;
@@ -190,6 +232,9 @@ export default function DonatePage() {
         payload.sponsorshipScope = sponsorshipScope;
         if (sponsorshipScope === "theme") {
           payload.themeId = themeId;
+          payload.packageTier = packageTier;
+        } else if (sponsorshipScope === "event_package") {
+          payload.eventPackageId = eventPackageId;
           payload.packageTier = packageTier;
         } else {
           payload.summitWideTierId = summitWideTierId;
@@ -284,7 +329,7 @@ export default function DonatePage() {
             <p className="text-sm text-slate-400 mb-6">
               {contributionMode === "donation"
                 ? "Donating: enter any USD amount you wish (minimum 1). The charge matches what you enter, subject to our payment partner&apos;s limits."
-                : "Sponsoring: pick theme spotlight or summit-wide, then tier. The USD amount is fixed by that package, filled in for you, and verified on our server before checkout."}
+                : "Sponsoring: pick theme spotlight, event packages (Welcome Cocktail, Ministerial Dinner, Magazine, Lanyards), or summit-wide, then tier. The USD amount is fixed by that package, filled in for you, and verified on our server before checkout."}
             </p>
 
             <form onSubmit={(e) => void submitCardDonation(e)} className="space-y-4">
@@ -479,6 +524,24 @@ export default function DonatePage() {
                       <input
                         type="radio"
                         name="sponsorshipScope"
+                        checked={sponsorshipScope === "event_package"}
+                        onChange={() => {
+                          setSponsorshipScope("event_package");
+                          setCategoryKey("event_package_sponsorship");
+                          const opts = getSponsorSpotlightDropdownOptions();
+                          const first = opts[0]?.id ?? "";
+                          setEventPackageId(first);
+                          const tiers = getSponsorshipTiersForSelectValue(first);
+                          setPackageTier(tiers[0]?.packageTier ?? "platinum");
+                        }}
+                        className="accent-[#d49a26]"
+                      />
+                      Event packages
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer text-sm text-slate-300">
+                      <input
+                        type="radio"
+                        name="sponsorshipScope"
                         checked={sponsorshipScope === "summit_wide"}
                         onChange={() => {
                           setSponsorshipScope("summit_wide");
@@ -531,6 +594,48 @@ export default function DonatePage() {
                           >
                             {getThemeSponsorshipTiers(themeId).map((t) => (
                               <option key={t.packageTier} value={t.packageTier}>
+                                {t.packageLabel} — USD {t.priceUsd.toLocaleString("en-US")}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
+                    </>
+                  ) : sponsorshipScope === "event_package" ? (
+                    <>
+                      <div>
+                        <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Select event package</label>
+                        <select
+                          required
+                          value={eventPackageId}
+                          onChange={(e) => {
+                            const id = e.target.value;
+                            setEventPackageId(id);
+                            const tiers = getSponsorshipTiersForSelectValue(id);
+                            setPackageTier(tiers[0]?.packageTier ?? "platinum");
+                          }}
+                          className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-primary)] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#d49a26]/40"
+                        >
+                          {getSponsorSpotlightDropdownOptions().map((opt) => (
+                            <option key={opt.id} value={opt.id}>
+                              {opt.optionLabel}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      {eventPackageId && getSponsorshipTiersForSelectValue(eventPackageId).length > 0 && (
+                        <div>
+                          <label className="block text-xs font-bold text-slate-500 uppercase mb-1">
+                            Package tier / placement
+                          </label>
+                          <select
+                            required
+                            value={packageTier}
+                            onChange={(e) => setPackageTier(e.target.value as ThemeSponsorshipPackageTier)}
+                            className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-primary)] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#d49a26]/40"
+                          >
+                            {getSponsorshipTiersForSelectValue(eventPackageId).map((t) => (
+                              <option key={t.offerKey} value={t.packageTier}>
                                 {t.packageLabel} — USD {t.priceUsd.toLocaleString("en-US")}
                               </option>
                             ))}

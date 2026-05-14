@@ -82,6 +82,12 @@ export const donationCategories: DonationCategoryDef[] = [
     description: "Full-summit exhibition and visibility tier (amount is set by tier)",
   },
   {
+    key: "event_package_sponsorship",
+    label: "Event package sponsorship",
+    description:
+      "Welcome Cocktail, Ministerial Dinner, Magazine placements, or Lanyards (amount is fixed by package and tier)",
+  },
+  {
     key: "other",
     label: "Other",
     description: "Choose this if your preferred donation category is not listed",

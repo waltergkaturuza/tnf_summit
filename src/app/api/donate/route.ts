@@ -6,6 +6,8 @@ import {
   getThemeSponsorshipOfferTier,
   getThemeSponsorshipTiers,
   getSummitWidePartnershipTier,
+  getSponsorshipTiersForSelectValue,
+  isEventSponsorshipPackageId,
   parseUsdFromPriceBand,
   type ThemeSponsorshipPackageTier,
 } from "@/lib/data";
@@ -32,7 +34,9 @@ type Body = {
   message?: string;
   /** When set to sponsorship, amount must match the selected package (validated server-side). */
   contributionType?: "donation" | "sponsorship";
-  sponsorshipScope?: "theme" | "summit_wide";
+  sponsorshipScope?: "theme" | "event_package" | "summit_wide";
+  /** Welcome Cocktail, Ministerial Dinner, Magazine, or Lanyards id (when sponsorshipScope is event_package). */
+  eventPackageId?: string;
   packageTier?: ThemeSponsorshipPackageTier;
   summitWideTierId?: string;
 };
@@ -45,6 +49,15 @@ function expectedSponsorshipUsd(b: Body): number | null {
     const sw = getSummitWidePartnershipTier(id);
     if (!sw) return null;
     return parseUsdFromPriceBand(sw.priceBand);
+  }
+  if (b.sponsorshipScope === "event_package") {
+    const pid = (b.eventPackageId ?? "").trim().toLowerCase();
+    if (!isEventSponsorshipPackageId(pid)) return null;
+    const tiers = getSponsorshipTiersForSelectValue(pid);
+    if (tiers.length === 0) return null;
+    const ptRaw = (b.packageTier ?? "").trim().toLowerCase();
+    const o = tiers.find((t) => t.packageTier === ptRaw) ?? tiers[0];
+    return o?.priceUsd ?? null;
   }
   if (b.sponsorshipScope !== "theme") return null;
   const tid = (b.themeId ?? "").trim().toUpperCase();
@@ -116,6 +129,28 @@ export async function POST(req: Request) {
           { status: 400 }
         );
       }
+    } else if (body.sponsorshipScope === "event_package") {
+      if (categoryKey !== "event_package_sponsorship") {
+        return NextResponse.json(
+          { error: "Use the Event package sponsorship category for Welcome, Ministerial, Magazine, or Lanyards." },
+          { status: 400 }
+        );
+      }
+      const pid = (body.eventPackageId ?? "").trim().toLowerCase();
+      if (!isEventSponsorshipPackageId(pid)) {
+        return NextResponse.json({ error: "Please select a valid event package." }, { status: 400 });
+      }
+      const exp = expectedSponsorshipUsd({
+        ...body,
+        eventPackageId: pid,
+        sponsorshipScope: "event_package",
+      });
+      if (exp == null || Math.abs(amountUsd - exp) > 0.02) {
+        return NextResponse.json(
+          { error: "Amount must match the selected event package and tier." },
+          { status: 400 }
+        );
+      }
     } else if (body.sponsorshipScope === "summit_wide") {
       if (categoryKey !== "summit_wide_sponsorship") {
         return NextResponse.json(
@@ -132,12 +167,16 @@ export async function POST(req: Request) {
       }
     } else {
       return NextResponse.json(
-        { error: "Select theme spotlight or summit-wide sponsorship." },
+        { error: "Select theme spotlight, event packages, or summit-wide sponsorship." },
         { status: 400 }
       );
     }
   } else {
-    if (categoryKey === "theme_sponsorship" || categoryKey === "summit_wide_sponsorship") {
+    if (
+      categoryKey === "theme_sponsorship" ||
+      categoryKey === "summit_wide_sponsorship" ||
+      categoryKey === "event_package_sponsorship"
+    ) {
       return NextResponse.json(
         { error: "Use Sponsorship on the donate form for fixed packages, or choose another category." },
         { status: 400 }
@@ -182,6 +221,18 @@ export async function POST(req: Request) {
   ) {
     const sw = getSummitWidePartnershipTier((body.summitWideTierId ?? "").trim().toLowerCase());
     categoryLabel = sw ? `Sponsorship: Summit-wide · ${sw.title} · ${sw.priceBand}` : getDonationCategoryLabel(categoryKey);
+  } else if (
+    categoryKey === "event_package_sponsorship" &&
+    contributionType === "sponsorship" &&
+    body.sponsorshipScope === "event_package"
+  ) {
+    const pid = (body.eventPackageId ?? "").trim().toLowerCase();
+    const tiers = isEventSponsorshipPackageId(pid) ? getSponsorshipTiersForSelectValue(pid) : [];
+    const ptRaw = (body.packageTier ?? "").trim().toLowerCase();
+    const offer = tiers.find((t) => t.packageTier === ptRaw) ?? tiers[0];
+    categoryLabel = offer
+      ? `Sponsorship: ${offer.themeLabel} · ${offer.packageLabel} · USD ${offer.priceUsd.toLocaleString("en-US")}`
+      : getDonationCategoryLabel(categoryKey);
   } else {
     categoryLabel = getDonationCategoryLabel(categoryKey);
   }
