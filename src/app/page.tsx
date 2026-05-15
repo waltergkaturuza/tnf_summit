@@ -190,10 +190,10 @@ export default function HomePage() {
                 <h2 className="text-4xl sm:text-5xl font-black text-white mt-3 mb-6 leading-tight">
                   <span className="gradient-text">{t.home.aboutTitle}</span>
                 </h2>
-                <p className="leading-relaxed mb-6 text-theme-primary">
+                <p className="leading-relaxed mb-6 text-theme-primary text-justify text-pretty">
                   {t.home.aboutDesc1}
                 </p>
-                <p className="leading-relaxed mb-8 text-theme-primary">
+                <p className="leading-relaxed mb-8 text-theme-primary text-justify text-pretty">
                   {t.home.aboutDesc2}
                 </p>
                 <div className="flex flex-wrap gap-3">
