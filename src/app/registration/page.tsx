@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   CheckCircle, ArrowRight, ArrowLeft, User, Mail, Phone,
@@ -446,7 +447,19 @@ export default function RegistrationPage() {
 
         {/* Form */}
         <form onSubmit={handleSubmit}>
-          <div className="glass rounded-2xl p-6 sm:p-8">
+          <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-xl">
+            <div className="absolute inset-0" aria-hidden>
+              <Image
+                src="/about_wallpaper.webp"
+                alt=""
+                fill
+                sizes="(max-width: 768px) 100vw, 896px"
+                quality={82}
+                className="object-cover object-center"
+              />
+            </div>
+            <div aria-hidden className="absolute inset-0 bg-[#0A1628]/90" />
+            <div className="relative z-10 p-6 sm:p-8">
             <AnimatePresence mode="wait">
               <motion.div key={step} initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.25 }}>
 
@@ -981,6 +994,7 @@ export default function RegistrationPage() {
                     ? <>Continue to {STEPS[step].label} <ArrowRight className="w-4 h-4" /></>
                     : <>Submit Registration <CheckCircle className="w-4 h-4" /></>}
               </button>
+            </div>
             </div>
           </div>
         </form>
