@@ -91,7 +91,7 @@ export default function HelloPageGallerySlider({ className = "" }: { className?:
               alt={slide.alt}
               fill
               className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 50vw"
+              sizes="(max-width: 1024px) 100vw, 65vw"
               priority={index === 0}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0A1628]/95 via-[#0A1628]/30 to-transparent" />

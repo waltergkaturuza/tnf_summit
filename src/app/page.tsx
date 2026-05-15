@@ -47,8 +47,8 @@ export default function HomePage() {
         <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full blur-3xl animate-pulse" style={{ background: "rgba(251, 188, 5, 0.16)", animationDelay: "1s" }} />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-3xl" style={{ background: "rgba(234, 67, 53, 0.06)" }} />
 
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-6 lg:pb-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 xl:gap-16 items-center">
+        <div className="relative z-10 w-full max-w-none mx-auto px-2 sm:px-4 md:px-5 lg:px-6 xl:px-8 2xl:px-10 pt-24 pb-6 lg:pb-10">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.52fr)] gap-7 lg:gap-8 xl:gap-10 items-center">
             {/* Left: headline, meta, CTAs (Chilmund-style column) */}
             <div className="flex flex-col items-center text-center w-full max-w-3xl mx-auto">
               {/* Title */}
@@ -133,9 +133,9 @@ export default function HomePage() {
               initial={{ opacity: 0, x: 24 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.75, delay: 0.2 }}
-              className="w-full max-w-lg mx-auto lg:max-w-none"
+              className="w-full min-w-0 mx-auto lg:mx-0"
             >
-              <HelloPageGallerySlider />
+              <HelloPageGallerySlider className="w-full" />
               <p className="text-[10px] sm:text-xs uppercase tracking-[0.2em] text-theme-primary/90 text-center mt-3">
                 {t.home.heroGalleryCaption}
               </p>
@@ -148,9 +148,9 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="relative z-10 w-full max-w-4xl mx-auto px-4 pb-24 lg:pb-28"
+          className="relative z-10 w-full max-w-none mx-auto px-2 sm:px-4 md:px-5 lg:px-6 xl:px-8 2xl:px-10 pb-14 lg:pb-16"
         >
-          <div className="glass rounded-3xl p-6 sm:p-8 lg:p-10">
+          <div className="glass rounded-2xl px-4 py-3 sm:px-5 sm:py-4 lg:px-6 lg:py-5">
             <CountdownTimer />
           </div>
         </motion.div>
