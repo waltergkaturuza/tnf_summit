@@ -181,38 +181,33 @@ export default function HomePage() {
       </section>
 
       {/* ─── ABOUT ─── */}
-      <section className="py-20 section-gradient">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-            <FadeIn>
-              <div>
-                <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">{t.home.aboutHeading}</span>
-                <h2 className="text-4xl sm:text-5xl font-black text-white mt-3 mb-6 leading-tight">
-                  <span className="gradient-text">{t.home.aboutTitle}</span>
-                </h2>
-                <p className="leading-relaxed mb-6 text-theme-primary text-justify text-pretty">
-                  {t.home.aboutDesc1}
-                </p>
-                <p className="leading-relaxed mb-8 text-theme-primary text-justify text-pretty">
-                  {t.home.aboutDesc2}
-                </p>
-                <div className="flex flex-wrap gap-3">
-                  {t.home.aboutTags.map((tag) => (
-                    <span key={tag} className="glass px-3 py-1.5 rounded-full text-xs border border-white/10 text-theme-primary">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+      <section className="wallpaper-surface relative overflow-hidden py-20 lg:py-24">
+        <HelloPageGallerySlider variant="background" />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeIn>
+            <motion.div className="max-w-3xl">
+              <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">{t.home.aboutHeading}</span>
+              <h2 className="text-4xl sm:text-5xl font-black text-white mt-3 mb-6 leading-tight">
+                <span className="gradient-text">{t.home.aboutTitle}</span>
+              </h2>
+              <p className="leading-relaxed mb-6 text-white/90 text-justify text-pretty">
+                {t.home.aboutDesc1}
+              </p>
+              <p className="leading-relaxed mb-8 text-white/90 text-justify text-pretty">
+                {t.home.aboutDesc2}
+              </p>
+              <div className="flex flex-wrap gap-3 pb-10">
+                {t.home.aboutTags.map((tag) => (
+                  <span key={tag} className="glass px-3 py-1.5 rounded-full text-xs border border-white/20 text-white/90">
+                    {tag}
+                  </span>
+                ))}
               </div>
-            </FadeIn>
-
-            <FadeIn delay={0.2}>
-              <HelloPageGallerySlider />
-            </FadeIn>
-          </div>
+            </motion.div>
+          </FadeIn>
 
           <FadeIn delay={0.25}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-12 lg:mt-14">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4 lg:mt-6">
               {[
                 { icon: "🦁", title: t.home.aboutCard1Title, sub: t.home.aboutCard1Sub },
                 { icon: "📅", title: t.home.aboutCard2Title, sub: t.home.aboutCard2Sub },
@@ -222,7 +217,7 @@ export default function HomePage() {
                 <div key={item.title} className="glass rounded-2xl p-5 card-hover">
                   <div className="text-3xl mb-3">{item.icon}</div>
                   <div className="text-white font-bold text-sm">{item.title}</div>
-                  <div className="text-xs mt-1 text-theme-primary">{item.sub}</div>
+                  <div className="text-xs mt-1 text-white/85">{item.sub}</div>
                 </div>
               ))}
             </div>

@@ -187,7 +187,9 @@ html.light .wallpaper-surface .text-slate-200,
 html.light .wallpaper-surface .text-slate-300,
 html.light .wallpaper-surface .text-slate-400,
 html.light .wallpaper-surface .text-slate-500,
-html.light .wallpaper-surface .text-theme-primary {
+html.light .wallpaper-surface .text-theme-primary,
+html.light .wallpaper-surface .text-white\/90,
+html.light .wallpaper-surface .text-white\/85 {
   color: rgba(255, 255, 255, 0.92) !important;
 }
 html.light .wallpaper-surface h2,
