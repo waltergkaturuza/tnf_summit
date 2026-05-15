@@ -8,6 +8,7 @@ import {
   Mic, Heart, Camera, Bell, Rocket, Handshake, Briefcase,
   FileText, ChevronDown, MapPin,
 } from "lucide-react";
+import PageHeader from "@/components/PageHeader";
 import { useLanguage } from "@/context/LanguageContext";
 import { subscribeEmail } from "@/lib/db";
 import { getCountryNames } from "@/lib/countries";
@@ -374,18 +375,8 @@ export default function RegistrationPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] pt-20">
-      {/* Header */}
-      <section className="py-12 hero-bg pattern-overlay relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[var(--bg-primary)]" />
-        <div className="relative z-10 text-center px-4">
-          <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">Secure Your Seat</span>
-          <h1 className="text-4xl sm:text-5xl font-black text-white mt-2 mb-2">
-            Delegate <span className="gradient-text">Registration</span>
-          </h1>
-          <p className="text-theme-primary">Zimbabwe TNF Global Summit 2026 · Victoria Falls, Zimbabwe · Flat registration fee <strong className="text-white">USD 1,500</strong> per delegate</p>
-        </div>
-      </section>
+    <div className="min-h-screen bg-[var(--bg-primary)]">
+      <PageHeader title={t.registration.heroTitle} subtitle={t.registration.heroSub} />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
         <div className="mb-6 rounded-2xl border border-[#C9921A]/30 bg-[#C9921A]/10 px-5 py-4">

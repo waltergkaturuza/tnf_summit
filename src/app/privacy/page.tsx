@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Shield, Mail, ArrowLeft } from "lucide-react";
+import { Mail, ArrowLeft } from "lucide-react";
+import PageHeader from "@/components/PageHeader";
 
 export const metadata = {
   title: "Privacy Policy | Zimbabwe TNF Global Summit 2026",
@@ -8,26 +9,16 @@ export const metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] pt-20">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {/* Back */}
+    <div className="min-h-screen bg-[var(--bg-primary)]">
+      <PageHeader
+        title="Privacy Policy"
+        subtitle="Zimbabwe TNF Global Summit 2026 · Last updated: March 2026"
+      />
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <Link href="/" className="inline-flex items-center gap-2 text-theme-primary hover:text-white text-sm mb-8 transition-colors">
           <ArrowLeft className="w-4 h-4" />
           Back to Home
         </Link>
-
-        {/* Header */}
-        <div className="flex items-start gap-4 mb-10">
-          <div className="w-12 h-12 rounded-xl bg-[#C9921A]/20 border border-[#C9921A]/30 flex items-center justify-center flex-shrink-0">
-            <Shield className="w-6 h-6 text-[#C9921A]" />
-          </div>
-          <div>
-            <h1 className="text-3xl sm:text-4xl font-black text-white">Privacy Policy</h1>
-            <p className="mt-1 text-sm text-theme-primary">
-              Zimbabwe TNF Global Summit 2026 · Last updated: March 2026
-            </p>
-          </div>
-        </div>
 
         <div className="glass rounded-2xl p-6 sm:p-10 space-y-8 text-sm leading-relaxed text-theme-primary">
 

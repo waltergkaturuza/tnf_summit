@@ -4,6 +4,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Star, Globe, CheckCircle, Mail, TrendingUp } from "lucide-react";
+import PageHeader from "@/components/PageHeader";
 import { useLanguage } from "@/context/LanguageContext";
 import {
   sponsors,
@@ -221,22 +222,8 @@ export default function SponsorsPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] pt-20">
-      {/* Header */}
-      <section className="py-20 hero-bg pattern-overlay relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[var(--bg-primary)]" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
-            <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">{t.sponsors.heroBadge}</span>
-            <h1 className="text-4xl sm:text-5xl font-black text-white mt-3 mb-4">
-              {t.sponsors.heroTitle}
-            </h1>
-            <p className="max-w-2xl mx-auto text-theme-primary">
-              {t.sponsors.heroSub}
-            </p>
-          </motion.div>
-        </div>
-      </section>
+    <div className="min-h-screen bg-[var(--bg-primary)]">
+      <PageHeader title={t.sponsors.heroTitle} subtitle={t.sponsors.heroSub} />
 
       {/* Partner Logos, from Supabase Storage */}
       {logos.length > 0 && (

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Search, FileText, User, ArrowRight, AlertCircle } from "lucide-react";
+import PageHeader from "@/components/PageHeader";
 import { useLanguage } from "@/context/LanguageContext";
 import { getTrackStatus } from "@/lib/db";
 
@@ -33,13 +34,9 @@ export default function TrackStatusPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] pt-28 pb-16 px-4">
-      <div className="max-w-xl mx-auto">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10">
-          <h1 className="text-4xl font-black text-white mb-2">{t.trackStatus.heroTitle}</h1>
-          <p className="text-slate-400">{t.trackStatus.heroSub}</p>
-        </motion.div>
-
+    <div className="min-h-screen bg-[var(--bg-primary)]">
+      <PageHeader title={t.trackStatus.heroTitle} subtitle={t.trackStatus.heroSub} />
+      <motion.div className="max-w-xl mx-auto px-4 pb-16 pt-4">
         <motion.form initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }} onSubmit={handleSubmit} className="space-y-4">
           <div className="flex gap-2">
             <div className="relative flex-1">
@@ -101,7 +98,7 @@ export default function TrackStatusPage() {
             {t.trackStatus.registerLink} <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

@@ -2,22 +2,16 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Heart, Mail, ArrowRight, Users } from "lucide-react";
+import { Mail, ArrowRight, Users } from "lucide-react";
+import PageHeader from "@/components/PageHeader";
 import { useLanguage } from "@/context/LanguageContext";
 
 export default function VolunteerPage() {
   const { t } = useLanguage();
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] pt-28 pb-16 px-4">
-      <div className="max-w-2xl mx-auto text-center">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#C9921A]/20 mb-6">
-            <Heart className="w-8 h-8 text-[#C9921A]" />
-          </div>
-          <h1 className="text-4xl font-black text-white mb-3">{t.volunteer.heroTitle}</h1>
-          <p className="text-slate-400 text-lg">{t.volunteer.heroSub}</p>
-        </motion.div>
-
+    <div className="min-h-screen bg-[var(--bg-primary)]">
+      <PageHeader title={t.volunteer.heroTitle} subtitle={t.volunteer.heroSub} />
+      <motion.div className="max-w-2xl mx-auto px-4 pb-16 pt-4 text-center">
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }} className="glass rounded-2xl border border-white/10 p-8 text-left space-y-6">
           <div className="flex gap-4">
             <Users className="w-6 h-6 text-[#C9921A] flex-shrink-0 mt-0.5" />
@@ -46,7 +40,7 @@ export default function VolunteerPage() {
         <Link href="/contact" className="inline-flex items-center gap-2 mt-6 text-[#C9921A] font-semibold hover:underline">
           {t.volunteer.contactPage} <ArrowRight className="w-4 h-4" />
         </Link>
-      </div>
+      </motion.div>
     </div>
   );
 }

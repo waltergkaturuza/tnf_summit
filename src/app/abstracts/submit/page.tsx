@@ -4,6 +4,7 @@ import { useState, useActionState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { FileText, Plus, Trash2, CheckCircle, ArrowRight } from "lucide-react";
+import PageHeader from "@/components/PageHeader";
 import { useLanguage } from "@/context/LanguageContext";
 import { themes } from "@/lib/data";
 import { submitAbstractAction, type SubmitAbstractState } from "./actions";
@@ -45,14 +46,9 @@ export default function SubmitAbstractPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] pt-28 pb-16 px-4">
-      <div className="max-w-3xl mx-auto">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
-          <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">{t.abstracts.badge}</span>
-          <h1 className="text-4xl font-black text-white mt-2 mb-2">{t.abstracts.formTitle}</h1>
-          <p className="text-slate-400">{t.abstracts.formSub}</p>
-        </motion.div>
-
+    <div className="min-h-screen bg-[var(--bg-primary)]">
+      <PageHeader title={t.abstracts.formTitle} subtitle={t.abstracts.formSub} />
+      <div className="max-w-3xl mx-auto px-4 pb-16 pt-4">
         <form action={formAction} className="space-y-8">
           <input type="hidden" name="coAuthors" value={JSON.stringify(coAuthors)} />
 

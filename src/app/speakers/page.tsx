@@ -4,6 +4,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import Link from "next/link";
 import { ArrowRight, Mic, Globe, Star, Users, Calendar, Bell } from "lucide-react";
+import PageHeader from "@/components/PageHeader";
 import { useLanguage } from "@/context/LanguageContext";
 
 function FadeIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
@@ -22,29 +23,8 @@ const profileColors = ["#3B82F6", "#C9921A", "#10B981", "#8B5CF6", "#F59E0B", "#
 export default function SpeakersPage() {
   const { t } = useLanguage();
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] pt-20">
-      {/* Header */}
-      <section className="py-20 hero-bg pattern-overlay relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[var(--bg-primary)]" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
-            <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">{t.speakers.heroBadge}</span>
-            <h1 className="text-4xl sm:text-5xl font-black text-white mt-3 mb-4">
-              {t.speakers.heroTitle.includes("&") ? (
-                <>
-                  {t.speakers.heroTitle.split("&")[0].trim()}
-                  <span className="gradient-text">&amp;{t.speakers.heroTitle.split("&")[1] ?? ""}</span>
-                </>
-              ) : (
-                t.speakers.heroTitle
-              )}
-            </h1>
-            <p className="max-w-2xl mx-auto text-theme-primary">
-              {t.speakers.heroSub}
-            </p>
-          </motion.div>
-        </div>
-      </section>
+    <div className="min-h-screen bg-[var(--bg-primary)]">
+      <PageHeader title={t.speakers.heroTitle} subtitle={t.speakers.heroSub} />
 
       {/* Coming Soon Banner */}
       <div className="bg-[#C9921A]/10 border-y border-[#C9921A]/20 py-4">

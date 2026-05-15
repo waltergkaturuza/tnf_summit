@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, CreditCard } from "lucide-react";
+import PageHeader from "@/components/PageHeader";
 
 export default function PayByReferencePage() {
   const [trackId, setTrackId] = useState("");
@@ -29,17 +30,21 @@ export default function PayByReferencePage() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] pt-24 pb-20 px-4">
-      <div className="max-w-xl mx-auto">
+    <div className="min-h-screen bg-[var(--bg-primary)]">
+      <PageHeader
+        title="Pay by Reference"
+        subtitle="Restart card payment with your existing registration or donation track ID."
+      />
+      <div className="max-w-xl mx-auto px-4 pb-20 pt-4">
         <Link href="/" className="inline-flex items-center gap-2 text-slate-400 hover:text-[#C9921A] text-sm font-semibold mb-8">
           <ArrowLeft className="w-4 h-4" /> Back to Home
         </Link>
 
         <div className="glass rounded-2xl border border-white/10 p-6 sm:p-8">
-          <h1 className="text-2xl sm:text-3xl font-black text-white mb-2 flex items-center gap-2">
+          <h2 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
             <CreditCard className="w-6 h-6 text-[#C9921A]" />
             Pay by Reference
-          </h1>
+          </h2>
           <p className="text-sm text-slate-400 mb-6">
             Enter your registration/donation reference and the same email used during submission to restart card payment.
           </p>

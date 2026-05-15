@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowLeft, Heart, CreditCard, Copy, Check, Building2, Hash, Globe, Loader2 } from "lucide-react";
 import { getSetting } from "@/lib/db";
+import PageHeader from "@/components/PageHeader";
 import {
   donationCategories,
   themes,
@@ -295,7 +296,12 @@ export default function DonatePage() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] pt-24 pb-20 px-4">
+    <div className="min-h-screen bg-[var(--bg-primary)]">
+      <PageHeader
+        title="Support the Zimbabwe TNF Global Summit"
+        subtitle="Support the summit with a flexible donation or a fixed sponsorship package. Use the card form below (choose Donating or Sponsoring), or pay by bank transfer in the panel on the right."
+      />
+      <div className="pb-20 px-4">
       {iveriRedirecting && (
         <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[var(--bg-primary)]/95 backdrop-blur-sm">
           <div className="w-12 h-12 border-2 border-[#d49a26] border-t-transparent rounded-full animate-spin mb-4" />
@@ -310,16 +316,6 @@ export default function DonatePage() {
         </Link>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
-          <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#C9921A]/20 border border-[#C9921A]/30 mb-6">
-              <Heart className="w-8 h-8 text-[#C9921A]" />
-            </div>
-            <h1 className="text-3xl sm:text-4xl font-black text-white mb-4">Support the Zimbabwe TNF Global Summit</h1>
-            <p className="text-theme-primary max-w-2xl mx-auto">
-              Support the summit with a flexible donation or a fixed sponsorship package. Use the card form below (choose Donating or Sponsoring), or pay by bank transfer in the panel on the right.
-            </p>
-          </div>
-
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 items-start">
             {/* Card donation, short form */}
             <div className="glass rounded-2xl p-6 border border-white/10 xl:col-span-2">
@@ -767,6 +763,7 @@ export default function DonatePage() {
             </p>
           </div>
         </motion.div>
+      </div>
       </div>
     </div>
   );
