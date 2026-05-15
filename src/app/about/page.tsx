@@ -2,6 +2,7 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight, CheckCircle, MapPin, Calendar, Users,
@@ -33,11 +34,17 @@ export default function AboutPage() {
       <PageHeader title={t.about.heroTitle} subtitle={t.about.heroSub} />
       {/* What is the Summit — wallpaper background */}
       <section className="relative py-20 overflow-hidden">
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url(/about_wallpaper.png)" }}
-        />
+        <div className="absolute inset-0" aria-hidden>
+          <Image
+            src="/about_wallpaper.webp"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            quality={82}
+            className="object-cover object-center"
+          />
+        </div>
         <div aria-hidden className="absolute inset-0 bg-[#0A1628]/82" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
