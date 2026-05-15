@@ -491,18 +491,14 @@ export default function HomePage() {
           </FadeIn>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {["🌊", "🌍", "🏨", "✈️", "🦁", "🤝"].map((emoji, i) => {
-              const card = t.home.venueCards[i];
-              return (
-                <FadeIn key={i} delay={i * 0.08}>
-                  <motion.div className="glass rounded-2xl p-6 card-hover border border-white/10">
-                    <div className="text-3xl mb-4">{emoji}</div>
-                    <h3 className="text-white font-bold mb-2">{card.title}</h3>
-                    <p className="text-sm leading-relaxed text-white/85">{card.desc}</p>
-                  </motion.div>
-                </FadeIn>
-              );
-            })}
+            {t.home.venueCards.map((card, i) => (
+              <FadeIn key={card.title} delay={i * 0.08}>
+                <motion.div className="glass rounded-2xl p-6 card-hover border border-white/10">
+                  <h3 className="text-white font-bold mb-2">{card.title}</h3>
+                  <p className="text-sm leading-relaxed text-white/85">{card.desc}</p>
+                </motion.div>
+              </FadeIn>
+            ))}
           </div>
         </div>
       </section>
