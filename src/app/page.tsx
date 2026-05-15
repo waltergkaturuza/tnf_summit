@@ -4,21 +4,15 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import Link from "next/link";
 import {
-  Calendar, MapPin, Users, Mic, Tag, Globe,
-  ArrowRight, ChevronDown, Star, TrendingUp, Cpu,
-  Leaf, CreditCard, GraduationCap, Factory, MessageSquare,
-  Rocket, Heart, Building, Zap, CheckCircle, ExternalLink,
+  Calendar, MapPin, Users,
+  ArrowRight, ChevronDown, Star, TrendingUp,
+  Rocket, CheckCircle, ExternalLink,
   Landmark, Handshake,
 } from "lucide-react";
 import CountdownTimer from "@/components/CountdownTimer";
 import HelloPageGallerySlider from "@/components/HelloPageGallerySlider";
 import { useLanguage } from "@/context/LanguageContext";
 import { summitInfo, themes, keyFacts, registrationFees } from "@/lib/data";
-
-const iconMap: Record<string, React.ElementType> = {
-  TrendingUp, Cpu, Leaf, CreditCard, GraduationCap, Factory, MessageSquare,
-  Rocket, Heart, Building, Zap, Star, Globe, Users, Calendar, MapPin, Mic, Tag,
-};
 
 function FadeIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef(null);
@@ -136,9 +130,6 @@ export default function HomePage() {
               className="w-full min-w-0 mx-auto lg:mx-0"
             >
               <HelloPageGallerySlider className="w-full" />
-              <p className="text-[10px] sm:text-xs uppercase tracking-[0.2em] text-theme-primary/90 text-center mt-3">
-                {t.home.heroGalleryCaption}
-              </p>
             </motion.div>
           </div>
         </div>
@@ -174,21 +165,17 @@ export default function HomePage() {
       </section>
 
       {/* ─── KEY STATS ─── */}
-      <section className="py-12 bg-[var(--bg-surface)] border-y border-white/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
-            {keyFacts.map((fact, i) => {
-              const Icon = iconMap[fact.icon] || Star;
-              return (
-                <FadeIn key={i} delay={i * 0.05}>
-                  <div className="text-center p-3">
-                    <Icon className="w-5 h-5 text-[#C9921A] mx-auto mb-2" />
-                    <div className="text-xl sm:text-2xl font-black gradient-text">{fact.value}</div>
-                    <div className="text-xs mt-1 leading-tight text-theme-primary">{t.home.keyFactLabels[i] ?? fact.label}</div>
-                  </div>
-                </FadeIn>
-              );
-            })}
+      <section className="key-stats-bar border-y py-4 sm:py-5">
+        <div className="max-w-7xl mx-auto px-3 sm:px-5 lg:px-6">
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-x-2 gap-y-2 sm:gap-x-3 lg:gap-x-4">
+            {keyFacts.map((fact, i) => (
+              <FadeIn key={i} delay={i * 0.05}>
+                <div className="text-center py-1.5 px-1 sm:py-2 sm:px-1.5">
+                  <div className="text-lg sm:text-xl font-black gradient-text leading-tight">{fact.value}</div>
+                  <div className="text-[10px] sm:text-xs mt-0.5 leading-snug text-theme-primary">{t.home.keyFactLabels[i] ?? fact.label}</div>
+                </div>
+              </FadeIn>
+            ))}
           </div>
         </div>
       </section>

@@ -19,12 +19,12 @@ function TimeBlock({ value, label }: TimeUnit) {
         initial={{ scale: 1.2, opacity: 0.5 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.3 }}
-        className="relative w-[5rem] h-[5rem] sm:w-24 sm:h-24 lg:w-28 lg:h-28 glass-gold rounded-xl flex items-center justify-center mb-1"
+        className="relative w-[5rem] h-[5rem] sm:w-24 sm:h-24 lg:w-28 lg:h-28 glass-countdown rounded-xl flex items-center justify-center mb-1"
       >
-        <div className="absolute inset-0 rounded-xl animated-border p-[1px]">
-          <div className="w-full h-full rounded-xl bg-[var(--bg-surface)] flex items-center justify-center px-1">
+        <div className="absolute inset-0 rounded-xl animated-border-countdown p-[1px]">
+          <div className="countdown-digit-inner w-full h-full rounded-xl flex items-center justify-center px-1">
             <span
-              className="text-3xl sm:text-4xl lg:text-5xl font-black leading-none gradient-text tabular-nums tracking-tight"
+              className="text-3xl sm:text-4xl lg:text-5xl font-black leading-none gradient-text-countdown tabular-nums tracking-tight"
               suppressHydrationWarning
             >
               {display}
@@ -73,17 +73,21 @@ export default function CountdownTimer() {
           {["Days", "Hours", "Minutes", "Seconds"].map((label, i) => (
             <div key={label} className="flex items-center gap-2 sm:gap-4">
               <div className="flex flex-col items-center">
-                <div className="w-[5rem] h-[5rem] sm:w-24 sm:h-24 lg:w-28 lg:h-28 glass-gold rounded-xl flex items-center justify-center mb-1">
-                  <span className="text-3xl sm:text-4xl lg:text-5xl font-black leading-none gradient-text tabular-nums tracking-tight">
-                    --
-                  </span>
+                <div className="relative w-[5rem] h-[5rem] sm:w-24 sm:h-24 lg:w-28 lg:h-28 glass-countdown rounded-xl flex items-center justify-center mb-1">
+                  <div className="absolute inset-0 rounded-xl animated-border-countdown p-[1px]">
+                    <div className="countdown-digit-inner w-full h-full rounded-xl flex items-center justify-center px-1">
+                      <span className="text-3xl sm:text-4xl lg:text-5xl font-black leading-none gradient-text-countdown tabular-nums tracking-tight">
+                        --
+                      </span>
+                    </div>
+                  </div>
                 </div>
                 <span className="text-[10px] sm:text-xs uppercase tracking-widest font-medium text-theme-primary">
                   {label}
                 </span>
               </div>
               {i < 3 && (
-                <span className="text-[#C9921A] text-xl sm:text-2xl font-bold mb-4 opacity-60">:</span>
+                <span className="text-[#33A852] text-xl sm:text-2xl font-bold mb-4 opacity-70">:</span>
               )}
             </div>
           ))}
@@ -105,7 +109,7 @@ export default function CountdownTimer() {
           <div key={unit.label} className="flex items-center gap-2 sm:gap-4">
             <TimeBlock value={unit.value} label={unit.label} />
             {i < units.length - 1 && (
-              <span className="text-[#C9921A] text-xl sm:text-2xl font-bold mb-4 opacity-60">:</span>
+              <span className="text-[#33A852] text-xl sm:text-2xl font-bold mb-4 opacity-70">:</span>
             )}
           </div>
         ))}

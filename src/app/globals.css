@@ -96,6 +96,64 @@ body {
   box-shadow: 0 0 0 1px rgba(251, 188, 5, 0.08);
 }
 
+/* Countdown digit cells — TNF logo green (same as hero / pattern accent) */
+.glass-countdown {
+  background: linear-gradient(145deg, rgba(51, 168, 82, 0.2) 0%, rgba(51, 168, 82, 0.06) 55%, rgba(26, 53, 88, 0.4) 100%);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(51, 168, 82, 0.42);
+  box-shadow: 0 0 0 1px rgba(51, 168, 82, 0.1);
+}
+
+html.light .glass-countdown {
+  background: linear-gradient(145deg, rgba(51, 168, 82, 0.16) 0%, rgba(51, 168, 82, 0.05) 100%);
+  border: 1px solid rgba(51, 168, 82, 0.35);
+  box-shadow: 0 0 0 1px rgba(51, 168, 82, 0.08);
+}
+
+.countdown-digit-inner {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--bg-surface) 88%, #33A852 12%) 0%, var(--bg-surface) 100%) !important;
+}
+
+html.light .countdown-digit-inner {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--bg-surface) 92%, #33A852 8%) 0%, var(--bg-surface) 100%) !important;
+}
+
+.gradient-text-countdown {
+  background: linear-gradient(135deg, #86efac 0%, #4ade80 35%, #33A852 70%, #22c55e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+html.light .gradient-text-countdown {
+  background: linear-gradient(135deg, #166534 0%, #15803d 45%, #166534 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.animated-border-countdown {
+  background: linear-gradient(270deg, #33a852, #4ade80, #22c55e, #2d8f47, #33a852);
+  background-size: 300% 300%;
+  animation: border-flow 5s ease infinite;
+}
+
+/* Home key stats strip — logo green wash over navy */
+.key-stats-bar {
+  background: linear-gradient(
+    180deg,
+    rgba(51, 168, 82, 0.28) 0%,
+    rgba(21, 45, 75, 0.92) 38%,
+    #152d4b 100%
+  );
+  border-color: rgba(51, 168, 82, 0.28);
+}
+
+html.light .key-stats-bar {
+  background: linear-gradient(180deg, rgba(51, 168, 82, 0.18) 0%, #e8eef4 100%);
+  border-color: rgba(51, 168, 82, 0.22);
+}
+
 /* Light mode section overrides */
 html.light .hero-bg {
   background:

@@ -22,7 +22,6 @@ const en: FullTranslations = {
     registerNow: "Register Now",
     viewProgramme: "View Programme",
     organisedBy: "Organised by the Tripartite Negotiating Forum (TNF)",
-    heroGalleryCaption: "Summit destination — photo highlights",
     explore: "Explore",
     keyFactLabels: ["Expected Delegates", "Days", "Plenary Days", "Sessions", "Spotlight Themes", "Concurrent Rooms", "African Nations Represented", "Victoria Falls, Zimbabwe"],
     aboutHeading: "About the Summit",
