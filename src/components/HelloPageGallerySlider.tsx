@@ -51,18 +51,31 @@ function slideSrc(path: string): string {
   return encodeURI(path);
 }
 
+export type GallerySlide = {
+  path: string;
+  alt: string;
+  title?: string;
+  subtitle?: string;
+};
+
 type HelloPageGallerySliderProps = {
   className?: string;
   /** `card` = right-column carousel; `background` = full-bleed sliding section backdrop */
   variant?: "card" | "background";
+  /** Custom slides; defaults to hello-page Victoria Falls gallery */
+  slides?: readonly GallerySlide[];
+  /** Accessible name for background carousel */
+  ariaLabel?: string;
 };
 
 export default function HelloPageGallerySlider({
   className = "",
   variant = "card",
+  slides = HELLO_PAGE_SLIDES,
+  ariaLabel = "Summit destination gallery background",
 }: HelloPageGallerySliderProps) {
   const [index, setIndex] = useState(0);
-  const len = HELLO_PAGE_SLIDES.length;
+  const len = slides.length;
   const isBackground = variant === "background";
 
   const go = useCallback(
@@ -77,7 +90,7 @@ export default function HelloPageGallerySlider({
     return () => window.clearInterval(id);
   }, [go]);
 
-  const slide = HELLO_PAGE_SLIDES[index];
+  const slide = slides[index];
 
   const imageLayer = (
     <AnimatePresence mode="wait" initial={false}>
@@ -142,7 +155,7 @@ export default function HelloPageGallerySlider({
           : "flex items-center justify-center gap-2 py-3 border-t border-white/10 bg-black/20"
       }
     >
-      {HELLO_PAGE_SLIDES.map((_, i) => (
+      {slides.map((_, i) => (
         <button
           key={i}
           type="button"
@@ -161,7 +174,7 @@ export default function HelloPageGallerySlider({
         className={`absolute inset-0 ${className}`}
         role="region"
         aria-roledescription="carousel"
-        aria-label="Summit destination gallery background"
+        aria-label={ariaLabel}
       >
         {imageLayer}
         {navButtons}

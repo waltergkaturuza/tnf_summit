@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import CountdownTimer from "@/components/CountdownTimer";
 import HelloPageGallerySlider from "@/components/HelloPageGallerySlider";
+import { WILDLIFE_SLIDES } from "@/lib/wildlifeSlides";
 import { useLanguage } from "@/context/LanguageContext";
 import { summitInfo, themes, keyFacts, registrationFees } from "@/lib/data";
 
@@ -470,15 +471,20 @@ export default function HomePage() {
       </section>
 
       {/* ─── VENUE ─── */}
-      <section className="py-20 bg-[var(--bg-alt)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="wallpaper-surface relative overflow-hidden py-20 lg:py-24">
+        <HelloPageGallerySlider
+          variant="background"
+          slides={WILDLIFE_SLIDES}
+          ariaLabel="Elephant Hills Resort and Victoria Falls venue gallery"
+        />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn>
             <div className="text-center mb-14">
               <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">{t.home.venueHeading}</span>
               <h2 className="text-4xl font-black text-white mt-3">
                 {t.home.venueTitle}
               </h2>
-              <p className="mt-4 max-w-2xl mx-auto text-theme-primary">
+              <p className="mt-4 max-w-2xl mx-auto text-white/90">
                 {t.home.venueIntro}
               </p>
             </div>
@@ -489,11 +495,11 @@ export default function HomePage() {
               const card = t.home.venueCards[i];
               return (
                 <FadeIn key={i} delay={i * 0.08}>
-                  <div className="glass rounded-2xl p-6 card-hover border border-white/5">
+                  <motion.div className="glass rounded-2xl p-6 card-hover border border-white/10">
                     <div className="text-3xl mb-4">{emoji}</div>
                     <h3 className="text-white font-bold mb-2">{card.title}</h3>
-                    <p className="text-sm leading-relaxed text-theme-primary">{card.desc}</p>
-                  </div>
+                    <p className="text-sm leading-relaxed text-white/85">{card.desc}</p>
+                  </motion.div>
                 </FadeIn>
               );
             })}
