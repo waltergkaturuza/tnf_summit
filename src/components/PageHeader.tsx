@@ -10,7 +10,7 @@ type PageHeaderProps = {
 /** Inner-page banner (Chilmund-style): centered title + subtitle on illuminated TNF green. */
 export default function PageHeader({ title, subtitle }: PageHeaderProps) {
   return (
-    <section className="page-header-green relative overflow-hidden pt-20">
+    <section className="page-header-green relative overflow-hidden mt-16">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

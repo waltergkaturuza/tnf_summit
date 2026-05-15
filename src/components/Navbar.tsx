@@ -77,6 +77,9 @@ export default function Navbar() {
   }, []);
 
   const isDark = !mounted ? true : theme !== "light";
+  const isHome = pathname === "/";
+  /** Home hero only: transparent nav at top. Inner pages keep a solid bar so green headers do not bleed through. */
+  const solidNav = scrolled || !isHome;
 
   const themeOptions = [
     { value: "dark", label: "Dark", icon: Moon },
@@ -84,10 +87,10 @@ export default function Navbar() {
     { value: "system", label: "System", icon: Monitor },
   ];
 
-  const navbarBg = scrolled
+  const navbarBg = solidNav
     ? isDark
-      ? "bg-[var(--bg-primary)]/95 backdrop-blur-xl shadow-2xl border-b border-white/5"
-      : "bg-white/95 backdrop-blur-xl shadow-lg border-b border-black/5"
+      ? "bg-[var(--bg-primary)]/98 backdrop-blur-xl shadow-lg border-b border-white/10"
+      : "bg-white/98 backdrop-blur-xl shadow-lg border-b border-black/8"
     : "bg-transparent";
 
   return (
