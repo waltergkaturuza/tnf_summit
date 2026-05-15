@@ -180,6 +180,26 @@ html.light .page-header-green p {
   color: #fff !important;
 }
 
+/* Photo wallpaper + scrim: keep light text in dark and light mode */
+html.light .wallpaper-surface .text-white,
+html.light .wallpaper-surface .text-slate-100,
+html.light .wallpaper-surface .text-slate-200,
+html.light .wallpaper-surface .text-slate-300,
+html.light .wallpaper-surface .text-slate-400,
+html.light .wallpaper-surface .text-slate-500,
+html.light .wallpaper-surface .text-theme-primary {
+  color: rgba(255, 255, 255, 0.92) !important;
+}
+html.light .wallpaper-surface h2,
+html.light .wallpaper-surface h3,
+html.light .wallpaper-surface .font-bold.text-white {
+  color: #ffffff !important;
+}
+html.light .wallpaper-surface .glass {
+  background: rgba(10, 22, 40, 0.55) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+}
+
 /* Light mode section overrides */
 html.light .hero-bg {
   background:

@@ -379,7 +379,20 @@ export default function RegistrationPage() {
     <div className="min-h-screen bg-[var(--bg-primary)]">
       <PageHeader title={t.registration.heroTitle} subtitle={t.registration.heroSub} />
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+      <section className="wallpaper-surface relative overflow-hidden">
+        <div className="absolute inset-0" aria-hidden>
+          <Image
+            src="/about_wallpaper.webp"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            quality={82}
+            className="object-cover object-center"
+          />
+        </div>
+        <div aria-hidden className="absolute inset-0 bg-[#0A1628]/85" />
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-20">
         <div className="mb-6 rounded-2xl border border-[#C9921A]/30 bg-[#C9921A]/10 px-5 py-4">
           <p className="text-sm text-slate-200">
             Already registered and have a reference? If payment failed earlier, use{" "}
@@ -447,19 +460,7 @@ export default function RegistrationPage() {
 
         {/* Form */}
         <form onSubmit={handleSubmit}>
-          <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-xl">
-            <div className="absolute inset-0" aria-hidden>
-              <Image
-                src="/about_wallpaper.webp"
-                alt=""
-                fill
-                sizes="(max-width: 768px) 100vw, 896px"
-                quality={82}
-                className="object-cover object-center"
-              />
-            </div>
-            <div aria-hidden className="absolute inset-0 bg-[#0A1628]/90" />
-            <div className="relative z-10 p-6 sm:p-8">
+          <div className="glass rounded-2xl p-6 sm:p-8 border border-white/10 shadow-xl">
             <AnimatePresence mode="wait">
               <motion.div key={step} initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.25 }}>
 
@@ -995,16 +996,16 @@ export default function RegistrationPage() {
                     : <>Submit Registration <CheckCircle className="w-4 h-4" /></>}
               </button>
             </div>
-            </div>
           </div>
         </form>
 
         {/* Help */}
         <div className="text-center mt-6 space-y-1">
-          <p className="text-xs text-theme-primary">Need help? <a href="mailto:info@tnfzim.com" className="text-[#C9921A] hover:text-[#F5B730]">info@tnfzim.com</a> · <a href="tel:+2632427830" className="text-[#C9921A] hover:text-[#F5B730]">+263 242 783 030</a></p>
-          <p className="text-xs text-theme-primary">Group registrations (5+ delegates): contact the Secretariat for rates.</p>
+          <p className="text-xs text-white/80">Need help? <a href="mailto:info@tnfzim.com" className="text-[#C9921A] hover:text-[#F5B730]">info@tnfzim.com</a> · <a href="tel:+2632427830" className="text-[#C9921A] hover:text-[#F5B730]">+263 242 783 030</a></p>
+          <p className="text-xs text-white/80">Group registrations (5+ delegates): contact the Secretariat for rates.</p>
         </div>
-      </div>
+        </div>
+      </section>
     </div>
   );
 }

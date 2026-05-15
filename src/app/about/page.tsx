@@ -33,7 +33,7 @@ export default function AboutPage() {
     <div className="min-h-screen bg-[var(--bg-primary)]">
       <PageHeader title={t.about.heroTitle} subtitle={t.about.heroSub} />
       {/* What is the Summit — wallpaper background */}
-      <section className="relative py-20 overflow-hidden">
+      <section className="wallpaper-surface relative py-20 overflow-hidden">
         <div className="absolute inset-0" aria-hidden>
           <Image
             src="/about_wallpaper.webp"
