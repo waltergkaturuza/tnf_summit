@@ -31,9 +31,15 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-[var(--bg-primary)]">
       <PageHeader title={t.about.heroTitle} subtitle={t.about.heroSub} />
-      {/* Mission */}
-      <section className="py-20 section-gradient">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* What is the Summit — wallpaper background */}
+      <section className="relative py-20 overflow-hidden">
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url(/about_wallpaper.png)" }}
+        />
+        <div aria-hidden className="absolute inset-0 bg-[#0A1628]/82" />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <FadeIn>
               <div>
