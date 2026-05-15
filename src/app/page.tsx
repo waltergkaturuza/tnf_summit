@@ -47,103 +47,121 @@ export default function HomePage() {
         <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full blur-3xl animate-pulse" style={{ background: "rgba(251, 188, 5, 0.16)", animationDelay: "1s" }} />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-3xl" style={{ background: "rgba(234, 67, 53, 0.06)" }} />
 
-        <div className="relative z-10 text-center max-w-5xl mx-auto px-4 pt-24 pb-16">
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 glass-gold rounded-full px-4 py-2 mb-6"
-          >
-            <Star className="w-4 h-4 text-[#F5B730]" />
-            <span className="text-[#F5B730] text-sm font-semibold">{t.home.edition}</span>
-          </motion.div>
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-6 lg:pb-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 xl:gap-16 items-center">
+            {/* Left: headline, meta, CTAs (Chilmund-style column) */}
+            <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
+              {/* Badge */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+                className="inline-flex items-center gap-2 glass-gold rounded-full px-4 py-2 mb-6"
+              >
+                <Star className="w-4 h-4 text-[#F5B730]" />
+                <span className="text-[#F5B730] text-sm font-semibold">{t.home.edition}</span>
+              </motion.div>
 
-          {/* Title */}
-          <motion.h1
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-4xl sm:text-5xl font-black leading-tight mb-4"
-          >
-            <span className="text-white">{t.home.title} </span>
-            <span className="shimmer">Global Summit</span>
-          </motion.h1>
+              {/* Title */}
+              <motion.h1
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.1 }}
+                className="text-4xl sm:text-5xl font-black leading-tight mb-4"
+              >
+                <span className="text-white">{t.home.title} </span>
+                <span className="shimmer">Global Summit</span>
+              </motion.h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-lg sm:text-2xl font-light mb-2 text-theme-primary"
-          >
-            {t.home.subtitle1}
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="text-lg sm:text-2xl text-[#C9921A] font-semibold mb-8"
-          >
-            {t.home.subtitle2}
-          </motion.p>
+              <motion.p
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.2 }}
+                className="text-lg sm:text-2xl font-light mb-2 text-theme-primary max-w-xl lg:max-w-none"
+              >
+                {t.home.subtitle1}
+              </motion.p>
+              <motion.p
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.3 }}
+                className="text-lg sm:text-2xl text-[#C9921A] font-semibold mb-8 max-w-xl lg:max-w-none"
+              >
+                {t.home.subtitle2}
+              </motion.p>
 
-          {/* Date & Location */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 mb-10"
-          >
-            <div className="flex items-center gap-2 glass rounded-full px-4 py-2">
-              <Calendar className="w-4 h-4 text-[#C9921A]" />
-              <span className="text-white text-sm font-medium">{t.home.date}</span>
+              {/* Date & Location */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="flex flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-4 mb-10"
+              >
+                <div className="flex items-center gap-2 glass rounded-full px-4 py-2">
+                  <Calendar className="w-4 h-4 text-[#C9921A]" />
+                  <span className="text-white text-sm font-medium">{t.home.date}</span>
+                </div>
+                <div className="flex items-center gap-2 glass rounded-full px-4 py-2">
+                  <MapPin className="w-4 h-4 text-[#C9921A]" />
+                  <span className="text-white text-sm font-medium">{t.home.venue}</span>
+                </div>
+                <div className="flex items-center gap-2 glass rounded-full px-4 py-2">
+                  <Users className="w-4 h-4 text-[#C9921A]" />
+                  <span className="text-white text-sm font-medium">{t.home.delegates}</span>
+                </div>
+              </motion.div>
+
+              {/* CTAs */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+                className="flex flex-wrap items-center justify-center lg:justify-start gap-4"
+              >
+                <Link href="/registration" className="btn-gold px-8 py-4 rounded-xl text-base font-bold flex items-center gap-2">
+                  {t.home.registerNow}
+                  <ArrowRight className="w-5 h-5" />
+                </Link>
+                <Link href="/program" className="btn-outline-gold px-8 py-4 rounded-xl text-base font-semibold flex items-center gap-2">
+                  {t.home.viewProgramme}
+                  <ArrowRight className="w-5 h-5" />
+                </Link>
+              </motion.div>
+
+              {/* Organised by */}
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8 }}
+                className="text-xs mt-8 text-theme-primary max-w-md"
+              >
+                {t.home.organisedBy}
+              </motion.p>
             </div>
-            <div className="flex items-center gap-2 glass rounded-full px-4 py-2">
-              <MapPin className="w-4 h-4 text-[#C9921A]" />
-              <span className="text-white text-sm font-medium">{t.home.venue}</span>
-            </div>
-            <div className="flex items-center gap-2 glass rounded-full px-4 py-2">
-              <Users className="w-4 h-4 text-[#C9921A]" />
-              <span className="text-white text-sm font-medium">{t.home.delegates}</span>
-            </div>
-          </motion.div>
 
-          {/* CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="flex flex-wrap items-center justify-center gap-4"
-          >
-            <Link href="/registration" className="btn-gold px-8 py-4 rounded-xl text-base font-bold flex items-center gap-2">
-              {t.home.registerNow}
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-            <Link href="/program" className="btn-outline-gold px-8 py-4 rounded-xl text-base font-semibold flex items-center gap-2">
-              {t.home.viewProgramme}
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-          </motion.div>
-
-          {/* Organised by */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-            className="text-xs mt-8 text-theme-primary"
-          >
-            {t.home.organisedBy}
-          </motion.p>
+            {/* Right: image slider sharing the row */}
+            <motion.div
+              initial={{ opacity: 0, x: 24 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.75, delay: 0.2 }}
+              className="w-full max-w-lg mx-auto lg:max-w-none"
+            >
+              <HelloPageGallerySlider />
+              <p className="text-[10px] sm:text-xs uppercase tracking-[0.2em] text-theme-primary/90 text-center mt-3">
+                {t.home.heroGalleryCaption}
+              </p>
+            </motion.div>
+          </div>
         </div>
 
-        {/* Countdown */}
+        {/* Countdown — full width below the two columns */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="relative z-10 w-full max-w-3xl mx-auto px-4 pb-20"
+          className="relative z-10 w-full max-w-4xl mx-auto px-4 pb-24 lg:pb-28"
         >
-          <div className="glass rounded-3xl p-8 sm:p-10">
+          <div className="glass rounded-3xl p-6 sm:p-8 lg:p-10">
             <CountdownTimer />
           </div>
         </motion.div>

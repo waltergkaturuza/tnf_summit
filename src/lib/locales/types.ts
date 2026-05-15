@@ -25,6 +25,8 @@ export type HomeTranslations = {
   registerNow: string;
   viewProgramme: string;
   organisedBy: string;
+  /** Small caption under hero image slider (e.g. Chilmund-style photo strip label) */
+  heroGalleryCaption: string;
   explore: string;
   keyFactLabels: string[];
   aboutHeading: string;
