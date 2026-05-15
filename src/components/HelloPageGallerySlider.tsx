@@ -76,7 +76,7 @@ export default function HelloPageGallerySlider({ className = "" }: { className?:
       aria-roledescription="carousel"
       aria-label="Summit destination gallery"
     >
-      <div className="relative aspect-[4/3] sm:aspect-[16/10] w-full min-h-[220px] sm:min-h-0">
+      <div className="relative aspect-[4/3] sm:aspect-[16/10] w-full min-h-[280px] sm:min-h-[300px] lg:min-h-[320px]">
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={slide.path}
@@ -108,18 +108,18 @@ export default function HelloPageGallerySlider({ className = "" }: { className?:
         <button
           type="button"
           onClick={() => go(-1)}
-          className="absolute left-2 top-1/2 -translate-y-1/2 z-20 rounded-full bg-black/45 hover:bg-black/60 text-white p-2 border border-white/15 transition-colors"
+          className="absolute left-2 top-1/2 -translate-y-1/2 z-20 rounded-full bg-black/45 hover:bg-black/60 text-white p-2.5 border border-white/15 transition-colors"
           aria-label="Previous slide"
         >
-          <ChevronLeft className="w-5 h-5" />
+          <ChevronLeft className="w-6 h-6" />
         </button>
         <button
           type="button"
           onClick={() => go(1)}
-          className="absolute right-2 top-1/2 -translate-y-1/2 z-20 rounded-full bg-black/45 hover:bg-black/60 text-white p-2 border border-white/15 transition-colors"
+          className="absolute right-2 top-1/2 -translate-y-1/2 z-20 rounded-full bg-black/45 hover:bg-black/60 text-white p-2.5 border border-white/15 transition-colors"
           aria-label="Next slide"
         >
-          <ChevronRight className="w-5 h-5" />
+          <ChevronRight className="w-6 h-6" />
         </button>
       </div>
 

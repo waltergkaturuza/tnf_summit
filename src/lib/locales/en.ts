@@ -12,7 +12,7 @@ const en: FullTranslations = {
   misc: { earlyBird: "Early bird closes 30 June 2026", visitSite: "Visit TNF Secretariat website" },
 
   home: {
-    edition: "Inaugural Edition",
+    edition: "2026",
     title: "Zimbabwe TNF",
     subtitle1: "on Inclusive Growth, Decent Work, Beneficiation,",
     subtitle2: "and Investment Promotion",

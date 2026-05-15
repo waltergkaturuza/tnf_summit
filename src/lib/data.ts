@@ -1,7 +1,7 @@
 export const summitInfo = {
   name: "Zimbabwe TNF Global Summit",
   subtitle: "on Inclusive Growth, Decent Work, Beneficiation, and Investment Promotion",
-  edition: "Inaugural Edition",
+  edition: "2026",
   dates: "21–25 September 2026",
   startDate: new Date("2026-09-21T00:00:00"),
   venue: "Elephant Hills Resort",

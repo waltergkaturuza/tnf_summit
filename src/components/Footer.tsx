@@ -138,7 +138,7 @@ export default function Footer() {
                   />
                 </div>
               </Link>
-              <p className="text-[#C9921A] text-xs font-semibold mb-2">Global Summit 2026. Inaugural Edition</p>
+              <p className="text-[#C9921A] text-xs font-semibold mb-2">Global Summit 2026</p>
               <p className="text-xs sm:text-sm leading-snug text-theme-primary">
                 Africa&apos;s premier tripartite-led global convening platform on Inclusive Growth, Decent Work and Investment Promotion. Anchored in UN SDG 8, AU Agenda 2063, AfCFTA, and Zimbabwe&apos;s NDS2.
               </p>
