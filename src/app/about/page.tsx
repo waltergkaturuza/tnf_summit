@@ -8,6 +8,7 @@ import {
   Globe, TrendingUp, Mic, Building, Rocket, Heart,
   Star, Landmark, Handshake
 } from "lucide-react";
+import PageHeader from "@/components/PageHeader";
 import { useLanguage } from "@/context/LanguageContext";
 import { summitInfo, themes, whyAttend } from "@/lib/data";
 
@@ -28,24 +29,8 @@ function FadeIn({ children, delay = 0, className = "" }: { children: React.React
 export default function AboutPage() {
   const { t } = useLanguage();
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] pt-20">
-      {/* Header */}
-      <section className="py-20 hero-bg pattern-overlay relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[var(--bg-primary)]" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
-            <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">{t.about.heroBadge}</span>
-            <h1 className="text-4xl sm:text-5xl font-black text-white mt-3 mb-4">
-              {t.about.heroTitle.split(" ").slice(0, -2).join(" ")}{" "}
-              <span className="gradient-text">{t.about.heroTitle.split(" ").slice(-2).join(" ")}</span>
-            </h1>
-            <p className="max-w-2xl mx-auto text-lg text-theme-primary">
-              {t.about.heroSub}
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
+    <div className="min-h-screen bg-[var(--bg-primary)]">
+      <PageHeader title={t.about.heroTitle} subtitle={t.about.heroSub} />
       {/* Mission */}
       <section className="py-20 section-gradient">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
