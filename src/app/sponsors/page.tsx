@@ -3,6 +3,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, Star, Globe, CheckCircle, Mail, TrendingUp } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import { useLanguage } from "@/context/LanguageContext";
@@ -622,10 +623,26 @@ export default function SponsorsPage() {
                                 className="flex items-center gap-2 glass rounded-lg px-3 py-2 hover:border-white/20 transition-colors border border-transparent"
                               >
                                 <div
-                                  className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black"
-                                  style={{ background: `${tier.color}20`, color: tier.color }}
+                                  className={`rounded-lg flex items-center justify-center shrink-0 overflow-hidden ${
+                                    "logo" in s && s.logo ? "w-12 h-12 bg-white p-1" : "w-8 h-8 text-xs font-black"
+                                  }`}
+                                  style={
+                                    "logo" in s && s.logo
+                                      ? undefined
+                                      : { background: `${tier.color}20`, color: tier.color }
+                                  }
                                 >
-                                  {s.name.slice(0, 2)}
+                                  {"logo" in s && s.logo ? (
+                                    <Image
+                                      src={s.logo}
+                                      alt={s.fullName}
+                                      width={48}
+                                      height={48}
+                                      className="w-full h-full object-contain"
+                                    />
+                                  ) : (
+                                    s.name.slice(0, 2)
+                                  )}
                                 </div>
                                 <div>
                                   <div className="text-white text-xs font-bold">{s.name}</div>

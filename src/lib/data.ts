@@ -1730,23 +1730,25 @@ export function parseUsdFromPriceBand(priceBand: string): number | null {
   return Number.isFinite(n) ? n : null;
 }
 
+/** Confirmed sponsor listings only; restore other partners when confirmed. */
 export const sponsors = {
-  platinum: [
-    { name: "ZIDA", fullName: "Zimbabwe Investment and Development Agency", description: "Host Nation Investment Partner", website: "https://zida.gov.zw" },
-    { name: "ILO", fullName: "International Labour Organization", description: "International Partner", website: "https://ilo.org" },
-  ],
-  gold: [
-    { name: "AU Commission", fullName: "African Union Commission", description: "Continental Partner", website: "https://au.int" },
-    { name: "AfCFTA", fullName: "African Continental Free Trade Area Secretariat", description: "Trade Partner", website: "https://afcfta.au.int" },
-  ],
-  silver: [
-    { name: "ZCTU", fullName: "Zimbabwe Congress of Trade Unions", description: "Workers' Partner", website: "#" },
-    { name: "CZI", fullName: "Confederation of Zimbabwe Industries", description: "Employers' Partner", website: "#" },
-    { name: "AICESIS", fullName: "International Association of Economic and Social Councils", description: "ESC Network Partner", website: "#" },
-  ],
+  platinum: [],
+  gold: [],
+  silver: [],
   partners: [
-    { name: "SADC", fullName: "Southern African Development Community", description: "Regional Partner", website: "https://sadc.int" },
-    { name: "Elephant Hills", fullName: "Elephant Hills Resort", description: "Official Venue Partner", website: "#" },
+    {
+      name: "AICESIS",
+      fullName: "International Association of Economic and Social Councils",
+      description: "ESC Network Partner",
+      website: "#",
+    },
+    {
+      name: "UCESA",
+      fullName: "Union of Economic and Social Councils of Africa",
+      description: "ESC Network Partner",
+      website: "#",
+      logo: "/partners/ucesa.png",
+    },
   ],
 };
 

@@ -3,6 +3,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Calendar, MapPin, Users,
   ArrowRight, ChevronDown, Star, TrendingUp,
@@ -13,7 +14,7 @@ import CountdownTimer from "@/components/CountdownTimer";
 import HelloPageGallerySlider from "@/components/HelloPageGallerySlider";
 import { WILDLIFE_SLIDES } from "@/lib/wildlifeSlides";
 import { useLanguage } from "@/context/LanguageContext";
-import { summitInfo, themes, keyFacts, registrationFees } from "@/lib/data";
+import { summitInfo, themes, keyFacts, registrationFees, sponsors } from "@/lib/data";
 
 function FadeIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef(null);
@@ -368,7 +369,6 @@ export default function HomePage() {
                     <div key={fee.category} className="glass rounded-xl p-3 text-center">
                       <div className="text-[#F5B730] text-xl font-black">${fee.earlyBird}</div>
                       <div className="text-xs mt-1 leading-tight text-theme-primary">{fee.category}</div>
-                      <div className="text-xs line-through text-theme-primary">${fee.standard}</div>
                     </div>
                   ))}
                 </div>
@@ -400,9 +400,24 @@ export default function HomePage() {
 
           <FadeIn delay={0.1}>
             <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10">
-              {["TNF Secretariat", "ILO", "ZIDA", "AU Commission", "AfCFTA Secretariat", "ZCTU", "CZI", "AICESIS"].map((partner) => (
-                <div key={partner} className="glass px-6 py-3 rounded-xl text-sm font-medium hover:text-white hover:border-white/20 transition-all border border-transparent card-hover text-theme-primary">
-                  {partner}
+              {sponsors.partners.map((partner) => (
+                <div
+                  key={partner.name}
+                  className="glass px-6 py-3 rounded-xl hover:border-white/20 transition-all border border-transparent card-hover flex items-center justify-center min-h-[3.25rem]"
+                >
+                  {"logo" in partner && partner.logo ? (
+                    <div className="bg-white rounded-lg px-3 py-1.5">
+                      <Image
+                        src={partner.logo}
+                        alt={partner.fullName}
+                        width={140}
+                        height={56}
+                        className="h-10 sm:h-12 w-auto object-contain"
+                      />
+                    </div>
+                  ) : (
+                    <span className="text-sm font-medium text-theme-primary">{partner.name}</span>
+                  )}
                 </div>
               ))}
             </div>
