@@ -32,7 +32,6 @@ import {
   summitWidePartnershipIntro,
   getThemeSpotlightSponsorshipDeck,
 } from "@/lib/data";
-import { fetchPublicSponsorLogos, type MediaFile } from "@/lib/storage";
 
 function FadeIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef(null);
@@ -119,15 +118,14 @@ const tiers = [
 ];
 
 const whySponsor = [
-  { icon: "👥", value: "1,500+", label: "Senior Delegates", desc: "Ministers, investors, DFI leaders, social partners" },
-  { icon: "🌍", value: "30+", label: "Countries Represented", desc: "Pan-African and global delegate base" },
-  { icon: "💼", value: "USD Billions", label: "Investment Discussed", desc: "Deal rooms, pipelines and LOI signings" },
-  { icon: "📺", value: "Hybrid", label: "Media Reach", desc: "Live streaming and media coverage" },
+  { value: "1,500+", label: "Senior Delegates", desc: "Ministers, investors, DFI leaders, social partners" },
+  { value: "30+", label: "Countries Represented", desc: "Pan-African and global delegate base" },
+  { value: "USD Billions", label: "Investment Discussed", desc: "Deal rooms, pipelines and LOI signings" },
+  { value: "Hybrid", label: "Media Reach", desc: "Live streaming and media coverage" },
 ];
 
 export default function SponsorsPage() {
   const { t } = useLanguage();
-  const [logos, setLogos] = useState<MediaFile[]>([]);
   const [sponsorSelectId, setSponsorSelectId] = useState(themeSponsorshipOffers[0]?.themeId ?? "A");
 
   const welcomeSelected = isWelcomeCocktailSponsorshipId(sponsorSelectId);
@@ -202,10 +200,6 @@ export default function SponsorsPage() {
   };
 
   useEffect(() => {
-    fetchPublicSponsorLogos().then(setLogos).catch(() => {});
-  }, []);
-
-  useEffect(() => {
     const applyHash = () => {
       const raw = window.location.hash.replace(/^#/, "").trim().toLowerCase();
       const m = raw.match(/^theme-([a-z])$/i) ?? raw.match(/^spotlight-([a-z])$/i);
@@ -226,38 +220,45 @@ export default function SponsorsPage() {
     <div className="min-h-screen bg-[var(--bg-primary)]">
       <PageHeader title={t.sponsors.heroTitle} subtitle={t.sponsors.heroSub} />
 
-      {/* Partner Logos, from Supabase Storage */}
-      {logos.length > 0 && (
-        <section className="py-16 section-gradient">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <FadeIn>
-              <div className="text-center mb-10">
-                <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">{t.sponsors.heroBadge}</span>
-                <h2 className="text-2xl font-black text-white mt-3">{t.sponsors.partnersTitle}</h2>
-              </div>
-            </FadeIn>
-            <div className="flex flex-wrap justify-center items-center gap-8 sm:gap-12">
-              {logos.map((logo, i) => (
-                <FadeIn key={logo.id} delay={i * 0.05}>
-                  <div className="flex flex-col items-center gap-3 group">
-                    <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl glass flex items-center justify-center p-3 border border-white/5 hover:border-[#C9921A]/30 transition-colors">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={logo.publicUrl}
-                        alt={logo.altText}
-                        className="max-w-full max-h-full object-contain"
-                      />
-                    </div>
-                    {logo.caption && (
-                      <p className="text-xs text-center max-w-[120px] text-theme-primary">{logo.caption}</p>
+      {/* Confirmed official partners only */}
+      <section className="py-16 section-gradient">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeIn>
+            <div className="text-center mb-10">
+              <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">{t.sponsors.heroBadge}</span>
+              <h2 className="text-2xl font-black text-white mt-3">{t.sponsors.partnersTitle}</h2>
+            </div>
+          </FadeIn>
+          <div className="flex flex-wrap justify-center items-center gap-8 sm:gap-12">
+            {sponsors.partners.map((partner, i) => (
+              <FadeIn key={partner.name} delay={i * 0.05}>
+                <div className="flex flex-col items-center gap-3 group">
+                  <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl glass flex items-center justify-center p-3 border border-white/5 hover:border-[#C9921A]/30 transition-colors">
+                    {"logo" in partner && partner.logo ? (
+                      <div className="bg-white rounded-lg p-2 w-full h-full flex items-center justify-center">
+                        <Image
+                          src={partner.logo}
+                          alt={partner.fullName}
+                          width={112}
+                          height={112}
+                          className="max-w-full max-h-full object-contain"
+                        />
+                      </div>
+                    ) : (
+                      <span className="text-base sm:text-lg font-bold text-theme-primary text-center leading-tight">
+                        {partner.name}
+                      </span>
                     )}
                   </div>
-                </FadeIn>
-              ))}
-            </div>
+                  <p className="text-xs text-center max-w-[140px] text-theme-primary">
+                    {partner.name} — {partner.description}
+                  </p>
+                </div>
+              </FadeIn>
+            ))}
           </div>
-        </section>
-      )}
+        </div>
+      </section>
 
       {/* Why Sponsor */}
       <section className="py-16 section-gradient">
@@ -274,7 +275,6 @@ export default function SponsorsPage() {
             {whySponsor.map((item, i) => (
               <FadeIn key={i} delay={i * 0.1}>
                 <div className="glass rounded-2xl p-5 text-center card-hover">
-                  <div className="text-3xl mb-2">{item.icon}</div>
                   <div className="text-2xl font-black gradient-text">{item.value}</div>
                   <div className="text-white font-bold text-sm mt-1">{item.label}</div>
                   <div className="text-xs mt-1 text-theme-primary">{item.desc}</div>

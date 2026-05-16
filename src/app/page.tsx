@@ -6,15 +6,13 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   Calendar, MapPin, Users,
-  ArrowRight, ChevronDown, Star, TrendingUp,
-  Rocket, CheckCircle, ExternalLink,
-  Landmark, Handshake,
+  ArrowRight, ChevronDown, CheckCircle, ExternalLink,
 } from "lucide-react";
 import CountdownTimer from "@/components/CountdownTimer";
 import HelloPageGallerySlider from "@/components/HelloPageGallerySlider";
 import { WILDLIFE_SLIDES } from "@/lib/wildlifeSlides";
 import { useLanguage } from "@/context/LanguageContext";
-import { summitInfo, themes, keyFacts, registrationFees, sponsors } from "@/lib/data";
+import { summitInfo, themes, keyFacts, sponsors } from "@/lib/data";
 
 function FadeIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef(null);
@@ -211,13 +209,12 @@ export default function HomePage() {
           <FadeIn delay={0.25}>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4 lg:mt-6">
               {[
-                { icon: "🦁", title: t.home.aboutCard1Title, sub: t.home.aboutCard1Sub },
-                { icon: "📅", title: t.home.aboutCard2Title, sub: t.home.aboutCard2Sub },
-                { icon: "🌍", title: t.home.aboutCard3Title, sub: t.home.aboutCard3Sub },
-                { icon: "🏆", title: t.home.aboutCard4Title, sub: t.home.aboutCard4Sub },
+                { title: t.home.aboutCard1Title, sub: t.home.aboutCard1Sub },
+                { title: t.home.aboutCard2Title, sub: t.home.aboutCard2Sub },
+                { title: t.home.aboutCard3Title, sub: t.home.aboutCard3Sub },
+                { title: t.home.aboutCard4Title, sub: t.home.aboutCard4Sub },
               ].map((item) => (
                 <div key={item.title} className="glass rounded-2xl p-5 card-hover">
-                  <div className="text-3xl mb-3">{item.icon}</div>
                   <div className="text-white font-bold text-sm">{item.title}</div>
                   <div className="text-xs mt-1 text-white/85">{item.sub}</div>
                 </div>
@@ -241,24 +238,14 @@ export default function HomePage() {
           </FadeIn>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {t.home.whyAttendItems.map((item, i) => {
-              const colors = ["#3B82F6", "#C9921A", "#10B981", "#8B5CF6"];
-              const Icon = [Landmark, TrendingUp, Handshake, Rocket][i] || Star;
-              return (
+            {t.home.whyAttendItems.map((item, i) => (
                 <FadeIn key={i} delay={i * 0.1}>
                   <div className="glass rounded-2xl p-6 card-hover h-full">
-                    <div
-                      className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
-                      style={{ background: `${colors[i]}20`, border: `1px solid ${colors[i]}40` }}
-                    >
-                      <Icon className="w-6 h-6" style={{ color: colors[i] }} />
-                    </div>
                     <h3 className="text-white font-bold text-sm mb-3">{item.audience}</h3>
                     <p className="text-sm leading-relaxed text-theme-primary">{item.description}</p>
                   </div>
                 </FadeIn>
-              );
-            })}
+            ))}
           </div>
         </div>
       </section>
@@ -328,12 +315,10 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
             {t.home.weekDays.map((day, i) => {
-              const emojis = ["📋", "💼", "🌱", "🎓", "🦁", "🏡", "✈️"];
               const colors = ["#64748B", "#3B82F6", "#8B5CF6", "#10B981", "#F59E0B", "#EC4899", "#94A3B8"];
               return (
                 <FadeIn key={day.date} delay={i * 0.07}>
                   <div className="glass rounded-xl p-4 card-hover text-center border border-white/5 h-full">
-                    <div className="text-2xl mb-2">{emojis[i] ?? "📅"}</div>
                     <div className="text-xs mb-1 text-theme-primary">{day.date}</div>
                     <div className="text-sm font-bold mb-2" style={{ color: colors[i % colors.length] }}>{day.label}</div>
                     <p className="text-xs leading-relaxed text-theme-primary">{day.desc}</p>
@@ -362,16 +347,6 @@ export default function HomePage() {
                 <p className="text-lg mb-8 max-w-2xl mx-auto text-theme-primary">
                   {t.home.registerCtaSub}
                 </p>
-
-                {/* Fee preview */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-10 max-w-2xl mx-auto">
-                  {registrationFees.slice(0, 3).map((fee) => (
-                    <div key={fee.category} className="glass rounded-xl p-3 text-center">
-                      <div className="text-[#F5B730] text-xl font-black">${fee.earlyBird}</div>
-                      <div className="text-xs mt-1 leading-tight text-theme-primary">{fee.category}</div>
-                    </div>
-                  ))}
-                </div>
 
                 <div className="flex flex-wrap items-center justify-center gap-4">
                   <Link href="/registration" className="btn-gold px-10 py-4 rounded-xl text-base font-bold flex items-center gap-2">
@@ -465,7 +440,6 @@ export default function HomePage() {
             <FadeIn delay={0.2}>
               <div className="glass rounded-3xl p-8">
                 <div className="text-center mb-8">
-                  <div className="text-6xl mb-4">🚀</div>
                   <h3 className="text-2xl font-black text-white">{t.home.innovationTimelineTitle}</h3>
                 </div>
                 <div className="space-y-4">
