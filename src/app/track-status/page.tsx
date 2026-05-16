@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Search, FileText, User, ArrowRight, AlertCircle } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
+import WallpaperSurface from "@/components/WallpaperSurface";
 import { useLanguage } from "@/context/LanguageContext";
 import { getTrackStatus } from "@/lib/db";
 
@@ -36,7 +37,7 @@ export default function TrackStatusPage() {
   return (
     <div className="min-h-screen bg-[var(--bg-primary)]">
       <PageHeader title={t.trackStatus.heroTitle} subtitle={t.trackStatus.heroSub} />
-      <motion.div className="max-w-xl mx-auto px-4 pb-16 pt-4">
+      <WallpaperSurface contentClassName="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-20">
         <motion.form initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }} onSubmit={handleSubmit} className="space-y-4">
           <div className="flex gap-2">
             <div className="relative flex-1">
@@ -90,7 +91,7 @@ export default function TrackStatusPage() {
           </motion.div>
         )}
 
-        <p className="text-center text-slate-500 text-sm mt-8">
+        <p className="text-center text-white/80 text-sm mt-8">
           {t.trackStatus.lostIdContact} <a href="mailto:info@tnfzim.com" className="text-[#C9921A] hover:underline">info@tnfzim.com</a> with your name and email.
         </p>
         <div className="text-center mt-6">
@@ -98,7 +99,7 @@ export default function TrackStatusPage() {
             {t.trackStatus.registerLink} <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
-      </motion.div>
+      </WallpaperSurface>
     </div>
   );
 }
