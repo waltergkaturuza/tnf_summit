@@ -230,16 +230,17 @@ export default function Footer() {
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-9 lg:py-10">
         <div className="flex flex-col gap-8 md:flex-row md:flex-nowrap md:items-start md:gap-x-5 lg:gap-x-6">
           <div className="w-[16rem] max-w-full min-w-0 shrink-0">
-            <Link href="/" className="flex items-center gap-3 mb-1.5 group w-fit max-w-full">
-                <div className="relative h-10 w-full max-w-[14rem]">
-                  <Image
-                    src="/tnf-logo.png"
-                    alt="Tripartite Negotiating Forum"
-                    fill
-                    className="object-contain object-left"
-                  />
-                </div>
-              </Link>
+            <Link href="/" className="block mb-1.5 group max-w-full">
+              <div className="relative h-11 w-[14rem] max-w-full">
+                <Image
+                  src="/tnf-logo.png"
+                  alt="Tripartite Negotiating Forum"
+                  fill
+                  sizes="(max-width: 16rem) 100vw, 14rem"
+                  className="object-contain object-left"
+                />
+              </div>
+            </Link>
               <p className="text-[#C9921A] text-sm font-semibold mb-2">Global Summit 2026</p>
               <p className="w-full text-sm leading-relaxed text-pretty text-theme-primary">
                 Africa&apos;s premier tripartite-led global convening platform on Inclusive Growth, Decent Work and Investment Promotion. Anchored in UN SDG 8, AU Agenda 2063, AfCFTA, and Zimbabwe&apos;s NDS2.
