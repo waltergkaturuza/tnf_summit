@@ -48,6 +48,63 @@ function footerAddressLines(address: string): string[] {
   return address.split(",").map((p) => p.trim()).filter(Boolean);
 }
 
+function FooterContact() {
+  const { t } = useLanguage();
+  return (
+    <div className="w-[12rem] max-w-full min-w-0 shrink-0">
+      <h4 className="text-white font-semibold text-sm mb-2.5">{t.footer.contactCol}</h4>
+      <div className="space-y-2.5 text-xs">
+        <a
+          href={`mailto:${summitInfo.email}`}
+          className="flex items-start gap-2 text-theme-primary hover:text-[#F5B730] transition-colors break-words"
+        >
+          <Mail className="w-3.5 h-3.5 text-[#C9921A] flex-shrink-0 mt-0.5" />
+          <span className="min-w-0">{summitInfo.email}</span>
+        </a>
+        {summitDirectContacts.map((c) => (
+          <a
+            key={c.telHref}
+            href={c.telHref}
+            className="flex items-start gap-2 text-theme-primary hover:text-[#F5B730] transition-colors"
+          >
+            <Phone className="w-3.5 h-3.5 text-[#C9921A] flex-shrink-0 mt-0.5" />
+            <span className="min-w-0 text-pretty">
+              {c.name}, {c.phoneDisplay}
+            </span>
+          </a>
+        ))}
+        <a
+          href="tel:+263242783030"
+          className="flex items-start gap-2 text-theme-primary hover:text-[#F5B730] transition-colors"
+        >
+          <Phone className="w-3.5 h-3.5 text-[#C9921A] flex-shrink-0 mt-0.5" />
+          <span className="min-w-0">{summitInfo.phone}</span>
+        </a>
+        <div className="flex items-start gap-2.5 text-theme-primary text-xs leading-relaxed pt-1">
+          <MapPin className="w-3.5 h-3.5 text-[#C9921A] mt-0.5 flex-shrink-0" />
+          <span className="w-full text-pretty">
+            {footerAddressLines(summitInfo.address).map((line, i) => (
+              <span key={line}>
+                {i > 0 && <br />}
+                {line}
+              </span>
+            ))}
+          </span>
+        </div>
+        <a
+          href={summitInfo.mainWebsite}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 text-theme-primary hover:text-[#F5B730] transition-colors"
+        >
+          <Globe className="w-3.5 h-3.5 text-[#C9921A] flex-shrink-0" />
+          tnfzim.com
+        </a>
+      </div>
+    </div>
+  );
+}
+
 function FooterNavColumn({
   title,
   links,
@@ -162,10 +219,10 @@ export default function Footer() {
       {/* Newsletter */}
       <NewsletterSignup />
 
-      {/* Main footer: brand + contact in col 1; four nav cols on the same row */}
+      {/* Main footer: brand | contact | nav cols in one row on lg+ */}
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-9 lg:py-10">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-[12rem_repeat(4,max-content)] md:gap-x-5 lg:gap-x-6 md:items-start">
-          <div className="flex w-[12rem] max-w-full min-w-0 flex-col gap-6">
+        <div className="flex flex-col gap-8 md:flex-row md:flex-nowrap md:items-start md:gap-x-5 lg:gap-x-6">
+          <div className="w-[12rem] max-w-full min-w-0 shrink-0">
             <Link href="/" className="flex items-center gap-3 mb-1.5 group w-fit max-w-full">
                 <div className="relative h-10 w-[10.5rem] max-w-full">
                   <Image
@@ -232,67 +289,16 @@ export default function Footer() {
                 {t.footer.visitSecretariat}
               </a>
 
-            <div>
-              <h4 className="text-white font-semibold text-sm mb-2.5">{t.footer.contactCol}</h4>
-              <div className="space-y-2.5 text-xs">
-                <a
-                  href={`mailto:${summitInfo.email}`}
-                  className="flex items-start gap-2 text-theme-primary hover:text-[#F5B730] transition-colors break-words"
-                >
-                  <Mail className="w-3.5 h-3.5 text-[#C9921A] flex-shrink-0 mt-0.5" />
-                  <span className="min-w-0">{summitInfo.email}</span>
-                </a>
-                {summitDirectContacts.map((c) => (
-                  <a
-                    key={c.telHref}
-                    href={c.telHref}
-                    className="flex items-start gap-2 text-theme-primary hover:text-[#F5B730] transition-colors"
-                  >
-                    <Phone className="w-3.5 h-3.5 text-[#C9921A] flex-shrink-0 mt-0.5" />
-                    <span className="min-w-0 text-pretty">
-                      {c.name}, {c.phoneDisplay}
-                    </span>
-                  </a>
-                ))}
-                <a
-                  href="tel:+263242783030"
-                  className="flex items-start gap-2 text-theme-primary hover:text-[#F5B730] transition-colors"
-                >
-                  <Phone className="w-3.5 h-3.5 text-[#C9921A] flex-shrink-0 mt-0.5" />
-                  <span className="min-w-0">{summitInfo.phone}</span>
-                </a>
-                <div className="flex items-start gap-2.5 text-theme-primary text-xs leading-relaxed pt-1">
-                  <MapPin className="w-3.5 h-3.5 text-[#C9921A] mt-0.5 flex-shrink-0" />
-                  <span className="w-full text-pretty">
-                    {footerAddressLines(summitInfo.address).map((line, i) => (
-                      <span key={line}>
-                        {i > 0 && <br />}
-                        {line}
-                      </span>
-                    ))}
-                  </span>
-                </div>
-                <a
-                  href={summitInfo.mainWebsite}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-theme-primary hover:text-[#F5B730] transition-colors"
-                >
-                  <Globe className="w-3.5 h-3.5 text-[#C9921A] flex-shrink-0" />
-                  tnfzim.com
-                </a>
-              </div>
-            </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-x-5 gap-y-6 sm:grid-cols-4 md:contents">
+          <FooterContact />
+
+          <div className="flex flex-wrap items-start gap-x-5 gap-y-6 sm:gap-x-6 lg:flex-nowrap lg:shrink-0">
             <FooterNavColumn title={t.footer.summitCol} links={t.footer.summitLinks} />
             <FooterNavColumn title={t.footer.programmeCol} links={t.footer.programmeLinks} />
             <FooterNavColumn title={t.footer.participateCol} links={t.footer.participateLinks} />
             <FooterNavColumn title={t.footer.mediaCol} links={t.footer.mediaLinks} />
           </div>
-
-
         </div>
       </div>
 
