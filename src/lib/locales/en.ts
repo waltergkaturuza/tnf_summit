@@ -396,6 +396,7 @@ const en: FullTranslations = {
     viewProgramme: "View Programme",
     questionsContact: "Questions? Contact",
     needHelp: "Need help?",
+    helpContactLink: "Contact page",
     groupReg: "Group registrations (5+ delegates): contact the Secretariat for rates.",
   },
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   CheckCircle, ArrowRight, ArrowLeft, User, Mail, Phone,
@@ -988,8 +989,13 @@ export default function RegistrationPage() {
 
         {/* Help */}
         <div className="text-center mt-6 space-y-1">
-          <p className="text-xs text-white/80">Need help? <a href="mailto:info@tnfzim.com" className="text-[#C9921A] hover:text-[#F5B730]">info@tnfzim.com</a> · <a href="tel:+2632427830" className="text-[#C9921A] hover:text-[#F5B730]">+263 242 783 030</a></p>
-          <p className="text-xs text-white/80">Group registrations (5+ delegates): contact the Secretariat for rates.</p>
+          <p className="text-xs text-white/80">
+            {t.registration.needHelp}{" "}
+            <Link href="/contact" className="text-[#C9921A] hover:text-[#F5B730] font-medium hover:underline">
+              {t.registration.helpContactLink}
+            </Link>
+          </p>
+          <p className="text-xs text-white/80">{t.registration.groupReg}</p>
         </div>
       </WallpaperSurface>
     </div>

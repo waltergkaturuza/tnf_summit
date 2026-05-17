@@ -274,16 +274,10 @@ export default function HomePage() {
                     <div>
                       <div className="text-xs font-black mb-1" style={{ color: theme.color }}>
                         THEME {theme.id}
-                        {theme.isNew ? " ★" : ""}
                       </div>
                       <p className="text-white text-xs leading-relaxed font-medium">
-                        {theme.label.replace(" ★ NEW", "")}
+                        {theme.label}
                       </p>
-                      {theme.isNew && (
-                        <span className="inline-block mt-1 text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold">
-                          NEW
-                        </span>
-                      )}
                     </div>
                   </Link>
                 </FadeIn>

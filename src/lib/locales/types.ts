@@ -253,6 +253,7 @@ export type RegistrationTranslations = {
   viewProgramme: string;
   questionsContact: string;
   needHelp: string;
+  helpContactLink: string;
   groupReg: string;
 };
 

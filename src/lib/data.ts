@@ -1741,6 +1741,7 @@ export const sponsors = {
       fullName: "International Association of Economic and Social Councils",
       description: "ESC Network Partner",
       website: "#",
+      logo: "/partners/aicesis.png",
     },
     {
       name: "UCESA",

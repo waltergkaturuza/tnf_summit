@@ -149,13 +149,8 @@ export default function AboutPage() {
                     </div>
                     <div>
                       <p className="text-white text-sm font-semibold leading-relaxed">
-                        {theme.label.replace(" ★ NEW", "")}
+                        {theme.label}
                       </p>
-                      {theme.isNew && (
-                        <span className="inline-block mt-1.5 text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold">
-                          ★ NEW FOR 2026
-                        </span>
-                      )}
                     </div>
                   </div>
                 </div>
