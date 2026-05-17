@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   CheckCircle, ArrowRight, ArrowLeft, User, Mail, Phone,
@@ -10,6 +9,7 @@ import {
   FileText, ChevronDown, MapPin,
 } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
+import WallpaperSurface from "@/components/WallpaperSurface";
 import { useLanguage } from "@/context/LanguageContext";
 import { subscribeEmail } from "@/lib/db";
 import { getCountryNames } from "@/lib/countries";
@@ -376,23 +376,10 @@ export default function RegistrationPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)]">
+    <div className="min-h-screen flex flex-col">
       <PageHeader title={t.registration.heroTitle} subtitle={t.registration.heroSub} />
 
-      <section className="wallpaper-surface relative overflow-hidden">
-        <div className="absolute inset-0" aria-hidden>
-          <Image
-            src="/about_wallpaper.webp"
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            quality={82}
-            className="object-cover object-center"
-          />
-        </div>
-        <div aria-hidden className="absolute inset-0 bg-[#0A1628]/85" />
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-20">
+      <WallpaperSurface fillViewport contentClassName="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-20 flex-1">
         <div className="mb-6 rounded-2xl border border-[#C9921A]/30 bg-[#C9921A]/10 px-5 py-4">
           <p className="text-sm text-slate-200">
             Already registered and have a reference? If payment failed earlier, use{" "}
@@ -1004,8 +991,7 @@ export default function RegistrationPage() {
           <p className="text-xs text-white/80">Need help? <a href="mailto:info@tnfzim.com" className="text-[#C9921A] hover:text-[#F5B730]">info@tnfzim.com</a> · <a href="tel:+2632427830" className="text-[#C9921A] hover:text-[#F5B730]">+263 242 783 030</a></p>
           <p className="text-xs text-white/80">Group registrations (5+ delegates): contact the Secretariat for rates.</p>
         </div>
-        </div>
-      </section>
+      </WallpaperSurface>
     </div>
   );
 }

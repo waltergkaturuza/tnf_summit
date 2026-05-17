@@ -35,9 +35,12 @@ export default function TrackStatusPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)]">
+    <div className="min-h-screen flex flex-col">
       <PageHeader title={t.trackStatus.heroTitle} subtitle={t.trackStatus.heroSub} />
-      <WallpaperSurface contentClassName="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-20">
+      <WallpaperSurface
+        fillViewport
+        contentClassName="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-20 flex-1 justify-center"
+      >
         <motion.form initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }} onSubmit={handleSubmit} className="space-y-4">
           <div className="flex gap-2">
             <div className="relative flex-1">

@@ -10,9 +10,12 @@ import { useLanguage } from "@/context/LanguageContext";
 export default function VolunteerPage() {
   const { t } = useLanguage();
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)]">
+    <div className="min-h-screen flex flex-col">
       <PageHeader title={t.volunteer.heroTitle} subtitle={t.volunteer.heroSub} />
-      <WallpaperSurface contentClassName="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-20 text-center">
+      <WallpaperSurface
+        fillViewport
+        contentClassName="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-20 text-center flex-1 justify-center"
+      >
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }} className="glass rounded-2xl border border-white/10 p-8 text-left space-y-6">
           <div className="flex gap-4">
             <Users className="w-6 h-6 text-[#C9921A] flex-shrink-0 mt-0.5" />

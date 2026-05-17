@@ -21,9 +21,12 @@ export default function SubmitAbstractPage() {
 
   if (state.ok && state.trackId) {
     return (
-      <div className="min-h-screen bg-[var(--bg-primary)]">
+      <div className="min-h-screen flex flex-col">
         <PageHeader title={t.abstracts.formTitle} subtitle={t.abstracts.successTitle} />
-        <WallpaperSurface contentClassName="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-20 text-center">
+        <WallpaperSurface
+          fillViewport
+          contentClassName="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-20 text-center flex-1 justify-center"
+        >
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <div className="w-24 h-24 rounded-full bg-emerald-500/20 border-2 border-emerald-500/50 flex items-center justify-center mx-auto mb-6">
             <CheckCircle className="w-12 h-12 text-emerald-400" />
@@ -50,9 +53,9 @@ export default function SubmitAbstractPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)]">
+    <div className="min-h-screen flex flex-col">
       <PageHeader title={t.abstracts.formTitle} subtitle={t.abstracts.formSub} />
-      <WallpaperSurface contentClassName="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-20">
+      <WallpaperSurface fillViewport contentClassName="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-20 flex-1">
         <form action={formAction} className="space-y-8 glass rounded-2xl border border-white/10 p-6 sm:p-8">
           <input type="hidden" name="coAuthors" value={JSON.stringify(coAuthors)} />
 
