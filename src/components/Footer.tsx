@@ -58,12 +58,12 @@ function footerAddressLines(address: string): string[] {
 function FooterContact() {
   const { t } = useLanguage();
   return (
-    <div className="w-[15rem] max-w-full min-w-0 shrink-0">
+    <div className="w-[17rem] max-w-full min-w-0 shrink-0">
       <h4 className="text-white font-semibold text-sm mb-2.5">{t.footer.contactCol}</h4>
-      <div className="space-y-2.5 text-xs">
+      <div className="space-y-2 text-sm text-theme-primary">
         <a
           href={`mailto:${summitInfo.email}`}
-          className="flex items-start gap-2 text-theme-primary hover:text-[#F5B730] transition-colors break-words"
+          className="flex items-start gap-2 hover:text-[#F5B730] transition-colors break-words"
         >
           <Mail className="w-3.5 h-3.5 text-[#C9921A] flex-shrink-0 mt-0.5" />
           <span className="min-w-0">{summitInfo.email}</span>
@@ -72,7 +72,7 @@ function FooterContact() {
           <a
             key={c.telHref}
             href={c.telHref}
-            className="flex items-start gap-2 text-theme-primary hover:text-[#F5B730] transition-colors"
+            className="flex items-start gap-2 hover:text-[#F5B730] transition-colors"
           >
             <Phone className="w-3.5 h-3.5 text-[#C9921A] flex-shrink-0 mt-0.5" />
             <span className="min-w-0 text-pretty">
@@ -82,14 +82,14 @@ function FooterContact() {
         ))}
         <a
           href="tel:+263242783030"
-          className="flex items-start gap-2 text-theme-primary hover:text-[#F5B730] transition-colors"
+          className="flex items-start gap-2 hover:text-[#F5B730] transition-colors"
         >
           <Phone className="w-3.5 h-3.5 text-[#C9921A] flex-shrink-0 mt-0.5" />
           <span className="min-w-0">{summitInfo.phone}</span>
         </a>
-        <div className="flex items-start gap-2.5 text-theme-primary text-xs leading-relaxed pt-1">
+        <div className="flex items-start gap-2 leading-relaxed pt-0.5">
           <MapPin className="w-3.5 h-3.5 text-[#C9921A] mt-0.5 flex-shrink-0" />
-          <span className="w-full text-pretty">
+          <span className="min-w-0 text-pretty">
             {footerAddressLines(summitInfo.address).map((line, i) => (
               <span key={line}>
                 {i > 0 && <br />}
@@ -102,7 +102,7 @@ function FooterContact() {
           href={summitInfo.mainWebsite}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-2 text-theme-primary hover:text-[#F5B730] transition-colors"
+          className="flex items-center gap-2 hover:text-[#F5B730] transition-colors"
         >
           <Globe className="w-3.5 h-3.5 text-[#C9921A] flex-shrink-0" />
           tnfzim.com
@@ -229,9 +229,9 @@ export default function Footer() {
       {/* Main footer: brand | contact | nav cols in one row on lg+ */}
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-9 lg:py-10">
         <div className="flex flex-col gap-8 md:flex-row md:flex-nowrap md:items-start md:gap-x-5 lg:gap-x-6">
-          <div className="w-[12rem] max-w-full min-w-0 shrink-0">
+          <div className="w-[16rem] max-w-full min-w-0 shrink-0">
             <Link href="/" className="flex items-center gap-3 mb-1.5 group w-fit max-w-full">
-                <div className="relative h-10 w-[10.5rem] max-w-full">
+                <div className="relative h-10 w-full max-w-[14rem]">
                   <Image
                     src="/tnf-logo.png"
                     alt="Tripartite Negotiating Forum"
@@ -240,8 +240,8 @@ export default function Footer() {
                   />
                 </div>
               </Link>
-              <p className="text-[#C9921A] text-xs font-semibold mb-2">Global Summit 2026</p>
-              <p className="w-full text-[11px] leading-relaxed text-pretty text-theme-primary">
+              <p className="text-[#C9921A] text-sm font-semibold mb-2">Global Summit 2026</p>
+              <p className="w-full text-sm leading-relaxed text-pretty text-theme-primary">
                 Africa&apos;s premier tripartite-led global convening platform on Inclusive Growth, Decent Work and Investment Promotion. Anchored in UN SDG 8, AU Agenda 2063, AfCFTA, and Zimbabwe&apos;s NDS2.
               </p>
 
@@ -290,7 +290,7 @@ export default function Footer() {
                 href={summitInfo.mainWebsite}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 mt-3 text-theme-primary hover:text-[#C9921A] text-xs transition-colors"
+                className="inline-flex items-center gap-1.5 mt-3 text-sm text-theme-primary hover:text-[#C9921A] transition-colors"
               >
                 <ExternalLink className="w-3 h-3" />
                 {t.footer.visitSecretariat}
