@@ -126,7 +126,7 @@ export default function Footer() {
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-9 lg:py-10">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-10">
           {/* Brand + Contact (two columns inside former single brand cell) */}
-          <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-x-8 lg:gap-x-10 gap-y-6 sm:gap-y-7">
+          <div className="lg:col-span-2 flex flex-col gap-8 lg:gap-9">
             <div className="min-w-0">
               <Link href="/" className="flex items-center gap-3 mb-1.5 group w-fit">
                 <div className="relative h-11 sm:h-12 w-36 sm:w-40">
@@ -195,50 +195,48 @@ export default function Footer() {
               </a>
             </div>
 
-            <div className="min-w-0">
+            <div className="min-w-0 w-full max-w-md">
               <h4 className="text-white font-semibold text-sm mb-2.5">{t.footer.contactCol}</h4>
-              <div className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-x-6 gap-y-1 min-[400px]:gap-y-2">
-                <div className="space-y-2 text-sm">
+              <div className="space-y-2.5 text-sm">
+                <a
+                  href={`mailto:${summitInfo.email}`}
+                  className="flex items-center gap-2.5 text-theme-primary hover:text-[#F5B730] transition-colors whitespace-nowrap"
+                >
+                  <Mail className="w-3.5 h-3.5 text-[#C9921A] flex-shrink-0" />
+                  <span>{summitInfo.email}</span>
+                </a>
+                {summitDirectContacts.map((c) => (
                   <a
-                    href={`mailto:${summitInfo.email}`}
-                    className="flex items-center gap-2 text-theme-primary hover:text-[#F5B730] transition-colors"
-                  >
-                    <Mail className="w-3.5 h-3.5 text-[#C9921A] flex-shrink-0" />
-                    <span className="break-all">{summitInfo.email}</span>
-                  </a>
-                  {summitDirectContacts.map((c) => (
-                    <a
-                      key={c.telHref}
-                      href={c.telHref}
-                      className="flex items-center gap-2 text-theme-primary hover:text-[#F5B730] transition-colors"
-                    >
-                      <Phone className="w-3.5 h-3.5 text-[#C9921A] flex-shrink-0" />
-                      {c.name}, {c.phoneDisplay}
-                    </a>
-                  ))}
-                  <a
-                    href="tel:+263242783030"
-                    className="flex items-center gap-2 text-theme-primary hover:text-[#F5B730] transition-colors"
+                    key={c.telHref}
+                    href={c.telHref}
+                    className="flex items-center gap-2.5 text-theme-primary hover:text-[#F5B730] transition-colors whitespace-nowrap"
                   >
                     <Phone className="w-3.5 h-3.5 text-[#C9921A] flex-shrink-0" />
-                    {summitInfo.phone}
+                    <span>
+                      {c.name}, {c.phoneDisplay}
+                    </span>
                   </a>
+                ))}
+                <a
+                  href="tel:+263242783030"
+                  className="flex items-center gap-2.5 text-theme-primary hover:text-[#F5B730] transition-colors whitespace-nowrap"
+                >
+                  <Phone className="w-3.5 h-3.5 text-[#C9921A] flex-shrink-0" />
+                  <span>{summitInfo.phone}</span>
+                </a>
+                <div className="flex items-start gap-2.5 text-theme-primary leading-snug pt-1">
+                  <MapPin className="w-3.5 h-3.5 text-[#C9921A] mt-0.5 flex-shrink-0" />
+                  <span>{summitInfo.address}</span>
                 </div>
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-start gap-2 text-theme-primary leading-snug">
-                    <MapPin className="w-3.5 h-3.5 text-[#C9921A] mt-0.5 flex-shrink-0" />
-                    {summitInfo.address}
-                  </div>
-                  <a
-                    href={summitInfo.mainWebsite}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-theme-primary hover:text-[#F5B730] transition-colors"
-                  >
-                    <Globe className="w-3.5 h-3.5 text-[#C9921A] flex-shrink-0" />
-                    tnfzim.com
-                  </a>
-                </div>
+                <a
+                  href={summitInfo.mainWebsite}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2.5 text-theme-primary hover:text-[#F5B730] transition-colors whitespace-nowrap"
+                >
+                  <Globe className="w-3.5 h-3.5 text-[#C9921A] flex-shrink-0" />
+                  tnfzim.com
+                </a>
               </div>
             </div>
           </div>
