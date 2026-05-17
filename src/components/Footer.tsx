@@ -43,15 +43,22 @@ function YouTubeIcon({ className }: { className?: string }) {
   );
 }
 
-/** One line per comma-separated segment for a compact footer address block. */
+/** Footer address as three lines: venue, suburb + city, country. */
 function footerAddressLines(address: string): string[] {
-  return address.split(",").map((p) => p.trim()).filter(Boolean);
+  const parts = address.split(",").map((p) => p.trim()).filter(Boolean);
+  if (parts.length >= 4) {
+    return [parts[0], `${parts[1]} ${parts[2]}`, parts[3]];
+  }
+  if (parts.length === 3) {
+    return parts;
+  }
+  return [address];
 }
 
 function FooterContact() {
   const { t } = useLanguage();
   return (
-    <div className="w-[12rem] max-w-full min-w-0 shrink-0">
+    <div className="w-[15rem] max-w-full min-w-0 shrink-0">
       <h4 className="text-white font-semibold text-sm mb-2.5">{t.footer.contactCol}</h4>
       <div className="space-y-2.5 text-xs">
         <a
