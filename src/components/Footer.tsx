@@ -48,6 +48,41 @@ function footerAddressLines(address: string): string[] {
   return address.split(",").map((p) => p.trim()).filter(Boolean);
 }
 
+function FooterNavColumn({
+  title,
+  links,
+}: {
+  title: string;
+  links: { label: string; href: string }[];
+}) {
+  return (
+    <div className="shrink-0">
+      <h4 className="text-white font-semibold text-sm mb-2.5">{title}</h4>
+      <ul className="space-y-2">
+        {links.map((link) => (
+          <li key={link.href}>
+            {link.href.startsWith("http") ? (
+              <a
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-theme-primary hover:text-[#F5B730] text-sm transition-colors inline-flex items-center gap-1"
+              >
+                {link.label}
+                <ExternalLink className="w-3 h-3 opacity-50" />
+              </a>
+            ) : (
+              <Link href={link.href} className="text-theme-primary hover:text-[#F5B730] text-sm transition-colors">
+                {link.label}
+              </Link>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 function NewsletterSignup() {
   const { t } = useLanguage();
   const [email, setEmail] = useState("");
@@ -127,13 +162,11 @@ export default function Footer() {
       {/* Newsletter */}
       <NewsletterSignup />
 
-      {/* Main Footer — w-fit grid, start-aligned only (never justify-between) */}
+      {/* Main footer: brand + contact in col 1; four nav cols on the same row */}
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-9 lg:py-10">
-        <div className="w-fit max-w-full grid grid-cols-1 gap-8 lg:grid-cols-[11rem_max-content] lg:justify-items-start lg:gap-x-6 xl:gap-x-8">
-          {/* Brand + contact — fixed narrow width */}
-          <div className="flex w-[11rem] max-w-[11rem] min-w-0 flex-col gap-6">
-            <div className="min-w-0 w-full">
-              <Link href="/" className="flex items-center gap-3 mb-1.5 group w-fit max-w-full">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-[12rem_repeat(4,max-content)] md:gap-x-5 lg:gap-x-6 md:items-start">
+          <div className="flex w-[12rem] max-w-full min-w-0 flex-col gap-6">
+            <Link href="/" className="flex items-center gap-3 mb-1.5 group w-fit max-w-full">
                 <div className="relative h-10 w-[10.5rem] max-w-full">
                   <Image
                     src="/tnf-logo.png"
@@ -198,9 +231,8 @@ export default function Footer() {
                 <ExternalLink className="w-3 h-3" />
                 {t.footer.visitSecretariat}
               </a>
-            </div>
 
-            <div className="min-w-0">
+            <div>
               <h4 className="text-white font-semibold text-sm mb-2.5">{t.footer.contactCol}</h4>
               <div className="space-y-2.5 text-xs">
                 <a
@@ -253,69 +285,14 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Nav columns — fixed 4-column grid, hugs brand column */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 sm:gap-x-5 lg:gap-x-6 gap-y-6 w-max max-w-full">
-            <div className="min-w-0">
-              <h4 className="text-white font-semibold text-sm mb-2.5">{t.footer.summitCol}</h4>
-              <ul className="space-y-2">
-                {t.footer.summitLinks.map((link) => (
-                  <li key={link.href}>
-                    <Link href={link.href} className="text-theme-primary hover:text-[#F5B730] text-sm transition-colors">
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="min-w-0">
-              <h4 className="text-white font-semibold text-sm mb-2.5">{t.footer.programmeCol}</h4>
-              <ul className="space-y-2">
-                {t.footer.programmeLinks.map((link) => (
-                  <li key={link.href}>
-                    <Link href={link.href} className="text-theme-primary hover:text-[#F5B730] text-sm transition-colors">
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="min-w-0">
-              <h4 className="text-white font-semibold text-sm mb-2.5">{t.footer.participateCol}</h4>
-              <ul className="space-y-2">
-                {t.footer.participateLinks.map((link) => (
-                  <li key={link.href}>
-                    <Link href={link.href} className="text-theme-primary hover:text-[#F5B730] text-sm transition-colors">
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="min-w-0">
-              <h4 className="text-white font-semibold text-sm mb-2.5">{t.footer.mediaCol}</h4>
-              <ul className="space-y-2">
-                {t.footer.mediaLinks.map((link) => (
-                  <li key={link.href}>
-                    {link.href.startsWith("http") ? (
-                      <a
-                        href={link.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-theme-primary hover:text-[#F5B730] text-sm transition-colors flex items-center gap-1"
-                      >
-                        {link.label}
-                        <ExternalLink className="w-3 h-3 opacity-50" />
-                      </a>
-                    ) : (
-                      <Link href={link.href} className="text-theme-primary hover:text-[#F5B730] text-sm transition-colors">
-                        {link.label}
-                      </Link>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <div className="grid grid-cols-2 gap-x-5 gap-y-6 sm:grid-cols-4 md:contents">
+            <FooterNavColumn title={t.footer.summitCol} links={t.footer.summitLinks} />
+            <FooterNavColumn title={t.footer.programmeCol} links={t.footer.programmeLinks} />
+            <FooterNavColumn title={t.footer.participateCol} links={t.footer.participateLinks} />
+            <FooterNavColumn title={t.footer.mediaCol} links={t.footer.mediaLinks} />
           </div>
+
+
         </div>
       </div>
 
