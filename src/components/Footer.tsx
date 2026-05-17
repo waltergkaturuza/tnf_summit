@@ -43,6 +43,18 @@ function YouTubeIcon({ className }: { className?: string }) {
   );
 }
 
+/** Split summit address into short lines for the footer. */
+function footerAddressLines(address: string): string[] {
+  const parts = address.split(",").map((p) => p.trim()).filter(Boolean);
+  if (parts.length >= 4) {
+    return [parts[0], parts[1], `${parts[2]}, ${parts[3]}`];
+  }
+  if (parts.length === 3) {
+    return parts;
+  }
+  return [address];
+}
+
 function NewsletterSignup() {
   const { t } = useLanguage();
   const [email, setEmail] = useState("");
@@ -124,9 +136,9 @@ export default function Footer() {
 
       {/* Main Footer */}
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-9 lg:py-10">
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-10">
-          {/* Brand + Contact (two columns inside former single brand cell) */}
-          <div className="lg:col-span-2 flex flex-col gap-8 lg:gap-9">
+        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,12.5rem)_auto] lg:items-start lg:justify-between lg:gap-x-8 lg:gap-y-8">
+          {/* Brand + contact — narrow column */}
+          <div className="flex w-full max-w-[12.5rem] min-w-0 flex-col gap-7">
             <div className="min-w-0">
               <Link href="/" className="flex items-center gap-3 mb-1.5 group w-fit">
                 <div className="relative h-11 sm:h-12 w-36 sm:w-40">
@@ -139,7 +151,7 @@ export default function Footer() {
                 </div>
               </Link>
               <p className="text-[#C9921A] text-xs font-semibold mb-2">Global Summit 2026</p>
-              <p className="text-xs sm:text-sm leading-snug text-theme-primary">
+              <p className="max-w-[12.5rem] text-xs leading-relaxed text-pretty text-theme-primary">
                 Africa&apos;s premier tripartite-led global convening platform on Inclusive Growth, Decent Work and Investment Promotion. Anchored in UN SDG 8, AU Agenda 2063, AfCFTA, and Zimbabwe&apos;s NDS2.
               </p>
 
@@ -195,7 +207,7 @@ export default function Footer() {
               </a>
             </div>
 
-            <div className="min-w-0 w-full max-w-md">
+            <div className="min-w-0">
               <h4 className="text-white font-semibold text-sm mb-2.5">{t.footer.contactCol}</h4>
               <div className="space-y-2.5 text-sm">
                 <a
@@ -224,9 +236,16 @@ export default function Footer() {
                   <Phone className="w-3.5 h-3.5 text-[#C9921A] flex-shrink-0" />
                   <span>{summitInfo.phone}</span>
                 </a>
-                <div className="flex items-start gap-2.5 text-theme-primary leading-snug pt-1">
+                <div className="flex items-start gap-2.5 text-theme-primary text-xs leading-relaxed pt-1">
                   <MapPin className="w-3.5 h-3.5 text-[#C9921A] mt-0.5 flex-shrink-0" />
-                  <span>{summitInfo.address}</span>
+                  <span className="max-w-[11.5rem] text-pretty">
+                    {footerAddressLines(summitInfo.address).map((line, i) => (
+                      <span key={line}>
+                        {i > 0 && <br />}
+                        {line}
+                      </span>
+                    ))}
+                  </span>
                 </div>
                 <a
                   href={summitInfo.mainWebsite}
@@ -241,9 +260,9 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Links */}
-          <div className="lg:col-span-3 grid grid-cols-2 sm:grid-cols-4 gap-6 lg:gap-7">
-            <div>
+          {/* Nav link columns — compact, not stretched across the row */}
+          <div className="flex flex-wrap items-start gap-x-5 gap-y-6 sm:gap-x-6 lg:gap-x-7">
+            <div className="w-max shrink-0">
               <h4 className="text-white font-semibold text-sm mb-2.5">{t.footer.summitCol}</h4>
               <ul className="space-y-2">
                 {t.footer.summitLinks.map((link) => (
@@ -255,7 +274,7 @@ export default function Footer() {
                 ))}
               </ul>
             </div>
-            <div>
+            <div className="w-max shrink-0">
               <h4 className="text-white font-semibold text-sm mb-2.5">{t.footer.programmeCol}</h4>
               <ul className="space-y-2">
                 {t.footer.programmeLinks.map((link) => (
@@ -267,7 +286,7 @@ export default function Footer() {
                 ))}
               </ul>
             </div>
-            <div>
+            <div className="w-max shrink-0">
               <h4 className="text-white font-semibold text-sm mb-2.5">{t.footer.participateCol}</h4>
               <ul className="space-y-2">
                 {t.footer.participateLinks.map((link) => (
@@ -279,7 +298,7 @@ export default function Footer() {
                 ))}
               </ul>
             </div>
-            <div>
+            <div className="w-max shrink-0">
               <h4 className="text-white font-semibold text-sm mb-2.5">{t.footer.mediaCol}</h4>
               <ul className="space-y-2">
                 {t.footer.mediaLinks.map((link) => (
