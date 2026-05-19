@@ -372,16 +372,16 @@ export default function SponsorsPage() {
           </FadeIn>
 
           <FadeIn delay={0.05}>
-            <div className="glass rounded-2xl p-6 sm:p-8 border border-[#C9921A]/20 mb-10">
-              <label className="block text-xs font-bold uppercase tracking-wide text-theme-primary mb-2">
+            <div className="glass rounded-2xl px-4 sm:px-6 pt-3 pb-4 border border-[#C9921A]/20 mb-10">
+              <label className="inline-flex items-center gap-2 rounded-lg bg-[#10B981] text-white text-xs sm:text-sm font-extrabold uppercase tracking-wide px-3 py-1.5 mb-3 shadow-sm">
                 Select theme or event package
               </label>
-              <div className="flex flex-col sm:flex-row gap-4 sm:items-end">
+              <div className="flex flex-col sm:flex-row gap-3 sm:items-end">
                 <div className="flex-1">
                   <select
                     value={sponsorSelectId}
                     onChange={(e) => setSponsorSelectId(e.target.value)}
-                    className="w-full bg-[var(--bg-surface)] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#C9921A]/60"
+                    className="w-full bg-[var(--bg-surface)] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#C9921A]/60"
                   >
                     {getSponsorSpotlightDropdownOptions().map((opt) => (
                       <option key={opt.id} value={opt.id}>
