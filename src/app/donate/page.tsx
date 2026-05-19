@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowLeft, Heart, CreditCard, Copy, Check, Building2, Hash, Globe, Loader2 } from "lucide-react";
+import { ArrowLeft, Heart, CreditCard, Copy, Check, Building2, Hash, Globe, Loader2, ChevronDown } from "lucide-react";
 import { getSetting } from "@/lib/db";
 import PageHeader from "@/components/PageHeader";
 import {
@@ -64,6 +64,50 @@ function CopyField({ label, value, icon: Icon }: { label: string; value: string;
 type DonorType = "individual" | "organisation";
 type ContributionMode = "donation" | "sponsorship";
 type SponsorshipScope = "theme" | "event_package" | "summit_wide";
+
+/**
+ * Visually clear dropdown shell: prominent label, a "click to choose" hint, and a
+ * visible chevron so users immediately recognise the field as a dropdown menu.
+ */
+function SelectField({
+  label,
+  hint,
+  required,
+  children,
+}: {
+  label: string;
+  hint?: string;
+  required?: boolean;
+  children: React.ReactElement<React.SelectHTMLAttributes<HTMLSelectElement>>;
+}) {
+  const select = React.cloneElement(children, {
+    className: [
+      "w-full appearance-none cursor-pointer pl-3 pr-10 py-3 rounded-xl",
+      "bg-[var(--bg-primary)] border-2 border-[#C9921A]/40 hover:border-[#C9921A]/70",
+      "text-white text-sm font-medium",
+      "focus:outline-none focus:ring-2 focus:ring-[#d49a26]/50 focus:border-[#C9921A]",
+      "transition-colors",
+      children.props.className ?? "",
+    ].join(" "),
+  });
+  return (
+    <div>
+      <label className="flex items-center gap-2 text-sm font-bold text-white mb-1.5">
+        <ChevronDown className="w-4 h-4 text-[#C9921A]" aria-hidden />
+        <span>{label}</span>
+        {required && <span className="text-[#C9921A]">*</span>}
+      </label>
+      {hint && <p className="text-xs text-slate-300 mb-2">{hint}</p>}
+      <div className="relative">
+        {select}
+        <ChevronDown
+          className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#C9921A]"
+          aria-hidden
+        />
+      </div>
+    </div>
+  );
+}
 
 export default function DonatePage() {
   const [settings, setSettings] = useState<Record<string, string>>({});
@@ -444,8 +488,7 @@ export default function DonatePage() {
 
               {contributionMode === "donation" ? (
                 <>
-                  <div>
-                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Category</label>
+                  <SelectField label="Donation category" hint="Click to choose where your donation goes">
                     <select
                       value={categoryKey}
                       onChange={(e) => {
@@ -454,7 +497,6 @@ export default function DonatePage() {
                         if (next !== "global_themes_fund") setThemeId("");
                         if (next !== "other") setCategoryOther("");
                       }}
-                      className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-primary)] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#d49a26]/40"
                     >
                       {donationCategoryOptions.map((c) => (
                         <option key={c.key} value={c.key}>
@@ -462,27 +504,21 @@ export default function DonatePage() {
                         </option>
                       ))}
                     </select>
-                    <p className="text-[11px] text-slate-500 mt-1.5">
-                      {donationCategories.find((c) => c.key === categoryKey)?.description}
-                    </p>
-                  </div>
+                  </SelectField>
+                  <p className="-mt-2 text-xs text-slate-400">
+                    {donationCategories.find((c) => c.key === categoryKey)?.description}
+                  </p>
                   {categoryKey === "global_themes_fund" && (
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Select theme</label>
-                      <select
-                        required
-                        value={themeId}
-                        onChange={(e) => setThemeId(e.target.value)}
-                        className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-primary)] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#d49a26]/40"
-                      >
-                        <option value="">Choose a theme</option>
+                    <SelectField label="Select Summit theme" hint="Pick the theme you would like your donation to support" required>
+                      <select required value={themeId} onChange={(e) => setThemeId(e.target.value)}>
+                        <option value="">Choose a theme…</option>
                         {themes.map((th) => (
                           <option key={th.id} value={th.id}>
                             Theme {th.id}: {th.label}
                           </option>
                         ))}
                       </select>
-                    </div>
+                    </SelectField>
                   )}
                   {categoryKey === "other" && (
                     <div>
@@ -561,15 +597,13 @@ export default function DonatePage() {
 
                   {sponsorshipScope === "theme" ? (
                     <>
-                      <div>
-                        <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Select theme</label>
-                        <select
-                          required
-                          value={themeId}
-                          onChange={(e) => setThemeId(e.target.value)}
-                          className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-primary)] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#d49a26]/40"
-                        >
-                          <option value="">Choose a theme</option>
+                      <SelectField
+                        label="Select theme or event package"
+                        hint="Click the menu below to choose which Summit theme you would like to spotlight"
+                        required
+                      >
+                        <select required value={themeId} onChange={(e) => setThemeId(e.target.value)}>
+                          <option value="">Choose a theme…</option>
                           {themes
                             .filter((th) => getThemeSponsorshipTiers(th.id).length > 0)
                             .map((th) => (
@@ -578,15 +612,17 @@ export default function DonatePage() {
                               </option>
                             ))}
                         </select>
-                      </div>
+                      </SelectField>
                       {themeId && getThemeSponsorshipTiers(themeId).length > 0 && (
-                        <div>
-                          <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Package tier</label>
+                        <SelectField
+                          label="Select package tier"
+                          hint="Each tier sets a fixed contribution amount — verified at checkout"
+                          required
+                        >
                           <select
                             required
                             value={packageTier}
                             onChange={(e) => setPackageTier(e.target.value as ThemeSponsorshipPackageTier)}
-                            className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-primary)] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#d49a26]/40"
                           >
                             {getThemeSponsorshipTiers(themeId).map((t) => (
                               <option key={t.packageTier} value={t.packageTier}>
@@ -594,13 +630,16 @@ export default function DonatePage() {
                               </option>
                             ))}
                           </select>
-                        </div>
+                        </SelectField>
                       )}
                     </>
                   ) : sponsorshipScope === "event_package" ? (
                     <>
-                      <div>
-                        <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Select event package</label>
+                      <SelectField
+                        label="Select event package"
+                        hint="Click the menu below — Welcome Cocktail, Ministerial Dinner, Summit Magazine, Lanyards and more"
+                        required
+                      >
                         <select
                           required
                           value={eventPackageId}
@@ -610,7 +649,6 @@ export default function DonatePage() {
                             const tiers = getSponsorshipTiersForSelectValue(id);
                             setPackageTier(tiers[0]?.packageTier ?? "platinum");
                           }}
-                          className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-primary)] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#d49a26]/40"
                         >
                           {getSponsorSpotlightDropdownOptions().map((opt) => (
                             <option key={opt.id} value={opt.id}>
@@ -618,17 +656,17 @@ export default function DonatePage() {
                             </option>
                           ))}
                         </select>
-                      </div>
+                      </SelectField>
                       {eventPackageId && getSponsorshipTiersForSelectValue(eventPackageId).length > 0 && (
-                        <div>
-                          <label className="block text-xs font-bold text-slate-500 uppercase mb-1">
-                            Package tier / placement
-                          </label>
+                        <SelectField
+                          label="Select package tier or placement"
+                          hint="The chosen tier fixes the USD amount for this sponsorship"
+                          required
+                        >
                           <select
                             required
                             value={packageTier}
                             onChange={(e) => setPackageTier(e.target.value as ThemeSponsorshipPackageTier)}
-                            className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-primary)] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#d49a26]/40"
                           >
                             {getSponsorshipTiersForSelectValue(eventPackageId).map((t) => (
                               <option key={t.offerKey} value={t.packageTier}>
@@ -636,17 +674,19 @@ export default function DonatePage() {
                               </option>
                             ))}
                           </select>
-                        </div>
+                        </SelectField>
                       )}
                     </>
                   ) : (
-                    <div>
-                      <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Summit-wide tier</label>
+                    <SelectField
+                      label="Select summit-wide partnership tier"
+                      hint="Click to choose the partnership tier that matches your contribution"
+                      required
+                    >
                       <select
                         required
                         value={summitWideTierId}
                         onChange={(e) => setSummitWideTierId(e.target.value as SummitWidePartnershipTierId)}
-                        className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-primary)] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#d49a26]/40"
                       >
                         {summitWidePartnershipTiers.map((t) => (
                           <option key={t.id} value={t.id}>
@@ -654,7 +694,7 @@ export default function DonatePage() {
                           </option>
                         ))}
                       </select>
-                    </div>
+                    </SelectField>
                   )}
                 </>
               )}
