@@ -252,6 +252,19 @@ html.light .text-forest-light { color: #0F172A !important; }
 :not(html.light) .text-slate-600 { color: #94A3B8 !important; }
 :not(html.light) footer input::placeholder { color: #94A3B8 !important; }
 
+/* Native <option> rendering in popup menu — ensure readable text on dark UA backgrounds.
+ * Without this, some browsers/themes render white-on-white when the option is not hovered. */
+:not(html.light) select option,
+:not(html.light) select optgroup {
+  background-color: #0A1628;
+  color: #FFFFFF;
+}
+html.light select option,
+html.light select optgroup {
+  background-color: #FFFFFF;
+  color: #0F172A;
+}
+
 /* Gradient text */
 .gradient-text {
   background: linear-gradient(135deg, #F5B730 0%, #C9921A 50%, #F5B730 100%);

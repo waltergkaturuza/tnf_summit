@@ -55,59 +55,59 @@ export default function SubmitAbstractPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <PageHeader title={t.abstracts.formTitle} subtitle={t.abstracts.formSub} />
-      <WallpaperSurface fillViewport contentClassName="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-20 flex-1">
-        <form action={formAction} className="space-y-8 glass rounded-2xl border border-white/10 p-6 sm:p-8">
+      <WallpaperSurface fillViewport contentClassName="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-20 flex-1">
+        <form action={formAction} className="space-y-6 glass rounded-2xl border border-white/10 p-6 sm:p-8">
           <input type="hidden" name="coAuthors" value={JSON.stringify(coAuthors)} />
 
-          {/* Theme */}
-          <div>
-            <label className="block text-white/90 font-semibold mb-2">{t.abstracts.themeLabel}</label>
-            <select name="themeId" required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#C9921A]/60">
-              <option value="">{t.abstracts.selectTheme}</option>
-              {themes.map((theme) => (
-                <option key={theme.id} value={theme.id}>{theme.label}</option>
-              ))}
-            </select>
+          {/* Submission details — Theme + Participation type */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-white/90 font-semibold mb-2">{t.abstracts.themeLabel}</label>
+              <select name="themeId" required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#C9921A]/60">
+                <option value="">{t.abstracts.selectTheme}</option>
+                {themes.map((theme) => (
+                  <option key={theme.id} value={theme.id}>{theme.label}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-white/90 font-semibold mb-2">{t.abstracts.participationLabel}</label>
+              <select name="participation" defaultValue="oral" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#C9921A]/60">
+                {t.abstracts.participationOptions.map((o) => (
+                  <option key={o.value} value={o.value}>{o.label}</option>
+                ))}
+              </select>
+            </div>
           </div>
 
-          {/* Title */}
+          {/* Title (full width) */}
           <div>
             <label className="block text-white/90 font-semibold mb-2">{t.abstracts.titleLabel}</label>
             <input type="text" name="title" required placeholder={t.abstracts.titlePlaceholder} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:border-[#C9921A]/60" />
           </div>
 
-          {/* Abstract text */}
+          {/* Abstract text (full width) */}
           <div>
             <label className="block text-white/90 font-semibold mb-2">{t.abstracts.abstractLabel}</label>
             <textarea name="abstractText" required rows={10} placeholder={t.abstracts.abstractPlaceholder} value={abstractText} onChange={(e) => setAbstractText(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:border-[#C9921A]/60 resize-y" />
             <p className={`text-xs mt-1 ${wordCount >= 350 && wordCount <= 500 ? "text-emerald-400" : "text-slate-500"}`}>{t.abstracts.wordCount} {wordCount} / 350–500</p>
           </div>
 
-          {/* Keywords */}
-          <div>
-            <label className="block text-white/90 font-semibold mb-2">{t.abstracts.keywordsLabel}</label>
-            <input type="text" name="keywords" placeholder={t.abstracts.keywordsPlaceholder} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:border-[#C9921A]/60" />
+          {/* Keywords + Document URL */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-white/90 font-semibold mb-2">{t.abstracts.keywordsLabel}</label>
+              <input type="text" name="keywords" placeholder={t.abstracts.keywordsPlaceholder} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:border-[#C9921A]/60" />
+            </div>
+            <div>
+              <label className="block text-white/90 font-semibold mb-2">{t.abstracts.documentLinkLabel}</label>
+              <input type="url" name="documentUrl" placeholder="https://..." className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:border-[#C9921A]/60" />
+              <input type="text" name="fileName" placeholder={t.abstracts.documentNamePlaceholder} className="w-full mt-2 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-[#C9921A]/60" />
+            </div>
           </div>
 
-          {/* How to participate */}
-          <div>
-            <label className="block text-white/90 font-semibold mb-2">{t.abstracts.participationLabel}</label>
-            <select name="participation" defaultValue="oral" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#C9921A]/60">
-              {t.abstracts.participationOptions.map((o) => (
-                <option key={o.value} value={o.value}>{o.label}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Document URL */}
-          <div>
-            <label className="block text-white/90 font-semibold mb-2">{t.abstracts.documentLinkLabel}</label>
-            <input type="url" name="documentUrl" placeholder="https://..." className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:border-[#C9921A]/60" />
-            <input type="text" name="fileName" placeholder={t.abstracts.documentNamePlaceholder} className="w-full mt-2 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-[#C9921A]/60" />
-          </div>
-
-          {/* Author details */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Author details — 2 cols */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-white/90 font-semibold mb-2">{t.abstracts.firstName}</label>
               <input type="text" name="firstName" required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#C9921A]/60" />
@@ -116,24 +116,26 @@ export default function SubmitAbstractPage() {
               <label className="block text-white/90 font-semibold mb-2">{t.abstracts.lastName}</label>
               <input type="text" name="lastName" required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#C9921A]/60" />
             </div>
+            <div>
+              <label className="block text-white/90 font-semibold mb-2">{t.abstracts.email}</label>
+              <input type="email" name="email" required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#C9921A]/60" />
+            </div>
+            <div>
+              <label className="block text-white/90 font-semibold mb-2">{t.abstracts.phone}</label>
+              <input type="tel" name="phone" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#C9921A]/60" />
+            </div>
+            <div>
+              <label className="block text-white/90 font-semibold mb-2">{t.abstracts.institution}</label>
+              <input type="text" name="institution" required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#C9921A]/60" />
+            </div>
+            <div>
+              <label className="block text-white/90 font-semibold mb-2">{t.abstracts.country}</label>
+              <input type="text" name="country" required placeholder={t.abstracts.countryPlaceholder} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:border-[#C9921A]/60" />
+            </div>
           </div>
-          <div>
-            <label className="block text-white/90 font-semibold mb-2">{t.abstracts.email}</label>
-            <input type="email" name="email" required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#C9921A]/60" />
-          </div>
-          <div>
-            <label className="block text-white/90 font-semibold mb-2">{t.abstracts.phone}</label>
-            <input type="tel" name="phone" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#C9921A]/60" />
-          </div>
-          <div>
-            <label className="block text-white/90 font-semibold mb-2">{t.abstracts.institution}</label>
-            <input type="text" name="institution" required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#C9921A]/60" />
-          </div>
-          <div>
-            <label className="block text-white/90 font-semibold mb-2">{t.abstracts.country}</label>
-            <input type="text" name="country" required placeholder={t.abstracts.countryPlaceholder} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:border-[#C9921A]/60" />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+          {/* Personal — 3 cols */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             <div>
               <label className="block text-white/90 font-semibold mb-2">{t.abstracts.gender}</label>
               <select name="gender" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#C9921A]/60">
@@ -147,15 +149,15 @@ export default function SubmitAbstractPage() {
               <label className="block text-white/90 font-semibold mb-2">{t.abstracts.dateOfBirth}</label>
               <input type="date" name="dateOfBirth" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#C9921A]/60" />
             </div>
-          </div>
-          <div>
-            <label className="block text-white/90 font-semibold mb-2">{t.abstracts.tShirtSize}</label>
-            <select name="tShirtSize" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#C9921A]/60">
-              <option value="">{t.abstracts.tShirtSelect}</option>
-              {T_SHIRT_SIZES.map((s) => (
-                <option key={s} value={s}>{s}</option>
-              ))}
-            </select>
+            <div>
+              <label className="block text-white/90 font-semibold mb-2">{t.abstracts.tShirtSize}</label>
+              <select name="tShirtSize" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#C9921A]/60">
+                <option value="">{t.abstracts.tShirtSelect}</option>
+                {T_SHIRT_SIZES.map((s) => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+              </select>
+            </div>
           </div>
 
           {/* Co-authors */}
