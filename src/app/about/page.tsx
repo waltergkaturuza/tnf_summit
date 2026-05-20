@@ -5,17 +5,12 @@ import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
-  ArrowRight, CheckCircle, MapPin, Calendar, Users,
-  Globe, TrendingUp, Mic, Building, Rocket, Heart,
-  Star, Landmark, Handshake
+  ArrowRight, CheckCircle, MapPin,
+  Globe,
 } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import { useLanguage } from "@/context/LanguageContext";
 import { summitInfo, themes, whyAttend } from "@/lib/data";
-
-const iconMap: Record<string, React.ElementType> = {
-  TrendingUp, Globe, Handshake, Rocket, Landmark, Heart, Building, Mic, Users,
-};
 
 function FadeIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef(null);
@@ -73,18 +68,14 @@ export default function AboutPage() {
 
             <FadeIn delay={0.2}>
               <div className="space-y-4">
-                {["🎯", "💰", "📊", "🌍"].map((icon, i) => {
-                  const card = t.about.whatIsCards[i];
-                  return card ? (
-                    <div key={i} className="glass rounded-xl p-4 flex items-start gap-4">
-                      <div className="text-2xl">{icon}</div>
-                      <div>
-                        <div className="text-white font-bold text-sm">{card.title}</div>
-                        <div className="text-xs mt-1 leading-relaxed text-theme-primary">{card.desc}</div>
-                      </div>
+                {t.about.whatIsCards.map((card, i) =>
+                  card ? (
+                    <div key={i} className="glass rounded-xl p-4">
+                      <div className="text-white font-bold text-sm">{card.title}</div>
+                      <div className="text-xs mt-1 leading-relaxed text-theme-primary">{card.desc}</div>
                     </div>
-                  ) : null;
-                })}
+                  ) : null,
+                )}
               </div>
             </FadeIn>
           </div>
@@ -102,23 +93,14 @@ export default function AboutPage() {
           </FadeIn>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {whyAttend.map((item, i) => {
-              const Icon = iconMap[item.icon] || Star;
-              return (
+            {whyAttend.map((item, i) => (
                 <FadeIn key={i} delay={i * 0.1}>
                   <div className="glass rounded-2xl p-6 card-hover h-full">
-                    <div
-                      className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
-                      style={{ background: `${item.color}20`, border: `1px solid ${item.color}40` }}
-                    >
-                      <Icon className="w-6 h-6" style={{ color: item.color }} />
-                    </div>
                     <h3 className="text-white font-bold mb-3">{item.audience}</h3>
                     <p className="text-sm leading-relaxed text-theme-primary">{item.description}</p>
                   </div>
                 </FadeIn>
-              );
-            })}
+            ))}
           </div>
         </div>
       </section>
@@ -175,13 +157,12 @@ export default function AboutPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
             {[
-              { emoji: "🏛", color: "#3B82F6", item: t.about.tripartiteItems[0] },
-              { emoji: "💼", color: "#C9921A", item: t.about.tripartiteItems[1] },
-              { emoji: "👷", color: "#10B981", item: t.about.tripartiteItems[2] },
+              { color: "#3B82F6", item: t.about.tripartiteItems[0] },
+              { color: "#C9921A", item: t.about.tripartiteItems[1] },
+              { color: "#10B981", item: t.about.tripartiteItems[2] },
             ].map((pillar, i) => (
               <FadeIn key={i} delay={i * 0.15}>
                 <div className="glass rounded-2xl p-8 text-center card-hover border border-white/5">
-                  <div className="text-5xl mb-4">{pillar.emoji}</div>
                   <h3 className="text-xl font-black mb-3" style={{ color: pillar.color }}>{pillar.item.title}</h3>
                   <p className="text-sm leading-relaxed text-theme-primary">{pillar.item.desc}</p>
                 </div>
@@ -229,21 +210,18 @@ export default function AboutPage() {
             <FadeIn delay={0.2}>
               <div className="space-y-4">
                 {[
-                  { title: "Summit Week", value: "21–25 Sep 2026", icon: "📅" },
-                  { title: "Official Opening Day", value: "Wednesday 23 September", icon: "🎊" },
-                  { title: "Gala Dinner", value: "Wednesday 23 Sep, Black Tie", icon: "🎭" },
-                  { title: "Innovation Challenge Finals", value: "During Gala Dinner", icon: "🏆" },
-                  { title: "Excursions Day", value: "Friday 25 September", icon: "🦁" },
-                  { title: "Nearest Airport", value: "Victoria Falls International Airport", icon: "✈️" },
-                  { title: "Time Zone", value: "CAT (UTC+2)", icon: "🕐" },
-                  { title: "Currency", value: "USD / ZiG", icon: "💵" },
+                  { title: "Summit Week", value: "21–25 Sep 2026" },
+                  { title: "Official Opening Day", value: "Wednesday 23 September" },
+                  { title: "Gala Dinner", value: "Wednesday 23 Sep, Black Tie" },
+                  { title: "Innovation Challenge Finals", value: "During Gala Dinner" },
+                  { title: "Excursions Day", value: "Friday 25 September" },
+                  { title: "Nearest Airport", value: "Victoria Falls International Airport" },
+                  { title: "Time Zone", value: "CAT (UTC+2)" },
+                  { title: "Currency", value: "USD / ZiG" },
                 ].map((item, i) => (
-                  <div key={i} className="glass rounded-xl p-3 flex items-center gap-4">
-                    <div className="text-2xl w-10 text-center">{item.icon}</div>
-                    <div className="flex-1">
-                      <div className="text-xs text-theme-primary">{item.title}</div>
-                      <div className="text-white text-sm font-semibold">{item.value}</div>
-                    </div>
+                  <div key={i} className="glass rounded-xl p-4">
+                    <div className="text-xs text-theme-primary">{item.title}</div>
+                    <div className="text-white text-sm font-semibold mt-0.5">{item.value}</div>
                   </div>
                 ))}
               </div>
