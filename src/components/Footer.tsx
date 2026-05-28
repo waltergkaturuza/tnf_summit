@@ -159,9 +159,17 @@ function NewsletterSignup() {
     if (!email) return;
     setLoading(true);
     try {
-      const { subscribeEmail } = await import("@/lib/db");
-      const result = await subscribeEmail(email, "footer");
-      if (result === "already_subscribed") {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, source: "footer" }),
+      });
+      const data = (await res.json().catch(() => ({}))) as { ok?: boolean; result?: "subscribed" | "already_subscribed"; error?: string };
+      if (!res.ok || !data.ok) {
+        setMessage(data.error || "Something went wrong. Please try again.");
+        return;
+      }
+      if (data.result === "already_subscribed") {
         setMessage(t.footer.thankYou);
       } else {
         setSubscribed(true);

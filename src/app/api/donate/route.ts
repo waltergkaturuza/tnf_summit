@@ -13,6 +13,7 @@ import {
 } from "@/lib/data";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { generateDonationTrackId } from "@/lib/trackId";
+import { sendMail, renderBrandedEmail, getSiteBaseUrl } from "@/lib/email";
 
 export const runtime = "nodejs";
 
@@ -264,8 +265,72 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: error.message }, { status: 400 });
   }
 
+  void sendDonationConfirmation({
+    trackId: (data.track_id as string) ?? trackId,
+    donorType,
+    firstName,
+    lastName,
+    organisation,
+    email,
+    contributionType,
+    categoryLabel,
+    amountUsd,
+  }).catch((e) => console.warn("[api/donate] confirmation email failed:", e));
+
   return NextResponse.json({
     id: data.id as string,
     trackId: (data.track_id as string) ?? trackId,
+  });
+}
+
+async function sendDonationConfirmation(args: {
+  trackId: string;
+  donorType: "individual" | "organisation";
+  firstName: string;
+  lastName: string;
+  organisation: string;
+  email: string;
+  contributionType: "donation" | "sponsorship";
+  categoryLabel: string;
+  amountUsd: number;
+}) {
+  if (!args.email || !args.email.includes("@")) return;
+  const isSponsorship = args.contributionType === "sponsorship";
+  const recipientName =
+    args.donorType === "organisation" && args.organisation
+      ? args.organisation
+      : [args.firstName, args.lastName].filter(Boolean).join(" ").trim() || args.firstName;
+  const payUrl = `${getSiteBaseUrl()}/api/payments/iveri/start?trackId=${encodeURIComponent(args.trackId)}`;
+  const subjectKind = isSponsorship ? "Sponsorship pledge received" : "Donation pledge received";
+
+  const html = renderBrandedEmail({
+    brandSubtitle: subjectKind,
+    recipientName,
+    noticeText: isSponsorship
+      ? "Thank you for pledging your sponsorship support. Your contribution will help power the Zimbabwe TNF Global Summit 2026."
+      : "Thank you for your generous pledge to the Zimbabwe TNF Global Summit 2026. Every contribution helps shape an inclusive future of work.",
+    noticeTone: "emerald",
+    detailsHeading: isSponsorship ? "Sponsorship details" : "Donation details",
+    details: [
+      { label: "Reference", value: args.trackId },
+      { label: "Name", value: recipientName },
+      { label: "Email", value: args.email },
+      ...(args.organisation ? [{ label: "Organisation", value: args.organisation }] : []),
+      { label: "Category", value: args.categoryLabel },
+      { label: "Amount", value: `USD ${args.amountUsd.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` },
+      { label: "Status", value: "AWAITING PAYMENT" },
+    ],
+    bodyParagraphs: [
+      "Use the secure link below to complete payment on our payment partner's hosted page. You can choose card, bank transfer, or mobile money (EcoCash / InnBucks) there.",
+      "If you would like a tax invoice or receipt issued to a specific organisation, reply to this email with the details.",
+    ],
+    cta: { label: "Complete payment securely", url: payUrl },
+    footerLine: "Keep this reference safe. You can resume payment any time using the button above.",
+  });
+
+  await sendMail({
+    to: args.email,
+    subject: `Zimbabwe TNF Global Summit 2026 · ${subjectKind} (${args.trackId})`,
+    html,
   });
 }

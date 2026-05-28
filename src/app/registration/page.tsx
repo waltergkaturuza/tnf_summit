@@ -12,7 +12,6 @@ import {
 import PageHeader from "@/components/PageHeader";
 import WallpaperSurface from "@/components/WallpaperSurface";
 import { useLanguage } from "@/context/LanguageContext";
-import { subscribeEmail } from "@/lib/db";
 import { getCountryNames } from "@/lib/countries";
 
 const STEPS = [
@@ -314,9 +313,13 @@ export default function RegistrationPage() {
         }
       }
 
-      // Auto-subscribe if opted in
+      // Auto-subscribe if opted in (server-side, also sends welcome email)
       if (form.newsletterOptIn) {
-        await subscribeEmail(form.email, "registration").catch(() => {});
+        void fetch("/api/subscribe", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: form.email, source: "registration" }),
+        }).catch(() => {});
       }
       setSubmitted(true);
     } catch (err: unknown) {
