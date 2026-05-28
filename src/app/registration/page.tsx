@@ -30,7 +30,7 @@ const genders = ["Male", "Female", "Non-binary", "Prefer not to say", "Other"];
 const sectors = ["Government / Public Sector", "Private Sector / Corporate", "International Organisation / DFI", "Civil Society / NGO", "Academic / Research", "Media / Press", "Youth-Led Enterprise / MSME", "Other"];
 const dietaryOptions = ["No special requirements", "Vegetarian", "Vegan", "Halal", "Kosher", "Gluten-free", "Dairy-free", "Other (specify in notes)"];
 const roomTypes = ["Single Room", "Double Room (single occupancy)", "Twin Room (sharing)", "Suite"];
-const paymentMethods = ["Bank Transfer (Invoice)", "Credit / Debit Card", "Mobile Money (EcoCash / InnBucks)"];
+const paymentMethods = ["Bank Transfer", "Credit / Debit Card", "Mobile Money (EcoCash / InnBucks)"];
 const participationTypes = ["Delegate", "Exhibitor"] as const;
 const sessionOptionsByDay = [
   {
@@ -256,7 +256,12 @@ export default function RegistrationPage() {
       if (!trackId) throw new Error("No registration reference returned");
       setRegId(trackId);
 
-      if (form.paymentMethod === "Credit / Debit Card" && feeAmount > 0) {
+      const onlinePaymentMethods = [
+        "Credit / Debit Card",
+        "Bank Transfer",
+        "Mobile Money (EcoCash / InnBucks)",
+      ];
+      if (onlinePaymentMethods.includes(form.paymentMethod) && feeAmount > 0) {
         setIveriRedirecting(true);
         try {
           const res = await fetch("/api/payments/iveri/start", {
@@ -297,12 +302,12 @@ export default function RegistrationPage() {
           }
           setCardPaymentNotice(
             data.error
-              ? `Card checkout could not start (${data.error}). Use bank transfer or another method, we will invoice you by email.`
-              : "Card checkout is unavailable. Use bank transfer or another method, we will invoice you by email."
+              ? `Secure checkout could not start (${data.error}). We will follow up with payment details by email.`
+              : "Secure checkout is unavailable. We will follow up with payment details by email."
           );
         } catch {
           setCardPaymentNotice(
-            "Card checkout could not be reached. Use bank transfer or another method, we will invoice you by email."
+            "Secure checkout could not be reached. We will follow up with payment details by email."
           );
         } finally {
           setIveriRedirecting(false);
@@ -328,8 +333,8 @@ export default function RegistrationPage() {
         {iveriRedirecting && (
           <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[var(--bg-primary)]/95 backdrop-blur-sm">
             <div className="w-12 h-12 border-2 border-[#C9921A] border-t-transparent rounded-full animate-spin mb-4" />
-            <p className="text-white font-semibold">Redirecting to secure card payment…</p>
-            <p className="text-sm text-theme-primary mt-2 max-w-sm text-center">You are being sent to our payment partner. Do not close this window.</p>
+            <p className="text-white font-semibold">Redirecting to secure payment…</p>
+            <p className="text-sm text-theme-primary mt-2 max-w-sm text-center">You are being sent to our payment partner (iVeri). You can choose card, bank transfer or mobile money on the next page. Do not close this window.</p>
           </div>
         )}
         <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="text-center max-w-3xl w-full">
@@ -885,8 +890,8 @@ export default function RegistrationPage() {
                     <div className="glass rounded-xl p-4 flex items-start gap-3">
                       <Info className="w-5 h-5 text-[#C9921A] flex-shrink-0 mt-0.5" />
                       <div className="text-xs leading-relaxed space-y-1 text-theme-primary">
-                        <p>Payment is due within <strong className="text-white">3 days</strong> of invoice date. Registration is only confirmed upon receipt of full payment.</p>
-                        <p>Bank transfer details will be included in your invoice. For mobile money, contact <a href="mailto:info@tnfzim.com" className="text-[#C9921A]">info@tnfzim.com</a>.</p>
+                        <p>Payment is due within <strong className="text-white">3 days</strong>. Registration is only confirmed upon receipt of full payment.</p>
+                        <p>All methods (card, bank transfer, EcoCash / InnBucks) are handled on our secure iVeri hosted page after you submit. Tick <strong className="text-white">Invoice Required</strong> if you also need a tax invoice for your finance team.</p>
                       </div>
                     </div>
                   </div>
