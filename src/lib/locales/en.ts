@@ -80,8 +80,8 @@ const en: FullTranslations = {
     applyInnovation: "Apply for Innovation Challenge",
     innovationTimelineTitle: "Innovation Timeline",
     innovationSteps: [
-      { step: "Applications Open", date: "Now, May 2026" },
-      { step: "Shortlist Announced", date: "July 2026" },
+      { step: "Applications Open", date: "Open until 31 July 2026" },
+      { step: "Shortlist Announced", date: "August 2026" },
       { step: "Round 1 Pitches", date: "22 Sep 2026" },
       { step: "Top 5 Finals", date: "23 Sep 2026, Gala Dinner" },
       { step: "Winner Announced", date: "23 Sep 2026" },
@@ -267,7 +267,7 @@ const en: FullTranslations = {
     innovationIntro: "Are you an African youth entrepreneur with a solution for digital or green economy challenges? Apply to pitch at the TNF Innovation Challenge before a live global investor jury.",
     innovationFormatTitle: "Challenge Format",
     innovationFormatItems: [
-      { label: "Applications", value: "Open now until May 2026" },
+      { label: "Applications", value: "Open until 31 July 2026" },
       { label: "Shortlist", value: "12 African youth finalists" },
       { label: "Round 1", value: "22 September 2026, Live pitches before investor panel" },
       { label: "Audience voting", value: "Real-time, Top 5 advance to Finals" },

@@ -68,8 +68,8 @@ export const zh: LocaleOverride = {
     applyInnovation: "申请创新挑战",
     innovationTimelineTitle: "创新时间线",
     innovationSteps: [
-      { step: "申请开放", date: "即日起, 2026年5月" },
-      { step: "公布入围名单", date: "2026年7月" },
+      { step: "申请开放", date: "即日起至2026年7月31日" },
+      { step: "公布入围名单", date: "2026年8月" },
       { step: "第一轮展示", date: "2026年9月22日" },
       { step: "前五名决赛", date: "2026年9月23日, 晚宴" },
       { step: "公布获胜者", date: "2026年9月23日" },

@@ -68,8 +68,8 @@ export const ja: LocaleOverride = {
     applyInnovation: "イノベーション・チャレンジに応募",
     innovationTimelineTitle: "イノベーション・タイムライン",
     innovationSteps: [
-      { step: "応募開始", date: "現在, 2026年5月" },
-      { step: "ショートリスト発表", date: "2026年7月" },
+      { step: "応募開始", date: "2026年7月31日まで受付" },
+      { step: "ショートリスト発表", date: "2026年8月" },
       { step: "1次ピッチ", date: "2026年9月22日" },
       { step: "トップ5ファイナル", date: "2026年9月23日, ガラディナー" },
       { step: "優勝者発表", date: "2026年9月23日" },

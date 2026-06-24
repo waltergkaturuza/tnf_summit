@@ -68,8 +68,8 @@ export const fr: LocaleOverride = {
     applyInnovation: "Postuler au Défi innovation",
     innovationTimelineTitle: "Calendrier de l'innovation",
     innovationSteps: [
-      { step: "Ouverture des candidatures", date: "Maintenant, mai 2026" },
-      { step: "Shortlist annoncée", date: "Juillet 2026" },
+      { step: "Ouverture des candidatures", date: "Ouvert jusqu'au 31 juillet 2026" },
+      { step: "Shortlist annoncée", date: "Août 2026" },
       { step: "Pitches tour 1", date: "22 sep 2026" },
       { step: "Top 5 finale", date: "23 sep 2026, Dîner de gala" },
       { step: "Lauréat annoncé", date: "23 sep 2026" },

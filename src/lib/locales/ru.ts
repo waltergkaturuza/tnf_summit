@@ -68,8 +68,8 @@ export const ru: LocaleOverride = {
     applyInnovation: "Подать заявку на Innovation Challenge",
     innovationTimelineTitle: "График инноваций",
     innovationSteps: [
-      { step: "Прием заявок открыт", date: "Сейчас, май 2026" },
-      { step: "Шорт-лист", date: "Июль 2026" },
+      { step: "Прием заявок открыт", date: "Открыто до 31 июля 2026" },
+      { step: "Шорт-лист", date: "Август 2026" },
       { step: "Презентации 1-го тура", date: "22 сен 2026" },
       { step: "Топ-5 финал", date: "23 сен 2026" },
       { step: "Победитель", date: "23 сен 2026" },

@@ -68,8 +68,8 @@ export const el: LocaleOverride = {
     applyInnovation: "Υποβολή αίτησης για Innovation Challenge",
     innovationTimelineTitle: "Χρονοδιάγραμμα καινοτομίας",
     innovationSteps: [
-      { step: "Άνοιγμα αιτήσεων", date: "Τώρα, Μάιος 2026" },
-      { step: "Ανακοίνωση shortlist", date: "Ιούλιος 2026" },
+      { step: "Άνοιγμα αιτήσεων", date: "Ανοιχτές έως 31 Ιουλίου 2026" },
+      { step: "Ανακοίνωση shortlist", date: "Αύγουστος 2026" },
       { step: "Παρουσιάσεις γύρος 1", date: "22 Σεπ 2026" },
       { step: "Τοπ 5 τελικός", date: "23 Σεπ 2026, Gala Dinner" },
       { step: "Ανακοίνωση νικητή", date: "23 Σεπ 2026" },

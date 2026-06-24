@@ -68,8 +68,8 @@ export const sn: LocaleOverride = {
     applyInnovation: "Nyorera kuInnovation Challenge",
     innovationTimelineTitle: "Innovation Timeline",
     innovationSteps: [
-      { step: "Zvikumbiro Zvavhurwa", date: "Zvino, Chivabvu 2026" },
-      { step: "Shortlist Yakaziviswa", date: "Chikunguru 2026" },
+      { step: "Zvikumbiro Zvavhurwa", date: "Zvavhurwa kusvika 31 Chikunguru 2026" },
+      { step: "Shortlist Yakaziviswa", date: "Nyamavhuvhu 2026" },
       { step: "Round 1 Pitches", date: "22 Gunyana 2026" },
       { step: "Top 5 Fainari", date: "23 Gunyana 2026" },
       { step: "Muhwina Akaziviswa", date: "23 Gunyana 2026" },
