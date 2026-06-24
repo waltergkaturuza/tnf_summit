@@ -70,6 +70,19 @@ async function verifyAuthoriseInfoAndMarkPaidIfApproved(out: URLSearchParams): P
     return { authorise: info, dbMarkedPaid: true };
   }
 
+  if (trace.startsWith("TNF-INN-")) {
+    const { error } = await supabaseAdmin
+      .schema("tnf_summit")
+      .from("innovation_applications")
+      .update({ payment_status: "paid" })
+      .eq("track_id", trace);
+    if (error) {
+      console.error("[api/payments/iveri/return] innovation payment update:", error.message);
+      return { authorise: info, dbMarkedPaid: false };
+    }
+    return { authorise: info, dbMarkedPaid: true };
+  }
+
   const { error } = await supabaseAdmin
     .schema("tnf_summit")
     .from("registrations")

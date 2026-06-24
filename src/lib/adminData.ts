@@ -24,6 +24,49 @@ export type Donation = {
   adminNotes: string | null;
 };
 
+export type InnovationApplication = {
+  id: string;
+  createdAt: string;
+  trackId: string;
+  status: RegistrationStatus;
+  salutation: string;
+  firstName: string;
+  lastName: string;
+  gender: string;
+  dateOfBirth: string;
+  nationality: string;
+  email: string;
+  phone: string;
+  whatsapp: string;
+  country: string;
+  city: string;
+  organisation: string;
+  startupName: string;
+  startupStage: string;
+  startupDescription: string;
+  projectUrl: string;
+  attendanceMode: "in-person";
+  excursions: string[];
+  excursionCount: number;
+  dietaryRequirements: string;
+  requiresAccommodation: boolean;
+  arrivalDate: string;
+  departureDate: string;
+  specialNeeds: string;
+  paymentMethod: string;
+  invoiceRequired: boolean;
+  billingOrganisation: string;
+  baseFeeUsd: number;
+  excursionFeeUsd: number;
+  feeAmount: number;
+  paymentStatus: "unpaid" | "paid" | "partial";
+  privacyConsent: boolean;
+  photoConsent: boolean;
+  newsletterOptIn: boolean;
+  termsAccepted: boolean;
+  adminNotes: string;
+};
+
 export type Registration = {
   id: string;
   createdAt: string;

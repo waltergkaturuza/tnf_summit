@@ -32,3 +32,11 @@ export function generateAbstractTrackId(): string {
 export function generateDonationTrackId(): string {
   return `TNF-DON-${ddmmyy()}-${randomSegment(6)}`;
 }
+
+export function generateInnovationTrackId(): string {
+  return `TNF-INN-${ddmmyy()}-${randomSegment(6)}`;
+}
+
+export function isInnovationTrack(id: string): boolean {
+  return id.trim().startsWith("TNF-INN-");
+}

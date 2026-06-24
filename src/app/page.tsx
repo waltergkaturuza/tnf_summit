@@ -424,7 +424,7 @@ export default function HomePage() {
                     </li>
                   ))}
                 </ul>
-                <Link href="/registration" className="btn-gold px-8 py-3 rounded-xl text-sm font-bold inline-flex items-center gap-2">
+                <Link href="/innovation/apply" className="btn-gold px-8 py-3 rounded-xl text-sm font-bold inline-flex items-center gap-2">
                   {t.home.applyInnovation}
                   <ArrowRight className="w-4 h-4" />
                 </Link>

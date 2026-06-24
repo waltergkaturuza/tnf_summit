@@ -25,6 +25,10 @@ function isDonationTrack(id: string): boolean {
   return id.trim().startsWith("TNF-DON-");
 }
 
+function isInnovationTrack(id: string): boolean {
+  return id.trim().startsWith("TNF-INN-");
+}
+
 function activeProvider(): "zikimall" | "iveri" {
   const raw = (process.env.PAYMENT_PROVIDER || "iveri").trim().toLowerCase();
   return raw === "iveri" ? "iveri" : "zikimall";
@@ -194,6 +198,73 @@ async function resolveAndBuildStart(body: Body): Promise<
         category: catKey,
         payerEmail,
         flow: "donation",
+      });
+      return { status: 200, payload: { provider, action, fields } };
+    }
+
+    if (isInnovationTrack(trackId)) {
+      if (!supabaseAdmin) {
+        return { status: 500, payload: { error: "Server configuration error." } };
+      }
+      const { data: row, error: qErr } = await supabaseAdmin
+        .schema("tnf_summit")
+        .from("innovation_applications")
+        .select("email, startup_name, fee_amount, payment_status")
+        .eq("track_id", trackId.trim())
+        .maybeSingle();
+
+      if (qErr || !row) {
+        return { status: 404, payload: { error: "Innovation application not found." } };
+      }
+      if (row.payment_status === "paid") {
+        return { status: 400, payload: { error: "This application is already marked as paid." } };
+      }
+      const amountUsd = Number(row.fee_amount);
+      if (!Number.isFinite(amountUsd) || amountUsd <= 0) {
+        return { status: 400, payload: { error: "Invalid stored application fee." } };
+      }
+      const payerEmail = String(row.email ?? email?.trim() ?? "").trim();
+      if (!payerEmail) {
+        return { status: 400, payload: { error: "Application has no email on file." } };
+      }
+      const startupName = String(row.startup_name ?? "Youth Innovation Challenge").slice(0, 120);
+
+      if (provider === "zikimall") {
+        const redirectUrl = buildZikiMallRedirect({
+          trackId: trackId.trim(),
+          email: payerEmail,
+          amountUsd,
+          category: "Youth Innovation Challenge",
+          flow: "registration",
+        });
+        void notifyPaymentLink({
+          trackId: trackId.trim(),
+          email: payerEmail,
+          amountUsd,
+          flow: "registration",
+          category: `Innovation: ${startupName}`,
+        });
+        return { status: 200, payload: { provider, redirectUrl } };
+      }
+
+      const { action, fields } = buildIveriLiteFormFields({
+        applicationIdRaw: applicationId,
+        gatewayUrl: process.env.IVERI_GATEWAY_URL,
+        sharedSecret: process.env.IVERI_SHARED_SECRET,
+        amountUsd,
+        email: payerEmail,
+        merchantReference: merchantReferenceForAttempt(trackId),
+        merchantTrace: trackId.slice(0, 64),
+        lineItemDescription: `Zimbabwe TNF Global Summit 2026, Youth Innovation (${startupName})`.slice(0, 255),
+        baseUrl,
+        returnNext: "registration",
+      });
+      logIveriStartCert({
+        trackId: trackId.trim(),
+        amountUsd,
+        category: "Youth Innovation Challenge",
+        payerEmail,
+        flow: "registration",
       });
       return { status: 200, payload: { provider, action, fields } };
     }

@@ -33,7 +33,7 @@ export default function PayByReferencePage() {
     <div className="min-h-screen bg-[var(--bg-primary)]">
       <PageHeader
         title="Pay by Reference"
-        subtitle="Restart card payment with your existing registration or donation track ID."
+        subtitle="Restart payment with your registration, innovation application, or donation track ID."
       />
       <div className="max-w-xl mx-auto px-4 pb-20 pt-4">
         <Link href="/" className="inline-flex items-center gap-2 text-slate-400 hover:text-[#C9921A] text-sm font-semibold mb-8">
@@ -46,7 +46,7 @@ export default function PayByReferencePage() {
             Pay by Reference
           </h2>
           <p className="text-sm text-slate-400 mb-6">
-            Enter your registration/donation reference and the same email used during submission to restart card payment.
+            Enter your registration, innovation (TNF-INN-*), or donation reference and the same email used during submission to restart payment.
           </p>
 
           <form onSubmit={(e) => void restartPayment(e)} className="space-y-4">
@@ -56,7 +56,7 @@ export default function PayByReferencePage() {
                 required
                 value={trackId}
                 onChange={(e) => setTrackId(e.target.value)}
-                placeholder="e.g. TNF-REG-080526-NP2XUX"
+                placeholder="e.g. TNF-INN-220626-ABC123"
                 className="w-full px-3 py-2.5 rounded-xl bg-[var(--bg-primary)] border border-white/10 text-white text-sm font-mono uppercase"
               />
             </div>

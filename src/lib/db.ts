@@ -5,7 +5,7 @@
 
 import { supabase } from "./supabase";
 import { generateRegistrationTrackId } from "./trackId";
-import type { Registration, Donation, ContactMessage, NewsletterSubscriber, Speaker, Update, Abstract, UpdateComment, UpdateReactionCounts, UpdateAttachment } from "./adminData";
+import type { Registration, Donation, ContactMessage, NewsletterSubscriber, Speaker, Update, Abstract, UpdateComment, UpdateReactionCounts, UpdateAttachment, InnovationApplication } from "./adminData";
 
 // ── Type map: JS camelCase → Postgres snake_case ──────────────────────────────
 
@@ -840,7 +840,7 @@ export async function getActiveSubscriberEmails(): Promise<string[]> {
 }
 
 // ── TRACK STATUS (public RPC) ─────────────────────────────────────────────────
-export type TrackStatusResult = { trackType: "registration" | "abstract"; status: string; titleOrName: string } | null;
+export type TrackStatusResult = { trackType: "registration" | "abstract" | "innovation"; status: string; titleOrName: string } | null;
 
 export async function getTrackStatus(trackId: string): Promise<TrackStatusResult> {
   const { data, error } = await supabase.schema("tnf_summit").rpc("get_track_status", { p_track_id: trackId });
@@ -848,7 +848,7 @@ export async function getTrackStatus(trackId: string): Promise<TrackStatusResult
   const row = Array.isArray(data) ? data[0] : data;
   if (!row || !row.track_type) return null;
   return {
-    trackType: row.track_type as "registration" | "abstract",
+    trackType: row.track_type as "registration" | "abstract" | "innovation",
     status: row.status as string,
     titleOrName: (row.title_or_name as string) ?? "",
   };
@@ -953,5 +953,76 @@ export async function updateAbstract(id: string, updates: Partial<Abstract>): Pr
 
 export async function deleteAbstract(id: string): Promise<void> {
   const { error } = await supabase.schema("tnf_summit").from("abstracts").delete().eq("id", id);
+  if (error) throw error;
+}
+
+// ── INNOVATION APPLICATIONS ─────────────────────────────────────────────────────
+
+function rowToInnovation(row: Record<string, unknown>): InnovationApplication {
+  return {
+    id: row.id as string,
+    createdAt: row.created_at as string,
+    trackId: (row.track_id as string) ?? "",
+    status: row.status as InnovationApplication["status"],
+    adminNotes: (row.admin_notes as string) ?? "",
+    salutation: (row.salutation as string) ?? "",
+    firstName: (row.first_name as string) ?? "",
+    lastName: (row.last_name as string) ?? "",
+    gender: (row.gender as string) ?? "",
+    dateOfBirth: (row.date_of_birth as string) ?? "",
+    nationality: (row.nationality as string) ?? "",
+    email: (row.email as string) ?? "",
+    phone: (row.phone as string) ?? "",
+    whatsapp: (row.whatsapp as string) ?? "",
+    country: (row.country as string) ?? "",
+    city: (row.city as string) ?? "",
+    organisation: (row.organisation as string) ?? "",
+    startupName: (row.startup_name as string) ?? "",
+    startupStage: (row.startup_stage as string) ?? "",
+    startupDescription: (row.startup_description as string) ?? "",
+    projectUrl: (row.project_url as string) ?? "",
+    attendanceMode: "in-person",
+    excursions: (row.excursions as string[]) ?? [],
+    excursionCount: Number(row.excursion_count ?? 0),
+    dietaryRequirements: (row.dietary_requirements as string) ?? "",
+    requiresAccommodation: !!(row.requires_accommodation),
+    arrivalDate: (row.arrival_date as string) ?? "",
+    departureDate: (row.departure_date as string) ?? "",
+    specialNeeds: (row.special_needs as string) ?? "",
+    paymentMethod: (row.payment_method as string) ?? "",
+    invoiceRequired: !!(row.invoice_required),
+    billingOrganisation: (row.billing_organisation as string) ?? "",
+    baseFeeUsd: Number(row.base_fee_usd ?? 200),
+    excursionFeeUsd: Number(row.excursion_fee_usd ?? 0),
+    feeAmount: Number(row.fee_amount ?? 200),
+    paymentStatus: (row.payment_status as InnovationApplication["paymentStatus"]) ?? "unpaid",
+    privacyConsent: !!(row.privacy_consent),
+    photoConsent: !!(row.photo_consent),
+    newsletterOptIn: !!(row.newsletter_opt_in),
+    termsAccepted: !!(row.terms_accepted),
+  };
+}
+
+export async function fetchInnovationApplications(): Promise<InnovationApplication[]> {
+  const { data, error } = await supabase
+    .schema("tnf_summit")
+    .from("innovation_applications")
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return (data ?? []).map((row) => rowToInnovation(row as Record<string, unknown>));
+}
+
+export async function updateInnovationApplication(id: string, updates: Partial<InnovationApplication>): Promise<void> {
+  const clean: Record<string, unknown> = {};
+  if (updates.status !== undefined) clean.status = updates.status;
+  if (updates.adminNotes !== undefined) clean.admin_notes = updates.adminNotes;
+  if (updates.paymentStatus !== undefined) clean.payment_status = updates.paymentStatus;
+  const { error } = await supabase.schema("tnf_summit").from("innovation_applications").update(clean).eq("id", id);
+  if (error) throw error;
+}
+
+export async function deleteInnovationApplication(id: string): Promise<void> {
+  const { error } = await supabase.schema("tnf_summit").from("innovation_applications").delete().eq("id", id);
   if (error) throw error;
 }

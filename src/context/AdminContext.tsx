@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
 import { supabase } from "@/lib/supabase";
 import * as db from "@/lib/db";
-import type { Registration, Donation, ContactMessage, NewsletterSubscriber, Speaker, Update, Abstract } from "@/lib/adminData";
+import type { Registration, Donation, ContactMessage, NewsletterSubscriber, Speaker, Update, Abstract, InnovationApplication } from "@/lib/adminData";
 
 type AdminContextType = {
   isAuthenticated: boolean;
@@ -50,6 +50,12 @@ type AdminContextType = {
   updateAbstract: (id: string, updates: Partial<Abstract>) => Promise<void>;
   deleteAbstract: (id: string) => Promise<void>;
   refreshAbstracts: () => Promise<void>;
+
+  innovationApplications: InnovationApplication[];
+  innovationLoading: boolean;
+  updateInnovationApplication: (id: string, updates: Partial<InnovationApplication>) => Promise<void>;
+  deleteInnovationApplication: (id: string) => Promise<void>;
+  refreshInnovationApplications: () => Promise<void>;
 };
 
 const AdminContext = createContext<AdminContextType | null>(null);
@@ -79,6 +85,9 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   const [abstracts, setAbstracts] = useState<Abstract[]>([]);
   const [abstractsLoading, setAbstractsLoading] = useState(false);
 
+  const [innovationApplications, setInnovationApplications] = useState<InnovationApplication[]>([]);
+  const [innovationLoading, setInnovationLoading] = useState(false);
+
   // ── Auth state from Supabase ──────────────────────────────────────────────
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -107,11 +116,12 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     setSpksLoading(true);
     setUpdatesLoading(true);
     setAbstractsLoading(true);
+    setInnovationLoading(true);
 
     setDonationsLoading(true);
 
     try {
-      const [regs, dons, msgs, subs, spks, upds, abs] = await Promise.all([
+      const [regs, dons, msgs, subs, spks, upds, abs, innov] = await Promise.all([
         db.fetchRegistrations(),
         db.fetchDonations().catch((e) => {
           console.warn("Donations table may be missing; run Supabase migration:", e);
@@ -122,6 +132,10 @@ export function AdminProvider({ children }: { children: ReactNode }) {
         db.fetchSpeakers(),
         db.fetchUpdates(),
         db.fetchAbstracts(),
+        db.fetchInnovationApplications().catch((e) => {
+          console.warn("Innovation applications table may be missing; run Supabase migration:", e);
+          return [] as InnovationApplication[];
+        }),
       ]);
       setRegistrations(regs);
       setDonations(dons);
@@ -130,6 +144,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       setSpeakers(spks);
       setUpdates(upds);
       setAbstracts(abs);
+      setInnovationApplications(innov);
     } catch (err) {
       console.error("Failed to load admin data:", err);
     } finally {
@@ -140,6 +155,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       setSpksLoading(false);
       setUpdatesLoading(false);
       setAbstractsLoading(false);
+      setInnovationLoading(false);
     }
   };
 
@@ -160,6 +176,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     setSpeakers([]);
     setUpdates([]);
     setAbstracts([]);
+    setInnovationApplications([]);
   };
 
   // ── Registrations ─────────────────────────────────────────────────────────
@@ -305,6 +322,22 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     setAbstracts(prev => prev.filter(a => a.id !== id));
   };
 
+  const refreshInnovationApplications = useCallback(async () => {
+    setInnovationLoading(true);
+    try { setInnovationApplications(await db.fetchInnovationApplications()); }
+    finally { setInnovationLoading(false); }
+  }, []);
+
+  const updateInnovationApplication = async (id: string, updates: Partial<InnovationApplication>) => {
+    await db.updateInnovationApplication(id, updates);
+    setInnovationApplications(prev => prev.map(a => a.id === id ? { ...a, ...updates } : a));
+  };
+
+  const deleteInnovationApplication = async (id: string) => {
+    await db.deleteInnovationApplication(id);
+    setInnovationApplications(prev => prev.filter(a => a.id !== id));
+  };
+
   return (
     <AdminContext.Provider value={{
       isAuthenticated, authLoading, login, logout,
@@ -315,6 +348,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       speakers, spksLoading, updateSpeaker, addSpeaker, deleteSpeaker,
       updates, updatesLoading, addUpdate, updateUpdate, deleteUpdate, refreshUpdates,
       abstracts, abstractsLoading, updateAbstract, deleteAbstract, refreshAbstracts,
+      innovationApplications, innovationLoading, updateInnovationApplication, deleteInnovationApplication, refreshInnovationApplications,
     }}>
       {children}
     </AdminContext.Provider>

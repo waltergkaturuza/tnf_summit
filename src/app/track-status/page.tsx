@@ -74,13 +74,19 @@ export default function TrackStatusPage() {
                   <div className="w-12 h-12 rounded-xl bg-[#C9921A]/20 flex items-center justify-center">
                     <FileText className="w-6 h-6 text-[#C9921A]" />
                   </div>
+                ) : result.trackType === "innovation" ? (
+                  <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                    <User className="w-6 h-6 text-purple-400" />
+                  </div>
                 ) : (
                   <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center">
                     <User className="w-6 h-6 text-emerald-400" />
                   </div>
                 )}
                 <div>
-                  <p className="text-slate-500 text-xs uppercase font-semibold">{result.trackType === "abstract" ? t.trackStatus.abstractLabel : t.trackStatus.registrationLabel}</p>
+                  <p className="text-slate-500 text-xs uppercase font-semibold">
+                    {result.trackType === "abstract" ? t.trackStatus.abstractLabel : result.trackType === "innovation" ? "Innovation Challenge Application" : t.trackStatus.registrationLabel}
+                  </p>
                   <p className="text-white font-bold">{result.titleOrName || "-"}</p>
                 </div>
               </div>

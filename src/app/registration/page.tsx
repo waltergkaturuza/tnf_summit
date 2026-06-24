@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   CheckCircle, ArrowRight, ArrowLeft, User, Mail, Phone,
   Building, Globe, Users, CreditCard, Calendar, Info,
-  Mic, Heart, Camera, Bell, Rocket, Handshake, Briefcase,
+  Mic, Heart, Camera, Bell, Handshake, Briefcase,
   FileText, ChevronDown, MapPin,
 } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
@@ -19,7 +19,7 @@ const STEPS = [
   { id: 2, label: "Professional", icon: Briefcase },
   { id: 3, label: "Attendance", icon: Calendar },
   { id: 4, label: "Preferences", icon: Heart },
-  { id: 5, label: "Extras", icon: Rocket },
+  { id: 5, label: "Extras", icon: Handshake },
   { id: 6, label: "Payment", icon: CreditCard },
   { id: 7, label: "Confirm", icon: CheckCircle },
 ];
@@ -752,8 +752,8 @@ export default function RegistrationPage() {
                 {step === 5 && (
                   <div className="space-y-6">
                     <div className="mb-2">
-                      <h2 className="text-xl font-black text-white">Additional Registrations</h2>
-                      <p className="text-sm mt-1 text-theme-primary">Innovation Challenge, bilateral meetings, and media accreditation.</p>
+                      <h2 className="text-xl font-black text-white">Additional Options</h2>
+                      <p className="text-sm mt-1 text-theme-primary">Bilateral meetings and media accreditation. Youth innovators should use the <Link href="/innovation/apply" className="text-[#C9921A] underline">separate Innovation Challenge application</Link>.</p>
                     </div>
 
                     {/* Bilateral meetings */}
@@ -776,43 +776,6 @@ export default function RegistrationPage() {
                           <Field label="Investment / Partnership Areas of Interest">
                             <CheckboxGroup options={investmentAreas} selected={form.investmentInterests} onChange={v => set("investmentInterests", v)} />
                           </Field>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Innovation Challenge */}
-                    <div className="glass rounded-xl p-5">
-                      <div className="flex items-start gap-3 mb-4">
-                        <Rocket className="w-5 h-5 text-[#C9921A] flex-shrink-0 mt-0.5" />
-                        <div>
-                          <h3 className="text-white font-bold text-sm">TNF Innovation Challenge 2026</h3>
-                          <p className="text-xs mt-1 text-theme-primary">African youth entrepreneurs pitch digital and green solutions to a global investor panel. Open to delegates under 35.</p>
-                        </div>
-                      </div>
-                      <Field label="Apply for the TNF Innovation Challenge?">
-                        <div className="flex gap-3">
-                          <ToggleButton value="yes" current={form.applyInnovation} onChange={v => set("applyInnovation", v)}>Yes, apply</ToggleButton>
-                          <ToggleButton value="no" current={form.applyInnovation} onChange={v => set("applyInnovation", v)}>No</ToggleButton>
-                        </div>
-                      </Field>
-                      {form.applyInnovation === "yes" && (
-                        <div className="space-y-4 mt-4">
-                          <Field label="Start-up / Project Name">
-                            <input type="text" placeholder="Your venture name" value={form.startupName} onChange={e => set("startupName", e.target.value)} className={inputClass} />
-                          </Field>
-                          <Field label="Stage of Development">
-                            <div className="relative">
-                              <select value={form.startupStage} onChange={e => set("startupStage", e.target.value)} className={selectClass}>
-                                <option value="">Select stage</option>
-                                {["Idea Stage", "Prototype / MVP", "Early Traction", "Growth Stage", "Scaling"].map(s => <option key={s}>{s}</option>)}
-                              </select>
-                              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-theme-primary pointer-events-none" />
-                            </div>
-                          </Field>
-                          <Field label="Brief Description of Your Solution (max 250 words)">
-                            <textarea rows={4} placeholder="Describe the problem you solve, your solution, and your impact..." value={form.startupDescription} onChange={e => set("startupDescription", e.target.value)} className={inputClass + " resize-none"} maxLength={1500} />
-                          </Field>
-                          <p className="text-[#F5B730] text-xs">★ A full application form will be emailed to you after registration is confirmed.</p>
                         </div>
                       )}
                     </div>
