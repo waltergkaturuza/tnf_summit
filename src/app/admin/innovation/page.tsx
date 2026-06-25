@@ -42,10 +42,10 @@ function InnovationModal({ app, onClose, onUpdate }: {
   };
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-10 overflow-y-auto">
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-start justify-center p-2 sm:p-4 pt-6 sm:pt-10 overflow-y-auto">
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
-      <motion.div initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95 }} className="relative w-full max-w-3xl bg-[var(--bg-surface)] rounded-2xl border border-white/10 overflow-hidden mb-4">
-        <div className="flex items-start justify-between p-6 border-b border-white/5">
+      <motion.div initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95 }} className="relative w-[min(1400px,calc(100vw-1rem))] bg-[var(--bg-surface)] rounded-2xl border border-white/10 overflow-hidden mb-4">
+        <div className="flex items-start justify-between p-6 lg:p-8 border-b border-white/5">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-300 font-black text-lg">
               {app.firstName[0]}{app.lastName[0]}
@@ -61,7 +61,7 @@ function InnovationModal({ app, onClose, onUpdate }: {
           </div>
         </div>
 
-        <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div className="p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-6">
           <div className="space-y-5">
             <div>
               <h3 className="text-[#C9921A] text-xs font-bold uppercase mb-3">Contact</h3>
@@ -75,19 +75,6 @@ function InnovationModal({ app, onClose, onUpdate }: {
                 {app.nationality && (
                   <div className="flex items-center gap-2"><MapPin className="w-3.5 h-3.5 text-slate-500" /><span className="text-slate-300">Nationality: {app.nationality}</span></div>
                 )}
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-[#C9921A] text-xs font-bold uppercase mb-3">Venture</h3>
-              <div className="glass rounded-xl p-3 space-y-2 text-sm">
-                <div><span className="text-slate-500">Start-up:</span> <span className="text-white font-semibold">{app.startupName}</span></div>
-                <div><span className="text-slate-500">Stage:</span> <span className="text-slate-300">{app.startupStage || "—"}</span></div>
-                {app.organisation && <div><span className="text-slate-500">Organisation:</span> <span className="text-slate-300">{app.organisation}</span></div>}
-                {app.projectUrl && (
-                  <div><span className="text-slate-500">Link:</span> <a href={app.projectUrl} target="_blank" rel="noopener noreferrer" className="text-[#C9921A] hover:underline break-all">{app.projectUrl}</a></div>
-                )}
-                <p className="text-slate-400 text-xs leading-relaxed pt-1 border-t border-white/5">{app.startupDescription}</p>
               </div>
             </div>
 
@@ -124,6 +111,21 @@ function InnovationModal({ app, onClose, onUpdate }: {
                   <option value="paid">Paid</option>
                   <option value="partial">Partial</option>
                 </select>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-5">
+            <div>
+              <h3 className="text-[#C9921A] text-xs font-bold uppercase mb-3">Venture</h3>
+              <div className="glass rounded-xl p-4 space-y-2 text-sm h-full">
+                <div><span className="text-slate-500">Start-up:</span> <span className="text-white font-semibold">{app.startupName}</span></div>
+                <div><span className="text-slate-500">Stage:</span> <span className="text-slate-300">{app.startupStage || "—"}</span></div>
+                {app.organisation && <div><span className="text-slate-500">Organisation:</span> <span className="text-slate-300">{app.organisation}</span></div>}
+                {app.projectUrl && (
+                  <div><span className="text-slate-500">Link:</span> <a href={app.projectUrl} target="_blank" rel="noopener noreferrer" className="text-[#C9921A] hover:underline break-all">{app.projectUrl}</a></div>
+                )}
+                <p className="text-slate-300 text-sm leading-relaxed pt-2 border-t border-white/5 whitespace-pre-wrap">{app.startupDescription}</p>
               </div>
             </div>
           </div>
