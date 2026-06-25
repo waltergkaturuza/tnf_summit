@@ -61,7 +61,7 @@ function InnovationModal({ app, onClose, onUpdate }: {
           </div>
         </div>
 
-        <div className="p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-6">
+        <div className="p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,2.5fr)_minmax(0,1fr)] gap-x-8 gap-y-6">
           <div className="space-y-5">
             <div>
               <h3 className="text-[#C9921A] text-xs font-bold uppercase mb-3">Contact</h3>
