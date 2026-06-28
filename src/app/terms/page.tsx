@@ -1,11 +1,9 @@
 import Link from "next/link";
 import { Mail, ArrowLeft } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
+import { PAGE_SEO, pageMetadata } from "@/lib/seo";
 
-export const metadata = {
-  title: "Terms of Use | Zimbabwe TNF Global Summit 2026",
-  description: "Terms of Use for the Zimbabwe TNF Global Summit 2026 website and registration platform.",
-};
+export const metadata = pageMetadata(PAGE_SEO.terms);
 
 export default function TermsPage() {
   return (

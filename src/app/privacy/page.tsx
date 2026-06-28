@@ -1,11 +1,9 @@
 import Link from "next/link";
 import { Mail, ArrowLeft } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
+import { PAGE_SEO, pageMetadata } from "@/lib/seo";
 
-export const metadata = {
-  title: "Privacy Policy | Zimbabwe TNF Global Summit 2026",
-  description: "Privacy Policy for the Zimbabwe TNF Global Summit 2026 website and registration system.",
-};
+export const metadata = pageMetadata(PAGE_SEO.privacy);
 
 export default function PrivacyPage() {
   return (
