@@ -956,6 +956,105 @@ export async function deleteAbstract(id: string): Promise<void> {
   if (error) throw error;
 }
 
+// ── ABSTRACT REVIEWERS / ASSIGNMENTS / REVIEWS ───────────────────────────────
+
+function rowToAbstractReviewer(row: Record<string, unknown>): import("./adminData").AbstractReviewer {
+  return {
+    id: row.id as string,
+    email: (row.email as string) ?? "",
+    fullName: (row.full_name as string) ?? "",
+    institution: (row.institution as string) ?? "",
+    department: (row.department as string) ?? "",
+    isActive: !!(row.is_active),
+  };
+}
+
+function rowToAbstractAssignment(row: Record<string, unknown>): import("./adminData").AbstractAssignment {
+  return {
+    id: row.id as string,
+    abstractId: row.abstract_id as string,
+    reviewerId: row.reviewer_id as string,
+    createdAt: row.created_at as string,
+  };
+}
+
+function rowToAbstractReview(row: Record<string, unknown>): import("./adminData").AbstractReview {
+  return {
+    id: row.id as string,
+    abstractId: row.abstract_id as string,
+    reviewerId: row.reviewer_id as string,
+    score: (row.score as number) ?? 0,
+    recommendation: (row.recommendation as import("./adminData").ReviewRecommendation) ?? "accept",
+    confidence: (row.confidence as import("./adminData").ReviewConfidence) ?? "medium",
+    comments: (row.comments as string) ?? "",
+    createdAt: row.created_at as string,
+    updatedAt: row.updated_at as string,
+  };
+}
+
+export async function fetchAbstractReviewers(): Promise<import("./adminData").AbstractReviewer[]> {
+  const { data, error } = await supabase
+    .schema("tnf_summit")
+    .from("admin_users")
+    .select("*")
+    .eq("role", "reviewer")
+    .eq("is_active", true)
+    .order("full_name", { ascending: true });
+  if (error) throw error;
+  return (data ?? []).map((r) => rowToAbstractReviewer(r as Record<string, unknown>));
+}
+
+export async function fetchAbstractAssignments(): Promise<import("./adminData").AbstractAssignment[]> {
+  const { data, error } = await supabase.schema("tnf_summit").from("abstract_assignments").select("*");
+  if (error) throw error;
+  return (data ?? []).map((r) => rowToAbstractAssignment(r as Record<string, unknown>));
+}
+
+export async function fetchAbstractReviews(): Promise<import("./adminData").AbstractReview[]> {
+  const { data, error } = await supabase
+    .schema("tnf_summit")
+    .from("abstract_reviews")
+    .select("*")
+    .order("score", { ascending: false });
+  if (error) throw error;
+  return (data ?? []).map((r) => rowToAbstractReview(r as Record<string, unknown>));
+}
+
+export async function assignAbstractReviewers(abstractId: string, reviewerIds: string[]): Promise<void> {
+  const { error: delErr } = await supabase
+    .schema("tnf_summit")
+    .from("abstract_assignments")
+    .delete()
+    .eq("abstract_id", abstractId);
+  if (delErr) throw delErr;
+  if (!reviewerIds.length) return;
+  const { error } = await supabase.schema("tnf_summit").from("abstract_assignments").insert(
+    reviewerIds.map((reviewerId) => ({ abstract_id: abstractId, reviewer_id: reviewerId }))
+  );
+  if (error) throw error;
+}
+
+export async function upsertAbstractReview(
+  review: Omit<import("./adminData").AbstractReview, "id" | "createdAt" | "updatedAt">
+): Promise<import("./adminData").AbstractReview> {
+  const row = {
+    abstract_id: review.abstractId,
+    reviewer_id: review.reviewerId,
+    score: review.score,
+    recommendation: review.recommendation,
+    confidence: review.confidence,
+    comments: review.comments ?? "",
+  };
+  const { data, error } = await supabase
+    .schema("tnf_summit")
+    .from("abstract_reviews")
+    .upsert(row, { onConflict: "abstract_id,reviewer_id" })
+    .select("*")
+    .single();
+  if (error) throw error;
+  return rowToAbstractReview(data as Record<string, unknown>);
+}
+
 // ── INNOVATION APPLICATIONS ─────────────────────────────────────────────────────
 
 function rowToInnovation(row: Record<string, unknown>): InnovationApplication {

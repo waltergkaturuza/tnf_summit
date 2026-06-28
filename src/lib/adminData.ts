@@ -218,6 +218,37 @@ export type AbstractStatus = "submitted" | "under_review" | "accepted" | "reject
 
 export type CoAuthor = { name: string; email?: string; institution?: string };
 
+export type AbstractReviewer = {
+  id: string;
+  email: string;
+  fullName: string;
+  institution: string;
+  department: string;
+  isActive: boolean;
+};
+
+export type AbstractAssignment = {
+  id: string;
+  abstractId: string;
+  reviewerId: string;
+  createdAt: string;
+};
+
+export type ReviewRecommendation = "accept" | "minor-revisions" | "major-revisions" | "reject";
+export type ReviewConfidence = "high" | "medium" | "low";
+
+export type AbstractReview = {
+  id: string;
+  abstractId: string;
+  reviewerId: string;
+  score: number;
+  recommendation: ReviewRecommendation;
+  confidence: ReviewConfidence;
+  comments: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type Abstract = {
   id: string;
   createdAt: string;

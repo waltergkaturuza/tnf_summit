@@ -4,12 +4,12 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Users, Plus, Edit3, Trash2, X, Shield, Eye, Check,
-  UserCheck, UserX, RefreshCw, Mail, Search, Crown,
+  UserCheck, UserX, RefreshCw, Mail, Search, Crown, GraduationCap,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { logAudit } from "@/lib/audit";
 
-type AdminRole = "super_admin" | "admin" | "editor" | "viewer";
+type AdminRole = "super_admin" | "admin" | "editor" | "viewer" | "reviewer";
 
 type AdminUser = {
   id: string;
@@ -17,6 +17,7 @@ type AdminUser = {
   fullName: string;
   role: AdminRole;
   department: string;
+  institution: string;
   isActive: boolean;
   createdAt: string;
   lastSeenAt: string | null;
@@ -43,6 +44,11 @@ const ROLE_CONFIG: Record<AdminRole, { label: string; color: string; bg: string;
     icon: Eye,
     perms: ["Read-only access to dashboard and analytics", "Cannot make any changes"],
   },
+  reviewer: {
+    label: "Reviewer", color: "#F59E0B", bg: "#F59E0B",
+    icon: GraduationCap,
+    perms: ["Review assigned abstracts using the 1–30 rubric", "Listed on the Abstracts → Reviewers tab"],
+  },
 };
 
 function RoleBadge({ role }: { role: AdminRole }) {
@@ -67,7 +73,7 @@ export default function UsersPage() {
   const [error, setError]   = useState("");
 
   const [form, setForm] = useState({
-    email: "", fullName: "", role: "viewer" as AdminRole, department: "", password: "",
+    email: "", fullName: "", role: "viewer" as AdminRole, department: "", institution: "", password: "",
   });
 
   const load = async () => {
@@ -80,6 +86,7 @@ export default function UsersPage() {
       fullName:   (r.full_name as string) ?? "",
       role:       r.role as AdminRole,
       department: (r.department as string) ?? "",
+      institution: (r.institution as string) ?? "",
       isActive:   !!(r.is_active),
       createdAt:  r.created_at as string,
       lastSeenAt: r.last_seen_at as string | null,
@@ -107,11 +114,12 @@ export default function UsersPage() {
       const { error: dbErr } = await supabase.schema("tnf_summit").from("admin_users").insert({
         email: form.email, full_name: form.fullName,
         role: form.role, department: form.department,
+        institution: form.role === "reviewer" ? form.institution : "",
       });
       if (dbErr) { setError(dbErr.message); return; }
       await logAudit("user_created", "admin_user", form.fullName, "", { email: form.email, role: form.role });
       setShowAdd(false);
-      setForm({ email: "", fullName: "", role: "viewer", department: "", password: "" });
+      setForm({ email: "", fullName: "", role: "viewer", department: "", institution: "", password: "" });
       load();
     } finally { setSaving(false); }
   };
@@ -121,7 +129,9 @@ export default function UsersPage() {
     setSaving(true);
     const { error: dbErr } = await supabase.schema("tnf_summit").from("admin_users").update({
       full_name: editUser.fullName, role: editUser.role,
-      department: editUser.department, is_active: editUser.isActive,
+      department: editUser.department,
+      institution: editUser.role === "reviewer" ? editUser.institution : "",
+      is_active: editUser.isActive,
     }).eq("id", editUser.id);
     if (dbErr) { setError(dbErr.message); setSaving(false); return; }
     await logAudit("user_updated", "admin_user", editUser.fullName, editUser.id, { role: editUser.role });
@@ -163,7 +173,7 @@ export default function UsersPage() {
       </div>
 
       {/* Role legend */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
         {(Object.entries(ROLE_CONFIG) as [AdminRole, typeof ROLE_CONFIG[AdminRole]][]).map(([role, cfg]) => {
           const Icon = cfg.icon;
           return (
@@ -202,7 +212,7 @@ export default function UsersPage() {
               <tr className="border-b border-white/5">
                 <th className="text-left px-5 py-3.5 text-slate-400 text-xs font-semibold uppercase tracking-wide">User</th>
                 <th className="text-left px-5 py-3.5 text-slate-400 text-xs font-semibold uppercase tracking-wide hidden md:table-cell">Role</th>
-                <th className="text-left px-5 py-3.5 text-slate-400 text-xs font-semibold uppercase tracking-wide hidden lg:table-cell">Department</th>
+                <th className="text-left px-5 py-3.5 text-slate-400 text-xs font-semibold uppercase tracking-wide hidden lg:table-cell">Dept / Institution</th>
                 <th className="text-left px-5 py-3.5 text-slate-400 text-xs font-semibold uppercase tracking-wide hidden lg:table-cell">Last Seen</th>
                 <th className="text-left px-5 py-3.5 text-slate-400 text-xs font-semibold uppercase tracking-wide">Status</th>
                 <th className="px-5 py-3.5" />
@@ -224,7 +234,9 @@ export default function UsersPage() {
                     </div>
                   </td>
                   <td className="px-5 py-4 hidden md:table-cell"><RoleBadge role={u.role} /></td>
-                  <td className="px-5 py-4 text-slate-400 text-sm hidden lg:table-cell">{u.department || "-"}</td>
+                  <td className="px-5 py-4 text-slate-400 text-sm hidden lg:table-cell">
+                    {u.role === "reviewer" ? (u.institution || u.department || "-") : (u.department || "-")}
+                  </td>
                   <td className="px-5 py-4 text-slate-500 text-xs hidden lg:table-cell">
                     {u.lastSeenAt ? new Date(u.lastSeenAt).toLocaleDateString() : "Never"}
                   </td>
@@ -289,6 +301,15 @@ export default function UsersPage() {
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-[#C9921A]/60" />
                 </div>
               ))}
+              {form.role === "reviewer" && (
+                <div>
+                  <label className="text-slate-400 text-xs font-semibold uppercase tracking-wide mb-1.5 block">Institution / University</label>
+                  <input type="text" placeholder="e.g. University of Zimbabwe"
+                    value={form.institution}
+                    onChange={(e) => setForm((p) => ({ ...p, institution: e.target.value }))}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-[#C9921A]/60" />
+                </div>
+              )}
               <div>
                 <label className="text-slate-400 text-xs font-semibold uppercase tracking-wide mb-1.5 block">Role</label>
                 <div className="grid grid-cols-2 gap-2">
@@ -338,6 +359,13 @@ export default function UsersPage() {
                 <input value={editUser.department} onChange={e => setEditUser(u => u ? { ...u, department: e.target.value } : u)}
                   className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#C9921A]/60" />
               </div>
+              {editUser.role === "reviewer" && (
+                <div>
+                  <label className="text-slate-400 text-xs font-semibold uppercase tracking-wide mb-1.5 block">Institution / University</label>
+                  <input value={editUser.institution} onChange={e => setEditUser(u => u ? { ...u, institution: e.target.value } : u)}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#C9921A]/60" />
+                </div>
+              )}
               <div>
                 <label className="text-slate-400 text-xs font-semibold uppercase tracking-wide mb-2 block">Role</label>
                 <div className="grid grid-cols-2 gap-2">

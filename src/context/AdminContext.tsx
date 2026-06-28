@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
 import { supabase } from "@/lib/supabase";
 import * as db from "@/lib/db";
-import type { Registration, Donation, ContactMessage, NewsletterSubscriber, Speaker, Update, Abstract, InnovationApplication } from "@/lib/adminData";
+import type { Registration, Donation, ContactMessage, NewsletterSubscriber, Speaker, Update, Abstract, InnovationApplication, AbstractReviewer, AbstractAssignment, AbstractReview } from "@/lib/adminData";
 
 type AdminContextType = {
   isAuthenticated: boolean;
@@ -50,6 +50,13 @@ type AdminContextType = {
   updateAbstract: (id: string, updates: Partial<Abstract>) => Promise<void>;
   deleteAbstract: (id: string) => Promise<void>;
   refreshAbstracts: () => Promise<void>;
+  abstractReviewers: AbstractReviewer[];
+  abstractAssignments: AbstractAssignment[];
+  abstractReviews: AbstractReview[];
+  abstractReviewLoading: boolean;
+  refreshAbstractReviewData: () => Promise<void>;
+  assignAbstractReviewers: (abstractId: string, reviewerIds: string[]) => Promise<void>;
+  saveAbstractReview: (review: Omit<AbstractReview, "id" | "createdAt" | "updatedAt">) => Promise<void>;
 
   innovationApplications: InnovationApplication[];
   innovationLoading: boolean;
@@ -84,6 +91,10 @@ export function AdminProvider({ children }: { children: ReactNode }) {
 
   const [abstracts, setAbstracts] = useState<Abstract[]>([]);
   const [abstractsLoading, setAbstractsLoading] = useState(false);
+  const [abstractReviewers, setAbstractReviewers] = useState<AbstractReviewer[]>([]);
+  const [abstractAssignments, setAbstractAssignments] = useState<AbstractAssignment[]>([]);
+  const [abstractReviews, setAbstractReviews] = useState<AbstractReview[]>([]);
+  const [abstractReviewLoading, setAbstractReviewLoading] = useState(false);
 
   const [innovationApplications, setInnovationApplications] = useState<InnovationApplication[]>([]);
   const [innovationLoading, setInnovationLoading] = useState(false);
@@ -145,6 +156,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       setUpdates(upds);
       setAbstracts(abs);
       setInnovationApplications(innov);
+      void refreshAbstractReviewDataInternal();
     } catch (err) {
       console.error("Failed to load admin data:", err);
     } finally {
@@ -322,6 +334,40 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     setAbstracts(prev => prev.filter(a => a.id !== id));
   };
 
+  const refreshAbstractReviewDataInternal = async () => {
+    setAbstractReviewLoading(true);
+    try {
+      const [reviewers, assignments, reviews] = await Promise.all([
+        db.fetchAbstractReviewers().catch(() => [] as AbstractReviewer[]),
+        db.fetchAbstractAssignments().catch(() => [] as AbstractAssignment[]),
+        db.fetchAbstractReviews().catch(() => [] as AbstractReview[]),
+      ]);
+      setAbstractReviewers(reviewers);
+      setAbstractAssignments(assignments);
+      setAbstractReviews(reviews);
+    } finally {
+      setAbstractReviewLoading(false);
+    }
+  };
+
+  const refreshAbstractReviewData = useCallback(async () => {
+    await refreshAbstractReviewDataInternal();
+  }, []);
+
+  const assignAbstractReviewers = async (abstractId: string, reviewerIds: string[]) => {
+    await db.assignAbstractReviewers(abstractId, reviewerIds);
+    const assignments = await db.fetchAbstractAssignments();
+    setAbstractAssignments(assignments);
+  };
+
+  const saveAbstractReview = async (review: Omit<AbstractReview, "id" | "createdAt" | "updatedAt">) => {
+    const saved = await db.upsertAbstractReview(review);
+    setAbstractReviews((prev) => {
+      const rest = prev.filter((r) => !(r.abstractId === saved.abstractId && r.reviewerId === saved.reviewerId));
+      return [...rest, saved];
+    });
+  };
+
   const refreshInnovationApplications = useCallback(async () => {
     setInnovationLoading(true);
     try { setInnovationApplications(await db.fetchInnovationApplications()); }
@@ -348,6 +394,8 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       speakers, spksLoading, updateSpeaker, addSpeaker, deleteSpeaker,
       updates, updatesLoading, addUpdate, updateUpdate, deleteUpdate, refreshUpdates,
       abstracts, abstractsLoading, updateAbstract, deleteAbstract, refreshAbstracts,
+      abstractReviewers, abstractAssignments, abstractReviews, abstractReviewLoading,
+      refreshAbstractReviewData, assignAbstractReviewers, saveAbstractReview,
       innovationApplications, innovationLoading, updateInnovationApplication, deleteInnovationApplication, refreshInnovationApplications,
     }}>
       {children}
