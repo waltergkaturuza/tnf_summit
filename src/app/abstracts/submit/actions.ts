@@ -1,6 +1,6 @@
 "use server";
 
-import { insertAbstract } from "@/lib/db";
+import { insertAbstractPublic } from "@/lib/abstractsServer";
 import { generateAbstractTrackId } from "@/lib/trackId";
 import { themes } from "@/lib/data";
 import { sendMail, renderBrandedEmail, getSiteBaseUrl } from "@/lib/email";
@@ -48,7 +48,7 @@ export async function submitAbstractAction(_prev: SubmitAbstractState, formData:
     }
 
     const trackId = generateAbstractTrackId();
-    await insertAbstract({
+    await insertAbstractPublic({
       trackId,
       themeId,
       title,
@@ -87,6 +87,10 @@ export async function submitAbstractAction(_prev: SubmitAbstractState, formData:
     return { ok: true, trackId };
   } catch (e) {
     console.error(e);
+    const message = e instanceof Error ? e.message : "";
+    if (message.includes("Server configuration error")) {
+      return { ok: false, error: "Submission is temporarily unavailable. Please email info@tnfzim.com with your abstract." };
+    }
     return { ok: false, error: "Submission failed. Please try again or contact info@tnfzim.com." };
   }
 }

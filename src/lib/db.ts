@@ -912,7 +912,7 @@ export async function insertAbstract(a: Omit<Abstract, "id" | "createdAt" | "upd
     country: a.country,
     institution: a.institution,
     t_shirt_size: a.tShirtSize || null,
-    co_authors: JSON.stringify(a.coAuthors ?? []),
+    co_authors: a.coAuthors ?? [],
     first_name: a.firstName,
     last_name: a.lastName,
     email: a.email,
@@ -940,7 +940,7 @@ export async function updateAbstract(id: string, updates: Partial<Abstract>): Pr
   if (updates.country !== undefined) clean.country = updates.country;
   if (updates.institution !== undefined) clean.institution = updates.institution;
   if (updates.tShirtSize !== undefined) clean.t_shirt_size = updates.tShirtSize;
-  if (updates.coAuthors !== undefined) clean.co_authors = JSON.stringify(updates.coAuthors);
+  if (updates.coAuthors !== undefined) clean.co_authors = updates.coAuthors;
   if (updates.firstName !== undefined) clean.first_name = updates.firstName;
   if (updates.lastName !== undefined) clean.last_name = updates.lastName;
   if (updates.email !== undefined) clean.email = updates.email;
