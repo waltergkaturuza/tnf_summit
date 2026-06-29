@@ -106,7 +106,7 @@ export default function HelloPageGallerySlider({
           src={slideSrc(slide.path)}
           alt={slide.alt}
           fill
-          className="object-cover"
+          className="object-cover wallpaper-photo"
           sizes={isBackground ? "100vw" : "(max-width: 1024px) 100vw, 65vw"}
           priority={index === 0}
         />
@@ -114,8 +114,8 @@ export default function HelloPageGallerySlider({
           aria-hidden
           className={
             isBackground
-              ? "absolute inset-0 bg-[#0A1628]/78"
-              : "absolute inset-0 bg-gradient-to-t from-[#0A1628]/95 via-[#0A1628]/30 to-transparent"
+              ? "absolute inset-0 wallpaper-scrim"
+              : "absolute inset-0 wallpaper-scrim-gradient"
           }
         />
       </motion.div>

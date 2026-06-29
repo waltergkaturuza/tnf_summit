@@ -198,8 +198,24 @@ html.light .wallpaper-surface .font-bold.text-white {
   color: #ffffff !important;
 }
 html.light .wallpaper-surface .glass {
-  background: rgba(10, 22, 40, 0.55) !important;
+  background: rgba(10, 22, 40, 0.38) !important;
   border-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+/* Photo wallpaper scrims — keep text readable while showing more of the image */
+.wallpaper-scrim {
+  background: rgba(10, 22, 40, 0.5);
+}
+.wallpaper-scrim-gradient {
+  background: linear-gradient(
+    to top,
+    rgba(10, 22, 40, 0.72) 0%,
+    rgba(10, 22, 40, 0.14) 48%,
+    transparent 100%
+  );
+}
+.wallpaper-photo {
+  filter: brightness(1.07) saturate(1.06);
 }
 
 /* Light mode section overrides */

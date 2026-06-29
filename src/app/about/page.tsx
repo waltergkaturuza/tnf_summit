@@ -37,10 +37,10 @@ export default function AboutPage() {
             priority
             sizes="100vw"
             quality={82}
-            className="object-cover object-center"
+            className="object-cover object-center wallpaper-photo"
           />
         </div>
-        <div aria-hidden className="absolute inset-0 bg-[#0A1628]/82" />
+        <div aria-hidden className="absolute inset-0 wallpaper-scrim" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <FadeIn>

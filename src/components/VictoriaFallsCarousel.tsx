@@ -70,11 +70,11 @@ export default function VictoriaFallsCarousel({ className = "" }: { className?: 
               src={slide.src}
               alt={slide.alt}
               fill
-              className="object-cover"
+              className="object-cover wallpaper-photo"
               sizes="(max-width: 1024px) 100vw, 50vw"
               priority={index === 0}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0A1628]/95 via-[#0A1628]/35 to-transparent" />
+            <div className="absolute inset-0 wallpaper-scrim-gradient" />
           </motion.div>
         </AnimatePresence>
 

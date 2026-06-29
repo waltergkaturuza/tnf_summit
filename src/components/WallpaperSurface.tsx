@@ -34,10 +34,10 @@ export default function WallpaperSurface({
           priority
           sizes="100vw"
           quality={82}
-          className="object-cover object-center"
+          className="object-cover object-center wallpaper-photo"
         />
       </div>
-      <div aria-hidden className="absolute inset-0 bg-[#0A1628]/85" />
+      <div aria-hidden className="absolute inset-0 wallpaper-scrim" />
       <div
         className={[
           "relative z-10",
