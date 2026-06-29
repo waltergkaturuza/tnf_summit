@@ -56,7 +56,7 @@ export default function SubmitAbstractPage() {
     <div className="min-h-screen flex flex-col">
       <PageHeader title={t.abstracts.formTitle} subtitle={t.abstracts.formSub} />
       <WallpaperSurface fillViewport contentClassName="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-20 flex-1">
-        <form action={formAction} className="space-y-6 glass rounded-2xl border border-white/10 p-6 sm:p-8">
+        <form action={formAction} className="wallpaper-form space-y-6 glass rounded-2xl border border-white/10 p-6 sm:p-8">
           <input type="hidden" name="coAuthors" value={JSON.stringify(coAuthors)} />
 
           {/* Submission details — Theme + Participation type */}

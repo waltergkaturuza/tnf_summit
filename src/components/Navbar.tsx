@@ -18,7 +18,7 @@ export default function Navbar() {
   const [themeOpen, setThemeOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
-  const { theme, setTheme } = useTheme();
+  const { theme, resolvedTheme, setTheme } = useTheme();
   const { t } = useLanguage();
   const themeRef = useRef<HTMLDivElement>(null);
   const participateRef = useRef<HTMLDivElement>(null);
@@ -76,7 +76,7 @@ export default function Navbar() {
     return () => window.removeEventListener("keydown", down);
   }, []);
 
-  const isDark = !mounted ? true : theme !== "light";
+  const isDark = !mounted ? true : resolvedTheme !== "light";
   const isHome = pathname === "/";
   /** Home hero only: transparent nav at top. Inner pages keep a solid bar so green headers do not bleed through. */
   const solidNav = scrolled || !isHome;

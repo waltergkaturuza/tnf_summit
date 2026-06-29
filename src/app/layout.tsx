@@ -67,7 +67,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
-      <body className="antialiased bg-[var(--bg-primary)] text-white font-sans">
+      <body className="antialiased bg-[var(--bg-primary)] text-[var(--text-primary)] font-sans">
         <JsonLd data={[websiteJsonLd(), organizationJsonLd(), eventJsonLd()]} />
         <ClientLayout>{children}</ClientLayout>
       </body>
