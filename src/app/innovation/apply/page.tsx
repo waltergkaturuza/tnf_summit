@@ -251,7 +251,7 @@ export default function InnovationApplyPage() {
           })}
         </div>
 
-        <form onSubmit={handleSubmit} className="glass rounded-2xl border border-white/10 p-6 sm:p-8">
+        <form onSubmit={handleSubmit} className="wallpaper-form glass rounded-2xl border border-white/10 p-6 sm:p-8">
           <AnimatePresence mode="wait">
             <motion.div key={step} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.25 }}>
 

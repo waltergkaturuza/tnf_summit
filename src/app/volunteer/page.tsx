@@ -16,7 +16,7 @@ export default function VolunteerPage() {
         fillViewport
         contentClassName="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-20 text-center flex-1 justify-center"
       >
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }} className="glass rounded-2xl border border-white/10 p-8 text-left space-y-6">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }} className="wallpaper-glass glass rounded-2xl border border-white/10 p-8 text-left space-y-6">
           <div className="flex gap-4">
             <Users className="w-6 h-6 text-[#C9921A] flex-shrink-0 mt-0.5" />
             <div>

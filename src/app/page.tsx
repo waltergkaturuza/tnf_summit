@@ -198,7 +198,7 @@ export default function HomePage() {
               </p>
               <div className="flex flex-wrap gap-3 pb-10">
                 {t.home.aboutTags.map((tag) => (
-                  <span key={tag} className="glass px-3 py-1.5 rounded-full text-xs border border-white/20 text-white/90">
+                  <span key={tag} className="wallpaper-glass glass px-3 py-1.5 rounded-full text-xs border border-white/20 text-white/90">
                     {tag}
                   </span>
                 ))}
@@ -214,9 +214,9 @@ export default function HomePage() {
                 { title: t.home.aboutCard3Title, sub: t.home.aboutCard3Sub },
                 { title: t.home.aboutCard4Title, sub: t.home.aboutCard4Sub },
               ].map((item) => (
-                <div key={item.title} className="glass rounded-2xl p-5 card-hover">
-                  <div className="text-white font-bold text-sm">{item.title}</div>
-                  <div className="text-xs mt-1 text-white/85">{item.sub}</div>
+                <div key={item.title} className="wallpaper-glass glass rounded-2xl p-5 card-hover border border-slate-200/80">
+                  <div className="font-bold text-sm text-theme-primary">{item.title}</div>
+                  <div className="text-xs mt-1 text-theme-primary opacity-90">{item.sub}</div>
                 </div>
               ))}
             </div>
@@ -476,9 +476,9 @@ export default function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {t.home.venueCards.map((card, i) => (
               <FadeIn key={card.title} delay={i * 0.08}>
-                <motion.div className="glass rounded-2xl p-6 card-hover border border-white/10">
-                  <h3 className="text-white font-bold mb-2">{card.title}</h3>
-                  <p className="text-sm leading-relaxed text-white/85">{card.desc}</p>
+                <motion.div className="wallpaper-glass glass rounded-2xl p-6 card-hover border border-slate-200/80">
+                  <h3 className="font-bold mb-2 text-theme-primary">{card.title}</h3>
+                  <p className="text-sm leading-relaxed text-theme-primary opacity-90">{card.desc}</p>
                 </motion.div>
               </FadeIn>
             ))}

@@ -181,28 +181,32 @@ html.light .page-header-green p {
   color: #fff !important;
 }
 
-/* Photo wallpaper + scrim: light text on photo areas only (not inside form panels) */
-html.light .wallpaper-surface .relative.z-10 > .text-white,
-html.light .wallpaper-surface .relative.z-10 > .text-white\/90,
-html.light .wallpaper-surface .relative.z-10 > h1,
-html.light .wallpaper-surface .relative.z-10 > h2,
-html.light .wallpaper-surface .relative.z-10 > h3,
-html.light .wallpaper-surface .relative.z-10 > p,
-html.light .wallpaper-surface .text-center .text-white,
-html.light .wallpaper-surface .text-center .text-white\/90,
-html.light .wallpaper-surface .text-center h2,
-html.light .wallpaper-surface .text-center p,
+/* Photo wallpaper: light text on headings/copy directly on the photo (not inside panels) */
+html.light .wallpaper-surface .text-white,
+html.light .wallpaper-surface .text-white\/90,
+html.light .wallpaper-surface .text-white\/85,
+html.light .wallpaper-surface .text-white\/80,
+html.light .wallpaper-surface .text-slate-100,
+html.light .wallpaper-surface .text-slate-200,
+html.light .wallpaper-surface .text-slate-300,
 html.light .wallpaper-surface h2,
-html.light .wallpaper-surface h3,
 html.light .wallpaper-surface .font-bold.text-white {
   color: rgba(255, 255, 255, 0.92) !important;
 }
 
-/* Light mode form panels on wallpaper — solid white (no blur bleed from dark photo) */
+/* Theme-primary copy sitting directly on the photo (not inside white panels) */
+html.light .wallpaper-surface .text-center .text-theme-primary,
+html.light .wallpaper-surface .max-w-3xl .text-theme-primary,
+html.light .wallpaper-surface .relative.z-10 p.text-theme-primary {
+  color: rgba(255, 255, 255, 0.92) !important;
+}
+
+/* Light mode panels on wallpaper — solid white (forms, cards, chips) */
 html.light .wallpaper-surface .glass,
 html.light .wallpaper-surface .glass-gold,
 html.light .wallpaper-surface form.glass,
-html.light .wallpaper-surface .wallpaper-form {
+html.light .wallpaper-surface .wallpaper-form,
+html.light .wallpaper-surface .wallpaper-glass {
   background: #ffffff !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
@@ -215,6 +219,7 @@ html.light .wallpaper-surface .glass :is(label, p, h1, h2, h3, h4, span, legend,
 html.light .wallpaper-surface .glass-gold :is(label, p, h1, h2, h3, h4, span, legend, a:not(.btn-gold)),
 html.light .wallpaper-surface form.glass :is(label, p, h1, h2, h3, h4, span, legend, a:not(.btn-gold)),
 html.light .wallpaper-surface .wallpaper-form :is(label, p, h1, h2, h3, h4, span, legend, a:not(.btn-gold)),
+html.light .wallpaper-surface .wallpaper-glass :is(label, p, h1, h2, h3, h4, span, legend, a:not(.btn-gold)),
 html.light .wallpaper-surface .glass .text-white,
 html.light .wallpaper-surface .glass .text-white\/90,
 html.light .wallpaper-surface .glass .text-white\/85,
@@ -228,7 +233,12 @@ html.light .wallpaper-surface .glass-gold .text-white\/90,
 html.light .wallpaper-surface form.glass .text-white,
 html.light .wallpaper-surface form.glass .text-white\/90,
 html.light .wallpaper-surface .wallpaper-form .text-white,
-html.light .wallpaper-surface .wallpaper-form .text-white\/90 {
+html.light .wallpaper-surface .wallpaper-form .text-white\/90,
+html.light .wallpaper-surface .wallpaper-form .text-theme-primary,
+html.light .wallpaper-surface .wallpaper-glass .text-white,
+html.light .wallpaper-surface .wallpaper-glass .text-white\/90,
+html.light .wallpaper-surface .wallpaper-glass .text-white\/85,
+html.light .wallpaper-surface .wallpaper-glass .text-theme-primary {
   color: #0f172a !important;
 }
 
@@ -237,7 +247,9 @@ html.light .wallpaper-surface .glass .text-slate-500,
 html.light .wallpaper-surface form.glass .text-slate-400,
 html.light .wallpaper-surface form.glass .text-slate-500,
 html.light .wallpaper-surface .wallpaper-form .text-slate-400,
-html.light .wallpaper-surface .wallpaper-form .text-slate-500 {
+html.light .wallpaper-surface .wallpaper-form .text-slate-500,
+html.light .wallpaper-surface .wallpaper-glass .text-slate-400,
+html.light .wallpaper-surface .wallpaper-glass .text-slate-500 {
   color: #64748b !important;
 }
 
@@ -249,7 +261,10 @@ html.light .wallpaper-surface form.glass textarea,
 html.light .wallpaper-surface form.glass select,
 html.light .wallpaper-surface .wallpaper-form input,
 html.light .wallpaper-surface .wallpaper-form textarea,
-html.light .wallpaper-surface .wallpaper-form select {
+html.light .wallpaper-surface .wallpaper-form select,
+html.light .wallpaper-surface .wallpaper-glass input,
+html.light .wallpaper-surface .wallpaper-glass textarea,
+html.light .wallpaper-surface .wallpaper-glass select {
   background: #f8fafc !important;
   border-color: #cbd5e1 !important;
   color: #0f172a !important;
@@ -260,15 +275,64 @@ html.light .wallpaper-surface .glass textarea::placeholder,
 html.light .wallpaper-surface form.glass input::placeholder,
 html.light .wallpaper-surface form.glass textarea::placeholder,
 html.light .wallpaper-surface .wallpaper-form input::placeholder,
-html.light .wallpaper-surface .wallpaper-form textarea::placeholder {
+html.light .wallpaper-surface .wallpaper-form textarea::placeholder,
+html.light .wallpaper-surface .wallpaper-glass input::placeholder,
+html.light .wallpaper-surface .wallpaper-glass textarea::placeholder {
   color: #64748b !important;
 }
 
 html.light .wallpaper-surface .glass .bg-white\/5,
 html.light .wallpaper-surface form.glass .bg-white\/5,
-html.light .wallpaper-surface .wallpaper-form .bg-white\/5 {
+html.light .wallpaper-surface .wallpaper-form .bg-white\/5,
+html.light .wallpaper-surface .wallpaper-glass .bg-white\/5 {
   background: #f1f5f9 !important;
   border-color: #cbd5e1 !important;
+}
+
+/* Wallpaper info cards — highest priority: solid white panel, dark text in light mode */
+html.light .wallpaper-surface .wallpaper-glass.glass,
+html.light .wallpaper-surface .glass.wallpaper-glass {
+  background: #ffffff !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-color: rgba(15, 23, 42, 0.14) !important;
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.14) !important;
+}
+
+html.light .wallpaper-surface .wallpaper-glass.glass h1,
+html.light .wallpaper-surface .wallpaper-glass.glass h2,
+html.light .wallpaper-surface .wallpaper-glass.glass h3,
+html.light .wallpaper-surface .wallpaper-glass.glass h4,
+html.light .wallpaper-surface .wallpaper-glass.glass h5,
+html.light .wallpaper-surface .wallpaper-glass.glass h6,
+html.light .wallpaper-surface .wallpaper-glass.glass p,
+html.light .wallpaper-surface .wallpaper-glass.glass span,
+html.light .wallpaper-surface .wallpaper-glass.glass li,
+html.light .wallpaper-surface .wallpaper-glass.glass label,
+html.light .wallpaper-surface .glass.wallpaper-glass h1,
+html.light .wallpaper-surface .glass.wallpaper-glass h2,
+html.light .wallpaper-surface .glass.wallpaper-glass h3,
+html.light .wallpaper-surface .glass.wallpaper-glass h4,
+html.light .wallpaper-surface .glass.wallpaper-glass h5,
+html.light .wallpaper-surface .glass.wallpaper-glass h6,
+html.light .wallpaper-surface .glass.wallpaper-glass p,
+html.light .wallpaper-surface .glass.wallpaper-glass span,
+html.light .wallpaper-surface .glass.wallpaper-glass li,
+html.light .wallpaper-surface .glass.wallpaper-glass label,
+html.light .wallpaper-surface .wallpaper-glass.glass .text-theme-primary,
+html.light .wallpaper-surface .glass.wallpaper-glass .text-theme-primary,
+html.light .wallpaper-surface .wallpaper-glass.glass .text-white,
+html.light .wallpaper-surface .wallpaper-glass.glass .text-white\/90,
+html.light .wallpaper-surface .glass.wallpaper-glass .text-white,
+html.light .wallpaper-surface .glass.wallpaper-glass .text-white\/90 {
+  color: #0f172a !important;
+}
+
+html.light .wallpaper-surface .wallpaper-glass.glass .text-white\/85,
+html.light .wallpaper-surface .wallpaper-glass.glass .text-white\/80,
+html.light .wallpaper-surface .glass.wallpaper-glass .text-white\/85,
+html.light .wallpaper-surface .glass.wallpaper-glass .text-white\/80 {
+  color: #334155 !important;
 }
 
 /* Dark mode: opaque glass on wallpaper so light text stays readable */

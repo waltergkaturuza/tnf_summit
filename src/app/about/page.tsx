@@ -58,7 +58,7 @@ export default function AboutPage() {
                 </p>
                 <div className="flex flex-wrap gap-3">
                   {t.about.whatIsTags.map((tag) => (
-                    <span key={tag} className="glass px-3 py-1.5 rounded-full text-xs text-theme-primary">
+                    <span key={tag} className="wallpaper-glass glass px-3 py-1.5 rounded-full text-xs text-theme-primary">
                       {tag}
                     </span>
                   ))}
@@ -70,7 +70,7 @@ export default function AboutPage() {
               <div className="space-y-4">
                 {t.about.whatIsCards.map((card, i) =>
                   card ? (
-                    <div key={i} className="glass rounded-xl p-4">
+                    <div key={i} className="wallpaper-glass glass rounded-xl p-4">
                       <div className="text-white font-bold text-sm">{card.title}</div>
                       <div className="text-xs mt-1 leading-relaxed text-theme-primary">{card.desc}</div>
                     </div>

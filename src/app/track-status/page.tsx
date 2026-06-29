@@ -41,7 +41,7 @@ export default function TrackStatusPage() {
         fillViewport
         contentClassName="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-20 flex-1 justify-center"
       >
-        <motion.form initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }} onSubmit={handleSubmit} className="space-y-4">
+        <motion.form initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }} onSubmit={handleSubmit} className="wallpaper-form glass rounded-2xl border border-white/10 p-4 space-y-4">
           <div className="flex gap-2">
             <div className="relative flex-1">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
@@ -67,7 +67,7 @@ export default function TrackStatusPage() {
         )}
 
         {result && (
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-8 glass rounded-2xl border border-white/10 overflow-hidden">
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-8 wallpaper-glass glass rounded-2xl border border-white/10 overflow-hidden">
             <div className="p-6">
               <div className="flex items-center gap-3 mb-4">
                 {result.trackType === "abstract" ? (
