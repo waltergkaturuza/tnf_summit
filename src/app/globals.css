@@ -44,8 +44,9 @@
 html.light {
   --bg-primary: #EFF3F8;
   --bg-surface: #FFFFFF;
-  --bg-card: rgba(15, 23, 42, 0.04);
-  --bg-card-hover: rgba(15, 23, 42, 0.07);
+  --bg-alt: #E2EAF4;
+  --bg-card: rgba(255, 255, 255, 0.88);
+  --bg-card-hover: rgba(255, 255, 255, 0.96);
   --text-primary: #0F172A;
   --text-secondary: #1E293B;
   --text-muted: #475569;
@@ -197,9 +198,127 @@ html.light .wallpaper-surface h3,
 html.light .wallpaper-surface .font-bold.text-white {
   color: #ffffff !important;
 }
-html.light .wallpaper-surface .glass {
-  background: rgba(10, 22, 40, 0.38) !important;
-  border-color: rgba(255, 255, 255, 0.18) !important;
+
+/* Glass cards on wallpaper — light panel + dark text in light mode (site-wide glass rules below) */
+html.light .wallpaper-surface .glass,
+html.light .wallpaper-surface .glass-gold {
+  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.08);
+}
+
+/* Dark mode: opaque glass on wallpaper so light text stays readable */
+:not(html.light) .wallpaper-surface .glass,
+:not(html.light) .wallpaper-surface .glass-gold {
+  background: rgba(10, 22, 40, 0.88) !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+:not(html.light) .wallpaper-surface .glass input,
+:not(html.light) .wallpaper-surface .glass textarea,
+:not(html.light) .wallpaper-surface .glass select,
+:not(html.light) .wallpaper-surface .glass-gold input,
+:not(html.light) .wallpaper-surface .glass-gold textarea,
+:not(html.light) .wallpaper-surface .glass-gold select {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #F8FAFC !important;
+}
+
+:not(html.light) .wallpaper-surface .glass input::placeholder,
+:not(html.light) .wallpaper-surface .glass textarea::placeholder,
+:not(html.light) .wallpaper-surface .glass-gold input::placeholder,
+:not(html.light) .wallpaper-surface .glass-gold textarea::placeholder {
+  color: #94A3B8 !important;
+}
+
+/* Light mode: glass surfaces site-wide — solid light panels, dark text */
+html.light .glass {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border-color: rgba(15, 23, 42, 0.1) !important;
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
+}
+
+html.light .glass-gold {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 248, 232, 0.96) 100%) !important;
+  border-color: rgba(201, 146, 26, 0.25) !important;
+}
+
+html.light .glass .text-white,
+html.light .glass .text-white\/90,
+html.light .glass .text-white\/85,
+html.light .glass .text-white\/80,
+html.light .glass .text-slate-100,
+html.light .glass .text-slate-200,
+html.light .glass .text-slate-300,
+html.light .glass label,
+html.light .glass h1,
+html.light .glass h2,
+html.light .glass h3,
+html.light .glass h4,
+html.light .glass p,
+html.light .glass-gold .text-white,
+html.light .glass-gold .text-white\/90,
+html.light .glass-gold .text-white\/85,
+html.light .glass-gold .text-white\/80,
+html.light .glass-gold .text-slate-100,
+html.light .glass-gold .text-slate-200,
+html.light .glass-gold .text-slate-300,
+html.light .glass-gold label,
+html.light .glass-gold h1,
+html.light .glass-gold h2,
+html.light .glass-gold h3,
+html.light .glass-gold h4,
+html.light .glass-gold p {
+  color: #0F172A !important;
+}
+
+html.light .glass .text-theme-primary,
+html.light .glass-gold .text-theme-primary {
+  color: #334155 !important;
+}
+
+html.light .glass .text-slate-400,
+html.light .glass .text-slate-500,
+html.light .glass-gold .text-slate-400,
+html.light .glass-gold .text-slate-500 {
+  color: #475569 !important;
+}
+
+html.light .glass input,
+html.light .glass textarea,
+html.light .glass select,
+html.light .glass-gold input,
+html.light .glass-gold textarea,
+html.light .glass-gold select {
+  background: #F8FAFC !important;
+  border-color: rgba(15, 23, 42, 0.18) !important;
+  color: #0F172A !important;
+}
+
+html.light .glass input::placeholder,
+html.light .glass textarea::placeholder,
+html.light .glass-gold input::placeholder,
+html.light .glass-gold textarea::placeholder {
+  color: #64748B !important;
+}
+
+html.light .glass .bg-white\/5,
+html.light .glass-gold .bg-white\/5 {
+  background: #F1F5F9 !important;
+  border-color: rgba(15, 23, 42, 0.12) !important;
+}
+
+/* Form fields outside glass — light bg + dark text in light mode */
+html.light input[class*="bg-white"],
+html.light textarea[class*="bg-white"],
+html.light select[class*="bg-white"] {
+  background: #F8FAFC !important;
+  border-color: rgba(15, 23, 42, 0.18) !important;
+  color: #0F172A !important;
+}
+
+html.light input.text-white,
+html.light textarea.text-white,
+html.light select.text-white {
+  color: #0F172A !important;
 }
 
 /* Photo wallpaper scrims — keep text readable while showing more of the image */
@@ -234,6 +353,9 @@ html.light .pattern-overlay {
 
 /* Light mode: dark text on light backgrounds, maximum contrast */
 html.light .text-white,
+html.light .text-white\/90,
+html.light .text-white\/85,
+html.light .text-white\/80,
 html.light .text-slate-100,
 html.light .text-slate-200,
 html.light .text-slate-300,
@@ -241,6 +363,16 @@ html.light .text-slate-400,
 html.light .text-slate-500,
 html.light .text-slate-600,
 html.light .text-slate-700 { color: #0F172A !important; }
+
+/* Keep light text on photo/video overlays and the green page header */
+html.light .page-header-green .text-white,
+html.light .page-header-green .text-white\/90,
+html.light .page-header-green .text-white\/80,
+html.light [class*="from-black"] .text-white,
+html.light [class*="from-black"] .text-white\/90,
+html.light [class*="from-black"] .text-white\/80 {
+  color: #ffffff !important;
+}
 /* Keep gold/amber accents visible in light mode */
 html.light .text-amber-400,
 html.light .text-amber-500 { color: #B45309 !important; }
