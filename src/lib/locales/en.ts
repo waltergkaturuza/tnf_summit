@@ -181,6 +181,7 @@ const en: FullTranslations = {
     ],
     participateLinks: [
       { label: "Register", href: "/registration" },
+      { label: "Book Accommodation", href: "/accommodation" },
       { label: "Fees & Categories", href: "/registration#fees" },
       { label: "Sponsors & Partners", href: "/sponsors" },
       { label: "Contact Us", href: "/contact" },

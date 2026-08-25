@@ -470,6 +470,13 @@ export default function HomePage() {
               <p className="mt-4 max-w-2xl mx-auto text-white/90">
                 {t.home.venueIntro}
               </p>
+              <Link
+                href="/accommodation"
+                className="btn-gold inline-flex items-center gap-2 mt-6 px-6 py-3 rounded-xl text-sm font-bold"
+              >
+                {t.nav.bookAccommodation}
+                <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
           </FadeIn>
 
@@ -482,6 +489,15 @@ export default function HomePage() {
                 </motion.div>
               </FadeIn>
             ))}
+          </div>
+          <div className="text-center mt-10">
+            <Link
+              href="/accommodation"
+              className="btn-outline-gold inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold"
+            >
+              {t.nav.bookAccommodation}
+              <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </section>
