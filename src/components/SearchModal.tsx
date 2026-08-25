@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, X, ArrowRight, FileText, Calendar, Mic, Users, Image, Phone, Shield, BookOpen, Star, Newspaper, Download, UserPlus, FileCheck, Heart } from "lucide-react";
+import { Search, X, ArrowRight, FileText, Calendar, Mic, Users, Image, Phone, Shield, BookOpen, Star, Newspaper, Download, UserPlus, FileCheck, Heart, Building } from "lucide-react";
 import { program, themes } from "@/lib/data";
 import { useLanguage } from "@/context/LanguageContext";
 
@@ -26,6 +26,7 @@ const pageResults: Result[] = [
   { id: "updates", title: "Updates & News", subtitle: "Latest news, announcements, upcoming events", href: "/updates", category: "Pages", icon: Newspaper },
   { id: "gallery", title: "Media & Gallery", subtitle: "Photos, videos, resources & downloads", href: "/gallery", category: "Pages", icon: Image },
   { id: "abstracts", title: "Submit Abstract", subtitle: "Abstract submission for sessions", href: "/abstracts/submit", category: "Pages", icon: FileCheck },
+  { id: "accommodation", title: "Book Accommodation", subtitle: "Hotels & lodges via Gateway Stream", href: "/accommodation", category: "Pages", icon: Building },
   { id: "volunteer", title: "Volunteer", subtitle: "Apply to volunteer at the Summit", href: "/volunteer", category: "Pages", icon: UserPlus },
   { id: "track-status", title: "Track Status", subtitle: "Check registration or abstract status", href: "/track-status", category: "Pages", icon: Download },
   { id: "contact", title: "Contact & FAQ", subtitle: "Secretariat contact, enquiry form", href: "/contact", category: "Pages", icon: Phone },

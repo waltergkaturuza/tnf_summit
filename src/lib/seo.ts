@@ -132,6 +132,12 @@ export const PAGE_SEO = {
     description:
       "Volunteer with the Zimbabwe TNF Global Summit 2026 team in Victoria Falls and support summit delivery.",
   },
+  accommodation: {
+    path: "/accommodation",
+    title: "Book Accommodation",
+    description:
+      "Book hotels and lodges in Victoria Falls for the Zimbabwe TNF Global Summit 2026 via Gateway Stream, our accommodation booking partner.",
+  },
   innovationApply: {
     path: "/innovation/apply",
     title: "Youth Innovation Challenge",

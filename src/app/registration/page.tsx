@@ -667,6 +667,12 @@ export default function RegistrationPage() {
 
                     <div className="divider-gold" />
                     <h3 className="text-white font-bold text-sm flex items-center gap-2"><Building className="w-4 h-4 text-[#C9921A]" />Accommodation at Elephant Hills Resort</h3>
+                    <p className="text-xs text-theme-primary">
+                      Prefer to book another Victoria Falls hotel or lodge yourself?{" "}
+                      <Link href="/accommodation" className="text-[#C9921A] font-semibold hover:underline">
+                        Book via Gateway Stream →
+                      </Link>
+                    </p>
                     <Field label="Do you require accommodation assistance?">
                       <div className="flex gap-3">
                         <ToggleButton value="yes" current={form.requiresAccommodation} onChange={v => set("requiresAccommodation", v)}>Yes, please</ToggleButton>

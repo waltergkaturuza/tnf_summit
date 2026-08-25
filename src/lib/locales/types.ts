@@ -5,7 +5,7 @@ export type CoreTranslations = {
   nav: {
     home: string; about: string; program: string; speakers: string;
     registration: string; sponsors: string; gallery: string; updates: string; contact: string;
-    participate: string; submitAbstract: string; volunteer: string; trackStatus: string;
+    participate: string; submitAbstract: string; volunteer: string; bookAccommodation: string; trackStatus: string;
     programmeSchedule: string; sessions: string;
   };
   cta: { register: string; learnMore: string; viewProgram: string };
@@ -316,6 +316,20 @@ export type VolunteerTranslations = {
   contactPage: string;
 };
 
+/** Accommodation / Gateway Stream booking page */
+export type AccommodationTranslations = {
+  heroTitle: string;
+  heroSub: string;
+  partnerTitle: string;
+  partnerDesc: string;
+  bookCta: string;
+  registerCta: string;
+  opensExternal: string;
+  needHelpBefore: string;
+  needHelpLink: string;
+  needHelpAfter: string;
+};
+
 /** Abstract submit page */
 export type AbstractsTranslations = {
   successTitle: string;
@@ -379,6 +393,7 @@ export type FullTranslations = CoreTranslations & {
   updates: UpdatesTranslations;
   trackStatus: TrackStatusTranslations;
   volunteer: VolunteerTranslations;
+  accommodation: AccommodationTranslations;
   abstracts: AbstractsTranslations;
 };
 

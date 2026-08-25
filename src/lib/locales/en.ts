@@ -4,7 +4,7 @@ const en: FullTranslations = {
   nav: {
     home: "Home", about: "About", program: "Program", speakers: "Speakers",
     registration: "Registration", sponsors: "Sponsors", gallery: "Gallery", updates: "Updates & News", contact: "Contact",
-    participate: "Participate", submitAbstract: "Submit Abstract", volunteer: "Volunteer", trackStatus: "Track Status",
+    participate: "Participate", submitAbstract: "Submit Abstract", volunteer: "Volunteer", bookAccommodation: "Book Accommodation", trackStatus: "Track Status",
     programmeSchedule: "Programme Schedule", sessions: "Sessions",
   },
   cta: { register: "Register Now", learnMore: "Learn More", viewProgram: "View Programme" },
@@ -463,6 +463,20 @@ const en: FullTranslations = {
     registerAsDelegateLink: "register as a delegate",
     registerAsDelegateAfter: " if you prefer to attend in full.",
     contactPage: "Contact page",
+  },
+
+  accommodation: {
+    heroTitle: "Book Accommodation",
+    heroSub: "Book your Victoria Falls hotel or lodge for the Zimbabwe TNF Global Summit 2026.",
+    partnerTitle: "Book with Gateway Stream",
+    partnerDesc:
+      "Delegates can search and book accommodation directly on Gateway Stream. Live inventory and payment are handled on their site.",
+    bookCta: "Book accommodation on Gateway Stream",
+    registerCta: "Register for the Summit",
+    opensExternal: "You will be taken to",
+    needHelpBefore: "Need summit help? ",
+    needHelpLink: "Contact the Secretariat",
+    needHelpAfter: "",
   },
 
   abstracts: {

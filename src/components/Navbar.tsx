@@ -29,6 +29,7 @@ export default function Navbar() {
   const participateItems = [
     { label: t.nav.registration, href: "/registration" },
     { label: t.nav.submitAbstract, href: "/abstracts/submit" },
+    { label: t.nav.bookAccommodation, href: "/accommodation" },
     { label: t.nav.volunteer, href: "/volunteer" },
     { label: t.nav.trackStatus, href: "/track-status" },
   ];
