@@ -59,7 +59,7 @@ function FooterContact() {
   const { t } = useLanguage();
   return (
     <div className="w-[17rem] max-w-full min-w-0 shrink-0">
-      <h4 className="text-white font-semibold text-sm mb-2.5">{t.footer.contactCol}</h4>
+      <h4 className="text-[#C9921A] font-semibold text-sm mb-2.5">{t.footer.contactCol}</h4>
       <div className="space-y-2 text-sm text-theme-primary">
         <a
           href={`mailto:${summitInfo.email}`}
@@ -121,7 +121,7 @@ function FooterNavColumn({
 }) {
   return (
     <div className="shrink-0">
-      <h4 className="text-white font-semibold text-sm mb-2.5">{title}</h4>
+      <h4 className="text-[#C9921A] font-semibold text-sm mb-2.5">{title}</h4>
       <ul className="space-y-2">
         {links.map((link) => (
           <li key={link.href}>

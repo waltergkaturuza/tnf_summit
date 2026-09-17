@@ -11,7 +11,9 @@ export default function manifest(): MetadataRoute.Manifest {
     background_color: "#0A1628",
     theme_color: "#C9921A",
     icons: [
-      { src: "/tnf-icon.png", sizes: "192x192", type: "image/png" },
+      { src: "/tnf-logo-square.png", sizes: "512x512", type: "image/png", purpose: "any" },
+      { src: "/tnf-icon.png", sizes: "512x512", type: "image/png", purpose: "any" },
+      { src: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
       { src: "/favicon.ico", sizes: "48x48", type: "image/x-icon" },
     ],
   };

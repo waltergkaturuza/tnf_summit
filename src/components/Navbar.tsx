@@ -120,7 +120,7 @@ export default function Navbar() {
             <nav className="hidden xl:flex items-center gap-0.5">
               {navLinks.slice(0, 2).map((link) => (
                 <Link key={link.href} href={link.href}
-                  className={`px-3 py-2 rounded-lg text-xs font-bold transition-all duration-200 ${pathname === link.href ? (isDark ? "text-[#F5B730] bg-[#C9921A]/15" : "text-[#33A852] bg-[#33A852]/10") : isDark ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-slate-600 hover:text-[#0A1628] hover:bg-black/5"}`}>
+                  className={`px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${pathname === link.href ? (isDark ? "text-[#F5B730] bg-[#C9921A]/15" : "text-[#33A852] bg-[#33A852]/10") : isDark ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-slate-600 hover:text-[#0A1628] hover:bg-black/5"}`}>
                   {link.label}
                 </Link>
               ))}
@@ -128,7 +128,7 @@ export default function Navbar() {
               <div ref={participateRef} className="relative">
                 <button
                   onClick={() => { setParticipateOpen(!participateOpen); setProgramOpen(false); }}
-                  className={`flex items-center gap-0.5 px-3 py-2 rounded-lg text-xs font-bold transition-all duration-200 ${participateItems.some(i => pathname === i.href) ? (isDark ? "text-[#F5B730] bg-[#C9921A]/15" : "text-[#33A852] bg-[#33A852]/10") : isDark ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-slate-600 hover:text-[#0A1628] hover:bg-black/5"}`}
+                  className={`flex items-center gap-0.5 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${participateItems.some(i => pathname === i.href) ? (isDark ? "text-[#F5B730] bg-[#C9921A]/15" : "text-[#33A852] bg-[#33A852]/10") : isDark ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-slate-600 hover:text-[#0A1628] hover:bg-black/5"}`}
                 >
                   {t.nav.participate}
                   <ChevronDown className={`w-3 h-3 transition-transform ${participateOpen ? "rotate-180" : ""}`} />
@@ -151,7 +151,7 @@ export default function Navbar() {
               <div ref={programRef} className="relative">
                 <button
                   onClick={() => { setProgramOpen(!programOpen); setParticipateOpen(false); }}
-                  className={`flex items-center gap-0.5 px-3 py-2 rounded-lg text-xs font-bold transition-all duration-200 ${programItems.some(i => pathname === i.href) ? (isDark ? "text-[#F5B730] bg-[#C9921A]/15" : "text-[#33A852] bg-[#33A852]/10") : isDark ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-slate-600 hover:text-[#0A1628] hover:bg-black/5"}`}
+                  className={`flex items-center gap-0.5 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${programItems.some(i => pathname === i.href) ? (isDark ? "text-[#F5B730] bg-[#C9921A]/15" : "text-[#33A852] bg-[#33A852]/10") : isDark ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-slate-600 hover:text-[#0A1628] hover:bg-black/5"}`}
                 >
                   {t.nav.program}
                   <ChevronDown className={`w-3 h-3 transition-transform ${programOpen ? "rotate-180" : ""}`} />
@@ -172,7 +172,7 @@ export default function Navbar() {
               </div>
               {navLinks.slice(2).map((link) => (
                 <Link key={link.href} href={link.href}
-                  className={`px-3 py-2 rounded-lg text-xs font-bold transition-all duration-200 ${pathname === link.href ? (isDark ? "text-[#F5B730] bg-[#C9921A]/15" : "text-[#33A852] bg-[#33A852]/10") : isDark ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-slate-600 hover:text-[#0A1628] hover:bg-black/5"}`}>
+                  className={`px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${pathname === link.href ? (isDark ? "text-[#F5B730] bg-[#C9921A]/15" : "text-[#33A852] bg-[#33A852]/10") : isDark ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-slate-600 hover:text-[#0A1628] hover:bg-black/5"}`}>
                   {link.label}
                 </Link>
               ))}
@@ -324,8 +324,8 @@ export default function Navbar() {
               </button>
 
               <nav className="space-y-0.5 mb-6">
-                <Link href="/" onClick={() => setMobileOpen(false)} className={`flex items-center px-4 py-3 rounded-xl text-sm font-bold transition-all ${pathname === "/" ? (isDark ? "text-[#F5B730] bg-[#C9921A]/15 border border-[#C9921A]/25" : "text-[#33A852] bg-[#33A852]/10 border border-[#33A852]/25") : ""}`} style={{ color: pathname === "/" ? undefined : "var(--text-secondary)" }}>{t.nav.home}</Link>
-                <Link href="/about" onClick={() => setMobileOpen(false)} className={`flex items-center px-4 py-3 rounded-xl text-sm font-bold transition-all ${pathname === "/about" ? (isDark ? "text-[#F5B730] bg-[#C9921A]/15 border border-[#C9921A]/25" : "text-[#33A852] bg-[#33A852]/10 border border-[#33A852]/25") : ""}`} style={{ color: pathname === "/about" ? undefined : "var(--text-secondary)" }}>{t.nav.about}</Link>
+                <Link href="/" onClick={() => setMobileOpen(false)} className={`flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all ${pathname === "/" ? (isDark ? "text-[#F5B730] bg-[#C9921A]/15 border border-[#C9921A]/25" : "text-[#33A852] bg-[#33A852]/10 border border-[#33A852]/25") : ""}`} style={{ color: pathname === "/" ? undefined : "var(--text-secondary)" }}>{t.nav.home}</Link>
+                <Link href="/about" onClick={() => setMobileOpen(false)} className={`flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all ${pathname === "/about" ? (isDark ? "text-[#F5B730] bg-[#C9921A]/15 border border-[#C9921A]/25" : "text-[#33A852] bg-[#33A852]/10 border border-[#33A852]/25") : ""}`} style={{ color: pathname === "/about" ? undefined : "var(--text-secondary)" }}>{t.nav.about}</Link>
                 <div className="px-4 py-2 text-[10px] font-bold uppercase tracking-widest" style={{ color: "var(--text-muted)" }}>{t.nav.participate}</div>
                 {participateItems.map((item) => (
                   <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)} className={`flex items-center pl-8 pr-4 py-2.5 rounded-xl text-sm font-medium transition-all ${pathname === item.href ? (isDark ? "text-[#F5B730] bg-[#C9921A]/15" : "text-[#33A852] bg-[#33A852]/10") : ""}`} style={{ color: pathname === item.href ? undefined : "var(--text-secondary)" }}>{item.label}</Link>
@@ -335,7 +335,7 @@ export default function Navbar() {
                   <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)} className={`flex items-center pl-8 pr-4 py-2.5 rounded-xl text-sm font-medium transition-all ${pathname === item.href ? (isDark ? "text-[#F5B730] bg-[#C9921A]/15" : "text-[#33A852] bg-[#33A852]/10") : ""}`} style={{ color: pathname === item.href ? undefined : "var(--text-secondary)" }}>{item.label}</Link>
                 ))}
                 {navLinks.slice(2).map((link) => (
-                  <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)} className={`flex items-center px-4 py-3 rounded-xl text-sm font-bold transition-all ${pathname === link.href ? (isDark ? "text-[#F5B730] bg-[#C9921A]/15 border border-[#C9921A]/25" : "text-[#33A852] bg-[#33A852]/10 border border-[#33A852]/25") : ""}`} style={{ color: pathname === link.href ? undefined : "var(--text-secondary)" }}>{link.label}</Link>
+                  <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)} className={`flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all ${pathname === link.href ? (isDark ? "text-[#F5B730] bg-[#C9921A]/15 border border-[#C9921A]/25" : "text-[#33A852] bg-[#33A852]/10 border border-[#33A852]/25") : ""}`} style={{ color: pathname === link.href ? undefined : "var(--text-secondary)" }}>{link.label}</Link>
                 ))}
               </nav>
 

@@ -4,7 +4,11 @@ import { summitInfo } from "./data";
 export const SITE_NAME = `Zimbabwe TNF Global Summit ${summitInfo.edition}`;
 export const DEFAULT_TITLE = `${SITE_NAME} | Inclusive Growth, Decent Work, Beneficiation, and Investment Promotion`;
 export const DEFAULT_DESCRIPTION = `Africa's premier tripartite-led global convening platform. ${summitInfo.dates} at ${summitInfo.venue}, ${summitInfo.location}. ${summitInfo.delegates} delegates. Organised by the ${summitInfo.organiser}.`;
-export const DEFAULT_OG_IMAGE = "/about_wallpaper.webp";
+export const DEFAULT_OG_IMAGE = "/og-image.png";
+/** Square TNF emblem on white — Google Search favicon / knowledge-panel logo (min 112×112). */
+export const SITE_LOGO_SQUARE = "/tnf-logo-square.png";
+export const SITE_LOGO_WORDMARK = "/tnf-logo.png";
+export const SITE_ICON = "/tnf-icon.png";
 
 export function getSiteUrl(): string {
   const configured = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "");
@@ -57,7 +61,10 @@ export function pageMetadata({
       siteName: SITE_NAME,
       type: openGraphType ?? "website",
       locale: "en_GB",
-      images: [{ url: ogImage, alt: SITE_NAME }],
+      images: [
+        { url: ogImage, width: 1200, height: 630, alt: SITE_NAME },
+        { url: absoluteUrl(SITE_LOGO_SQUARE), width: 512, height: 512, alt: "TNF logo" },
+      ],
       ...(publishedTime ? { publishedTime } : {}),
     },
     twitter: {
@@ -215,8 +222,13 @@ export function eventJsonLd() {
       name: summitInfo.organiser,
       url: absoluteUrl("/"),
       email: summitInfo.email,
+      logo: logoImageObject(),
     },
-    image: absoluteUrl(DEFAULT_OG_IMAGE),
+    image: [
+      absoluteUrl(SITE_LOGO_SQUARE),
+      absoluteUrl(SITE_LOGO_WORDMARK),
+      absoluteUrl(DEFAULT_OG_IMAGE),
+    ],
     url: absoluteUrl("/"),
     offers: {
       "@type": "Offer",
@@ -227,13 +239,27 @@ export function eventJsonLd() {
   };
 }
 
+function logoImageObject() {
+  return {
+    "@type": "ImageObject",
+    url: absoluteUrl(SITE_LOGO_SQUARE),
+    contentUrl: absoluteUrl(SITE_LOGO_SQUARE),
+    width: 512,
+    height: 512,
+    caption: "Tripartite Negotiating Forum (TNF) logo",
+  };
+}
+
 export function organizationJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "Tripartite Negotiating Forum (TNF)",
-    url: summitInfo.mainWebsite,
-    logo: absoluteUrl(summitInfo.logo),
+    legalName: "Tripartite Negotiating Forum Secretariat",
+    alternateName: ["TNF Zimbabwe", SITE_NAME],
+    url: getSiteUrl(),
+    logo: logoImageObject(),
+    image: absoluteUrl(SITE_LOGO_WORDMARK),
     email: summitInfo.email,
     telephone: summitInfo.phone,
     address: {
@@ -241,7 +267,7 @@ export function organizationJsonLd() {
       streetAddress: summitInfo.address,
       addressCountry: "ZW",
     },
-    sameAs: Object.values(summitInfo.social),
+    sameAs: [summitInfo.mainWebsite, ...Object.values(summitInfo.social)],
   };
 }
 
@@ -251,6 +277,11 @@ export function websiteJsonLd() {
     "@type": "WebSite",
     name: SITE_NAME,
     url: getSiteUrl(),
+    publisher: {
+      "@type": "Organization",
+      name: "Tripartite Negotiating Forum (TNF)",
+      logo: logoImageObject(),
+    },
   };
 }
 
@@ -272,10 +303,7 @@ export function articleJsonLd(input: {
     publisher: {
       "@type": "Organization",
       name: SITE_NAME,
-      logo: {
-        "@type": "ImageObject",
-        url: absoluteUrl(summitInfo.logo),
-      },
+      logo: logoImageObject(),
     },
   };
 }

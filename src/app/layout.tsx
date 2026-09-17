@@ -7,6 +7,8 @@ import {
   DEFAULT_DESCRIPTION,
   DEFAULT_TITLE,
   SITE_NAME,
+  SITE_LOGO_SQUARE,
+  SITE_ICON,
   absoluteUrl,
   DEFAULT_OG_IMAGE,
   eventJsonLd,
@@ -42,7 +44,10 @@ export const metadata: Metadata = {
     locale: "en_GB",
     siteName: SITE_NAME,
     url: getSiteUrl(),
-    images: [{ url: absoluteUrl(DEFAULT_OG_IMAGE), alt: SITE_NAME }],
+    images: [
+      { url: absoluteUrl(DEFAULT_OG_IMAGE), width: 1200, height: 630, alt: SITE_NAME },
+      { url: absoluteUrl(SITE_LOGO_SQUARE), width: 512, height: 512, alt: "TNF logo" },
+    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -52,8 +57,13 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true },
   icons: {
-    icon: "/favicon.ico",
-    apple: "/tnf-icon.png",
+    icon: [
+      { url: "/favicon.ico", sizes: "48x48", type: "image/x-icon" },
+      { url: SITE_LOGO_SQUARE, sizes: "512x512", type: "image/png" },
+      { url: SITE_ICON, sizes: "512x512", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+    shortcut: SITE_LOGO_SQUARE,
   },
   ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
     ? { verification: { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION } }
