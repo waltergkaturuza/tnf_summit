@@ -124,7 +124,7 @@ function FooterNavColumn({
       <h4 className="text-[#C9921A] font-semibold text-sm mb-2.5">{title}</h4>
       <ul className="space-y-2">
         {links.map((link) => (
-          <li key={link.href}>
+          <li key={`${link.label}-${link.href}`}>
             {link.href.startsWith("http") ? (
               <a
                 href={link.href}

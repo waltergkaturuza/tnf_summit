@@ -6,6 +6,7 @@ export type CoreTranslations = {
     home: string; about: string; program: string; speakers: string;
     registration: string; sponsors: string; gallery: string; updates: string; contact: string;
     participate: string; submitAbstract: string; volunteer: string; bookAccommodation: string; trackStatus: string;
+    donate: string; innovation: string;
     programmeSchedule: string; sessions: string;
   };
   cta: { register: string; learnMore: string; viewProgram: string };

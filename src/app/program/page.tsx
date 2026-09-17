@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Calendar, Clock, MapPin, ChevronDown, Filter, Search,
@@ -166,6 +166,27 @@ export default function ProgramPage() {
   const sessionTypes = t.program.sessionTypes;
   const visibleDaySessions = currentDay.sessions.filter((s) => !s.hidden);
 
+  useEffect(() => {
+    const applyHash = () => {
+      const hash = window.location.hash.replace("#", "").toLowerCase();
+      if (hash === "concurrent") {
+        setActiveType("concurrent");
+      } else if (hash === "excursions") {
+        const idx = program.findIndex((d) => d.dayLabel === "EXCURSIONS DAY");
+        if (idx >= 0) setActiveDay(idx);
+        setActiveType("excursion");
+      }
+      if (hash === "sessions" || hash === "concurrent" || hash === "excursions") {
+        requestAnimationFrame(() => {
+          document.getElementById("sessions")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      }
+    };
+    applyHash();
+    window.addEventListener("hashchange", applyHash);
+    return () => window.removeEventListener("hashchange", applyHash);
+  }, []);
+
   const filteredSessions = visibleDaySessions.filter((s) => {
     const typeMatch = activeType === "all" || s.type === activeType;
     const roomMatch = activeRoom === "all" || s.room === activeRoom || s.room === "BOTH" || s.room === "ALL";
@@ -297,6 +318,7 @@ export default function ProgramPage() {
         </div>
 
         {/* Sessions */}
+        <div id="sessions" className="scroll-mt-28">
         <AnimatePresence mode="wait">
           <motion.div
             key={`${activeDay}-${activeType}-${activeRoom}-${search}`}
@@ -323,6 +345,7 @@ export default function ProgramPage() {
             )}
           </motion.div>
         </AnimatePresence>
+        </div>
 
         {/* Legend */}
         <div className="mt-10 glass rounded-2xl p-5">

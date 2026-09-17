@@ -77,6 +77,13 @@ body {
   transition: background 0.3s ease, color 0.3s ease;
 }
 
+/* Site-wide: one step lighter than Tailwind defaults so type is less heavy.
+ * Arial only has regular/bold, so 800–900 was synthesizing extra-thick glyphs. */
+.font-black,
+.font-extrabold { font-weight: 700; }
+.font-bold { font-weight: 600; }
+.font-semibold { font-weight: 500; }
+
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--scrollbar-track); }
@@ -620,7 +627,7 @@ html.light .gradient-text {
 .btn-gold {
   background: linear-gradient(135deg, #C9921A 0%, #F5B730 100%);
   color: #0A1628;
-  font-weight: 700;
+  font-weight: 600;
   transition: all 0.3s ease;
 }
 .btn-gold:hover {

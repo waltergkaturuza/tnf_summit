@@ -29,9 +29,11 @@ export default function Navbar() {
   const participateItems = [
     { label: t.nav.registration, href: "/registration" },
     { label: t.nav.submitAbstract, href: "/abstracts/submit" },
+    { label: t.nav.innovation, href: "/innovation/apply" },
     { label: t.nav.bookAccommodation, href: "/accommodation" },
     { label: t.nav.volunteer, href: "/volunteer" },
     { label: t.nav.trackStatus, href: "/track-status" },
+    { label: t.nav.donate, href: "/donate" },
   ];
   const programItems = [
     { label: t.nav.programmeSchedule, href: "/program" },
@@ -120,7 +122,7 @@ export default function Navbar() {
             <nav className="hidden xl:flex items-center gap-0.5">
               {navLinks.slice(0, 2).map((link) => (
                 <Link key={link.href} href={link.href}
-                  className={`px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${pathname === link.href ? (isDark ? "text-[#F5B730] bg-[#C9921A]/15" : "text-[#33A852] bg-[#33A852]/10") : isDark ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-slate-600 hover:text-[#0A1628] hover:bg-black/5"}`}>
+                  className={`px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${pathname === link.href ? (isDark ? "text-[#F5B730] bg-[#C9921A]/15" : "text-[#14532d] bg-[#166534]/12") : isDark ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-[#166534] hover:text-[#14532d] hover:bg-[#166534]/8"}`}>
                   {link.label}
                 </Link>
               ))}
@@ -128,7 +130,7 @@ export default function Navbar() {
               <div ref={participateRef} className="relative">
                 <button
                   onClick={() => { setParticipateOpen(!participateOpen); setProgramOpen(false); }}
-                  className={`flex items-center gap-0.5 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${participateItems.some(i => pathname === i.href) ? (isDark ? "text-[#F5B730] bg-[#C9921A]/15" : "text-[#33A852] bg-[#33A852]/10") : isDark ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-slate-600 hover:text-[#0A1628] hover:bg-black/5"}`}
+                  className={`flex items-center gap-0.5 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${participateItems.some(i => pathname === i.href) ? (isDark ? "text-[#F5B730] bg-[#C9921A]/15" : "text-[#14532d] bg-[#166534]/12") : isDark ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-[#166534] hover:text-[#14532d] hover:bg-[#166534]/8"}`}
                 >
                   {t.nav.participate}
                   <ChevronDown className={`w-3 h-3 transition-transform ${participateOpen ? "rotate-180" : ""}`} />
@@ -151,7 +153,7 @@ export default function Navbar() {
               <div ref={programRef} className="relative">
                 <button
                   onClick={() => { setProgramOpen(!programOpen); setParticipateOpen(false); }}
-                  className={`flex items-center gap-0.5 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${programItems.some(i => pathname === i.href) ? (isDark ? "text-[#F5B730] bg-[#C9921A]/15" : "text-[#33A852] bg-[#33A852]/10") : isDark ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-slate-600 hover:text-[#0A1628] hover:bg-black/5"}`}
+                  className={`flex items-center gap-0.5 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${programItems.some(i => pathname === i.href) ? (isDark ? "text-[#F5B730] bg-[#C9921A]/15" : "text-[#14532d] bg-[#166534]/12") : isDark ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-[#166534] hover:text-[#14532d] hover:bg-[#166534]/8"}`}
                 >
                   {t.nav.program}
                   <ChevronDown className={`w-3 h-3 transition-transform ${programOpen ? "rotate-180" : ""}`} />
@@ -172,7 +174,7 @@ export default function Navbar() {
               </div>
               {navLinks.slice(2).map((link) => (
                 <Link key={link.href} href={link.href}
-                  className={`px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${pathname === link.href ? (isDark ? "text-[#F5B730] bg-[#C9921A]/15" : "text-[#33A852] bg-[#33A852]/10") : isDark ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-slate-600 hover:text-[#0A1628] hover:bg-black/5"}`}>
+                  className={`px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${pathname === link.href ? (isDark ? "text-[#F5B730] bg-[#C9921A]/15" : "text-[#14532d] bg-[#166534]/12") : isDark ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-[#166534] hover:text-[#14532d] hover:bg-[#166534]/8"}`}>
                   {link.label}
                 </Link>
               ))}
@@ -187,7 +189,7 @@ export default function Navbar() {
                 className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all border ${
                   isDark
                     ? "text-slate-400 hover:text-white bg-white/5 border-white/10 hover:border-white/20"
-                    : "text-slate-500 hover:text-[#0A1628] bg-black/5 border-black/10 hover:border-black/20"
+                    : "text-[#166534] hover:text-[#14532d] bg-[#166534]/8 border-[#166534]/20 hover:border-[#166534]/35"
                 }`}
                 title="Search (Ctrl+K)"
               >
@@ -207,7 +209,7 @@ export default function Navbar() {
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm transition-all border ${
                     isDark
                       ? "text-slate-300 hover:text-white bg-white/5 border-white/10 hover:border-white/20"
-                      : "text-slate-600 hover:text-[#0A1628] bg-black/5 border-black/10 hover:border-black/20"
+                      : "text-[#166534] hover:text-[#14532d] bg-[#166534]/8 border-[#166534]/20 hover:border-[#166534]/35"
                   }`}
                   title="Change theme"
                 >
@@ -255,7 +257,7 @@ export default function Navbar() {
                 href="https://tnfzim.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`hidden lg:flex items-center gap-1 text-xs transition-colors ${isDark ? "text-slate-500 hover:text-slate-300" : "text-slate-400 hover:text-slate-600"}`}
+                className={`hidden lg:flex items-center gap-1 text-xs transition-colors ${isDark ? "text-slate-500 hover:text-slate-300" : "text-[#166534] hover:text-[#14532d]"}`}
               >
                 <ExternalLink className="w-3 h-3" />
                 <span className="hidden xl:inline">tnfzim.com</span>
@@ -272,7 +274,7 @@ export default function Navbar() {
               {/* Mobile menu button */}
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className={`lg:hidden p-2 rounded-lg transition-colors ${isDark ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-slate-600 hover:text-[#0A1628] hover:bg-black/5"}`}
+                className={`lg:hidden p-2 rounded-lg transition-colors ${isDark ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-[#166534] hover:text-[#14532d] hover:bg-[#166534]/8"}`}
               >
                 {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>

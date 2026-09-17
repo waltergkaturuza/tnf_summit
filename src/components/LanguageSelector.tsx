@@ -171,7 +171,7 @@ export function LanguageSelector({ dark }: { dark?: boolean }) {
           "flex items-center gap-1.5 rounded-xl border px-3 py-2 text-sm font-bold transition-all",
           dark
             ? "text-slate-300 hover:text-white bg-white/5 border-white/10 hover:border-white/20"
-            : "text-slate-600 hover:text-[#0A1628] bg-black/5 border-black/10 hover:border-black/20",
+            : "text-[#166534] hover:text-[#14532d] bg-[#166534]/8 border-[#166534]/20 hover:border-[#166534]/35",
         )}
       >
         <Globe className="w-4 h-4 shrink-0 opacity-80" aria-hidden />

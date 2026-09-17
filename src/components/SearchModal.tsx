@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, X, ArrowRight, FileText, Calendar, Mic, Users, Image, Phone, Shield, BookOpen, Star, Newspaper, Download, UserPlus, FileCheck, Heart, Building } from "lucide-react";
+import { Search, X, ArrowRight, FileText, Calendar, Mic, Users, Image, Phone, Shield, BookOpen, Star, Newspaper, Download, UserPlus, FileCheck, Heart, Building, Rocket, CreditCard } from "lucide-react";
 import { program, themes } from "@/lib/data";
 import { useLanguage } from "@/context/LanguageContext";
 
@@ -26,11 +26,13 @@ const pageResults: Result[] = [
   { id: "updates", title: "Updates & News", subtitle: "Latest news, announcements, upcoming events", href: "/updates", category: "Pages", icon: Newspaper },
   { id: "gallery", title: "Media & Gallery", subtitle: "Photos, videos, resources & downloads", href: "/gallery", category: "Pages", icon: Image },
   { id: "abstracts", title: "Submit Abstract", subtitle: "Abstract submission for sessions", href: "/abstracts/submit", category: "Pages", icon: FileCheck },
+  { id: "innovation", title: "Youth Innovation Challenge", subtitle: "Apply with your venture or prototype", href: "/innovation/apply", category: "Pages", icon: Rocket },
   { id: "accommodation", title: "Book Accommodation", subtitle: "Hotels & lodges via Gateway Stream", href: "/accommodation", category: "Pages", icon: Building },
   { id: "volunteer", title: "Volunteer", subtitle: "Apply to volunteer at the Summit", href: "/volunteer", category: "Pages", icon: UserPlus },
   { id: "track-status", title: "Track Status", subtitle: "Check registration or abstract status", href: "/track-status", category: "Pages", icon: Download },
   { id: "contact", title: "Contact & FAQ", subtitle: "Secretariat contact, enquiry form", href: "/contact", category: "Pages", icon: Phone },
   { id: "donate", title: "Donate", subtitle: "Support the Summit, bank transfer details", href: "/donate", category: "Pages", icon: Heart },
+  { id: "pay-by-reference", title: "Pay by Reference", subtitle: "Restart payment with an existing track ID", href: "/pay-by-reference", category: "Pages", icon: CreditCard },
   { id: "privacy", title: "Privacy Policy", subtitle: "Data protection, cookies, user rights", href: "/privacy", category: "Legal", icon: Shield },
   { id: "terms", title: "Terms of Use", subtitle: "Registration policies, code of conduct", href: "/terms", category: "Legal", icon: Shield },
 ];
