@@ -17,9 +17,9 @@ export default function PageHeader({ title, subtitle, subtitleLine2 }: PageHeade
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.55 }}
-        className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6 text-center"
+        className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 text-center"
       >
-        <h1 className="text-2xl sm:text-3xl lg:text-[2.25rem] font-black text-white leading-tight tracking-tight">
+        <h1 className="text-lg sm:text-xl lg:text-[1.375rem] font-semibold text-white leading-snug tracking-normal">
           {title}
         </h1>
         {subtitle ? (
