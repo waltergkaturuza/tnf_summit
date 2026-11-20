@@ -390,10 +390,10 @@ export default function RegistrationPage() {
 
       <WallpaperSurface fillViewport contentClassName="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-20 flex-1">
         <div id="fees" className="scroll-mt-28">
-          <div className="mb-6 rounded-2xl border border-[#C9921A]/30 bg-[#C9921A]/10 px-5 py-4">
-            <p className="text-sm text-slate-200">
+          <div className="pay-ref-banner mb-6 rounded-2xl border px-5 py-4">
+            <p className="pay-ref-note text-sm">
               Already registered and have a reference? If payment failed earlier, use{" "}
-              <a href="/pay-by-reference" className="font-bold text-[#F5B730] underline underline-offset-4">
+              <a href="/pay-by-reference" className="font-bold text-[#166534] underline underline-offset-4">
                 Pay by Reference
               </a>{" "}
               to restart payment with your existing track ID (registration or donation). No need to complete the registration form again.

@@ -25,6 +25,7 @@ export type HomeTranslations = {
   delegates: string;
   registerNow: string;
   viewProgramme: string;
+  featuredLabel: string;
   organisedBy: string;
   explore: string;
   keyFactLabels: string[];

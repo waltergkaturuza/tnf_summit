@@ -12,7 +12,6 @@ import { LanguageSelector } from "./LanguageSelector";
 import SearchModal from "./SearchModal";
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [themeOpen, setThemeOpen] = useState(false);
@@ -51,9 +50,6 @@ export default function Navbar() {
 
   useEffect(() => {
     setMounted(true);
-    const handleScroll = () => setScrolled(window.scrollY > 30);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   // Close dropdowns when clicking outside
@@ -79,10 +75,9 @@ export default function Navbar() {
     return () => window.removeEventListener("keydown", down);
   }, []);
 
-  const isDark = !mounted ? true : resolvedTheme !== "light";
-  const isHome = pathname === "/";
-  /** Home hero only: transparent nav at top. Inner pages keep a solid bar so green headers do not bleed through. */
-  const solidNav = scrolled || !isHome;
+  const isDark = mounted ? resolvedTheme !== "light" : false;
+  /** White bar in light mode, black bar in dark mode, so the green in the logo stays visible. */
+  const barDark = isDark;
 
   const themeOptions = [
     { value: "dark", label: "Dark", icon: Moon },
@@ -90,11 +85,7 @@ export default function Navbar() {
     { value: "system", label: "System", icon: Monitor },
   ];
 
-  const navbarBg = solidNav
-    ? isDark
-      ? "bg-[var(--bg-primary)]/98 backdrop-blur-xl shadow-lg border-b border-white/10"
-      : "bg-white/98 backdrop-blur-xl shadow-lg border-b border-black/8"
-    : "bg-transparent";
+  const navbarBg = isDark ? "bg-black" : "bg-white border-b border-black/10";
 
   return (
     <>
@@ -102,7 +93,7 @@ export default function Navbar() {
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${navbarBg}`}
+        className={`site-nav fixed top-0 left-0 right-0 z-50 ${navbarBg}`}
       >
         <div className="w-full px-10">
           <div className="flex items-center justify-between h-16 lg:h-18">
@@ -113,7 +104,7 @@ export default function Navbar() {
                 <Image src="/tnf-icon.png" alt="TNF Logo" fill className="object-contain" priority />
               </div>
               <div className="hidden sm:block leading-tight">
-                <div className={`font-bold text-sm transition-colors ${isDark ? "text-white" : "text-[#0A1628]"}`}>Zimbabwe TNF Global Summit</div>
+                <div className={`font-bold text-sm transition-colors ${barDark ? "text-white" : "text-[#0A1628]"}`}>Zimbabwe TNF Global Summit</div>
                 <div className="text-[#C9921A] text-xs">Victoria Falls 2026</div>
               </div>
             </Link>
@@ -122,7 +113,7 @@ export default function Navbar() {
             <nav className="hidden xl:flex items-center gap-0.5">
               {navLinks.slice(0, 2).map((link) => (
                 <Link key={link.href} href={link.href}
-                  className={`px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${pathname === link.href ? (isDark ? "text-[#F5B730] bg-[#C9921A]/15" : "text-[#14532d] bg-[#166534]/12") : isDark ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-[#166534] hover:text-[#14532d] hover:bg-[#166534]/8"}`}>
+                  className={`px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${pathname === link.href ? (barDark ? "text-[#F5B730] bg-[#C9921A]/15" : "text-[#166534] bg-[#33A852]/15") : barDark ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-[#111111] hover:text-black hover:bg-black/5"}`}>
                   {link.label}
                 </Link>
               ))}
@@ -130,7 +121,7 @@ export default function Navbar() {
               <div ref={participateRef} className="relative">
                 <button
                   onClick={() => { setParticipateOpen(!participateOpen); setProgramOpen(false); }}
-                  className={`flex items-center gap-0.5 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${participateItems.some(i => pathname === i.href) ? (isDark ? "text-[#F5B730] bg-[#C9921A]/15" : "text-[#14532d] bg-[#166534]/12") : isDark ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-[#166534] hover:text-[#14532d] hover:bg-[#166534]/8"}`}
+                  className={`flex items-center gap-0.5 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${participateItems.some(i => pathname === i.href) ? (barDark ? "text-[#F5B730] bg-[#C9921A]/15" : "text-[#166534] bg-[#33A852]/15") : barDark ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-[#111111] hover:text-black hover:bg-black/5"}`}
                 >
                   {t.nav.participate}
                   <ChevronDown className={`w-3 h-3 transition-transform ${participateOpen ? "rotate-180" : ""}`} />
@@ -153,7 +144,7 @@ export default function Navbar() {
               <div ref={programRef} className="relative">
                 <button
                   onClick={() => { setProgramOpen(!programOpen); setParticipateOpen(false); }}
-                  className={`flex items-center gap-0.5 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${programItems.some(i => pathname === i.href) ? (isDark ? "text-[#F5B730] bg-[#C9921A]/15" : "text-[#14532d] bg-[#166534]/12") : isDark ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-[#166534] hover:text-[#14532d] hover:bg-[#166534]/8"}`}
+                  className={`flex items-center gap-0.5 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${programItems.some(i => pathname === i.href) ? (barDark ? "text-[#F5B730] bg-[#C9921A]/15" : "text-[#166534] bg-[#33A852]/15") : barDark ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-[#111111] hover:text-black hover:bg-black/5"}`}
                 >
                   {t.nav.program}
                   <ChevronDown className={`w-3 h-3 transition-transform ${programOpen ? "rotate-180" : ""}`} />
@@ -174,7 +165,7 @@ export default function Navbar() {
               </div>
               {navLinks.slice(2).map((link) => (
                 <Link key={link.href} href={link.href}
-                  className={`px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${pathname === link.href ? (isDark ? "text-[#F5B730] bg-[#C9921A]/15" : "text-[#14532d] bg-[#166534]/12") : isDark ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-[#166534] hover:text-[#14532d] hover:bg-[#166534]/8"}`}>
+                  className={`px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${pathname === link.href ? (barDark ? "text-[#F5B730] bg-[#C9921A]/15" : "text-[#166534] bg-[#33A852]/15") : barDark ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-[#111111] hover:text-black hover:bg-black/5"}`}>
                   {link.label}
                 </Link>
               ))}
@@ -187,9 +178,9 @@ export default function Navbar() {
               <button
                 onClick={() => setSearchOpen(true)}
                 className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all border ${
-                  isDark
+                  barDark
                     ? "text-slate-400 hover:text-white bg-white/5 border-white/10 hover:border-white/20"
-                    : "text-[#166534] hover:text-[#14532d] bg-[#166534]/8 border-[#166534]/20 hover:border-[#166534]/35"
+                    : "text-[#111111] hover:text-black bg-black/5 border-black/15 hover:border-black/30"
                 }`}
                 title="Search (Ctrl+K)"
               >
@@ -200,16 +191,16 @@ export default function Navbar() {
                 </span>
               </button>
 
-              <LanguageSelector dark={isDark} />
+              <LanguageSelector dark={barDark} />
 
               {/* Theme Toggle */}
               <div ref={themeRef} className="relative">
                 <button
                   onClick={() => setThemeOpen(!themeOpen)}
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm transition-all border ${
-                    isDark
+                    barDark
                       ? "text-slate-300 hover:text-white bg-white/5 border-white/10 hover:border-white/20"
-                      : "text-[#166534] hover:text-[#14532d] bg-[#166534]/8 border-[#166534]/20 hover:border-[#166534]/35"
+                      : "text-[#111111] hover:text-black bg-black/5 border-black/15 hover:border-black/30"
                   }`}
                   title="Change theme"
                 >
@@ -252,29 +243,10 @@ export default function Navbar() {
                 </AnimatePresence>
               </div>
 
-              {/* External link, desktop only */}
-              <a
-                href="https://tnfzim.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`hidden lg:flex items-center gap-1 text-xs transition-colors ${isDark ? "text-slate-500 hover:text-slate-300" : "text-[#166534] hover:text-[#14532d]"}`}
-              >
-                <ExternalLink className="w-3 h-3" />
-                <span className="hidden xl:inline">tnfzim.com</span>
-              </a>
-
-              {/* Register CTA, desktop */}
-              <Link
-                href="/registration"
-                className="hidden lg:flex btn-gold px-4 py-2 rounded-lg text-xs font-bold"
-              >
-                {t.cta.register}
-              </Link>
-
               {/* Mobile menu button */}
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className={`lg:hidden p-2 rounded-lg transition-colors ${isDark ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-[#166534] hover:text-[#14532d] hover:bg-[#166534]/8"}`}
+                className={`lg:hidden p-2 rounded-lg transition-colors ${barDark ? "text-slate-300 hover:text-white hover:bg-white/5" : "text-[#111111] hover:text-black hover:bg-black/5"}`}
               >
                 {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>

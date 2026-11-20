@@ -200,12 +200,7 @@ function ContactPageContent() {
                   const color = entry.color;
                   return (
                     <div key={i} className="glass rounded-xl p-4 flex items-start gap-4">
-                      <div
-                        className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                        style={{ background: `${color}20`, border: `1px solid ${color}30` }}
-                      >
-                        <Icon className="w-5 h-5" style={{ color }} />
-                      </div>
+                      <Icon className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color }} />
                       <div>
                         <div className="text-xs font-medium mb-0.5 text-theme-primary">{item.label}</div>
                         {href ? (
@@ -243,12 +238,7 @@ function ContactPageContent() {
                   const color = entry.color;
                   return (
                     <div key={idx} className="glass rounded-xl p-4 flex items-start gap-4">
-                      <div
-                        className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                        style={{ background: `${color}20`, border: `1px solid ${color}30` }}
-                      >
-                        <Icon className="w-5 h-5" style={{ color }} />
-                      </div>
+                      <Icon className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color }} />
                       <div>
                         <div className="text-xs font-medium mb-0.5 text-theme-primary">{item.label}</div>
                         {href ? (

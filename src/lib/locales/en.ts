@@ -22,6 +22,7 @@ const en: FullTranslations = {
     delegates: "1,500–2,000 Delegates",
     registerNow: "Register Now",
     viewProgramme: "View Programme",
+    featuredLabel: "Featured",
     organisedBy: "Organised by the Tripartite Negotiating Forum (TNF)",
     explore: "Explore",
     keyFactLabels: ["Expected Delegates", "Days", "Plenary Days", "Sessions", "Spotlight Themes", "Concurrent Rooms", "African Nations Represented", "Victoria Falls, Zimbabwe"],

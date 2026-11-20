@@ -59,6 +59,28 @@ html.light {
   --scrollbar-track: #EFF3F8;
 }
 
+/* Pay-by-reference notice sits on the photo. Keep a solid light bar and dark type in both themes. */
+.pay-ref-banner {
+  background: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.16) !important;
+}
+.pay-ref-note,
+html.light .wallpaper-surface .pay-ref-note,
+html.light .wallpaper-surface .relative.z-10 .pay-ref-note,
+html:not(.light) .wallpaper-surface .pay-ref-note,
+html:not(.light) .wallpaper-surface .relative.z-10 .pay-ref-note {
+  color: #0f172a !important;
+}
+
+html.light footer {
+  background-color: #ffffff !important;
+}
+html.light footer input {
+  background-color: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.22) !important;
+  color: #0f172a !important;
+}
+
 @theme inline {
   --color-background: var(--bg-primary);
   --color-foreground: var(--foreground);
@@ -201,11 +223,31 @@ html.light .wallpaper-surface .font-bold.text-white {
   color: rgba(255, 255, 255, 0.92) !important;
 }
 
+/* Chips that are themselves the white panel keep dark labels */
+html.light .wallpaper-surface .glass.text-white,
+html.light .wallpaper-surface .glass.text-white\/90,
+html.light .wallpaper-surface .glass.text-white\/85,
+html.light .wallpaper-surface .glass.text-white\/80,
+html.light .wallpaper-surface .wallpaper-glass.text-white,
+html.light .wallpaper-surface .wallpaper-glass.text-white\/90,
+html.light .wallpaper-surface .wallpaper-glass.text-white\/85,
+html.light .wallpaper-surface .wallpaper-glass.text-white\/80 {
+  color: #0f172a !important;
+}
+
 /* Theme-primary copy sitting directly on the photo (not inside white panels) */
 html.light .wallpaper-surface .text-center .text-theme-primary,
 html.light .wallpaper-surface .max-w-3xl .text-theme-primary,
 html.light .wallpaper-surface .relative.z-10 p.text-theme-primary {
   color: rgba(255, 255, 255, 0.92) !important;
+}
+
+/* Card body copy stays dark on the white panels in light mode */
+html.light .wallpaper-surface .relative.z-10 .glass p.text-theme-primary,
+html.light .wallpaper-surface .relative.z-10 .wallpaper-glass p.text-theme-primary,
+html.light .wallpaper-surface .relative.z-10 .glass .text-theme-primary,
+html.light .wallpaper-surface .relative.z-10 .wallpaper-glass .text-theme-primary {
+  color: #334155 !important;
 }
 
 /* Light mode panels on wallpaper — solid white (forms, cards, chips) */
@@ -343,26 +385,26 @@ html.light .wallpaper-surface .glass.wallpaper-glass .text-white\/80 {
 }
 
 /* Dark mode: opaque glass on wallpaper so light text stays readable */
-:not(html.light) .wallpaper-surface .glass,
-:not(html.light) .wallpaper-surface .glass-gold {
+html:not(.light) .wallpaper-surface .glass,
+html:not(.light) .wallpaper-surface .glass-gold {
   background: rgba(10, 22, 40, 0.88) !important;
   border-color: rgba(255, 255, 255, 0.14) !important;
 }
 
-:not(html.light) .wallpaper-surface .glass input,
-:not(html.light) .wallpaper-surface .glass textarea,
-:not(html.light) .wallpaper-surface .glass select,
-:not(html.light) .wallpaper-surface .glass-gold input,
-:not(html.light) .wallpaper-surface .glass-gold textarea,
-:not(html.light) .wallpaper-surface .glass-gold select {
+html:not(.light) .wallpaper-surface .glass input,
+html:not(.light) .wallpaper-surface .glass textarea,
+html:not(.light) .wallpaper-surface .glass select,
+html:not(.light) .wallpaper-surface .glass-gold input,
+html:not(.light) .wallpaper-surface .glass-gold textarea,
+html:not(.light) .wallpaper-surface .glass-gold select {
   background: rgba(255, 255, 255, 0.08) !important;
   color: #F8FAFC !important;
 }
 
-:not(html.light) .wallpaper-surface .glass input::placeholder,
-:not(html.light) .wallpaper-surface .glass textarea::placeholder,
-:not(html.light) .wallpaper-surface .glass-gold input::placeholder,
-:not(html.light) .wallpaper-surface .glass-gold textarea::placeholder {
+html:not(.light) .wallpaper-surface .glass input::placeholder,
+html:not(.light) .wallpaper-surface .glass textarea::placeholder,
+html:not(.light) .wallpaper-surface .glass-gold input::placeholder,
+html:not(.light) .wallpaper-surface .glass-gold textarea::placeholder {
   color: #94A3B8 !important;
 }
 
@@ -504,6 +546,34 @@ html.light .text-slate-500,
 html.light .text-slate-600,
 html.light .text-slate-700 { color: #0F172A !important; }
 
+/* Featured Learn More sits on dark green, so the label stays white in light mode. */
+html.light .featured-learn-more {
+  color: #ffffff !important;
+}
+
+/* Hero sits on a photo in both themes. Light mode would paint .text-white navy, so use logo green. */
+html.light .hero-on-photo .text-white,
+html.light .hero-on-photo .text-white\/90,
+html.light .hero-on-photo .text-white\/80 {
+  color: #33A852 !important;
+}
+html.light .hero-on-photo .border-white {
+  border-color: #33A852 !important;
+}
+
+/* Who Should Attend sits on a photo, so the heading stays white in light mode. */
+html.light .why-attend-heading .text-white {
+  color: #ffffff !important;
+}
+.why-attend-photo .glass {
+  background: rgba(10, 22, 40, 0.84) !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+}
+html.light .why-attend-photo .glass {
+  background: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.1) !important;
+}
+
 /* Keep light text on photo/video overlays and the green page header */
 html.light .page-header-green .text-white,
 html.light .page-header-green .text-white\/90,
@@ -513,9 +583,22 @@ html.light [class*="from-black"] .text-white\/90,
 html.light [class*="from-black"] .text-white\/80 {
   color: #ffffff !important;
 }
-/* Keep gold/amber accents visible in light mode */
+/* Light mode: gold accents become logo green. Solid gold buttons stay gold. */
+html.light [class*="text-[#C9921A]"],
+html.light [class*="text-[#F5B730]"],
+html.light [class*="text-[#A67C12]"],
 html.light .text-amber-400,
-html.light .text-amber-500 { color: #B45309 !important; }
+html.light .text-amber-500 {
+  color: #33A852 !important;
+}
+html.light [class*="bg-[#C9921A]/15"],
+html.light [class*="bg-[#C9921A]/10"],
+html.light [class*="bg-[#C9921A]/12"] {
+  background-color: rgba(51, 168, 82, 0.15) !important;
+}
+html.light [class*="border-[#C9921A]"] {
+  border-color: #33A852 !important;
+}
 /* Hover states, dark text in light mode */
 html.light .hover\:text-white:hover { color: #0F172A !important; }
 html.light .hover\:text-slate-400:hover { color: #0F172A !important; }
@@ -535,15 +618,15 @@ html.light .text-forest-light { color: #0F172A !important; }
 .text-theme-primary { color: var(--text-primary) !important; }
 
 /* Dark mode: brighter text on dark backgrounds site-wide */
-:not(html.light) .text-slate-400 { color: #CBD5E1 !important; }
-:not(html.light) .text-slate-500 { color: #94A3B8 !important; }
-:not(html.light) .text-slate-600 { color: #94A3B8 !important; }
-:not(html.light) footer input::placeholder { color: #94A3B8 !important; }
+html:not(.light) .text-slate-400 { color: #CBD5E1 !important; }
+html:not(.light) .text-slate-500 { color: #94A3B8 !important; }
+html:not(.light) .text-slate-600 { color: #94A3B8 !important; }
+html:not(.light) footer input::placeholder { color: #94A3B8 !important; }
 
 /* Native <option> rendering in popup menu — ensure readable text on dark UA backgrounds.
  * Without this, some browsers/themes render white-on-white when the option is not hovered. */
-:not(html.light) select option,
-:not(html.light) select optgroup {
+html:not(.light) select option,
+html:not(.light) select optgroup {
   background-color: #0A1628;
   color: #FFFFFF;
 }
@@ -561,7 +644,7 @@ html.light select optgroup {
   background-clip: text;
 }
 html.light .gradient-text {
-  background: linear-gradient(135deg, #B45309 0%, #92400E 50%, #B45309 100%);
+  background: linear-gradient(135deg, #33A852 0%, #166534 50%, #33A852 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -648,12 +731,12 @@ html.light .gradient-text {
   transform: translateY(-2px);
 }
 html.light .btn-outline-gold {
-  color: #92400E;
-  border-color: #C9921A;
+  color: #166534;
+  border-color: #33A852;
 }
 html.light .btn-outline-gold:hover {
-  color: #0F172A;
-  background: rgba(201, 146, 26, 0.12);
+  color: #14532d;
+  background: rgba(51, 168, 82, 0.12);
 }
 
 /* Divider gold */
@@ -704,7 +787,9 @@ html.light .btn-outline-gold:hover {
  * Google Website Translator, hide only the top banner iframe so it does not cover
  * the fixed navbar. Avoid broad html/body rules that can interfere with translation.
  */
-iframe.goog-te-banner-frame {
+iframe.goog-te-banner-frame,
+iframe.VIpgJd-ZVi9od-ORHb-OEVmcd,
+.VIpgJd-ZVi9od-ORHb-OEVmcd {
   display: none !important;
   visibility: hidden !important;
   height: 0 !important;
@@ -714,6 +799,8 @@ iframe.goog-te-banner-frame {
   border: 0 !important;
   margin: 0 !important;
   padding: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 body {

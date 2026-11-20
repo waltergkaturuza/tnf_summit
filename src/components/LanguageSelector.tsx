@@ -48,16 +48,22 @@ function triggerGoogleTranslate(langCode: string) {
   return false;
 }
 
+const GOOGLE_BANNER_SELECTOR =
+  "iframe.goog-te-banner-frame, iframe.VIpgJd-ZVi9od-ORHb-OEVmcd, .VIpgJd-ZVi9od-ORHb-OEVmcd";
+
 /** Hide only the top promo/banner iframe and undo body offset, must not run on every DOM mutation or translation breaks. */
 function stripGoogleTranslateBanner() {
   if (typeof document === "undefined") return;
-  document.querySelectorAll("iframe.goog-te-banner-frame").forEach((node) => {
+  document.querySelectorAll(GOOGLE_BANNER_SELECTOR).forEach((node) => {
     const el = node as HTMLElement;
     el.style.setProperty("display", "none", "important");
     el.style.setProperty("visibility", "hidden", "important");
     el.style.setProperty("height", "0", "important");
     el.style.setProperty("width", "0", "important");
+    el.style.setProperty("max-height", "0", "important");
     el.style.setProperty("overflow", "hidden", "important");
+    el.style.setProperty("opacity", "0", "important");
+    el.style.setProperty("pointer-events", "none", "important");
   });
   document.body.style.setProperty("top", "0", "important");
   document.body.style.setProperty("margin-top", "0", "important");
@@ -93,7 +99,7 @@ export function GoogleTranslateRoot() {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const run = () => {
-      if (document.querySelector("iframe.goog-te-banner-frame")) stripGoogleTranslateBanner();
+      if (document.querySelector(GOOGLE_BANNER_SELECTOR)) stripGoogleTranslateBanner();
     };
     run();
     const moBody = new MutationObserver(run);
@@ -142,7 +148,7 @@ export function LanguageSelector({ dark }: { dark?: boolean }) {
         const first = frame.contentDocument.querySelector<HTMLAnchorElement>(".goog-te-menu2-item:first-child a");
         first?.click();
       }
-      const banner = document.querySelector<HTMLElement>(".goog-te-banner-frame");
+      const banner = document.querySelector<HTMLElement>(GOOGLE_BANNER_SELECTOR);
       if (banner) banner.style.display = "none";
       document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
       window.location.reload();
@@ -171,7 +177,7 @@ export function LanguageSelector({ dark }: { dark?: boolean }) {
           "flex items-center gap-1.5 rounded-xl border px-3 py-2 text-sm font-bold transition-all",
           dark
             ? "text-slate-300 hover:text-white bg-white/5 border-white/10 hover:border-white/20"
-            : "text-[#166534] hover:text-[#14532d] bg-[#166534]/8 border-[#166534]/20 hover:border-[#166534]/35",
+            : "text-[#111111] hover:text-black bg-black/5 border-black/15 hover:border-black/30",
         )}
       >
         <Globe className="w-4 h-4 shrink-0 opacity-80" aria-hidden />

@@ -8,7 +8,6 @@ import {
   DEFAULT_TITLE,
   SITE_NAME,
   SITE_LOGO_SQUARE,
-  SITE_ICON,
   absoluteUrl,
   DEFAULT_OG_IMAGE,
   eventJsonLd,
@@ -58,9 +57,8 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "48x48", type: "image/x-icon" },
       { url: SITE_LOGO_SQUARE, sizes: "512x512", type: "image/png" },
-      { url: SITE_ICON, sizes: "512x512", type: "image/png" },
+      { url: "/favicon.ico", sizes: "48x48", type: "image/x-icon" },
     ],
     apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
     shortcut: SITE_LOGO_SQUARE,

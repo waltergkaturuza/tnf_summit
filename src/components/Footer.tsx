@@ -344,16 +344,16 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Bottom row: hashtag + developer credit */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
-              <div className="flex items-center gap-3 text-xs text-theme-primary">
-                <span className="text-[#C9921A] font-bold">{t.footer.hashtag}</span>
-                <span>·</span>
-                <span>{summitInfo.location}</span>
-                <span>·</span>
-                <span>{summitInfo.dates}</span>
-              </div>
-            <p className="text-xs text-theme-primary">
+          {/* Bottom row: summit line on the left, developer credit centered */}
+          <div className="relative flex flex-col items-center gap-2 sm:block">
+            <div className="flex items-center justify-center gap-3 text-xs text-theme-primary sm:absolute sm:left-0 sm:top-1/2 sm:-translate-y-1/2">
+              <span className="text-[#C9921A] font-bold">{t.footer.hashtag}</span>
+              <span>·</span>
+              <span>{summitInfo.location}</span>
+              <span>·</span>
+              <span>{summitInfo.dates}</span>
+            </div>
+            <p className="text-xs text-center text-theme-primary">
               {t.footer.developedBy}{" "}
               <a
                 href="https://www.quantistechnologies.co.zw/"

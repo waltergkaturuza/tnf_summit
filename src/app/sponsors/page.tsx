@@ -233,17 +233,15 @@ export default function SponsorsPage() {
             {sponsors.partners.map((partner, i) => (
               <FadeIn key={partner.name} delay={i * 0.05}>
                 <div className="flex flex-col items-center gap-3 group">
-                  <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl glass flex items-center justify-center p-3 border border-white/5 hover:border-[#C9921A]/30 transition-colors">
+                  <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-2xl overflow-hidden flex items-center justify-center">
                     {"logo" in partner && partner.logo ? (
-                      <div className="bg-white rounded-lg p-2 w-full h-full flex items-center justify-center">
-                        <Image
-                          src={partner.logo}
-                          alt={partner.fullName}
-                          width={112}
-                          height={112}
-                          className="max-w-full max-h-full object-contain"
-                        />
-                      </div>
+                      <Image
+                        src={partner.logo}
+                        alt={partner.fullName}
+                        width={160}
+                        height={160}
+                        className="w-full h-full object-contain"
+                      />
                     ) : (
                       <span className="text-base sm:text-lg font-bold text-theme-primary text-center leading-tight">
                         {partner.name}

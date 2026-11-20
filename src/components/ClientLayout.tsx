@@ -17,7 +17,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   return (
     <ThemeProvider
       attribute="class"
-      defaultTheme="dark"
+      defaultTheme="light"
       enableSystem
       themes={["light", "dark", "system"]}
     >

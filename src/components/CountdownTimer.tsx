@@ -19,12 +19,12 @@ function TimeBlock({ value, label }: TimeUnit) {
         initial={{ scale: 1.2, opacity: 0.5 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.3 }}
-        className="relative w-[5rem] h-[5rem] sm:w-24 sm:h-24 lg:w-28 lg:h-28 glass-countdown rounded-xl flex items-center justify-center mb-1"
+        className="relative w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 glass-countdown rounded-xl flex items-center justify-center mb-1"
       >
         <div className="absolute inset-0 rounded-xl animated-border-countdown p-[1px]">
           <div className="countdown-digit-inner w-full h-full rounded-xl flex items-center justify-center px-1">
             <span
-              className="text-3xl sm:text-4xl lg:text-5xl font-black leading-none gradient-text-countdown tabular-nums tracking-tight"
+              className="text-[0.9375rem] sm:text-lg lg:text-2xl font-black leading-none gradient-text-countdown tabular-nums tracking-tight"
               suppressHydrationWarning
             >
               {display}
@@ -73,10 +73,10 @@ export default function CountdownTimer() {
           {["Days", "Hours", "Minutes", "Seconds"].map((label, i) => (
             <div key={label} className="flex items-center gap-2 sm:gap-4">
               <div className="flex flex-col items-center">
-                <div className="relative w-[5rem] h-[5rem] sm:w-24 sm:h-24 lg:w-28 lg:h-28 glass-countdown rounded-xl flex items-center justify-center mb-1">
+                <div className="relative w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 glass-countdown rounded-xl flex items-center justify-center mb-1">
                   <div className="absolute inset-0 rounded-xl animated-border-countdown p-[1px]">
                     <div className="countdown-digit-inner w-full h-full rounded-xl flex items-center justify-center px-1">
-                      <span className="text-3xl sm:text-4xl lg:text-5xl font-black leading-none gradient-text-countdown tabular-nums tracking-tight">
+                      <span className="text-[0.9375rem] sm:text-lg lg:text-2xl font-black leading-none gradient-text-countdown tabular-nums tracking-tight">
                         --
                       </span>
                     </div>

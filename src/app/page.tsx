@@ -5,14 +5,22 @@ import { useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  Calendar, MapPin, Users,
-  ArrowRight, ChevronDown, CheckCircle, ExternalLink,
+  ArrowRight, CheckCircle, ExternalLink,
 } from "lucide-react";
 import CountdownTimer from "@/components/CountdownTimer";
 import HelloPageGallerySlider from "@/components/HelloPageGallerySlider";
 import { WILDLIFE_SLIDES } from "@/lib/wildlifeSlides";
 import { useLanguage } from "@/context/LanguageContext";
 import { summitInfo, themes, keyFacts, sponsors } from "@/lib/data";
+
+/** End of each Innovation Timeline step. A step is ticked once this date has passed. */
+const INNOVATION_STEP_ENDS = [
+  "2026-07-31",
+  "2026-08-31",
+  "2026-09-22",
+  "2026-09-23",
+  "2026-09-23",
+] as const;
 
 function FadeIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef(null);
@@ -32,136 +40,124 @@ function FadeIn({ children, delay = 0, className = "" }: { children: React.React
 
 export default function HomePage() {
   const { t } = useLanguage();
+  const innovationNow = Date.now();
+  const innovationReached = INNOVATION_STEP_ENDS.map(
+    (end) => innovationNow > new Date(`${end}T23:59:59`).getTime()
+  );
+  const innovationCurrent = innovationReached.findIndex((done) => !done);
   return (
     <div className="min-h-screen">
       {/* ─── HERO ─── */}
-      <section className="relative min-h-screen hero-bg pattern-overlay flex flex-col items-center justify-center overflow-hidden">
-        {/* Animated orbs, TNF logo colors (green, yellow, red) */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl animate-pulse" style={{ background: "rgba(51, 168, 82, 0.2)" }} />
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full blur-3xl animate-pulse" style={{ background: "rgba(251, 188, 5, 0.16)", animationDelay: "1s" }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-3xl" style={{ background: "rgba(234, 67, 53, 0.06)" }} />
+      <section className="hero-on-photo relative isolate h-[min(70vh,640px)] min-h-[480px] overflow-hidden sm:min-h-[540px]">
+        <Image
+          src="/2026-11-17 at 12.14.53.jpeg"
+          alt="Delegates gathered at the Zimbabwe TNF Global Summit"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-[center_54%]"
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(8, 24, 20, 0.28) 0%, rgba(8, 32, 26, 0.38) 46%, rgba(6, 18, 16, 0.72) 100%)",
+          }}
+        />
 
-        <div className="relative z-10 w-full max-w-none mx-auto px-2 sm:px-4 md:px-5 lg:px-6 xl:px-8 2xl:px-10 pt-24 pb-6 lg:pb-10">
-          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.52fr)] gap-7 lg:gap-8 xl:gap-10 items-center">
-            {/* Left: headline, meta, CTAs (Chilmund-style column) */}
-            <div className="flex flex-col items-center text-center w-full max-w-3xl mx-auto">
-              {/* Title */}
-              <motion.h1
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.1 }}
-                className="text-4xl sm:text-5xl font-black leading-tight mb-4 text-balance"
-              >
-                <span className="text-white">{t.home.title} </span>
-                <span className="shimmer">Global Summit</span>
-              </motion.h1>
-
-              <motion.p
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.2 }}
-                className="text-lg sm:text-2xl font-light mb-2 text-theme-primary max-w-2xl mx-auto"
-              >
-                {t.home.subtitle1}
-              </motion.p>
-              <motion.p
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.3 }}
-                className="text-lg sm:text-2xl text-[#C9921A] font-semibold mb-8 max-w-2xl mx-auto"
-              >
-                {t.home.subtitle2}
-              </motion.p>
-
-              {/* Date & Location */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-10"
-              >
-                <div className="flex items-center gap-2 glass rounded-full px-4 py-2">
-                  <Calendar className="w-5 h-5 shrink-0 text-[#C9921A]" />
-                  <span className="text-white text-sm font-medium">{t.home.date}</span>
-                </div>
-                <div className="flex items-center gap-2 glass rounded-full px-4 py-2">
-                  <MapPin className="w-5 h-5 shrink-0 text-[#C9921A]" />
-                  <span className="text-white text-sm font-medium">{t.home.venue}</span>
-                </div>
-                <div className="flex items-center gap-2 glass rounded-full px-4 py-2">
-                  <Users className="w-5 h-5 shrink-0 text-[#C9921A]" />
-                  <span className="text-white text-sm font-medium">{t.home.delegates}</span>
-                </div>
-              </motion.div>
-
-              {/* CTAs */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.5 }}
-                className="flex flex-wrap items-center justify-center gap-4"
-              >
-                <Link href="/registration" className="btn-gold px-8 py-4 rounded-xl text-base font-bold flex items-center gap-2">
-                  {t.home.registerNow}
-                  <ArrowRight className="w-6 h-6 shrink-0" />
-                </Link>
-                <Link href="/program" className="btn-outline-gold px-8 py-4 rounded-xl text-base font-semibold flex items-center gap-2">
-                  {t.home.viewProgramme}
-                  <ArrowRight className="w-6 h-6 shrink-0" />
-                </Link>
-              </motion.div>
-
-              {/* Organised by */}
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.8 }}
-                className="text-xs mt-8 text-theme-primary max-w-md mx-auto text-center text-pretty"
-              >
-                {t.home.organisedBy}
-              </motion.p>
-            </div>
-
-            {/* Right: image slider sharing the row */}
-            <motion.div
-              initial={{ opacity: 0, x: 24 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.75, delay: 0.2 }}
-              className="w-full min-w-0 mx-auto lg:mx-0"
-            >
-              <HelloPageGallerySlider className="w-full" />
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Countdown — full width below the two columns */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="relative z-10 w-full max-w-none mx-auto px-2 sm:px-4 md:px-5 lg:px-6 xl:px-8 2xl:px-10 pb-14 lg:pb-16"
-        >
-          <div className="glass rounded-2xl px-4 py-3 sm:px-5 sm:py-4 lg:px-6 lg:py-5">
-            <CountdownTimer />
-          </div>
-        </motion.div>
-
-        {/* Scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
-        >
+        <div className="relative z-10 flex h-full flex-col items-center justify-end px-4 pb-24 pt-24 text-center sm:px-6 sm:pb-28">
           <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ repeat: Infinity, duration: 1.5 }}
-            className="flex flex-col items-center gap-1 cursor-pointer text-theme-primary"
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="mb-3"
           >
-            <span className="text-xs uppercase tracking-widest">{t.home.explore}</span>
-            <ChevronDown className="w-5 h-5" />
+            <p
+              className="text-3xl font-black leading-[0.98] tracking-tight text-white sm:text-4xl lg:text-5xl"
+              style={{ textShadow: "0 2px 24px rgba(0,0,0,0.45)" }}
+            >
+              {t.home.title}
+            </p>
+            <p
+              className="mt-0.5 text-3xl font-black leading-[0.98] tracking-tight text-[#C9921A] sm:text-4xl lg:text-5xl"
+              style={{ textShadow: "0 2px 18px rgba(0,0,0,0.35)" }}
+            >
+              Global Summit
+            </p>
           </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.18 }}
+            className="max-w-3xl text-balance text-xl font-bold leading-[1.15] text-white sm:text-2xl lg:text-3xl"
+            style={{ textShadow: "0 2px 24px rgba(0,0,0,0.45)" }}
+          >
+            {t.home.aboutTitle}
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, delay: 0.22 }}
+            className="mt-4 max-w-xl text-pretty text-base leading-relaxed text-white sm:text-lg"
+            style={{ textShadow: "0 1px 12px rgba(0,0,0,0.55)" }}
+          >
+            {t.home.subtitle1} {t.home.subtitle2}. {t.home.date}, {t.home.venue}.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.34 }}
+            className="mt-8 flex flex-wrap items-center justify-center gap-3 sm:gap-4"
+          >
+            <Link
+              href="/registration"
+              className="btn-gold rounded-full px-8 py-3 text-sm font-bold sm:text-base"
+            >
+              {t.home.registerNow}
+            </Link>
+            <Link
+              href="/about"
+              className="rounded-full border-2 border-white px-8 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/15 sm:text-base"
+            >
+              {t.home.aboutHeading}
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Featured strip overlapping the photo, matching the reference layout */}
+      <div className="relative z-20 -mt-16 px-4 sm:-mt-20 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.45 }}
+          className="mx-auto flex max-w-6xl flex-col gap-4 rounded-[1.75rem] border-l-[7px] border-[#33A852] bg-white px-5 py-5 shadow-[0_18px_50px_rgba(0,0,0,0.22)] sm:flex-row sm:items-center sm:gap-8 sm:px-8 sm:py-6"
+        >
+          <div className="min-w-0 flex-1 text-left">
+            <p className="text-sm font-semibold text-[#1a1a1a]">{t.home.featuredLabel}</p>
+            <h2 className="mt-1 text-base font-bold leading-snug text-[#111827] sm:text-lg">
+              {t.home.registerCtaHeading}
+            </h2>
+            <p className="mt-1 text-sm leading-relaxed text-[#4b5563]">
+              {t.home.registerCtaSub}
+            </p>
+          </div>
+          <Link
+            href="/registration"
+            className="featured-learn-more inline-flex shrink-0 items-center justify-center self-start rounded-full bg-[#14532d] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#166534] sm:mr-16 sm:self-center lg:mr-20"
+          >
+            {t.cta.learnMore}
+          </Link>
         </motion.div>
+      </div>
+
+      <section className="relative z-10 pb-8 pt-8 sm:pt-10">
+        <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+          <CountdownTimer />
+        </div>
       </section>
 
       {/* ─── KEY STATS ─── */}
@@ -185,11 +181,12 @@ export default function HomePage() {
         <HelloPageGallerySlider variant="background" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn>
-            <motion.div className="max-w-3xl">
+            <motion.div>
               <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">{t.home.aboutHeading}</span>
-              <h2 className="text-4xl sm:text-5xl font-black text-white mt-3 mb-6 leading-tight">
+              <h2 className="mt-3 mb-6 whitespace-nowrap text-xl font-bold leading-[1.15] sm:text-2xl lg:text-3xl">
                 <span className="gradient-text">{t.home.aboutTitle}</span>
               </h2>
+              <div className="max-w-3xl">
               <p className="leading-relaxed mb-6 text-white/90 text-justify text-pretty">
                 {t.home.aboutDesc1}
               </p>
@@ -202,6 +199,7 @@ export default function HomePage() {
                     {tag}
                   </span>
                 ))}
+              </div>
               </div>
             </motion.div>
           </FadeIn>
@@ -225,13 +223,28 @@ export default function HomePage() {
       </section>
 
       {/* ─── WHY ATTEND ─── */}
-      <section className="py-20 bg-[var(--bg-alt)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="why-attend-photo relative isolate overflow-hidden py-10 sm:py-12">
+        <Image
+          src="/who-should-attend.jpg"
+          alt="Delegates seated at the Zimbabwe TNF Global Summit"
+          fill
+          unoptimized
+          sizes="100vw"
+          className="object-cover object-[center_42%]"
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(10,22,40,0.22) 0%, rgba(10,22,40,0.12) 52%, rgba(10,22,40,0.28) 100%)",
+          }}
+        />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn>
-            <div className="text-center mb-14">
+            <div className="why-attend-heading text-center mb-6 sm:mb-8" style={{ textShadow: "0 2px 16px rgba(0,0,0,0.65)" }}>
               <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">{t.home.whyAttendHeading}</span>
-              <h2 className="text-4xl font-black text-white mt-3">{t.home.whoShouldAttend}</h2>
-              <p className="mt-4 max-w-2xl mx-auto text-theme-primary">
+              <h2 className="text-4xl font-black text-white mt-2">{t.home.whoShouldAttend}</h2>
+              <p className="mt-3 max-w-2xl mx-auto text-white">
                 {t.home.whyAttendIntro}
               </p>
             </div>
@@ -358,12 +371,12 @@ export default function HomePage() {
       </section>
 
       {/* ─── PARTNERS ─── */}
-      <section className="py-16 bg-[var(--bg-alt)]">
+      <section className="py-8 sm:py-10 bg-[var(--bg-alt)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn>
-            <div className="text-center mb-10">
+            <div className="text-center mb-5">
               <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">{t.home.partnersHeading}</span>
-              <h2 className="text-3xl font-black text-white mt-3">{t.home.partnersSub}</h2>
+              <h2 className="text-3xl font-black text-white mt-2">{t.home.partnersSub}</h2>
             </div>
           </FadeIn>
 
@@ -372,18 +385,16 @@ export default function HomePage() {
               {sponsors.partners.map((partner) => (
                 <div
                   key={partner.name}
-                  className="glass px-6 py-3 rounded-xl hover:border-white/20 transition-all border border-transparent card-hover flex items-center justify-center min-h-[3.25rem]"
+                  className="rounded-2xl overflow-hidden flex items-center justify-center"
                 >
                   {"logo" in partner && partner.logo ? (
-                    <div className="bg-white rounded-lg px-3 py-1.5">
-                      <Image
-                        src={partner.logo}
-                        alt={partner.fullName}
-                        width={140}
-                        height={56}
-                        className="h-10 sm:h-12 w-auto object-contain"
-                      />
-                    </div>
+                    <Image
+                      src={partner.logo}
+                      alt={partner.fullName}
+                      width={220}
+                      height={160}
+                      className="h-24 sm:h-32 w-auto object-contain"
+                    />
                   ) : (
                     <span className="text-sm font-medium text-theme-primary">{partner.name}</span>
                   )}
@@ -393,7 +404,7 @@ export default function HomePage() {
           </FadeIn>
 
           <FadeIn delay={0.2}>
-            <div className="text-center mt-10">
+            <div className="text-center mt-5">
               <Link href="/sponsors" className="text-[#C9921A] text-sm hover:text-[#F5B730] transition-colors flex items-center gap-1.5 justify-center">
                 {t.home.viewAllSponsors}
                 <ExternalLink className="w-4 h-4" />
@@ -437,15 +448,19 @@ export default function HomePage() {
                   <h3 className="text-2xl font-black text-white">{t.home.innovationTimelineTitle}</h3>
                 </div>
                 <div className="space-y-4">
-                  {t.home.innovationSteps.map((item, i) => (
+                  {t.home.innovationSteps.map((item, i) => {
+                    const done = innovationReached[i] ?? false;
+                    const current = i === innovationCurrent;
+                    return (
                     <div key={i} className="flex items-center gap-4">
-                      <div className={`w-3 h-3 rounded-full flex-shrink-0 ${i === 0 ? "bg-[#10B981] pulse-gold" : "bg-slate-600"}`} />
+                      <div className={`w-3 h-3 rounded-full flex-shrink-0 ${done || current ? "bg-[#10B981]" : "bg-slate-600"} ${current ? "pulse-gold" : ""}`} />
                       <div className="flex-1 flex items-center justify-between">
-                        <span className={`text-sm font-medium ${i === 0 ? "text-white" : "text-theme-primary"}`}>{item.step}</span>
+                        <span className={`text-sm font-medium ${done || current ? "text-white" : "text-theme-primary"}`}>{item.step}</span>
                         <span className="text-xs text-theme-primary">{item.date}</span>
                       </div>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             </FadeIn>
@@ -503,14 +518,14 @@ export default function HomePage() {
       </section>
 
       {/* ─── FINAL CTA ─── */}
-      <section className="py-24 hero-bg pattern-overlay relative overflow-hidden">
+      <section className="py-10 sm:py-12 hero-bg pattern-overlay relative overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-3xl" style={{ background: "rgba(51, 168, 82, 0.12)" }} />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <FadeIn>
-            <h2 className="text-5xl sm:text-6xl font-black text-white mb-6">
+            <h2 className="text-5xl sm:text-6xl font-black text-white mb-3">
               <span className="shimmer">{t.home.finalCtaTitle}</span>
             </h2>
-            <p className="text-xl mb-10 max-w-2xl mx-auto text-theme-primary">
+            <p className="text-xl mb-6 max-w-2xl mx-auto text-theme-primary">
               {t.home.finalCtaSub}
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4">
@@ -522,7 +537,7 @@ export default function HomePage() {
                 {t.home.contactUs}
               </Link>
             </div>
-            <p className="text-sm mt-6 text-theme-primary">
+            <p className="text-sm mt-4 text-theme-primary">
               {t.home.finalHashtag}
             </p>
           </FadeIn>

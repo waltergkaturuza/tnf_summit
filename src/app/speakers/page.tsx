@@ -3,7 +3,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import Link from "next/link";
-import { ArrowRight, Mic, Globe, Star, Users, Calendar, Bell } from "lucide-react";
+import { ArrowRight, Mic, Star, Bell } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import { useLanguage } from "@/context/LanguageContext";
 
@@ -16,9 +16,6 @@ function FadeIn({ children, delay = 0, className = "" }: { children: React.React
     </motion.div>
   );
 }
-
-const profileIcons = ["🏛", "📊", "🌍", "🌐", "💱", "💼", "💪", "🤖", "🗺", "⭐", "🚀", "🤝"];
-const profileColors = ["#3B82F6", "#C9921A", "#10B981", "#8B5CF6", "#F59E0B", "#EC4899", "#14B8A6", "#6366F1", "#84CC16", "#C9921A", "#F59E0B", "#64748B"];
 
 export default function SpeakersPage() {
   const { t } = useLanguage();
@@ -56,17 +53,11 @@ export default function SpeakersPage() {
             {t.speakers.expectedProfiles.map((profile, i) => (
               <FadeIn key={i} delay={i * 0.05}>
                 <div className="glass rounded-2xl p-5 card-hover h-full border border-white/5 hover:border-white/15 transition-colors">
-                  <div className="flex items-start gap-4 mb-3">
-                    <div className="text-3xl">{profileIcons[i] ?? "🎤"}</div>
-                    <div>
-                      <h3 className="text-white font-bold text-sm leading-snug">{profile.role}</h3>
-                      <div className="flex items-center gap-1.5 mt-1">
-                        <Calendar className="w-3 h-3 text-[#C9921A]" />
-                        <span className="text-[#C9921A] text-xs">{profile.day}</span>
-                      </div>
-                    </div>
+                  <h3 className="text-white font-bold text-sm leading-snug">{profile.role}</h3>
+                  <div className="mt-1">
+                    <span className="text-[#C9921A] text-xs">{profile.day}</span>
                   </div>
-                  <p className="text-xs leading-relaxed text-theme-primary">{profile.desc}</p>
+                  <p className="text-xs leading-relaxed text-theme-primary mt-3">{profile.desc}</p>
                 </div>
               </FadeIn>
             ))}
@@ -104,7 +95,6 @@ export default function SpeakersPage() {
 
             <FadeIn delay={0.2}>
               <div className="glass-gold rounded-3xl p-8 text-center">
-                <div className="text-5xl mb-4">🎤</div>
                 <h3 className="text-2xl font-black text-white mb-4">{t.speakers.reachTitle}</h3>
                 <p className="mb-6 text-sm leading-relaxed text-theme-primary">
                   {t.speakers.reachIntro}
@@ -128,16 +118,15 @@ export default function SpeakersPage() {
       </section>
 
       {/* Innovation Challenge */}
-      <section className="py-20 section-gradient">
+      <section className="py-10 sm:py-12 section-gradient">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <FadeIn>
-            <div className="text-5xl mb-6">🚀</div>
             <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">{t.speakers.innovationBadge}</span>
-            <h2 className="text-3xl font-black text-white mt-3 mb-6">{t.speakers.innovationTitle}</h2>
-            <p className="leading-relaxed mb-8 text-theme-primary">
+            <h2 className="text-3xl font-black text-white mt-2 mb-3">{t.speakers.innovationTitle}</h2>
+            <p className="leading-relaxed mb-5 text-theme-primary">
               {t.speakers.innovationIntro}
             </p>
-            <div className="glass rounded-2xl p-6 mb-8 text-left">
+            <div className="glass rounded-2xl p-5 mb-5 text-left">
               <h3 className="text-[#F5B730] font-bold mb-4">{t.speakers.innovationFormatTitle}</h3>
               <div className="space-y-2 text-sm">
                 {t.speakers.innovationFormatItems.map((item) => (
