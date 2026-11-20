@@ -22,13 +22,40 @@ function getDeviceType(): string {
 
 // ── Track a page view ────────────────────────────────────────────────────────
 export async function trackPageView(path: string) {
+  const payload: { path: string; referrer: string; sessionId: string; deviceType: string; country?: string } = {
+    path,
+    referrer: typeof document !== "undefined" ? document.referrer : "",
+    sessionId: getSessionId(),
+    deviceType: getDeviceType(),
+  };
   try {
-    await supabase.schema("tnf_summit").from("page_views").insert({
-      page_path:   path,
-      referrer:    typeof document !== "undefined" ? document.referrer : "",
-      session_id:  getSessionId(),
-      device_type: getDeviceType(),
+    const res = await fetch("/api/track", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
     });
+    if (res.ok) return;
+    const data = (await res.json().catch(() => null)) as { country?: string } | null;
+    if (data?.country) payload.country = data.country;
+  } catch {
+    // Fall through to a direct insert so a lookup outage does not drop the view.
+  }
+  try {
+    const { error } = await supabase.schema("tnf_summit").from("page_views").insert({
+      page_path: payload.path,
+      referrer: payload.referrer,
+      session_id: payload.sessionId,
+      device_type: payload.deviceType,
+      country: payload.country ?? "",
+    });
+    if (error) {
+      await supabase.schema("tnf_summit").from("page_views").insert({
+        page_path: payload.path,
+        referrer: payload.referrer,
+        session_id: payload.sessionId,
+        device_type: payload.deviceType,
+      });
+    }
   } catch {
     // Silently fail, never break the user experience for analytics
   }

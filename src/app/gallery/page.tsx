@@ -4,22 +4,28 @@ import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import {
-  Download,
+  Download, Image as ImageIcon, Video, FileText,
   Bell, Play, ExternalLink, ArrowRight, X, ChevronLeft, ChevronRight as ChevronRightIcon,
 } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import { useLanguage } from "@/context/LanguageContext";
 import { fetchPublicGallery, type MediaFile } from "@/lib/storage";
 import { fetchAttachmentsForResources } from "@/lib/db";
-import type { UpdateAttachmentCategory } from "@/lib/adminData";
 
-const RESOURCE_CATEGORY_LABELS: Record<UpdateAttachmentCategory, string> = {
-  documents: "Documents",
-  media: "Media",
-  programme: "Programme",
-  press: "Press",
-  reports: "Reports",
-};
+type ResourceItem = Awaited<ReturnType<typeof fetchAttachmentsForResources>>[number];
+
+function isImageName(name: string) {
+  return /\.(png|jpe?g|webp|gif|avif)(\?|$)/i.test(name);
+}
+function isVideoName(name: string) {
+  return /\.(mp4|webm|mov|m4v)(\?|$)/i.test(name);
+}
+function isPresentationName(name: string) {
+  return /\.(pptx?|key)(\?|$)/i.test(name) || /presentation|slides/i.test(name);
+}
+function isPresentationResource(item: ResourceItem) {
+  return item.category === "programme" || item.type === "programme" || item.type === "schedule" || item.type === "brochure" || isPresentationName(item.name);
+}
 
 function FadeIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef(null);
@@ -88,7 +94,7 @@ export default function GalleryPage() {
 
   useEffect(() => {
     fetchPublicGallery().then(f => {
-      setLiveFiles(f.filter(x => x.mediaType === "image" || x.mediaType === "video"));
+      setLiveFiles(f);
       setGalleryLoading(false);
     }).catch(() => setGalleryLoading(false));
   }, []);
@@ -97,63 +103,143 @@ export default function GalleryPage() {
     fetchAttachmentsForResources().then(setResources).catch(() => setResources([]));
   }, []);
 
+  const photos = liveFiles.filter((f) => f.mediaType === "image");
+  const videos = liveFiles.filter((f) => f.mediaType === "video");
+  const presentationResources = resources.filter((item) => isPresentationResource(item) && !isImageName(item.name) && !isVideoName(item.name));
+  const documentResources = resources.filter((item) => !isPresentationResource(item) && !isImageName(item.publicUrl) && !isImageName(item.name) && !isVideoName(item.publicUrl) && !isVideoName(item.name));
+  const libraryDocuments = liveFiles.filter((f) => f.mediaType === "document" || f.mediaType === "audio");
+  const presentationFiles = libraryDocuments.filter((f) => isPresentationName(`${f.originalName} ${f.fileName} ${f.altText}`));
+  const officialFiles = libraryDocuments.filter((f) => !isPresentationName(`${f.originalName} ${f.fileName} ${f.altText}`));
+  const hasGroupedMedia = photos.length + videos.length + presentationResources.length + documentResources.length + presentationFiles.length + officialFiles.length > 0;
+
   return (
     <div className="min-h-screen bg-[var(--bg-primary)]">
       <PageHeader title={t.gallery.heroTitle} subtitle={t.gallery.heroSub} />
 
-      {/* Live Gallery from Supabase Storage */}
-      {!galleryLoading && liveFiles.length > 0 && (
-        <section className="py-16 section-gradient">
+      {/* Gallery grouped into Photography, Video, Presentations, and Official Documents */}
+      {!galleryLoading && hasGroupedMedia && (
+        <section id="downloads" className="py-12 sm:py-16 section-gradient">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <FadeIn>
-              <div className="text-center mb-12">
-                <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">{t.gallery.heroBadge}</span>
-                <h2 className="text-3xl font-black text-white mt-3">{t.gallery.venueTitle}</h2>
-                <p className="mt-2 text-theme-primary">{t.gallery.venueSub}</p>
-              </div>
-            </FadeIn>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-6">
-              {liveFiles.map((f, i) => (
-                <FadeIn key={f.id} delay={i * 0.05}>
-                  <div className="group" onClick={() => setLightboxIndex(i)}>
-                    <div className="rounded-xl overflow-hidden cursor-pointer relative aspect-[4/3] bg-white/5">
-                      {f.mediaType === "video" ? (
-                        <>
-                          <video src={f.publicUrl} className="w-full h-full object-cover rounded-xl" muted />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-end p-4">
-                            <p className="text-white text-sm font-medium leading-snug">{f.caption || f.altText}</p>
-                          </div>
-                          <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/60 to-transparent rounded-b-xl">
-                            <p className="text-white text-sm font-semibold">{f.altText}</p>
-                          </div>
-                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                            <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
-                              <Play className="w-6 h-6 text-white ml-0.5" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {photos.length > 0 && (
+                <FadeIn>
+                  <div className="glass rounded-2xl p-6 h-full">
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 bg-[#3B82F6]/15 border border-[#3B82F6]/30">
+                        <ImageIcon className="w-5 h-5 text-[#3B82F6]" />
+                      </div>
+                      <div>
+                        <h3 className="text-white font-bold">Photography</h3>
+                        <p className="text-xs mt-1 leading-relaxed text-theme-primary">Official Summit photography from all sessions, ceremonies, social events and excursions.</p>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      {photos.map((f) => (
+                        <button key={f.id} type="button" className="group text-left" onClick={() => setLightboxIndex(photos.findIndex((p) => p.id === f.id))}>
+                          <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-white/5">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={f.publicUrl} alt={f.altText} className="h-full w-full object-cover" loading="lazy" />
+                            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-2">
+                              <p className="text-xs font-semibold text-white line-clamp-2">{f.altText || f.originalName}</p>
                             </div>
                           </div>
-                        </>
-                      ) : (
-                        <>
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src={f.publicUrl}
-                            alt={f.altText}
-                            className="w-full h-full object-cover rounded-xl group-hover:scale-[1.02] transition-transform duration-300"
-                            loading="lazy"
-                          />
-                          <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent rounded-b-xl">
-                            <p className="text-white text-sm font-semibold">{f.altText}</p>
-                            {f.caption && (
-                              <p className="text-white/90 text-xs mt-1 line-clamp-2">{f.caption}</p>
-                            )}
-                          </div>
-                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors rounded-xl" />
-                        </>
-                      )}
+                        </button>
+                      ))}
                     </div>
                   </div>
                 </FadeIn>
-              ))}
+              )}
+
+              {videos.length > 0 && (
+                <FadeIn delay={0.05}>
+                  <div className="glass rounded-2xl p-6 h-full">
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 bg-[#EC4899]/15 border border-[#EC4899]/30">
+                        <Video className="w-5 h-5 text-[#EC4899]" />
+                      </div>
+                      <div>
+                        <h3 className="text-white font-bold">Video Recordings</h3>
+                        <p className="text-xs mt-1 leading-relaxed text-theme-primary">Full session recordings from plenary halls, Innovation Challenge pitches and key panel discussions.</p>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      {videos.map((f) => (
+                        <a key={f.id} href={f.publicUrl} target="_blank" rel="noopener noreferrer" className="group relative block aspect-[4/3] overflow-hidden rounded-xl bg-white/5">
+                          <video src={f.publicUrl} className="h-full w-full object-cover" muted />
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-black/45">
+                              <Play className="ml-0.5 h-5 w-5 text-white" />
+                            </div>
+                          </div>
+                          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-2">
+                            <p className="text-xs font-semibold text-white line-clamp-2">{f.altText || f.originalName}</p>
+                          </div>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </FadeIn>
+              )}
+
+              {(presentationResources.length > 0 || presentationFiles.length > 0) && (
+                <FadeIn delay={0.1}>
+                  <div className="glass rounded-2xl p-6 h-full">
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 bg-[#10B981]/15 border border-[#10B981]/30">
+                        <FileText className="w-5 h-5 text-[#10B981]" />
+                      </div>
+                      <div>
+                        <h3 className="text-white font-bold">Presentations</h3>
+                        <p className="text-xs mt-1 leading-relaxed text-theme-primary">Speaker presentations and supporting documents from sessions where permission has been granted.</p>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      {presentationFiles.map((f) => (
+                        <a key={f.id} href={f.publicUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-theme-primary hover:text-white">
+                          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#10B981]" />
+                          <span className="min-w-0 flex-1 truncate">{f.altText || f.originalName || f.fileName}</span>
+                        </a>
+                      ))}
+                      {presentationResources.map((att) => (
+                        <a key={att.id} href={`/api/track-download?url=${encodeURIComponent(att.publicUrl)}&attachmentId=${att.id}&name=${encodeURIComponent(att.name)}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-theme-primary hover:text-white">
+                          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#10B981]" />
+                          <span className="min-w-0 flex-1 truncate">{att.name}</span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </FadeIn>
+              )}
+
+              {(documentResources.length > 0 || officialFiles.length > 0) && (
+                <FadeIn delay={0.15}>
+                  <div className="glass rounded-2xl p-6 h-full">
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 bg-[#C9921A]/15 border border-[#C9921A]/30">
+                        <Download className="w-5 h-5 text-[#C9921A]" />
+                      </div>
+                      <div>
+                        <h3 className="text-white font-bold">Official Documents</h3>
+                        <p className="text-xs mt-1 leading-relaxed text-theme-primary">Official summit documents, including declarations, outcome reports and the investment commitments register.</p>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      {officialFiles.map((f) => (
+                        <a key={f.id} href={f.publicUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-theme-primary hover:text-white">
+                          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#C9921A]" />
+                          <span className="min-w-0 flex-1 truncate">{f.altText || f.originalName || f.fileName}</span>
+                        </a>
+                      ))}
+                      {documentResources.map((att) => (
+                        <a key={att.id} href={`/api/track-download?url=${encodeURIComponent(att.publicUrl)}&attachmentId=${att.id}&name=${encodeURIComponent(att.name)}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-theme-primary hover:text-white">
+                          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#C9921A]" />
+                          <span className="min-w-0 flex-1 truncate">{att.name}</span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </FadeIn>
+              )}
             </div>
           </div>
         </section>
@@ -162,15 +248,15 @@ export default function GalleryPage() {
       {/* Lightbox */}
       <AnimatePresence>
         {lightboxIndex !== null && (
-          <LightBox files={liveFiles} index={lightboxIndex} onClose={() => setLightboxIndex(null)}
-            onPrev={() => setLightboxIndex(i => i !== null ? (i - 1 + liveFiles.length) % liveFiles.length : 0)}
-            onNext={() => setLightboxIndex(i => i !== null ? (i + 1) % liveFiles.length : 0)}
+          <LightBox files={photos} index={lightboxIndex} onClose={() => setLightboxIndex(null)}
+            onPrev={() => setLightboxIndex(i => i !== null ? (i - 1 + photos.length) % photos.length : 0)}
+            onNext={() => setLightboxIndex(i => i !== null ? (i + 1) % photos.length : 0)}
           />
         )}
       </AnimatePresence>
 
       {/* Coming Soon Banner, only when no gallery content yet */}
-      {!galleryLoading && liveFiles.length === 0 && (
+      {!galleryLoading && !hasGroupedMedia && (
         <div className="bg-[#C9921A]/10 border-y border-[#C9921A]/20 py-4">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center gap-3 flex-wrap">
             <Bell className="w-5 h-5 text-[#F5B730]" />
@@ -185,7 +271,7 @@ export default function GalleryPage() {
       )}
 
       {/* Venue Preview, only when no live gallery content */}
-      {!galleryLoading && liveFiles.length === 0 && (
+      {!galleryLoading && !hasGroupedMedia && (
         <section className="py-20 section-gradient">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <FadeIn>
@@ -206,55 +292,6 @@ export default function GalleryPage() {
                       <div className="mt-3 text-[10px] px-2 py-0.5 rounded-full inline-block" style={{ background: `${img.color}20`, color: img.color }}>
                         Coming Sept 2026
                       </div>
-                    </div>
-                  </div>
-                </FadeIn>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Resources & Downloads (from update attachments) */}
-      {resources.length > 0 && (
-        <section id="downloads" className="py-20 section-gradient">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <FadeIn>
-              <div className="text-center mb-12">
-                <span className="text-[#C9921A] text-sm font-bold uppercase tracking-widest">{t.gallery.heroBadge}</span>
-                <h2 className="text-3xl font-black text-white mt-3">{t.gallery.resourcesTitle}</h2>
-                <p className="mt-2 text-theme-primary">{t.gallery.resourcesSub}</p>
-              </div>
-            </FadeIn>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {Object.entries(
-                resources.reduce<Record<string, typeof resources>>((acc, r) => {
-                  const cat = r.category;
-                  if (!acc[cat]) acc[cat] = [];
-                  acc[cat].push(r);
-                  return acc;
-                }, {})
-              ).map(([category, items]) => (
-                <FadeIn key={category}>
-                  <div className="glass rounded-2xl p-5 h-full">
-                    <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-3">{RESOURCE_CATEGORY_LABELS[category as UpdateAttachmentCategory] ?? category}</h3>
-                    <div className="space-y-2">
-                      {items.map((att) => (
-                        <a
-                          key={att.id}
-                          href={`/api/track-download?url=${encodeURIComponent(att.publicUrl)}&attachmentId=${att.id}&name=${encodeURIComponent(att.name)}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-2 py-2 px-3 rounded-lg hover:bg-white/5 transition-colors group"
-                        >
-                          <Download className="w-4 h-4 text-[#C9921A] shrink-0" />
-                          <span className="text-sm text-theme-primary group-hover:text-white truncate flex-1">{att.name}</span>
-                          {att.updateTitle && (
-                            <span className="text-xs text-slate-500 truncate max-w-[120px]">{att.updateTitle}</span>
-                          )}
-                          <ExternalLink className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                        </a>
-                      ))}
                     </div>
                   </div>
                 </FadeIn>

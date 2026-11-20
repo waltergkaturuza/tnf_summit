@@ -19,6 +19,10 @@ const GOLD    = "#C9921A";
 const TEAL    = "#0EA5E9";
 const EMERALD = "#10B981";
 const PURPLE  = "#8B5CF6";
+const COUNTRY_COLORS = ["#22D3EE", "#F5B730", "#A78BFA", "#F472B6", "#34D399", "#60A5FA", "#E879F9", "#FACC15"];
+const OTHER_COLOR = "#94A3B8";
+
+type CountryStat = { name: string; value: number; color: string };
 
 const DEVICE_COLORS: Record<string, string> = {
   desktop: TEAL, mobile: GOLD, tablet: EMERALD, unknown: "#475569",
@@ -78,6 +82,7 @@ export default function AnalyticsPage() {
   const [perDay, setPerDay]     = useState<ViewsPerDay[]>([]);
   const [topPages, setTopPages] = useState<TopPage[]>([]);
   const [devices, setDevices]   = useState<DeviceStat[]>([]);
+  const [countries, setCountries] = useState<CountryStat[]>([]);
   const [eventsByType, setEventsByType] = useState<{ name: string; Events: number }[]>([]);
   const [downloadStats, setDownloadStats] = useState<Awaited<ReturnType<typeof fetchDownloadStats>> | null>(null);
 
@@ -143,6 +148,25 @@ export default function AnalyticsPage() {
         devMap[d] = (devMap[d] ?? 0) + 1;
       });
       setDevices(Object.entries(devMap).map(([device_type, views]) => ({ device_type, views })));
+
+      const { data: countryRows } = await supabase.schema("tnf_summit").from("page_views")
+        .select("id, country, session_id").gte("created_at", cutoff);
+      const visitorsByCountry = new Map<string, Set<string>>();
+      (countryRows ?? []).forEach((r: { id: string; country: string | null; session_id: string | null }) => {
+        const name = (r.country ?? "").trim();
+        if (!name) return;
+        const visitor = r.session_id || r.id;
+        if (!visitorsByCountry.has(name)) visitorsByCountry.set(name, new Set());
+        visitorsByCountry.get(name)!.add(visitor);
+      });
+      const ranked = [...visitorsByCountry.entries()]
+        .map(([name, sessions]) => ({ name, value: sessions.size }))
+        .sort((a, b) => b.value - a.value);
+      const top = ranked.slice(0, 8);
+      const rest = ranked.slice(8).reduce((sum, row) => sum + row.value, 0);
+      const slices = top.map((row, i) => ({ ...row, color: COUNTRY_COLORS[i] ?? OTHER_COLOR }));
+      if (rest > 0) slices.push({ name: "Other", value: rest, color: OTHER_COLOR });
+      setCountries(slices);
 
       // Events by day (using page_path as proxy for "event type")
       const eventMap: Record<string, number> = {};
@@ -395,6 +419,36 @@ export default function AnalyticsPage() {
         </motion.div>
       )}
 
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.24 }}
+        className="glass rounded-2xl p-6 border border-white/5">
+        <div className="flex items-center justify-between mb-1">
+          <h2 className="text-white font-bold">Countries</h2>
+          <span className="text-slate-500 text-xs">{windowLabel}</span>
+        </div>
+        <p className="text-slate-500 text-xs mb-5">Unique visitors by country</p>
+        {countries.length === 0
+          ? <div className="text-slate-600 text-sm text-center py-6">No country data yet. New visits record a country from the visitor IP.</div>
+          : (
+            <div className="flex items-center gap-8 flex-wrap">
+              <PieChart width={180} height={180}>
+                <Pie data={countries} cx={85} cy={85} innerRadius={58} outerRadius={82}
+                  dataKey="value" paddingAngle={2} strokeWidth={0}>
+                  {countries.map((entry, i) => <Cell key={i} fill={entry.color} />)}
+                </Pie>
+              </PieChart>
+              <div className="flex-1 space-y-2.5 min-w-[160px]">
+                {countries.map((c) => (
+                  <div key={c.name} className="flex items-center gap-2 text-sm text-slate-200">
+                    <span className="w-3 h-3 rounded-sm flex-shrink-0" style={{ background: c.color }} />
+                    <span className="truncate">{c.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+      </motion.div>
+
       {/* Device Breakdown */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
         className="glass rounded-2xl p-6 border border-white/5">
@@ -440,6 +494,7 @@ export default function AnalyticsPage() {
             </div>
           )}
       </motion.div>
+      </div>
     </div>
   );
 }
